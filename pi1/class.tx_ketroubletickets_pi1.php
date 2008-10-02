@@ -502,6 +502,7 @@ function areYouSure(ziel) {
 
 				// go through the form fields and check what has changend
 				// add a history entry for every change
+				$changedFields = '';
 
 				foreach ($this->conf['formFieldList.'] as $fieldConf) {
 					$value_old = $this->internal['currentRow'][$fieldConf['name']];
@@ -561,11 +562,7 @@ function areYouSure(ziel) {
 						$changedFields .= CONST_NEWCOMMENT;
 					}
 
-				} else {
-					$changedFields = '';
-				}
-
-				//debug($this->insertFields);
+				} 
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], $this->insertFields);
 
 				// send the notification emails
