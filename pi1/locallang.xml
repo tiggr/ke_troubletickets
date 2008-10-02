@@ -61,7 +61,6 @@
 			<label index="pi_list_browseresults_displays">Aufgaben ###SPAN_BEGIN###%s bis %s&lt;/span&gt; (insgesamt ###SPAN_BEGIN###%s&lt;/span&gt;)</label>
 			<label index="pi_list_searchBox_search">Suche</label>
 
-			<label index="error_no_template">Fehler: Kein Template.</label>
 			<label index="pick_a_date">Datum auswählen.</label>
 			<label index="more_files">Weitere Datei</label>
 			<label index="formerror_date">Fehler: Das Datum wurde nicht korrekt eingegeben. Verwenden Sie das Format TT.MM.JJJJ, also z. B. 1.12.2007</label>
@@ -72,6 +71,9 @@
 			<label index="formerror_has_been_deleted"> wurde gelöscht.</label>
 			<label index="formerror_hours">Bitte geben Sie die Stundenzahl korrekt ein (z. B. 1,5).</label>
 			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Ticket konnte nicht erstellt werden.</label>
+
+			<label index="error_no_template">Fehler: Es wurde kein Template gefunden.</label>
+			<label index="error_no_category">Fehler: Es muss mindestens einen Kategorie angelegt sein.</label>
 			<label index="error_no_upload_directory">Fehler: Das Verzeichnis existiert nicht. Bitte kontaktieren Sie den Administrator.</label>
 			<label index="error_file_too_big">Fehler: Die Datei ist zu groß.</label>
 			<label index="error_filetype_not_allowed">Fehler: Dieser Dateityp ist nicht erlaubt.</label>
@@ -162,7 +164,7 @@
 			<label index="LABEL_NOTIFICATIONS_OBSERVER">Benachrichtigungen an den/die Beobachter</label>
 			
 			<label index="LABEL_COMMENT_HEADER">Kommentare</label>
-			<label index="LABEL_COMMENT_SUBMIT">Kommentar speichern</label>
+			<label index="LABEL_COMMENT_SUBMIT">Speichern</label>
 
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
 

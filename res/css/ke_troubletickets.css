@@ -112,3 +112,7 @@
 	font-family : monospace;
 	font-size : 10px;
 }
+
+.tx-ketroubletickets-pi1 .error  {
+	color: red;
+}

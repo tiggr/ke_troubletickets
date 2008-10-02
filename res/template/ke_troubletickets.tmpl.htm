@@ -101,10 +101,8 @@ New Ticket / Edit Ticket Form / Singleview
 	###HIDDEN_FIELDS###
 </td></tr></table>
 	
-	<div class="submit" align="right">
-	###FIELD_SUBMIT###
-	</div>
-
+	<div class="submit">###FIELD_SUBMIT###</div>
+	###OPTIONAL_TICKET_COMMENT###
 	</form>
 	###ADDITIONALJS_POST###
 
@@ -115,7 +113,6 @@ New Ticket / Edit Ticket Form / Singleview
 	</tr>
 </table>
 <!-- /\ STANDARD TABLE-->
-###OPTIONAL_TICKET_COMMENT###
 ###OPTIONAL_TICKET_HISTORY###
 </div>
 <!-- ###TICKET_FORM### END-->
@@ -195,33 +192,10 @@ Comments (in Singleview)
 ***********************************************
 -->
 <!-- ###TICKET_COMMENT### START-->
-<!-- \/ STANDARD TABLE-->
-<table class="std-table">
-	<tr>
-		<td class="head-left">&nbsp;</td>
-		<td class="head-middle"><h1>###LABEL_COMMENT_HEADER###</h1></td>
-		<td class="head-right">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="body-left">&nbsp;</td>
-		<td class="body-middle">
+	<h1 style="margin-top:20px;">###LABEL_COMMENT_HEADER###</h1>
 	<div style="margin-bottom:5px;">###COMMENTLIST###</div>
-<!-- \/ STANDARD TABLE-->
-
-	<form name="###COMMENTFORM_NAME###" id="###COMMENTFORM_NAME###" action="###COMMENTFORM_ACTION###" method="post" enctype="multipart/form-data">
-		<div style="margin-bottom:8px;">###FIELD_CONTENT###</div>
-		<div class="submit" align="right">
-		###FIELD_SUBMIT###
-		</div>
-		###HIDDEN_FIELDS###
-	</form>
-
-<!-- \/ STANDARD TABLE-->
-		</td>
-		<td class="body-right">&nbsp;</td>
-	</tr>
-</table>
-<!-- /\ STANDARD TABLE-->
+	<div style="margin-bottom:8px;">###FIELD_CONTENT###</div>
+	<div class="submit">###FIELD_SUBMIT###</div>
 <!-- ###TICKET_COMMENT### END-->
 
 <!-- 
@@ -237,8 +211,8 @@ Ticket History (in Singleview)
 		<td class="head-middle">
 			<div style="float:left;"><h1>###LABEL_TICKET_HISTORY_HEADER###</h1></div>
 			<div style="float:right;">
-				<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'none';"><img style="border:0px; float:left; margin:0px; padding:0px;" src="fileadmin/img/layout/forall/button_minus.gif" /></a>
-				<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';"><img style="border:0px; margin:0px; padding:0px;" src="fileadmin/img/layout/forall/button_plus.gif" /></a>
+				<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'none';"><span style="border:0px; float:left; margin:0px; padding:0px;">###ICONMINUS###</span></a>
+				<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';"><span style="border:0px; margin:0px; padding:0px;">###ICONPLUS###</span></a>
 			</div>
 		</td>
 		<td class="head-right">&nbsp;</td>
@@ -361,9 +335,6 @@ Listview
 
 </div>
 <div style="margin-top:3px;"><div>###EDIT_ICON###</div>###DELETE_ICON###</div><div>###CLOSE_ICON###</div>
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
 <div class="cleaner">&nbsp;</div>
 </div>
 

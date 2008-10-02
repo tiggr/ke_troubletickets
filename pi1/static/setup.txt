@@ -72,12 +72,16 @@ plugin.tx_ketroubletickets_pi1 {
 	icons.deleteFile.file = EXT:ke_troubletickets/res/images/fe_delete_small.png
 
 	# Additional Icons
-	additionalIconList = iconNewTicket,iconCsvExport
+	additionalIconList = iconNewTicket,iconCsvExport,iconMinus,iconPlus
 
 	iconNewTicket = IMAGE
 	iconNewTicket.file = EXT:ke_troubletickets/res/images/new.gif
 	iconCsvExport = IMAGE
 	iconCsvExport.file = EXT:ke_troubletickets/res/images/csv.gif
+	iconMinus = IMAGE
+	iconMinus.file = EXT:ke_troubletickets/res/images/button_minus.gif
+	iconPlus = IMAGE
+	iconPlus.file = EXT:ke_troubletickets/res/images/button_plus.gif
 
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
 	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING

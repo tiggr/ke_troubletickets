@@ -72,7 +72,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	var $historyTablename 	= 'tx_ketroubletickets_history';
 	var $commentsTablename 	= 'tx_ketroubletickets_comments';
 	var $hiddenFormFields 	= array();
-	var $hiddenCommentFormFields = array();
 	var $ticketFormName		= 'ketroubletickets_ticketform';
 	var $commentFormName	= 'ketroubletickets_commentform';
 	var $formErrors 		= array();
@@ -192,7 +191,7 @@ function areYouSure(ziel) {
 		// debug($GLOBALS['TSFE']->loginUser);
 
 		// Output database errors
-		//$GLOBALS['TYPO3_DB']->debugOutput = true;
+		$GLOBALS['TYPO3_DB']->debugOutput = true;
 
 		// General permission check: This plugin only makes sense if a user is logged in
 		if (!$GLOBALS['TSFE']->loginUser) {
@@ -216,11 +215,6 @@ function areYouSure(ziel) {
 		// a new ticket has been submitted / a ticket should be updated
 		if ($this->piVars['newticket'] || $this->piVars['updateUid']) {
 			$this->handleSubmittedForm();
-		}
-
-		// a new comment has been submitted
-		if ($this->piVars['newcomment']) {
-			$this->handleSubmittedCommentForm();
 		}
 
 		// a ticket should be deleted
@@ -392,9 +386,9 @@ function areYouSure(ziel) {
 		}
 
 		// and some vars from the comment form
-		unset($this->piVars['newcomment']);
 		unset($this->piVars['content']);
-		unset($this->piVars['ticket_uid']);
+		unset($this->piVars['comment_submit']);
+		unset($this->piVars['0']);
 
 		// some more piVars
 		unset($this->piVars['deleteUid']);
@@ -509,15 +503,12 @@ function areYouSure(ziel) {
 				// go through the form fields and check what has changend
 				// add a history entry for every change
 
-				// remember the fields that have changed for the notification mail
-				$changedFields = '';
-
 				foreach ($this->conf['formFieldList.'] as $fieldConf) {
 					$value_old = $this->internal['currentRow'][$fieldConf['name']];
 					$value_new = $this->insertFields[$fieldConf['name']];
 					if ( (!empty($value_new) && !empty($value_new)) && ($value_old != $value_new)) {
 						$this->addHistoryEntry( array(
-									'ticket_uid' => $this->piVars['updateUid'],
+									'ticket_uid' => $this->internal['currentRow']['uid'],
 									'databasefield' => $fieldConf['name'],
 									'value_old' => $value_old,
 									'value_new' => $value_new
@@ -528,8 +519,8 @@ function areYouSure(ziel) {
 							$this->insertFields['close_time'] = time();
 						}
 
-						// remember the fields that have changed for the notification mail
-						// do this only for fields that ar not internal
+						// Remember the fields that have changed for the notification mail.
+						// Do this only for fields that are not internal!
 						if (empty($fieldConf['internal'])) {
 							if (strlen($changedFields)) {
 								$changedFields .= ',';
@@ -538,11 +529,47 @@ function areYouSure(ziel) {
 						}
 					}
 				}
-				//debug($GLOBALS['TYPO3_DB']->UPDATEquery($this->tablename, 'uid=' . $this->piVars['updateUid'], $this->insertFields));
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->piVars['updateUid'], $this->insertFields);
+
+				// If a commented has been submitted, process it now.
+				// Comments are not normal fields but have an own table, so we cannot process them like the ticket fields.
+				// Remember the fields that have changed for the notification mail.
+				if (isset($this->piVars['content']) && !empty($this->piVars['content'])) {
+					$this->handleSubmittedCommentForm();
+
+					// if the ticket is currently is closed, re-open it.
+					if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
+						// change the status 
+						$this->insertFields['status'] = CONST_STATUS_OPEN;
+
+						// add the 'status'-field to the list of changed fields
+						if (strlen($changedFields)) {
+							$changedFields .= ',';
+						}
+						$changedFields .= CONST_REOPENANDCOMMENT;
+
+						// add a history entry
+						$this->addHistoryEntry( array(
+									'ticket_uid' => $this->internal['currentRow']['uid'],
+									'databasefield' => 'status',
+									'value_old' => $this->internal['currentRow']['status'],
+									'value_new' => CONST_STATUS_OPEN
+									));
+					} else {
+						if (strlen($changedFields)) {
+							$changedFields .= ',';
+						}
+						$changedFields .= CONST_NEWCOMMENT;
+					}
+
+				} else {
+					$changedFields = '';
+				}
+
+				//debug($this->insertFields);
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], $this->insertFields);
 
 				// send the notification emails
-				$this->checkChangesAndSendNotificationEmails($this->piVars['updateUid'], $changedFields);
+				$this->checkChangesAndSendNotificationEmails($this->internal['currentRow']['uid'], $changedFields);
 			}
 		}
 	}/*}}}*/
@@ -694,11 +721,11 @@ function areYouSure(ziel) {
 	 * handleSubmittedCommentForm 
 	 *
 	 * handle the incoming post data of a submitted comment form
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
-	public function handleSubmittedCommentForm() {/*{{{*/
+	protected function handleSubmittedCommentForm() {/*{{{*/
 		// set the crdate
 		$commentInsertFields['crdate'] = time();
 
@@ -717,12 +744,12 @@ function areYouSure(ziel) {
 		} 
 
 		// set the ticket_uid 
-		$commentInsertFields['ticket_uid'] = $this->piVars['ticketuid'];
+		$commentInsertFields['ticket_uid'] = $this->internal['currentRow']['uid'];
 
 		// set the content
 		// the user that committed the comment may be deleted later, so we write the
 		// username into the comment content
-		$commentInsertFields['content'] = $this->lib->getNameListFromUidList($commentInsertFields['feuser_uid'], 'fe_users', 'name,username') . ': ' . $this->piVars['content'];
+		$commentInsertFields['content'] = $this->lib->getNameListFromUidList($commentInsertFields['feuser_uid'], 'fe_users', 'name,username') . ': ' . $this->sanitizeData($this->piVars['content']);
 
 		// insert the comment
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery($this->commentsTablename, $commentInsertFields);
@@ -734,30 +761,19 @@ function areYouSure(ziel) {
 					'value_old' => '',
 					'value_new' => $this->pi_getLL('history_new_comment', 'new comment')
 					));
+	}/*}}}*/
 
-		// if the ticket is currently is closed, re-open it.
-		$ticket = $this->getTicketData($this->piVars['ticketuid']);
-		if ($ticket['status'] == CONST_STATUS_CLOSED) {
-
-			// set status to 'open'
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $ticket['uid'], array('status' => CONST_STATUS_OPEN));
-
-			// add a history entry
-			$this->addHistoryEntry( array(
-						'ticket_uid' => $ticket['ticket'],
-						'databasefield' => 'status',
-						'value_old' => $ticket['status'],
-						'value_new' => CONST_STATUS_OPEN
-						));
-
-			$what_has_changed = CONST_REOPENANDCOMMENT;
-		} else {
-			$what_has_changed = CONST_NEWCOMMENT;
-		}
-
-		// send the notification emails
-		$this->checkChangesAndSendNotificationEmails($this->piVars['ticketuid'], $what_has_changed);
-
+	/**
+	 * sanitizeData 
+	 *
+	 * sanitizeData
+	 * 
+	 * @param string $data 
+	 * @access public
+	 * @return string
+	 */
+	function sanitizeData($data='') {/*{{{*/
+		return htmlspecialchars($data, ENT_QUOTES);
 	}/*}}}*/
 
 	/**
@@ -1004,10 +1020,6 @@ function areYouSure(ziel) {
 				// otherwise just add the word "changed"
 				if (stristr($changedFields, CONST_NEWTICKET)) {
 					$subject .= $this->pi_getLL('email_subject_type_new', 'new') . ': ';
-				} else if (stristr($changedFields, CONST_STATUS_CLOSED)) {
-					$subject .= $this->pi_getLL('email_subject_type_closed', 'closed') . ': ';
-				} else if (stristr($changedFields, CONST_NEWCOMMENT)) {
-					$subject .= $this->pi_getLL('email_subject_type_newcomment', 'new comment') . ': ';
 				} else if (stristr($changedFields, CONST_REOPENANDCOMMENT)) {
 					$subject .= $this->pi_getLL('email_subject_type_newcomment_reopen', 'new comment and re-open') . ': ';
 				} else if (stristr($changedFields, CONST_ONSTATUSCHANGE)) {
@@ -1097,11 +1109,10 @@ function areYouSure(ziel) {
 	 * NEWCOMMENT
 	 * 
 	 * @param string $changedFields 
-	 * @param integer $htmlEntities
 	 * @access public
 	 * @return void
 	 */
-	function renderNotificationMail($changedFields='', $htmlEntities=1) {/*{{{*/
+	function renderNotificationMail($changedFields='') {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 		$content = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION###');
 		$localMarkerArray = array();
@@ -1138,17 +1149,15 @@ function areYouSure(ziel) {
 			 $localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_type_' . $type, $type);
 		}
 
-		$localMarkerArray['WHAT_HAS_HAPPENED'] = htmlentities($localMarkerArray['WHAT_HAS_HAPPENED']);
+		$localMarkerArray['WHAT_HAS_HAPPENED'] = htmlentities($localMarkerArray['WHAT_HAS_HAPPENED'], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
 		// which fields have changed?
-		if ($type == 'changed') {
+		$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+		$localMarkerArray['WHAT_HAS_HAPPENED'] .= htmlentities($this->pi_getLL('email_text_fields_have_changed'), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+		$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+		foreach (explode(',', $changedFields) as $fieldName) {
+			$localMarkerArray['WHAT_HAS_HAPPENED'] .= htmlentities($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
-			$localMarkerArray['WHAT_HAS_HAPPENED'] .= htmlentities($this->pi_getLL('email_text_fields_have_changed'));
-			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
-			foreach (explode(',', $changedFields) as $fieldName) {
-				$localMarkerArray['WHAT_HAS_HAPPENED'] .= htmlentities($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
-				$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
-			}
 		}
 
 		// generate a link to the ticket
@@ -1263,33 +1272,12 @@ function areYouSure(ziel) {
 	public function renderCommentForm($ticket_uid) {/*{{{*/
 		$content = $this->cObj->getSubpart($this->templateCode,'###TICKET_COMMENT###');
 
-		// set the form markers
-		$localMarkerArray['COMMENTFORM_NAME'] =  $this->commentFormName;
-		$localMarkerArray['COMMENTFORM_ACTION'] =  $this->cObj->typoLink_URL(
-			array(
-				'parameter' => $GLOBALS['TSFE']->id,
-				'additionalParams' => $this->getAdditionalParamsFromKeepPiVars()
-			)
-		);
-
 		// the form fields
 		$localMarkerArray['FIELD_CONTENT'] =  '<textarea name="' . $this->prefixId . '[content]" cols="' . $this->conf['comment_cols'] . '" rows="' . $this->conf['comment_rows'] . '"></textarea>';
 		$localMarkerArray['FIELD_SUBMIT'] = '<input type="submit" name="' . $this->prefixId . '[comment_submit]' . '" value="'.$this->pi_getLL('LABEL_COMMENT_SUBMIT').'">';
 
 		// show the existing comments
 		$localMarkerArray['COMMENTLIST'] = $this->renderCommentList($this->internal['currentRow']['uid']);
-
-		// remember some of the piVars when we go back the list view
-		foreach (explode(',',$this->conf['keepPiVars']) as $piVarName) {
-			$this->hiddenCommentFormFields['piVar_'.$piVarName] = '<input type="hidden" name="' . $this->prefixId . '[' . $piVarName . ']" value="' . $this->piVars[$piVarName] . '">';
-		}
-
-		// hidden field for "create a new comment"
-		$this->hiddenCommentFormFields['newcomment'] = '<input type="hidden" name="' . $this->prefixId . '[newcomment]" value="1">';
-		$this->hiddenCommentFormFields['ticketuid'] = '<input type="hidden" name="' . $this->prefixId . '[ticketuid]" value="' . $this->internal['currentRow']['uid'] . '">';
-
-		// add the hidden fields
-		$localMarkerArray['HIDDEN_FIELDS'] = implode("\n",$this->hiddenCommentFormFields);
 
 		// get some more markers
 		$localMarkerArray = $this->getAdditionalMarkers($localMarkerArray);
@@ -1327,9 +1315,9 @@ function areYouSure(ziel) {
 				if ($renderType != CONST_RENDER_TYPE_CSV) {
 					// Split up content in order to make single rows
 					$contentParts = explode(':', $row['content'], 2);
-					$content .= '<em>' . htmlentities($contentParts[0]) . ':</em>';
+					$content .= '<em>' . htmlentities($contentParts[0], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset) . ':</em>';
 					$content .= '</div>';
-					$content .= nl2br(htmlentities($contentParts[1]));
+					$content .= nl2br(htmlentities($contentParts[1], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset));
 					$content .= '</div>';
 				} else {
 					$commentline = ' ' . strip_tags($row['content']);
@@ -1516,6 +1504,8 @@ function areYouSure(ziel) {
 	 * @return void
 	 */
 	public function renderTicketForm() {/*{{{*/
+		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+
 		// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
@@ -1529,6 +1519,19 @@ function areYouSure(ziel) {
 		if (empty($this->piVars['showUid']) && empty($this->piVars['updateUid'])) {
 			$this->hiddenFormFields['newticket'] = '<input type="hidden" name="' . $this->prefixId . '[newticket]" value="1">';
 			$this->markerArray['LABEL_EDIT_TICKET'] = '';
+
+			// if we are creating a new ticket, we have to have at least one category
+			$where_clause = 'pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
+			if (!$this->ffdata['all_categories'] && $this->ffdata['categories']) {
+				$where_clause .= ' AND uid IN (' . $this->ffdata['categories'] . ')';
+			} 
+			$where_clause .= $lcObj->enableFields($this->categoryTablename);
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->categoryTablename,$where_clause,'','sorting');
+			$num_rows = $GLOBALS['TYPO3_DB']->sql_num_rows($res); 
+			if (!$num_rows) {
+				return '<p class="error">' . $this->pi_getLL('error_no_category') . '</p>';
+			}
+
 		} else {
 			$this->hiddenFormFields['updateUid'] = '<input type="hidden" name="' . $this->prefixId . '[updateUid]" value="' . $this->internal['currentRow']['uid'] . '">';
 			// remember the related tickets
@@ -1688,7 +1691,7 @@ function areYouSure(ziel) {
 		foreach (explode(',', $this->conf['locallangLabelList']) as $labelName) {
 			$markerArray['LABEL_' . trim($labelName)] = $this->pi_getLL('LABEL_' . trim($labelName));
 			if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-				$markerArray['LABEL_' . trim($labelName)] = htmlentities($markerArray['LABEL_' . trim($labelName)]);
+				$markerArray['LABEL_' . trim($labelName)] = htmlentities($markerArray['LABEL_' . trim($labelName)], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 			}
 		}
 
@@ -2627,7 +2630,7 @@ function areYouSure(ziel) {
 				
 				// don't link the title in the email and csv view
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = htmlentities($this->internal['currentRow']['title']);
+					$retval = htmlentities($this->internal['currentRow']['title'], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 					//$retval = htmlentities($retval);
 				} else if ($renderType == CONST_RENDER_TYPE_CSV) {
 					$retval = $this->internal['currentRow']['title'];
@@ -2671,12 +2674,12 @@ function areYouSure(ziel) {
 					$retval = html_entity_decode($retval);
 
 					// Replace all HTML-Entities
-					$retval = htmlentities($retval);
+					$retval = htmlentities($retval, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
 					// Keep Tags
-					$retval = str_replace(htmlentities('<'), '<', $retval);
-					$retval = str_replace(htmlentities('>'), '>', $retval);
-					$retval = str_replace(htmlentities('"'), '"', $retval);
+					$retval = str_replace(htmlentities('<', ENT_QUOTES, $GLOBALS['TSFE']->renderCharset), '<', $retval);
+					$retval = str_replace(htmlentities('>', ENT_QUOTES, $GLOBALS['TSFE']->renderCharset), '>', $retval);
+					$retval = str_replace(htmlentities('"', ENT_QUOTES, $GLOBALS['TSFE']->renderCharset), '"', $retval);
 				} else {
 					$retval = $this->pi_RTEcssText($this->internal['currentRow']['description']);
 				}
@@ -2693,7 +2696,7 @@ function areYouSure(ziel) {
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], 'fe_users', 'name,username');
 
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = htmlentities($retval);
+					$retval = htmlentities($retval, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 				}
 
 				return $retval;
@@ -2817,7 +2820,7 @@ function areYouSure(ziel) {
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], $this->categoryTablename, 'title');
 				/*
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = htmlentities($retval);
+					$retval = htmlentities($retval, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 				}
 				*/
 				return $retval;
@@ -2835,7 +2838,7 @@ function areYouSure(ziel) {
 				$retval = $this->internal['currentRow'][$fieldName];
 				/*
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = htmlentities($retval);
+					$retval = htmlentities($retval, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 				}
 				*/
 				return $retval;
