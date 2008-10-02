@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'ke_troubletickets'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tt_content.list_type_pi1">Trouble Ticket System</label>
+			<label index="tx_ketroubletickets_tickets">Trouble Tickets</label>
+			<label index="tx_ketroubletickets_tickets.title">Title</label>
+			<label index="tx_ketroubletickets_tickets.description">Description</label>
+			<label index="tx_ketroubletickets_tickets.additional_info">Additional Info</label>
+			<label index="tx_ketroubletickets_tickets.until_date">To do until</label>
+			<label index="tx_ketroubletickets_tickets.from_date">To do from</label>
+			<label index="tx_ketroubletickets_tickets.owner_feuser">Owner</label>
+			<label index="tx_ketroubletickets_tickets.responsible_feuser">Responsible user</label>
+			<label index="tx_ketroubletickets_tickets.observers_feuser">Observers</label>
+			<label index="tx_ketroubletickets_tickets.category">Category</label>
+			<label index="tx_ketroubletickets_tickets.status.I.0">Open</label>
+			<label index="tx_ketroubletickets_tickets.status.I.1">Acknowledged</label>
+			<label index="tx_ketroubletickets_tickets.status.I.2">working</label>
+			<label index="tx_ketroubletickets_tickets.status.I.3">Closed</label>
+			<label index="tx_ketroubletickets_tickets.status.I.4">On hold</label>
+			<label index="tx_ketroubletickets_tickets.status">Status</label>
+			<label index="tx_ketroubletickets_tickets.billing">Billing</label>
+			<label index="tx_ketroubletickets_tickets.priority.I.0">Low</label>
+			<label index="tx_ketroubletickets_tickets.priority.I.1">Normal</label>
+			<label index="tx_ketroubletickets_tickets.priority.I.2">High</label>
+			<label index="tx_ketroubletickets_tickets.priority">Priority</label>
+			<label index="tx_ketroubletickets_tickets.notifications_owner.I.0">Never</label>
+			<label index="tx_ketroubletickets_tickets.notifications_owner.I.1">When something changes</label>
+			<label index="tx_ketroubletickets_tickets.notifications_owner.I.2">When status changes</label>
+			<label index="tx_ketroubletickets_tickets.notifications_owner">Send notifications to owner</label>
+			<label index="tx_ketroubletickets_tickets.notifications_responsible.I.0">Never</label>
+			<label index="tx_ketroubletickets_tickets.notifications_responsible.I.1">When something changes</label>
+			<label index="tx_ketroubletickets_tickets.notifications_responsible.I.2">When status changes</label>
+			<label index="tx_ketroubletickets_tickets.notifications_responsible">Send notifications to responsible user</label>
+			<label index="tx_ketroubletickets_tickets.notifications_observer.I.0">Never</label>
+			<label index="tx_ketroubletickets_tickets.notifications_observer.I.1">When something changes</label>
+			<label index="tx_ketroubletickets_tickets.notifications_observer.I.2">When status changes</label>
+			<label index="tx_ketroubletickets_tickets.notifications_observer">Send notifications to observer</label>
+			<label index="tx_ketroubletickets_tickets.files">Files</label>
+			<label index="tx_ketroubletickets_tickets.related_tickets">Related tickets</label>
+			<label index="tx_ketroubletickets_tickets.time_used">Time used</label>
+			<label index="tx_ketroubletickets_tickets.time_planned">Time planned</label>
+			<label index="tx_ketroubletickets_tickets.effort">Effort</label>
+			<label index="tx_ketroubletickets_tickets.close_time">Closed on</label>
+			<label index="tx_ketroubletickets_comments">Trouble Ticket Comments</label>
+			<label index="tx_ketroubletickets_comments.ticket_uid">Ticket</label>
+			<label index="tx_ketroubletickets_comments.feuser_uid">Frontenduser</label>
+			<label index="tx_ketroubletickets_comments.content">Content</label>
+			<label index="tx_ketroubletickets_categories">Troble Ticket Categories</label>
+			<label index="tx_ketroubletickets_categories.title">Title</label>
+			<label index="tx_ketroubletickets_history">Trouble Ticket History</label>
+			<label index="tx_ketroubletickets_history.ticket_uid">Ticket</label>
+			<label index="tx_ketroubletickets_history.feuser_uid">Frontenduser</label>
+			<label index="tx_ketroubletickets_history.databasefield">Field</label>
+			<label index="tx_ketroubletickets_history.feuser_username">Frontenduser (Username)</label>
+			<label index="tx_ketroubletickets_history.value_old">Old value</label>
+			<label index="tx_ketroubletickets_history.value_new">New value</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tt_content.list_type_pi1">Trouble Ticket System</label>
+			<label index="tx_ketroubletickets_tickets">Trouble Tickets</label>
+			<label index="tx_ketroubletickets_tickets.title">Titel</label>
+			<label index="tx_ketroubletickets_tickets.description">Beschreibung</label>
+			<label index="tx_ketroubletickets_tickets.additional_info">Zusatzinformationen</label>
+			<label index="tx_ketroubletickets_tickets.until_date">Zu erledigen bis</label>
+			<label index="tx_ketroubletickets_tickets.from_date">Zu erledigen ab</label>
+			<label index="tx_ketroubletickets_tickets.owner_feuser">Besitzer</label>
+			<label index="tx_ketroubletickets_tickets.responsible_feuser">Verantwortlicher Benutzer</label>
+			<label index="tx_ketroubletickets_tickets.observers_feuser">Beobachter</label>
+			<label index="tx_ketroubletickets_tickets.category">Kategorie</label>
+			<label index="tx_ketroubletickets_tickets.status">Status</label>
+			<label index="tx_ketroubletickets_tickets.billing">Abrechnung</label>
+			<label index="tx_ketroubletickets_tickets.priority">Priorität</label>
+			<label index="tx_ketroubletickets_tickets.notifications_owner.I.0">Niemals</label>
+			<label index="tx_ketroubletickets_tickets.notifications_owner.I.1">Bei jeder Änderung</label>
+			<label index="tx_ketroubletickets_tickets.notifications_owner.I.2">Wenn sich der Status ändert</label>
+			<label index="tx_ketroubletickets_tickets.notifications_owner">Besitzer benachrichtigen</label>
+			<label index="tx_ketroubletickets_tickets.notifications_responsible.I.0">Niemals</label>
+			<label index="tx_ketroubletickets_tickets.notifications_responsible.I.1">Bei jeder Änderung</label>
+			<label index="tx_ketroubletickets_tickets.notifications_responsible.I.2">Wenn sich der Status ändert</label>
+			<label index="tx_ketroubletickets_tickets.notifications_responsible">Verantwortlichen Benutzer benachrichtigen</label>
+			<label index="tx_ketroubletickets_tickets.notifications_observer.I.0">Niemals</label>
+			<label index="tx_ketroubletickets_tickets.notifications_observer.I.1">Bei jeder Änderung</label>
+			<label index="tx_ketroubletickets_tickets.notifications_observer.I.2">Wenn sich der Status ändert</label>
+			<label index="tx_ketroubletickets_tickets.notifications_observer">Beobachter benachrichtigen</label>
+			<label index="tx_ketroubletickets_tickets.files">Dateien</label>
+			<label index="tx_ketroubletickets_tickets.related_tickets">Verwandte Aufgaben</label>
+			<label index="tx_ketroubletickets_tickets.time_used">Zeitaufwand tatsächlich (in Minuten)</label>
+			<label index="tx_ketroubletickets_tickets.time_planned">Zeitaufwand geplant (in Minuten)</label>
+			<label index="tx_ketroubletickets_tickets.effort">Aufwand</label>
+			<label index="tx_ketroubletickets_tickets.close_time">Geschlossen am</label>
+			<label index="tx_ketroubletickets_comments">Trouble Ticket Kommentare</label>
+			<label index="tx_ketroubletickets_comments.ticket_uid">Ticket</label>
+			<label index="tx_ketroubletickets_comments.feuser_uid">Frontendbenutzer</label>
+			<label index="tx_ketroubletickets_comments.content">Inhalt</label>
+			<label index="tx_ketroubletickets_categories">Trouble Ticket Kategorien</label>
+			<label index="tx_ketroubletickets_categories.title">Titel</label>
+			<label index="tx_ketroubletickets_categories.singleviewpage">Seite für Einzelansicht</label>
+			<label index="tx_ketroubletickets_history">Trouble Ticket Änderungsverlauf</label>
+			<label index="tx_ketroubletickets_history.ticket_uid">Ticket</label>
+			<label index="tx_ketroubletickets_history.feuser_uid">Frontendbenutzer</label>
+			<label index="tx_ketroubletickets_history.databasefield">Feld</label>
+			<label index="tx_ketroubletickets_history.feuser_username">Frontendbenutzer (Benutzername)</label>
+			<label index="tx_ketroubletickets_history.value_old">Alter Wert</label>
+			<label index="tx_ketroubletickets_history.value_new">Neuer Wert</label>
+		</languageKey>
+	</data>
+</T3locallang>

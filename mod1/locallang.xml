@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;web_txketroubleticketsM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">Trouble Tickets</label>
+			<label index="function1">Function #1</label>
+			<label index="function2">Function #2</label>
+			<label index="function3">Function #3</label>
+		</languageKey>
+		
+		<languageKey index="de" type="array">
+			<label index="title">Aufgabenauswertung</label>
+			<label index="select_tickets_page">Auf dieser Seite befinden sich keine Tickets. Bitte wählen Sie im Seitenbaum eine Seite aus, auf der sich Tickets befinden.</label>
+			<label index="all_owners">Alle Besitzer</label>
+			<label index="all_responsible_users">Alle Verantwortlichen</label>
+			<label index="all_categories">Alle Kategorien</label>
+			<label index="all_connected_custom">Alle Produkte</label>
+			<label index="all_connected_feuser">Alle Mitglieder</label>
+			<label index="all_connected_connected_addresses">Alle Lieferanten</label>
+			<label index="from_date">Eröffnet von</label>
+			<label index="to_date">Eröffnet bis</label>
+			<label index="from_date_closing_time">Erledigt von</label>
+			<label index="to_date_closing_time">Erledigt bis</label>
+			<label index="button_OK">OK</label>
+			<label index="error_date2cal">Die TYPO3-Erweiterung "date2cal" muss installiert sein.</label>
+			<label index="error_no_results">Keine Ergebnisse.</label>
+			<label index="error_from_greater_to">Fehler: Von-Datum ist größer als bis-Datum.</label>
+			<label index="sum">Summe</label>
+			<label index="average">Durch.</label>
+			<label index="table_title">Aufgaben</label>
+			<label index="empty_value">[leer]</label>
+			<label index="all_entries">Alle Einträge</label>
+			<label index="page">Seite</label>
+			<label index="explanation">Reaktionszeit: Zeit zwischen Erstellung und erster Änderung durch den Verantwortlichen.</label>
+
+			<label index="status_all">Alle Aufgaben</label>
+			<label index="status_not_closed">Nicht geschlossene Aufgaben</label>
+			<label index="status_closed">Geschlossene Aufgaben</label>
+			<label index="status_current">Aktuelle (offen, warten, Bearbeitung)</label>
+			<label index="status_offer">Angebote</label>
+
+			<label index="billing_all">Alle Abrechnungsarten</label>
+			<label index="billing_service">Pflege</label>
+			<label index="billing_invoice">zu berechnen</label>
+
+			<label index="header_line_number">Zeile</label>
+			<label index="header_uid">UID</label>
+			<label index="header_title">Titel</label>
+			<label index="header_owner_feuser">Besitzer</label>
+			<label index="header_responsible_feuser">Verantw.</label>
+			<label index="header_percent">Anteil</label>
+			<label index="header_status">Status</label>
+			<label index="header_crdate">Erstellt am</label>
+			<label index="header_cat_title">Kategorie</label>
+			<label index="header_until_date">erledigen bis</label>
+			<label index="header_time_used">Tats. Zeit</label>
+			<label index="header_time_planned">Gepl. Zeit</label>
+			<label index="header_effort">Aufw.</label>
+			<label index="header_priority">Priorität</label>
+			<label index="header_reaction_time">Reaktion</label>
+			<label index="header_close_time">Erledigt am</label>
+			<label index="header_billing">Abrechnung</label>
+
+		</languageKey>
+	</data>
+</T3locallang>

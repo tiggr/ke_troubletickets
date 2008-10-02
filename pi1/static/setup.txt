@@ -1,0 +1,304 @@
+plugin.tx_ketroubletickets_pi1 {
+	# include CSS?
+	includeDefaultCSS = 1
+
+	# PID List. Sysfolder on which the tickets and categories are stored
+	pidList =
+	recursive =
+
+	# modes used in the mode selector
+	modes = not_closed, all
+	defaultMode = not_closed
+
+	# remember some of the piVars when going from the listview to the singleview and back
+	keepPiVars = pointer,sword,mode,sort,filter
+
+	# Main HTML-Template
+	templateFile = EXT:ke_troubletickets/res/template/ke_troubletickets.tmpl.htm
+
+	# Image used for the date picker
+	datePickerImage = IMAGE
+	datePickerImage.file = EXT:ke_troubletickets/res/images/cal.gif
+
+	# Status and Priority Names are stored in locallang
+	# remember to adjust the TCA (tca.php), too, if you change these values
+	statusList = open,acknowledged,working,closed,onhold,wait,offer
+	priorityList = 2,1,3
+	billingList = open,service,invoice,service_invoice
+	notificationBehaviorList = oneverychange,onstatuschange,never
+	priorityWrap.1 = 
+	priorityWrap.2 = <span style="color:#ffcc00;">|</span>
+	priorityWrap.3 = <span style="color:red;">|</span>
+
+	# status icons
+	statusImage.open = IMAGE
+	statusImage.open.file = EXT:ke_troubletickets/res/images/status_open.gif
+	statusImage.acknowledged = IMAGE
+	statusImage.acknowledged.file = EXT:ke_troubletickets/res/images/status_acknowledged.gif
+	statusImage.working = IMAGE
+	statusImage.working.file = EXT:ke_troubletickets/res/images/status_edit.gif
+	statusImage.closed = IMAGE
+	statusImage.closed.file = EXT:ke_troubletickets/res/images/status_finished.gif
+	statusImage.onhold = IMAGE
+	statusImage.onhold.file = EXT:ke_troubletickets/res/images/status_parked.gif
+	statusImage.wait = IMAGE
+	statusImage.wait.file = EXT:ke_troubletickets/res/images/status_wait.gif
+	statusImage.offer = IMAGE
+	statusImage.offer.file = EXT:ke_troubletickets/res/images/status_offer.gif
+
+	statusImageTeaser.open = IMAGE
+	statusImageTeaser.open.file = EXT:ke_troubletickets/res/images/green.png
+	statusImageTeaser.acknowledged = IMAGE
+	statusImageTeaser.acknowledged.file = EXT:ke_troubletickets/res/images/green.png
+	statusImageTeaser.working = IMAGE
+	statusImageTeaser.working.file = EXT:ke_troubletickets/res/images/green.png
+	statusImageTeaser.closed = IMAGE
+	statusImageTeaser.closed.file = EXT:ke_troubletickets/res/images/orange.png
+	statusImageTeaser.onhold = IMAGE
+	statusImageTeaser.onhold.file = EXT:ke_troubletickets/res/images/orange.png
+	statusImageTeaser.wait = IMAGE
+	statusImageTeaser.wait.file = EXT:ke_troubletickets/res/images/orange.png
+	statusImageTeaser.offer = IMAGE
+	statusImageTeaser.offer.file = EXT:ke_troubletickets/res/images/orange.png
+	
+	# edit and delete icons
+	icons.edit = IMAGE
+	icons.edit.file = EXT:ke_troubletickets/res/images/fe_edit.gif
+	icons.delete = IMAGE
+	icons.delete.file = EXT:ke_troubletickets/res/images/fe_delete.gif
+	icons.close = IMAGE
+	icons.close.file = EXT:ke_troubletickets/res/images/fe_close.gif
+	icons.deleteFile = IMAGE
+	icons.deleteFile.file = EXT:ke_troubletickets/res/images/fe_delete_small.png
+
+	# Additional Icons
+	additionalIconList = iconNewTicket,iconCsvExport
+
+	iconNewTicket = IMAGE
+	iconNewTicket.file = EXT:ke_troubletickets/res/images/new.gif
+	iconCsvExport = IMAGE
+	iconCsvExport.file = EXT:ke_troubletickets/res/images/csv.gif
+
+	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
+	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING
+
+	# dateformat used by the datepicker in the form
+	# possible values:
+	# ddmmyyyy
+	# mmddyyyy
+	# if you change the format to mmddyyy, you have to change the 
+	# separator to "/" in js/datetimepicker.js
+	# Should be configurable in future versions
+	datepicker_dateformat = ddmmyyyy
+	datefield_dateformat = d.m.Y
+
+	# dateformat used by the history
+	history_dateformat = d.m.Y
+
+	# order of the history entries
+	history_order_by = crdate ASC
+
+	# some definitions for the comment form
+	comment_cols = 95
+	comment_rows = 15
+	comment_dateformat = d.m.Y
+
+	# empty element in dropdown list
+	emptyDropdownElement = ---
+
+	# definition of the input form
+	# 'name' has to be the same as defined in the database
+	formFieldList {
+		5 {
+			name = owner_feuser
+			type = feuserSelect
+			required = 0
+			prefillWithCurrentUserIfEmpty = 1
+		}
+		10 {
+			name = title
+			type = input
+			required = 1
+			size = 50
+			maxlength = 250
+		}
+		20 {
+			name = status
+			type = select
+			size = 1
+			multiple = 0
+			# list of values defined in this typoscript configuration
+			# labels are defined in locallang ('SELECTLABEL_...')
+			valueList = statusList
+		}
+		25 {
+			name = billing
+			type = select
+			size = 1
+			multiple = 0
+			# list of values defined in this typoscript configuration
+			# labels are defined in locallang ('SELECTLABEL_...')
+			valueList = billingList
+		}
+		30 {
+			name = priority
+			type = select
+			size = 1
+			multiple = 0
+			valueList = priorityList
+		}
+		40 {
+			name = description
+			type = textareaRTE
+			cols = 50
+			rows = 10
+			maxlength = 5000
+		}
+		50 {
+			name = from_date
+			type = date
+			size = 10
+			maxlength = 10
+		}
+		55 {
+			name = until_date
+			type = date
+			size = 10
+			maxlength = 10
+		}
+		60 {
+			internal = 1
+			name = time_used
+			type = inputHoursToMinutes
+			size = 5
+			maxlength = 10
+		}
+		65 {
+			internal = 1
+			name = time_planned
+			type = inputHoursToMinutes
+			size = 5
+			maxlength = 10
+		}
+		68 {
+			internal = 1
+			name = additional_info
+			type = textarea
+			cols = 85
+			rows = 5 
+			maxlength = 5000
+		}
+		70 {
+			name = files
+			type = files
+			maxFiles = 20
+			size = 50
+			maxlength = 10000000
+		}
+		73 {
+			name = related_tickets
+			type = input_related_tickets
+			size = 5
+			maxlength = 8
+		}
+		75 {
+			name = effort
+			type = input
+			required = 0
+			size = 10
+			maxlength = 250
+		}
+		80 {
+			optional = 1
+			name = category
+			type = categorySelect
+			size = 1
+			multiple = 0
+		}
+		90 {
+			optional = 1
+			name = responsible_feuser
+			type = feuserSelect
+			flexformFieldForPreselectedUser = responsible_singleuser
+			flexformFieldForUsergroupToChoseFrom = responsible_group_to_choose_from
+			size = 1
+			multiple = 0
+			prefillWithCurrentUserIfEmpty = 1
+		}
+		100 {
+			optional = 1
+			name = observers_feuser
+			type = feuserSelect
+			flexformFieldForPreselectedUser = observer_singleuser
+			flexformFieldForUsergroupToChoseFrom = observer_group_to_choose_from
+			size = 12
+			multiple = 1
+		}
+		110 {
+			optional = 1
+			name = notifications_owner
+			type = notificationsSelect
+			flexformFieldForNotificationsSelect = notifications_owner
+			valueList = notificationBehaviorList
+			size = 1
+			multiple = 0
+		}
+		120 {
+			optional = 1
+			name = notifications_responsible
+			type = notificationsSelect
+			flexformFieldForNotificationsSelect = notifications_responsible
+			valueList = notificationBehaviorList
+			size = 1
+			multiple = 0
+		}
+		130 {
+			optional = 1
+			name = notifications_observer
+			type = notificationsSelect
+			flexformFieldForNotificationsSelect = notifications_observer
+			valueList = notificationBehaviorList
+			size = 1
+			multiple = 0
+		}
+		170 {
+			name = submit
+			type = submit
+		}
+	}
+}
+
+# Listview defaults
+plugin.tx_ketroubletickets_pi1.listView {
+	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle
+	headerList = category, title, crdate, from_date, until_date, status, owner_feuser, responsible_feuser, number_of_comments, priority
+	filterList = responsible_feuser, category
+	csvExportFieldList =  crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments
+	results_at_a_time =
+	maxPages =
+	cropSingleviewPagetitle = 8
+}
+
+# Default values for email notifications
+plugin.tx_ketroubletickets_pi1.email_notifications {
+	subject_prefix = [TROUBLE TICKET]
+	from_email = me@domain.com
+	from_name = TYPO3 Trouble Ticket System
+	fieldList = crdate, title, status, billing, priority, from_date, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets
+}
+
+# Examples from Kickstarter:
+/*
+# Example of default set CSS styles (these go into the document header):
+plugin.tx_ketroubletickets_pi1._CSS_DEFAULT_STYLE (
+  .tx-ketroubletickets-pi1 H2 { margin-top: 0px; margin-bottom: 0px; }
+)
+
+# Example of how to overrule LOCAL_LANG values for the plugin:
+plugin.tx_ketroubletickets_pi1._LOCAL_LANG.default {
+  pi_list_searchBox_search = Search!
+}
+
+# Example of how to set default values from TS in the incoming array, $this->piVars of the plugin:
+plugin.tx_ketroubletickets_pi1._DEFAULT_PI_VARS.test = test
+*/

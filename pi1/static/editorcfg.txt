@@ -1,0 +1,367 @@
+
+plugin.tx_ketroubletickets_pi1.CSS_editor = Plugin: "tx_ketroubletickets_pi1"
+plugin.tx_ketroubletickets_pi1.CSS_editor.selector = .tx-ketroubletickets-pi1
+plugin.tx_ketroubletickets_pi1.CSS_editor.exampleWrap = <HR><strong>Plugin: "tx_ketroubletickets_pi1"</strong><HR><div class="tx-ketroubletickets-pi1"> | </div>
+plugin.tx_ketroubletickets_pi1.CSS_editor.ch {
+	P = Text
+	P.selector = P
+	P.attribs = BODYTEXT
+	P.example = <p>General text wrapped in &lt;P&gt;:<br />This is text <a href="#">with a link</a> in it. In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+	P.exampleStop = 1
+	P.ch.links = < CSS_editor.ch.A
+
+	H2 = Header 2
+	H2.selector = H2
+	H2.attribs = HEADER
+	H2.example = <H2>Header 2 example <a href="#"> with link</a></H2><p>Bodytext, Et praeessent diei ac nocti et dividerent lucem ac tenebras et vidit Deus quod esset bonum et factum est...</p>
+	H2.ch.links = < CSS_editor.ch.A
+	H2.exampleStop = 1
+
+	H3 = Header 3
+	H3.selector = H3
+	H3.attribs = HEADER
+	H3.example = <h3>Header 3 example <a href="#"> with link</a></h3><p>Bodytext, Et praeessent diei ac nocti et dividerent lucem ac tenebras et vidit Deus quod esset bonum et factum est...</p>
+	H3.ch.links = < CSS_editor.ch.A
+	H3.exampleStop = 1
+
+
+		## LISTING:
+	modeSelector = Mode selector
+	modeSelector.selector = .tx-ketroubletickets-pi1-modeSelector
+	modeSelector.example = <div class="tx-ketroubletickets-pi1-modeSelector"><table><tr><td class="tx-ketroubletickets-pi1-modeSelector-SCell"><p><a HREF="#">Mode 1 (S)</a></p></td><td><p><a HREF="#">Mode 2</a></p></td><td><p><a HREF="#">Mode 3</a></p></td></tr></table></div>
+	modeSelector.exampleStop = 1
+	modeSelector.ch.P < .P
+	modeSelector.ch.TABLE = Table
+	modeSelector.ch.TABLE.selector = TABLE
+	modeSelector.ch.TABLE.attribs = TABLE
+	modeSelector.ch.TD = Table cells
+	modeSelector.ch.TD.selector = TD
+	modeSelector.ch.TD.attribs = TD
+	modeSelector.ch.TD.ch {
+	  TD = Selected table cells
+	  TD.selector = + .tx-ketroubletickets-pi1-modeSelector-SCell
+	  TD.attribs = TD
+	}
+	modeSelector.ch.TD.ch.TD.ch.P < .P
+
+
+	browsebox = Browsing box
+	browsebox.selector = .tx-ketroubletickets-pi1-browsebox
+	browsebox.example = <div class="tx-ketroubletickets-pi1-browsebox"><p>Displaying results <span class="tx-ketroubletickets-pi1-browsebox-strong">1 to 3</span> out of <span class="tx-ketroubletickets-pi1-browsebox-strong">4</span></p><table><tr><td class="tx-ketroubletickets-pi1-browsebox-SCell"><p><a HREF="#">Page 1 (S)</a></p></td><td><p><a HREF="#">Page 2</a></p></td><td><p><a HREF="#">Next ></a></p></td></tr></table></div>
+	browsebox.exampleStop = 1
+	browsebox.ch.P < .P
+	browsebox.ch.P.ch.strong = Emphasized numbers
+	browsebox.ch.P.ch.strong {
+	  selector = SPAN.tx-ketroubletickets-pi1-browsebox-strong
+	  attribs = TEXT
+	}
+	browsebox.ch.TABLE = Table
+	browsebox.ch.TABLE.selector = TABLE
+	browsebox.ch.TABLE.attribs = TABLE
+	browsebox.ch.TD = Table cells
+	browsebox.ch.TD.selector = TD
+	browsebox.ch.TD.attribs = TD
+	browsebox.ch.TD.ch {
+	  TD = Selected table cells
+	  TD.selector = + .tx-ketroubletickets-pi1-browsebox-SCell
+	  TD.attribs = TD
+	}
+	browsebox.ch.TD.ch.P < .P
+	browsebox.ch.TD.ch.TD.ch.P < .P
+
+
+	searchbox = Search box
+	searchbox.selector = .tx-ketroubletickets-pi1-searchbox
+	searchbox.example = <div class="tx-ketroubletickets-pi1-searchbox"><table><form action="#" method="POST"><tr><td><input type="text" name="tx_ketroubletickets_pi1[sword]" value="Search word" class="tx-ketroubletickets-pi1-searchbox-sword"></td><td><input type="submit" value="Search" class="tx-ketroubletickets-pi1-searchbox-button"></td></tr></form></table></div>
+	searchbox.exampleStop = 1
+	searchbox.ch {
+		TABLE = Table
+		TABLE.selector = TABLE
+		TABLE.attribs = TABLE
+		TD = Table cells
+		TD.selector = TD
+		TD.attribs = TD
+		INPUT = Form fields
+		INPUT.selector = INPUT
+		INPUT.attribs = TEXT,background-color,width
+		INPUT.ch {
+			sword = Search word field
+			sword.selector = +.tx-ketroubletickets-pi1-searchbox-sword
+			sword.attribs = TEXT,background-color,width
+
+			button = Submit button
+			button.selector = +.tx-ketroubletickets-pi1-searchbox-button
+			button.attribs = TEXT,background-color,width
+		}
+	}
+	list = List display
+	list.selector = .tx-ketroubletickets-pi1-listrow
+	list.example = <div class="tx-ketroubletickets-pi1-listrow"><p>This is regular bodytext in the list display.</p><p>Viditque Deus cuncta quae fecit et erant valde bona et factum est vespere et mane dies sextus.</p></div>
+	list.exampleWrap = <div class="tx-ketroubletickets-pi1-listrow"> | </div>
+	list.ch.P < .P
+	list.ch.P.exampleStop = 0
+	list.ch.P.ch {
+		
+		P_0 = [listrowField-title]
+		P_0.selector = +.tx-ketroubletickets-pi1-listrowField-title
+		P_0.attribs = BODYTEXT
+		P_0.example = <p class="tx-ketroubletickets-pi1-listrowField-title">[listrowField-title] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-title">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_0.exampleStop = 1
+		P_0.ch.links = < CSS_editor.ch.A
+		
+		
+		P_1 = [listrowField-until-date]
+		P_1.selector = +.tx-ketroubletickets-pi1-listrowField-until-date
+		P_1.attribs = BODYTEXT
+		P_1.example = <p class="tx-ketroubletickets-pi1-listrowField-until-date">[listrowField-until-date] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-until-date">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_1.exampleStop = 1
+		P_1.ch.links = < CSS_editor.ch.A
+		
+		
+		P_2 = [listrowField-owner-feuser]
+		P_2.selector = +.tx-ketroubletickets-pi1-listrowField-owner-feuser
+		P_2.attribs = BODYTEXT
+		P_2.example = <p class="tx-ketroubletickets-pi1-listrowField-owner-feuser">[listrowField-owner-feuser] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-owner-feuser">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_2.exampleStop = 1
+		P_2.ch.links = < CSS_editor.ch.A
+		
+		
+		P_3 = [listrowField-responsible-feuser]
+		P_3.selector = +.tx-ketroubletickets-pi1-listrowField-responsible-feuser
+		P_3.attribs = BODYTEXT
+		P_3.example = <p class="tx-ketroubletickets-pi1-listrowField-responsible-feuser">[listrowField-responsible-feuser] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-responsible-feuser">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_3.exampleStop = 1
+		P_3.ch.links = < CSS_editor.ch.A
+		
+		
+		P_4 = [listrowField-observers-feuser]
+		P_4.selector = +.tx-ketroubletickets-pi1-listrowField-observers-feuser
+		P_4.attribs = BODYTEXT
+		P_4.example = <p class="tx-ketroubletickets-pi1-listrowField-observers-feuser">[listrowField-observers-feuser] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-observers-feuser">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_4.exampleStop = 1
+		P_4.ch.links = < CSS_editor.ch.A
+		
+		
+		P_5 = [listrowField-category]
+		P_5.selector = +.tx-ketroubletickets-pi1-listrowField-category
+		P_5.attribs = BODYTEXT
+		P_5.example = <p class="tx-ketroubletickets-pi1-listrowField-category">[listrowField-category] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-category">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_5.exampleStop = 1
+		P_5.ch.links = < CSS_editor.ch.A
+		
+		
+		P_6 = [listrowField-status]
+		P_6.selector = +.tx-ketroubletickets-pi1-listrowField-status
+		P_6.attribs = BODYTEXT
+		P_6.example = <p class="tx-ketroubletickets-pi1-listrowField-status">[listrowField-status] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-status">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_6.exampleStop = 1
+		P_6.ch.links = < CSS_editor.ch.A
+		
+		
+		P_7 = [listrowField-priority]
+		P_7.selector = +.tx-ketroubletickets-pi1-listrowField-priority
+		P_7.attribs = BODYTEXT
+		P_7.example = <p class="tx-ketroubletickets-pi1-listrowField-priority">[listrowField-priority] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-priority">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_7.exampleStop = 1
+		P_7.ch.links = < CSS_editor.ch.A
+		
+		
+		P_8 = [listrowField-notifications-owner]
+		P_8.selector = +.tx-ketroubletickets-pi1-listrowField-notifications-owner
+		P_8.attribs = BODYTEXT
+		P_8.example = <p class="tx-ketroubletickets-pi1-listrowField-notifications-owner">[listrowField-notifications-owner] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-notifications-owner">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_8.exampleStop = 1
+		P_8.ch.links = < CSS_editor.ch.A
+		
+		
+		P_9 = [listrowField-notifications-responsible]
+		P_9.selector = +.tx-ketroubletickets-pi1-listrowField-notifications-responsible
+		P_9.attribs = BODYTEXT
+		P_9.example = <p class="tx-ketroubletickets-pi1-listrowField-notifications-responsible">[listrowField-notifications-responsible] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-notifications-responsible">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_9.exampleStop = 1
+		P_9.ch.links = < CSS_editor.ch.A
+		
+		
+		P_10 = [listrowField-notifications-observer]
+		P_10.selector = +.tx-ketroubletickets-pi1-listrowField-notifications-observer
+		P_10.attribs = BODYTEXT
+		P_10.example = <p class="tx-ketroubletickets-pi1-listrowField-notifications-observer">[listrowField-notifications-observer] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-notifications-observer">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_10.exampleStop = 1
+		P_10.ch.links = < CSS_editor.ch.A
+		
+		
+		P_11 = [listrowField-files]
+		P_11.selector = +.tx-ketroubletickets-pi1-listrowField-files
+		P_11.attribs = BODYTEXT
+		P_11.example = <p class="tx-ketroubletickets-pi1-listrowField-files">[listrowField-files] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-files">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_11.exampleStop = 1
+		P_11.ch.links = < CSS_editor.ch.A
+		
+		
+		P_12 = [listrowField-time-used]
+		P_12.selector = +.tx-ketroubletickets-pi1-listrowField-time-used
+		P_12.attribs = BODYTEXT
+		P_12.example = <p class="tx-ketroubletickets-pi1-listrowField-time-used">[listrowField-time-used] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-time-used">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_12.exampleStop = 1
+		P_12.ch.links = < CSS_editor.ch.A
+		
+		
+		P_13 = [listrowField-connected-addresses]
+		P_13.selector = +.tx-ketroubletickets-pi1-listrowField-connected-addresses
+		P_13.attribs = BODYTEXT
+		P_13.example = <p class="tx-ketroubletickets-pi1-listrowField-connected-addresses">[listrowField-connected-addresses] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-connected-addresses">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_13.exampleStop = 1
+		P_13.ch.links = < CSS_editor.ch.A
+		
+		
+		P_14 = [listrowField-connected-feusers]
+		P_14.selector = +.tx-ketroubletickets-pi1-listrowField-connected-feusers
+		P_14.attribs = BODYTEXT
+		P_14.example = <p class="tx-ketroubletickets-pi1-listrowField-connected-feusers">[listrowField-connected-feusers] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-connected-feusers">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_14.exampleStop = 1
+		P_14.ch.links = < CSS_editor.ch.A
+		
+		
+		P_15 = [listrowField-connected-custom]
+		P_15.selector = +.tx-ketroubletickets-pi1-listrowField-connected-custom
+		P_15.attribs = BODYTEXT
+		P_15.example = <p class="tx-ketroubletickets-pi1-listrowField-connected-custom">[listrowField-connected-custom] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-listrowField-connected-custom">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_15.exampleStop = 1
+		P_15.ch.links = < CSS_editor.ch.A
+	}
+	single = Single display
+	single.selector = .tx-ketroubletickets-pi1-singleView
+	single.example = <div class="tx-ketroubletickets-pi1-singleView"><H2>Header, if any:</H2><p>This is regular bodytext in the list display.</p><p>Viditque Deus cuncta quae fecit et erant valde bona et factum est vespere et mane dies sextus.</p><p><a href="#">Back</a></p></div>
+	single.exampleWrap = <div class="tx-ketroubletickets-pi1-singleView"> | </div>
+	single.ch.P < .P
+	single.ch.P.exampleStop = 0
+	single.ch.P.ch {
+		
+		P_0 = [singleViewField-title]
+		P_0.selector = +.tx-ketroubletickets-pi1-singleViewField-title
+		P_0.attribs = BODYTEXT
+		P_0.example = <p class="tx-ketroubletickets-pi1-singleViewField-title">[singleViewField-title] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-title">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_0.exampleStop = 1
+		P_0.ch.links = < CSS_editor.ch.A
+		
+		
+		P_1 = [singleViewField-until-date]
+		P_1.selector = +.tx-ketroubletickets-pi1-singleViewField-until-date
+		P_1.attribs = BODYTEXT
+		P_1.example = <p class="tx-ketroubletickets-pi1-singleViewField-until-date">[singleViewField-until-date] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-until-date">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_1.exampleStop = 1
+		P_1.ch.links = < CSS_editor.ch.A
+		
+		
+		P_2 = [singleViewField-owner-feuser]
+		P_2.selector = +.tx-ketroubletickets-pi1-singleViewField-owner-feuser
+		P_2.attribs = BODYTEXT
+		P_2.example = <p class="tx-ketroubletickets-pi1-singleViewField-owner-feuser">[singleViewField-owner-feuser] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-owner-feuser">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_2.exampleStop = 1
+		P_2.ch.links = < CSS_editor.ch.A
+		
+		
+		P_3 = [singleViewField-responsible-feuser]
+		P_3.selector = +.tx-ketroubletickets-pi1-singleViewField-responsible-feuser
+		P_3.attribs = BODYTEXT
+		P_3.example = <p class="tx-ketroubletickets-pi1-singleViewField-responsible-feuser">[singleViewField-responsible-feuser] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-responsible-feuser">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_3.exampleStop = 1
+		P_3.ch.links = < CSS_editor.ch.A
+		
+		
+		P_4 = [singleViewField-observers-feuser]
+		P_4.selector = +.tx-ketroubletickets-pi1-singleViewField-observers-feuser
+		P_4.attribs = BODYTEXT
+		P_4.example = <p class="tx-ketroubletickets-pi1-singleViewField-observers-feuser">[singleViewField-observers-feuser] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-observers-feuser">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_4.exampleStop = 1
+		P_4.ch.links = < CSS_editor.ch.A
+		
+		
+		P_5 = [singleViewField-category]
+		P_5.selector = +.tx-ketroubletickets-pi1-singleViewField-category
+		P_5.attribs = BODYTEXT
+		P_5.example = <p class="tx-ketroubletickets-pi1-singleViewField-category">[singleViewField-category] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-category">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_5.exampleStop = 1
+		P_5.ch.links = < CSS_editor.ch.A
+		
+		
+		P_6 = [singleViewField-status]
+		P_6.selector = +.tx-ketroubletickets-pi1-singleViewField-status
+		P_6.attribs = BODYTEXT
+		P_6.example = <p class="tx-ketroubletickets-pi1-singleViewField-status">[singleViewField-status] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-status">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_6.exampleStop = 1
+		P_6.ch.links = < CSS_editor.ch.A
+		
+		
+		P_7 = [singleViewField-priority]
+		P_7.selector = +.tx-ketroubletickets-pi1-singleViewField-priority
+		P_7.attribs = BODYTEXT
+		P_7.example = <p class="tx-ketroubletickets-pi1-singleViewField-priority">[singleViewField-priority] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-priority">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_7.exampleStop = 1
+		P_7.ch.links = < CSS_editor.ch.A
+		
+		
+		P_8 = [singleViewField-notifications-owner]
+		P_8.selector = +.tx-ketroubletickets-pi1-singleViewField-notifications-owner
+		P_8.attribs = BODYTEXT
+		P_8.example = <p class="tx-ketroubletickets-pi1-singleViewField-notifications-owner">[singleViewField-notifications-owner] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-notifications-owner">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_8.exampleStop = 1
+		P_8.ch.links = < CSS_editor.ch.A
+		
+		
+		P_9 = [singleViewField-notifications-responsible]
+		P_9.selector = +.tx-ketroubletickets-pi1-singleViewField-notifications-responsible
+		P_9.attribs = BODYTEXT
+		P_9.example = <p class="tx-ketroubletickets-pi1-singleViewField-notifications-responsible">[singleViewField-notifications-responsible] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-notifications-responsible">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_9.exampleStop = 1
+		P_9.ch.links = < CSS_editor.ch.A
+		
+		
+		P_10 = [singleViewField-notifications-observer]
+		P_10.selector = +.tx-ketroubletickets-pi1-singleViewField-notifications-observer
+		P_10.attribs = BODYTEXT
+		P_10.example = <p class="tx-ketroubletickets-pi1-singleViewField-notifications-observer">[singleViewField-notifications-observer] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-notifications-observer">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_10.exampleStop = 1
+		P_10.ch.links = < CSS_editor.ch.A
+		
+		
+		P_11 = [singleViewField-files]
+		P_11.selector = +.tx-ketroubletickets-pi1-singleViewField-files
+		P_11.attribs = BODYTEXT
+		P_11.example = <p class="tx-ketroubletickets-pi1-singleViewField-files">[singleViewField-files] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-files">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_11.exampleStop = 1
+		P_11.ch.links = < CSS_editor.ch.A
+		
+		
+		P_12 = [singleViewField-time-used]
+		P_12.selector = +.tx-ketroubletickets-pi1-singleViewField-time-used
+		P_12.attribs = BODYTEXT
+		P_12.example = <p class="tx-ketroubletickets-pi1-singleViewField-time-used">[singleViewField-time-used] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-time-used">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_12.exampleStop = 1
+		P_12.ch.links = < CSS_editor.ch.A
+		
+		
+		P_13 = [singleViewField-connected-addresses]
+		P_13.selector = +.tx-ketroubletickets-pi1-singleViewField-connected-addresses
+		P_13.attribs = BODYTEXT
+		P_13.example = <p class="tx-ketroubletickets-pi1-singleViewField-connected-addresses">[singleViewField-connected-addresses] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-connected-addresses">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_13.exampleStop = 1
+		P_13.ch.links = < CSS_editor.ch.A
+		
+		
+		P_14 = [singleViewField-connected-feusers]
+		P_14.selector = +.tx-ketroubletickets-pi1-singleViewField-connected-feusers
+		P_14.attribs = BODYTEXT
+		P_14.example = <p class="tx-ketroubletickets-pi1-singleViewField-connected-feusers">[singleViewField-connected-feusers] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-connected-feusers">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_14.exampleStop = 1
+		P_14.ch.links = < CSS_editor.ch.A
+		
+		
+		P_15 = [singleViewField-connected-custom]
+		P_15.selector = +.tx-ketroubletickets-pi1-singleViewField-connected-custom
+		P_15.attribs = BODYTEXT
+		P_15.example = <p class="tx-ketroubletickets-pi1-singleViewField-connected-custom">[singleViewField-connected-custom] text <a href="#">with a link</a> in it.</p><p class="tx-ketroubletickets-pi1-singleViewField-connected-custom">In principio creavit Deus caelum et terram terra autem erat inanis et vacua et tenebrae super faciem abyssi et spiritus...</p>
+		P_15.exampleStop = 1
+		P_15.ch.links = < CSS_editor.ch.A
+	}
+}

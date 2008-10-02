@@ -1,0 +1,531 @@
+<!-- 
+***********************************************
+New Ticket / Edit Ticket Form / Singleview
+***********************************************
+-->
+
+<!-- ###TICKET_FORM### START-->
+
+<!-- \/ STANDARD TABLE-->
+<div class="ke_tts">
+<table class="std-table">
+	<tr>
+		<td class="head-left">&nbsp;</td>
+		<td class="head-middle"><h1>###LABEL_OPEN_NEW_TICKET######LABEL_EDIT_TICKET###</h1>###BACK_TO_LISTVIEW###</td>
+		<td class="head-right">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="body-left">&nbsp;</td>
+		<td class="body-middle">
+<!-- /\ STANDARD TABLE-->
+
+	###ERRORS###
+	
+	###ADDITIONALJS_PRE###
+	<form name="###TICKETFORM_NAME###" id="###TICKETFORM_NAME###" action="###TICKETFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
+	<span style="color:#bbbbbb;">###UID###</span>
+	<p class="title">
+	###LABEL_TITLE###
+	###FIELD_TITLE###
+	</p>
+	<p>
+	Besitzer: ###VALUE_OWNER_FEUSER###
+	</p>
+	
+	<table class="tab">
+	<tr>
+			<td style="padding-right:7px;">
+			<p>
+			###LABEL_STATUS###<br />
+			###FIELD_STATUS###
+			</p>
+
+			<p>
+			###LABEL_BILLING###<br />
+			###FIELD_BILLING###
+			</p>
+
+			<p>
+			###LABEL_PRIORITY###<br />
+			###FIELD_PRIORITY###
+			</p>
+			
+			<p>
+			###OPTIONAL_RESPONSIBLE_FEUSER###
+			</p>
+		</td>
+		<td style="padding-left:7px;">
+			
+			<div class="erledigenbis"><p>
+			###LABEL_FROM_DATE###<br />
+			###FIELD_FROM_DATE###
+			</p></div>
+			
+			<div class="erledigenbis"><p>
+			###LABEL_UNTIL_DATE###<br />
+			###FIELD_UNTIL_DATE###
+			</p></div>
+
+			<p>
+			###LABEL_EFFORT###<br />
+			###FIELD_EFFORT###
+			</p>
+
+			###INTERNAL_TIME_PLANNED###
+			###INTERNAL_TIME_USED###
+			###OPTIONAL_CATEGORY###
+		</td>
+	</tr>
+	</table>
+	
+	<p>###LABEL_DESCRIPTION###</p>
+	<div>###FIELD_DESCRIPTION###</div>
+	###INTERNAL_ADDITIONAL_INFO###
+
+	<p>
+	<a name="uploadfieldsmark"></a>
+	###LABEL_FILES###<br />
+	<div>###FIELD_FILES###</div>
+	</p>
+
+	<p>
+	###LABEL_RELATED_TICKETS###<br />
+	###FIELD_RELATED_TICKETS###
+	</p>
+
+<table class="tab" style="margin-bottom:7px;"><tr><td>
+	###OPTIONAL_OBSERVERS_FEUSER###
+	###OPTIONAL_NOTIFICATIONS_OWNER###
+	###OPTIONAL_NOTIFICATIONS_RESPONSIBLE###
+	###OPTIONAL_NOTIFICATIONS_OBSERVER###
+	###HIDDEN_FIELDS###
+</td></tr></table>
+	
+	<div class="submit" align="right">
+	###FIELD_SUBMIT###
+	</div>
+
+	</form>
+	###ADDITIONALJS_POST###
+
+
+<!-- \/ STANDARD TABLE-->
+		</td>
+		<td class="body-right">&nbsp;</td>
+	</tr>
+</table>
+<!-- /\ STANDARD TABLE-->
+###OPTIONAL_TICKET_COMMENT###
+###OPTIONAL_TICKET_HISTORY###
+</div>
+<!-- ###TICKET_FORM### END-->
+
+<!-- 
+***********************************************
+Optional Labels and Fields
+***********************************************
+-->
+
+<!-- ###OPTIONAL_CATEGORY_SUBPART### START-->
+	<p>
+	###LABEL_CATEGORY###<br />
+	###FIELD_CATEGORY###
+	</p>
+<!-- ###OPTIONAL_CATEGORY_SUBPART### END-->
+
+<!-- ###OPTIONAL_RESPONSIBLE_FEUSER_SUBPART### START-->
+	<p>
+	###LABEL_RESPONSIBLE_FEUSER###<br />
+	###FIELD_RESPONSIBLE_FEUSER###
+	</p>
+<!-- ###OPTIONAL_RESPONSIBLE_FEUSER_SUBPART### END-->
+
+<!-- ###OPTIONAL_OBSERVERS_FEUSER_SUBPART### START-->
+	<p>
+	###LABEL_OBSERVERS_FEUSER###<br />
+	###FIELD_OBSERVERS_FEUSER###
+	</p>
+<!-- ###OPTIONAL_OBSERVERS_FEUSER_SUBPART### END-->
+
+<!-- ###OPTIONAL_NOTIFICATIONS_OWNER_SUBPART### START-->
+	<p>
+	###LABEL_NOTIFICATIONS_OWNER###<br />
+	###FIELD_NOTIFICATIONS_OWNER###
+	</p>
+<!-- ###OPTIONAL_NOTIFICATIONS_OWNER_SUBPART### END-->
+
+<!-- ###OPTIONAL_NOTIFICATIONS_RESPONSIBLE_SUBPART### START-->
+	<p>
+	###LABEL_NOTIFICATIONS_RESPONSIBLE###<br />
+	###FIELD_NOTIFICATIONS_RESPONSIBLE###
+	</p>
+<!-- ###OPTIONAL_NOTIFICATIONS_RESPONSIBLE_SUBPART### END-->
+
+<!-- ###OPTIONAL_NOTIFICATIONS_OBSERVER_SUBPART### START-->
+	<p>
+	###LABEL_NOTIFICATIONS_OBSERVER###<br />
+	###FIELD_NOTIFICATIONS_OBSERVER###
+	</p>
+<!-- ###OPTIONAL_NOTIFICATIONS_OBSERVER_SUBPART### END-->
+
+<!-- ###INTERNAL_TIME_PLANNED_SUBPART### START-->
+	<p class="internalfield"><em>INTERN:</em> 
+	###LABEL_TIME_PLANNED###<br />
+	###FIELD_TIME_PLANNED###
+	</p>
+<!-- ###INTERNAL_TIME_PLANNED_SUBPART### END-->
+
+<!-- ###INTERNAL_TIME_USED_SUBPART### START-->
+	<p class="internalfield"><em>INTERN:</em> 
+	###LABEL_TIME_USED###<br />
+	###FIELD_TIME_USED###
+	</p>
+<!-- ###INTERNAL_TIME_USED_SUBPART### END-->
+
+<!-- ###INTERNAL_ADDITIONAL_INFO_SUBPART### START-->
+	<p class="internalfield"><em>INTERN:</em> 
+	###LABEL_ADDITIONAL_INFO###<br />
+	###FIELD_ADDITIONAL_INFO###
+	</p>
+<!-- ###INTERNAL_ADDITIONAL_INFO_SUBPART### END-->
+			
+<!-- 
+***********************************************
+Comments (in Singleview)
+***********************************************
+-->
+<!-- ###TICKET_COMMENT### START-->
+<!-- \/ STANDARD TABLE-->
+<table class="std-table">
+	<tr>
+		<td class="head-left">&nbsp;</td>
+		<td class="head-middle"><h1>###LABEL_COMMENT_HEADER###</h1></td>
+		<td class="head-right">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="body-left">&nbsp;</td>
+		<td class="body-middle">
+	<div style="margin-bottom:5px;">###COMMENTLIST###</div>
+<!-- \/ STANDARD TABLE-->
+
+	<form name="###COMMENTFORM_NAME###" id="###COMMENTFORM_NAME###" action="###COMMENTFORM_ACTION###" method="post" enctype="multipart/form-data">
+		<div style="margin-bottom:8px;">###FIELD_CONTENT###</div>
+		<div class="submit" align="right">
+		###FIELD_SUBMIT###
+		</div>
+		###HIDDEN_FIELDS###
+	</form>
+
+<!-- \/ STANDARD TABLE-->
+		</td>
+		<td class="body-right">&nbsp;</td>
+	</tr>
+</table>
+<!-- /\ STANDARD TABLE-->
+<!-- ###TICKET_COMMENT### END-->
+
+<!-- 
+***********************************************
+Ticket History (in Singleview)
+***********************************************
+-->
+<!-- ###TICKET_HISTORY### START-->
+<!-- \/ STANDARD TABLE-->
+<table class="std-table">
+	<tr>
+		<td class="head-left">&nbsp;</td>
+		<td class="head-middle">
+			<div style="float:left;"><h1>###LABEL_TICKET_HISTORY_HEADER###</h1></div>
+			<div style="float:right;">
+				<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'none';"><img style="border:0px; float:left; margin:0px; padding:0px;" src="fileadmin/img/layout/forall/button_minus.gif" /></a>
+				<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';"><img style="border:0px; margin:0px; padding:0px;" src="fileadmin/img/layout/forall/button_plus.gif" /></a>
+			</div>
+		</td>
+		<td class="head-right">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="body-left">&nbsp;</td>
+		<td class="body-middle">
+<!-- /\ STANDARD TABLE-->
+	
+	<a name="zur_history"></a>
+	<div id="std_tab_grey_body_id" style="display:none;">
+	<table class="ticket_history">
+	<tr>
+		<td class="headline">###LABEL_HISTORY_DATE###<br />###LABEL_HISTORY_USER###<br />###LABEL_HISTORY_FIELD###</td>
+		<td class="headline">###LABEL_HISTORY_OLD_VALUE###</td>
+		<td class="headline">###LABEL_HISTORY_NEW_VALUE###</td>
+	</tr>
+	###TICKET_HISTORY_ROWS###
+	</table>
+	</div>
+<!-- \/ STANDARD TABLE-->
+		</td>
+		<td class="body-right">&nbsp;</td>
+	</tr>
+</table>
+<!-- /\ STANDARD TABLE-->
+
+<!-- ###TICKET_HISTORY### END-->
+
+<!-- ###TICKET_HISTORY_ROW_TEMPLATE### START-->
+	<tr>
+		<td>###HISTORY_DATE###<br />###HISTORY_USER###<br />###HISTORY_FIELD###</td>
+		<td>###HISTORY_OLD_VALUE###</td>
+		<td>###HISTORY_NEW_VALUE###</td>
+	</tr>
+<!-- ###TICKET_HISTORY_ROW_TEMPLATE### START-->
+
+
+<!-- 
+***********************************************
+Listview
+***********************************************
+-->
+<!-- ###LISTVIEW### START-->
+
+<!-- \/ STANDARD TABLE-->
+<table class="std-table">
+	<tr>
+		<td class="head-left">&nbsp;</td>
+		<td class="head-middle">
+			<div style="float:left;">
+			<a href="###LINK_TO_NEW_TICKET_FORM_URL###">###ICONNEWTICKET###</a><span style="line-height:19px;">&nbsp;&nbsp;###LINK_TO_NEW_TICKET_FORM###</span></div>
+			<div style="float:right;">###SEARCHBOX###</div>
+		</td>
+		<td class="head-right">&nbsp;</td>
+	</tr>
+</table>
+<!-- /\ STANDARD TABLE-->
+
+
+<!-- \/ STANDARD TABLE-->
+<table class="std-table">
+	<tr>
+		<td class="head-left">&nbsp;</td>
+		<td class="head-middle"><div style="float:left; color:#000; margin-right:10px;"><b>Zeige:</b></div>###MODE_SELECTOR###
+		<form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
+		<div style="float:left; color:#000; margin-right:10px;"><b>Verantwortlich:</b> ###FILTER_RESPONSIBLE_FEUSER### <b>Kategorie:</b> ###FILTER_CATEGORY### ###FILTER_SUBMIT###</div> 
+		</form>
+		</td>
+		<td class="head-right">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="body-left">&nbsp;</td>
+		<td class="body-middle">
+<!-- /\ STANDARD TABLE-->
+<div style="border:0px dotted red;">
+
+<table class="ke-tt-listview-head">
+<tr>
+	<td><b>###LABEL_SORTING###:</b></td>
+	<td>###HEADER_CRDATE###</td>
+	<td>###HEADER_FROM_DATE###</td>
+	<td>###HEADER_UNTIL_DATE###</td>
+	<td>###HEADER_PRIORITY###</td>
+	<td>###HEADER_STATUS###</td>
+	<td style="width:250px;" align="right"><a href="###LINK_URL_CSV_EXPORT###">###ICONCSVEXPORT###</a> <a href="###LINK_URL_CSV_EXPORT###">###LABEL_LINKTEXT_CSV_EXPORT###</a></td>
+</tr>
+</table>
+
+###LISTCONTENT###<br />
+###PAGEBROWSER###
+
+
+<!-- \/ STANDARD TABLE-->
+		</td>
+		<td class="body-right">&nbsp;</td>
+	</tr>
+</table>
+<!-- /\ STANDARD TABLE-->
+<!-- ###LISTVIEW### END-->
+
+<!-- ###LISTVIEW_SINGLE_ROW### START-->
+<!--<div class="ROW_###PRIORITY###">-->
+
+<div class="current_row_###OWN_TASK###">
+	<div class="tt_row_###PRIORITY###" style="width:570px; min-height:70px; margin-bottom:5px; padding:4px; float:left;">
+		<div style="width:27px; height:60px; float:left;">###STATUS_ICON###</div>
+		<div style="width:313px; height:60px;  float:left; padding-top:3px;"><span style="color:#bbbbbb;">###UID###</span>###CATEGORY###<br />###TITLE###<br />###PRIORITY_WRAPPED### ###STATUS###</div>
+	<div>
+	<div style="height:20px;"><span style="font-size:10px;">Verantwortlich:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###RESPONSIBLE_FEUSER###</span></div>
+	<div style=""><span style="font-size:10px;">Besitzer:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###OWNER_FEUSER###</span></div>
+	<div style=""><span style="font-size:10px;">Beobachter:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###OBSERVERS_FEUSER###</span></div>
+</div>
+<div class="cleaner">&nbsp;</div>
+<div>
+	<div style="width:150px; float:left;"><span style="font-size:10px; ">Erstellt am:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###CRDATE###</span></div>
+	<div style="width:190px; float:left;"><span style="font-size:10px;">Von-bis:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###FROM_DATE### - <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></span></div>
+	<div style="width:auto; float:left;"><span style="font-size:10px; ">Kommentare:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###NUMBER_OF_COMMENTS###</span></div>
+</div>
+
+</div>
+<div style="margin-top:3px;"><div>###EDIT_ICON###</div>###DELETE_ICON###</div><div>###CLOSE_ICON###</div>
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<div class="cleaner">&nbsp;</div>
+</div>
+
+<!--</div>-->
+<!-- ###LISTVIEW_SINGLE_ROW### END-->
+
+<!-- 
+***********************************************
+E-Mail Notification
+***********************************************
+-->
+<!-- ###EMAIL_NOTIFICATION### START-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type">
+<title>###EMAIL_FIELD_TITLE###</title>
+</head>
+<body>
+<table style="width:98%; padding:0px; background:#e7e7e7; border-top:2px solid #d0d0d0; border-bottom:2px solid #d0d0d0;">
+<tr>
+	<td style="padding:1px 3px 5px 3px; font-size:11pt; font-weight:bold; color:red;">
+	###LINK_TO_SINGLEVIEW_FROM_EMAIL###
+	<p style="width:80%;">###WHAT_HAS_HAPPENED###</p>
+	</td>	
+</tr>
+
+<tr>
+	<td style="padding:0px; margin:0px;">
+		<table style="width:100%; background:#f2f2f2; padding:4px 3px;">
+		<tr>
+			<td style="font-size:10pt; width:20%;">###LABEL_TITLE###:</td>
+			<td style="font-size:11pt; font-weight:bold;"><span style="color:#bbbbbb;">###UID###</span> ###EMAIL_FIELD_TITLE###</td>
+		</tr>
+		<tr>
+			<td style=" font-size:10pt;  width:20%;">###LABEL_CRDATE###: </td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_CRDATE###</td>
+		</tr>
+		<tr>
+			<td style=" font-size:10pt;  width:20%;">###LABEL_OWNER_FEUSER###:</td>
+			<td style=" font-size:11pt;"> ###EMAIL_FIELD_OWNER_FEUSER###</td>
+		</tr>
+		<tr>	
+			<td style=" font-size:10pt; ">###LABEL_RESPONSIBLE_FEUSER###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_RESPONSIBLE_FEUSER###</td>
+		</tr>
+		<tr>
+			<td style=" font-size:10pt;  width:20%;">###LABEL_OBSERVERS_FEUSER###: </td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_OBSERVERS_FEUSER###</td>
+		</tr>
+		<tr>
+			<td style=" font-size:10pt; ">###LABEL_STATUS###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_STATUS###</td>
+		</tr>
+		<tr>
+			<td style=" font-size:10pt; ">###LABEL_BILLING###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_BILLING###</td>
+		</tr>
+		<tr>
+			<td style=" font-size:10pt; ">###LABEL_PRIORITY###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_PRIORITY###</td>
+		</tr>
+		<tr>
+			<td style=" font-size:10pt; ">###LABEL_UNTIL_DATE###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_UNTIL_DATE###</td>
+		</tr>
+		<tr>	
+			<td style=" font-size:10pt; ">###LABEL_EFFORT###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_EFFORT###</td>
+		</tr>
+		<tr>	
+			<td style=" font-size:10pt; ">###LABEL_CATEGORY###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_CATEGORY###</td>
+		</tr>
+		<tr>	
+			<td style=" font-size:10pt; ">###LABEL_FILES###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_FILES###</td>
+		</tr>
+		<tr>	
+			<td style=" font-size:10pt; ">###LABEL_RELATED_TICKETS###:</td>
+			<td style=" font-size:11pt;">###EMAIL_FIELD_RELATED_TICKETS###</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td style="padding:5px 3px 0px 3px; background:#fffedd;">
+		<p><b>###LABEL_DESCRIPTION###:</b><br />###EMAIL_FIELD_DESCRIPTION###</p>
+	</td>
+<tr>
+	<td style="padding:5px 3px;">
+		<p>###EMAIL_FIELD_COMMENTS###</p>
+	</td>
+</tr>
+
+</table>
+</body>
+</html>
+<!-- ###EMAIL_NOTIFICATION### END-->
+
+<!-- ###EMAIL_NOTIFICATION_LINKTOTICKET### BEGIN-->
+<a href="###URL_GO_TO_TICKET###" style="background:#bbbbbb; padding:2px 10px 2px 10px; border:1px solid #999999; font-weight:normal; float:right;">###LINKTEXT_GO_TO_TICKET###</a>
+<!-- ###EMAIL_NOTIFICATION_LINKTOTICKET### END-->
+
+<!-- 
+***********************************************
+TEASERVIEW
+***********************************************
+-->
+<!-- ###TEASERVIEW_OWN### START-->
+<!-- \/ STANDARD TABLE-->
+<table class="std-table">
+	<tr>
+		<td class="head-left">&nbsp;</td>
+		<td class="head-middle"><h1>Eigene Aufgaben</h1></td>
+		<td class="head-right">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="body-left">&nbsp;</td>
+		<td class="body-middle">
+<!-- /\ STANDARD TABLE-->
+<table>
+<tr><td><b>Datum</b></td><td><b>Titel</b></td><td><b>Von</b></td><td><b>zu erledigen ab</b></td><td><b>zu erledigen bis</b></td></tr>
+###LISTCONTENT###
+</table>
+<!-- \/ STANDARD TABLE-->
+		</td>
+		<td class="body-right">&nbsp;</td>
+	</tr>
+</table>
+<!-- /\ STANDARD TABLE-->
+<!-- ###TEASERVIEW_OWN### END-->
+
+<!-- ###TEASERVIEW_DEL### START-->
+<!-- \/ STANDARD TABLE-->
+<table class="std-table">
+	<tr>
+		<td class="head-left">&nbsp;</td>
+		<td class="head-middle"><h1>Deligierte Aufgaben</h1></td>
+		<td class="head-right">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="body-left">&nbsp;</td>
+		<td class="body-middle">
+<!-- /\ STANDARD TABLE-->
+<table>
+<tr><td><b>Datum</b></td><td><b>Titel</b></td><td><b>An</b></td><td><b>zu erledigen ab</b></td><td><b>zu erledigen bis</b></td></tr>
+###LISTCONTENT###
+</table>
+<!-- \/ STANDARD TABLE-->
+		</td>
+		<td class="body-right">&nbsp;</td>
+	</tr>
+</table>
+<!-- /\ STANDARD TABLE-->
+<!-- ###TEASERVIEW_DEL### END-->
+
+<!-- ###TEASER_SINGLE_ROW_OWN### START-->
+<tr><td>###CRDATE###</td><td><span class="teaser_pagename">###SINGLEVIEW_PAGETITLE### ###UID### ###STATUS_ICON_TEASER###</span> ###TITLE###</td><td>###OWNER_FEUSER###</td><td>###FROM_DATE###</td><td><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td></tr>
+<!-- ###TEASER_SINGLE_ROW_OWN### END-->
+
+<!-- ###TEASER_SINGLE_ROW_DEL### START-->
+<tr><td>###CRDATE###</td><td><span class="teaser_pagename">###SINGLEVIEW_PAGETITLE### ###UID### ###STATUS_ICON_TEASER###</span> ###TITLE###</td><td>###RESPONSIBLE_FEUSER###</td><td>###FROM_DATE###</td><td><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td></tr>
+<!-- ###TEASER_SINGLE_ROW_DEL### END-->

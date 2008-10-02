@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_ketroubletickets_pi1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="listFieldHeader_title">Title</label>
+			<label index="listFieldHeader_description">Description</label>
+			<label index="listFieldHeader_until_date">To do until</label>
+			<label index="listFieldHeader_owner_feuser">Owner</label>
+			<label index="listFieldHeader_responsible_feuser">Responsible user</label>
+			<label index="listFieldHeader_observers_feuser">Observers</label>
+			<label index="listFieldHeader_category">Category</label>
+			<label index="listFieldHeader_status">Status</label>
+			<label index="listFieldHeader_priority">Priority</label>
+			<label index="listFieldHeader_notifications_owner">Send notifications to owner</label>
+			<label index="listFieldHeader_notifications_responsible">Send notifications to responsible user</label>
+			<label index="listFieldHeader_notifications_observer">Send notifications to observer</label>
+			<label index="listFieldHeader_files">Files</label>
+			<label index="listFieldHeader_time_used">Time used</label>
+			<label index="listFieldHeader_time_planned">Time planned</label>
+			<label index="listFieldHeader_billing">Billing</label>
+			<label index="listFieldHeader_effort">Effort</label>
+			<label index="back">Back</label>
+			<label index="pi_list_browseresults_prev">&lt; Previous</label>
+			<label index="pi_list_browseresults_page">Page</label>
+			<label index="pi_list_browseresults_next">Next &gt;</label>
+			<label index="pi_list_browseresults_displays">Displaying results ###SPAN_BEGIN###%s to %s&lt;/span&gt; out of ###SPAN_BEGIN###%s&lt;/span&gt;</label>
+			<label index="pi_list_searchBox_search">Search</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="listFieldHeader_title">Titel</label>
+			<label index="listFieldHeader_description">Beschreibung</label>
+			<label index="listFieldHeader_until_date">Zu erledigen bis</label>
+			<label index="listFieldHeader_owner_feuser">Besitzer</label>
+			<label index="listFieldHeader_responsible_feuser">Verantwortlicher Benutzer</label>
+			<label index="listFieldHeader_observers_feuser">Beobachter</label>
+			<label index="listFieldHeader_category">Kategorie</label>
+			<label index="listFieldHeader_status">Status</label>
+			<label index="listFieldHeader_priority">Priorität</label>
+			<label index="listFieldHeader_notifications_owner">Benachrichtige Besitzer</label>
+			<label index="listFieldHeader_notifications_responsible">Benachrichtige verantwortlichen Benutzer</label>
+			<label index="listFieldHeader_notifications_observer">Benachrichtige Beobachter</label>
+			<label index="listFieldHeader_files">Dateien</label>
+			<label index="listFieldHeader_time_used">gebrauchte Zeit</label>
+			<label index="listFieldHeader_time_planned">geplante Zeit</label>
+			<label index="listFieldHeader_additional_info">Zusatzinformationen</label>
+			<label index="listFieldHeader_crdate">Erstelldatum</label>
+			<label index="listFieldHeader_comments">Kommentare</label>
+			<label index="listFieldHeader_billing">Abrechnung</label>
+			<label index="listFieldHeader_effort">Aufwand</label>
+
+			<label index="list_mode_all">Alle</label>
+			<label index="list_mode_not_closed">Noch nicht erledigt</label>
+			<label index="back">Zurück</label>
+			<label index="pi_list_browseresults_prev">&lt; Vorhergehende</label>
+			<label index="pi_list_browseresults_page">Seite</label>
+			<label index="pi_list_browseresults_next">Nächste &gt;</label>
+			<label index="pi_list_browseresults_displays">Aufgaben ###SPAN_BEGIN###%s bis %s&lt;/span&gt; (insgesamt ###SPAN_BEGIN###%s&lt;/span&gt;)</label>
+			<label index="pi_list_searchBox_search">Suche</label>
+
+			<label index="error_no_template">Fehler: Kein Template.</label>
+			<label index="pick_a_date">Datum auswählen.</label>
+			<label index="more_files">Weitere Datei</label>
+			<label index="formerror_date">Fehler: Das Datum wurde nicht korrekt eingegeben. Verwenden Sie das Format TT.MM.JJJJ, also z. B. 1.12.2007</label>
+			<label index="formerror_required_start">Fehler: Bitte füllen Sie das Feld </label>
+			<label index="formerror_required_end"> aus.</label>
+			<label index="formerror_upload_again">Bitte laden Sie die ausgewählten Dateien erneut hoch.</label>
+			<label index="formerror_could_not_be_deleted"> konnte nicht gelöscht werden.</label>
+			<label index="formerror_has_been_deleted"> wurde gelöscht.</label>
+			<label index="formerror_hours">Bitte geben Sie die Stundenzahl korrekt ein (z. B. 1,5).</label>
+			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Ticket konnte nicht erstellt werden.</label>
+			<label index="error_no_upload_directory">Fehler: Das Verzeichnis existiert nicht. Bitte kontaktieren Sie den Administrator.</label>
+			<label index="error_file_too_big">Fehler: Die Datei ist zu groß.</label>
+			<label index="error_filetype_not_allowed">Fehler: Dieser Dateityp ist nicht erlaubt.</label>
+			<label index="error_file_upload_not_successful">Fehler: Die Datei konnte nicht hochgeladen werden.</label>
+
+			<label index="link_to_new_ticket">Neue Aufgabe eröffnen.</label>
+			<label index="back_to_listview">Zurück</label>
+			<label index="altText_edit">Aufgabe bearbeiten</label>
+			<label index="altText_delete">Aufgabe löschen</label>
+			<label index="altText_close">Aufgabe schließen</label>
+			<label index="altText_deletefile">Datei löschen</label>
+			<label index="altText_delete_related_ticket">Verknüpfung löschen</label>
+			<label index="history_new_ticket">Aufgabe eröffnet</label>
+			<label index="history_new_comment">Kommentar hinzugefügt</label>
+			<label index="are_you_sure_delete">Sind Sie sicher?</label>
+			<label index="email_text_type_new">Eine neue Aufgabe wurde eröffnet.</label>
+			<label index="email_text_type_changed">Die Aufgabe wurde geändert.</label>
+			<label index="email_text_type_closed">Die Aufgabe wurde geschlossen.</label>
+			<label index="email_text_type_new_with_user">hat eine neue Aufgabe eröffnet.</label>
+			<label index="email_text_type_changed_with_user">hat diese Aufgabe geändert.</label>
+			<label index="email_text_type_closed_with_user">hat diese Aufgabe geschlossen.</label>
+			<label index="email_text_fields_have_changed">Diese Felder wurden geändert:</label>
+			<label index="email_text_user">Benutzer</label>
+			<label index="email_subject_type_changed">Geändert</label>
+			<label index="email_subject_type_new">Neu</label>
+			<label index="email_subject_type_closed">Erledigt</label>
+			<label index="email_subject_type_newcomment">Kommentar</label>
+			<label index="email_subject_type_newcomment_reopen">Kommentar/geöffnet</label>
+			<label index="error_no_permission">Sie haben leider kein Zugriffsrecht auf diese Aufgabe.</label>
+			<label index="error_not_logged_in">Bitte loggen Sie sich ein.</label>
+
+			<label index="SELECTLABEL_1">niedrig</label>
+			<label index="SELECTLABEL_2">normal</label>
+			<label index="SELECTLABEL_3">hoch</label>
+
+			<label index="SELECTLABEL_OPEN">offen</label>
+			<label index="SELECTLABEL_WORKING">in Bearbeitung</label>
+			<label index="SELECTLABEL_CLOSED">erledigt</label>
+			<label index="SELECTLABEL_ACKNOWLEDGED">zur Kenntnis genommen</label>
+			<label index="SELECTLABEL_ONHOLD">geparkt</label>
+			<label index="SELECTLABEL_WAIT">warten</label>
+			<label index="SELECTLABEL_OFFER">Angebot</label>
+
+			<label index="SELECTLABEL_SERVICE">Pflege</label>
+			<label index="SELECTLABEL_INVOICE">zu berechnen</label>
+			<label index="SELECTLABEL_INVOICE_IS_DONE">ist berechnet</label>
+			<label index="SELECTLABEL_SERVICE_INVOICE">Pflege (zu berechnen)</label>
+
+			<label index="SELECTLABEL_ONEVERYCHANGE">Bei jeder Änderung</label>
+			<label index="SELECTLABEL_ONSTATUSCHANGE">Bei Änderung des Status</label>
+			<label index="SELECTLABEL_NEVER">Nie</label>
+			<label index="SELECTLABEL_FRONTENDSELECTION">Auswahl im Frontend</label>
+			
+			<label index="LABEL_HISTORY_DATE">Datum</label>
+			<label index="LABEL_HISTORY_USER">Benutzer</label>
+			<label index="LABEL_HISTORY_FIELD">Feld</label>
+			<label index="LABEL_HISTORY_OLD_VALUE">Alter Wert</label>
+			<label index="LABEL_HISTORY_NEW_VALUE">Neuer Wert</label>
+			<label index="LABEL_TICKET_HISTORY_HEADER">Verlauf der Änderungen</label>
+
+			<label index="LABEL_SUBMIT">Speichern</label>
+			<label index="LABEL_OPEN_NEW_TICKET">Neue Aufgabe eröffnen</label>
+			<label index="LABEL_EDIT_TICKET">Aufgabe ansehen / bearbeiten</label>
+			<label index="LABEL_TITLE">Titel</label>
+			<label index="LABEL_STATUS">Status</label>
+			<label index="LABEL_BILLING">Abrechnung</label>
+			<label index="LABEL_PRIORITY">Priorität</label>
+			<label index="LABEL_DESCRIPTION">Beschreibung</label>
+			<label index="LABEL_UNTIL_DATE">Zu erledigen bis</label>
+			<label index="LABEL_FROM_DATE">Zu erledigen ab</label>
+			<label index="LABEL_CRDATE">Erstellt am</label>
+			<label index="LABEL_TIME_USED">Zeitaufwand tatsächlich (in Stunden)</label>
+			<label index="LABEL_TIME_PLANNED">Zeitaufwand geplant (in Stunden)</label>
+			<label index="LABEL_ADDITIONAL_INFO">Zusatzinformationen</label>
+			<label index="LABEL_EFFORT">Aufwand</label>
+			<label index="LABEL_FILES">Dateien</label>
+			<label index="LABEL_CATEGORY">Kategorie</label>
+			<label index="LABEL_OWNER_FEUSER">Besitzer</label>
+			<label index="LABEL_RESPONSIBLE_FEUSER">Verantwortlich</label>
+			<label index="LABEL_OBSERVERS_FEUSER">Beobachter</label>
+			<label index="LABEL_NUMBER_OF_COMMENTS">Kommentare</label>
+			<label index="LABEL_NEWCOMMENT">Ein Kommentar wurde hinzugefügt.</label>
+			<label index="LABEL_REOPENANDNEWCOMMENT">Ein Kommentar wurde hinzugefügt und die Aufgabe damit wieder eröffnet.</label>
+			<label index="LABEL_LINKTEXT_CSV_EXPORT">Export als CSV</label>
+
+			<label index="LABEL_NOTIFICATIONS_OWNER">Benachrichtigungen an den Besitzer</label>
+			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Benachrichtigungen an den verantwortlichen Benutzer</label>
+			<label index="LABEL_NOTIFICATIONS_OBSERVER">Benachrichtigungen an den/die Beobachter</label>
+			
+			<label index="LABEL_COMMENT_HEADER">Kommentare</label>
+			<label index="LABEL_COMMENT_SUBMIT">Kommentar speichern</label>
+
+			<label index="LABEL_FILTER_SUBMIT">OK</label>
+
+			<label index="LABEL_GO_TO_TICKET">Aufgabe aufrufen</label>
+			<label index="LABEL_RELATED_TICKETS">Verwandte Aufgaben</label>
+			<label index="LABEL_RELATED_TICKETS_ADD">Hinzufügen (Nr. eingeben):</label>
+
+			<label index="LABEL_SORTING">Sortierung</label>
+
+			<label index="tt_content.pi_ketroubletickets.sheet_title_default">Allgemeine Einstellungen</label>
+			<label index="tt_content.pi_ketroubletickets.sheet_title_users">Benutzereinstellungen</label>
+
+			<label index="tt_content.pi_ketroubletickets.viewtype">Darstellung</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normal</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own">Kurzübersicht: verantwortliche für</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_delegated">Kurzübersicht: delegiert</label>
+
+			<label index="tt_content.pi_ketroubletickets.show_tickets">Zeige Aufgaben</label>
+			<label index="tt_content.pi_ketroubletickets.show_tickets.only_own">nur eigene/zu verantwortende/beobachtete</label>
+			<label index="tt_content.pi_ketroubletickets.show_tickets.all_for_admins">alle nur für Aufgaben-Administratoren</label>
+			<label index="tt_content.pi_ketroubletickets.show_tickets.all_always">immer alle</label>
+			<label index="tt_content.pi_ketroubletickets.all_categories">Alle Kategorien (die unter Ausgangspunkt liegen) zur Auswahl anbieten?</label>
+			<label index="tt_content.pi_ketroubletickets.categories">Einzelne Kategorien zur Auswahl anbieten (bei einer Kategorie wird diese fest hinterlegt)</label>
+			<label index="tt_content.pi_ketroubletickets.listcategories">NUR folgende Kategorie in der Liste anzeigen</label>
+
+			<label index="tt_content.pi_ketroubletickets.responsible_singleuser">Verantwortlicher Benutzer (fest hinterlegt)</label>
+			<label index="tt_content.pi_ketroubletickets.responsible_group_to_choose_from">Verantwortlicher Benutzer (Benutzergruppe zur Auswahl)</label>
+			<label index="tt_content.pi_ketroubletickets.observer_singleuser">Beobachter (fest hinterlegt)</label>
+			<label index="tt_content.pi_ketroubletickets.observer_group_to_choose_from">Beobachter (Benutzergruppe zur Auswahl)</label>
+
+			<label index="tt_content.pi_ketroubletickets.ticket_administrators">Aufgaben-Administratoren (sehen alle Tickets)</label>
+			<label index="tt_content.pi_ketroubletickets.internal_users">Interne Benutzer (sehen interne Felder)</label>
+		</languageKey>
+	</data>
+</T3locallang>

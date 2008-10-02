@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;web_txketroubleticketsM1&quot; - header, description</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="mlang_tabs_tab">Trouble Tickets</label>
+			<label index="mlang_labels_tabdescr">Trouble ticket system reports</label>
+			<label index="mlang_labels_tablabel">TTS Auswertungen</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="mlang_tabs_tab">Aufgaben</label>
+			<label index="mlang_labels_tabdescr">Aufgaben Auswertungen</label>
+			<label index="mlang_labels_tablabel">Aufgaben Auswertungen</label>
+		</languageKey>
+	</data>
+</T3locallang>

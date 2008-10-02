@@ -1,0 +1,313 @@
+<T3DataStructure>
+	<meta>
+	    <langDisable>1</langDisable>
+	</meta>
+	<sheets>
+		<defaultSheet>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.sheet_title_default</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<view>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+								<numIndex index="0" type="array">
+									<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype_default</numIndex>
+									<numIndex index="1">NORMAL</numIndex>
+								</numIndex>
+								<numIndex index="1" type="array">
+									<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype_teaser_own</numIndex>
+									<numIndex index="1">TEASER_OWN</numIndex>
+								</numIndex>
+								<numIndex index="2" type="array">
+									<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype_teaser_delegated</numIndex>
+									<numIndex index="1">TEASER_DEL</numIndex>
+								</numIndex>
+								</items>
+								<maxitems>1</maxitems>
+								<size>1</size>
+								<multiple>0</multiple>
+								<selectedListStyle>width:150px</selectedListStyle>
+								<itemListStyle>width:150px</itemListStyle>
+							</config>
+						</TCEforms>
+					</view>
+					<page_of_main_plugin>
+						<TCEforms>
+							<label>Edit-/Singleview-Seite</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</page_of_main_plugin>
+					<all_categories>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.all_categories</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</all_categories>
+
+					<categories>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.categories</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_ketroubletickets_categories</allowed>
+								<size>5</size>
+								<maxitems>50</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</categories>
+					<listcategories>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.listcategories</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_ketroubletickets_categories</allowed>
+								<size>5</size>
+								<maxitems>50</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</listcategories>
+
+					<show_tickets>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.show_tickets</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="all_for_admins" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.show_tickets.all_for_admins</numIndex>
+										<numIndex index="1">all_for_admins</numIndex>
+									</numIndex>
+									<numIndex index="only_own" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.show_tickets.only_own</numIndex>
+										<numIndex index="1">only_own</numIndex>
+									</numIndex>
+									<numIndex index="all_always" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.show_tickets.all_always</numIndex>
+										<numIndex index="1">all_always</numIndex>
+									</numIndex>
+								</items>
+								<minitems>1</minitems>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</show_tickets>
+
+					<notifications_owner>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:LABEL_NOTIFICATIONS_OWNER</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="oneverychange" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ONEVERYCHANGE</numIndex>
+										<numIndex index="1">oneverychange</numIndex>
+									</numIndex>
+									<numIndex index="onstatuschange" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ONSTATUSCHANGE</numIndex>
+										<numIndex index="1">onstatuschange</numIndex>
+									</numIndex>
+									<numIndex index="never" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_NEVER</numIndex>
+										<numIndex index="1">never</numIndex>
+									</numIndex>
+									<numIndex index="frontendselection" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_FRONTENDSELECTION</numIndex>
+										<numIndex index="1">frontendselection</numIndex>
+									</numIndex>
+								</items>
+								<minitems>1</minitems>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</notifications_owner>
+
+					<notifications_responsible>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:LABEL_NOTIFICATIONS_RESPONSIBLE</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="oneverychange" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ONEVERYCHANGE</numIndex>
+										<numIndex index="1">oneverychange</numIndex>
+									</numIndex>
+									<numIndex index="onstatuschange" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ONSTATUSCHANGE</numIndex>
+										<numIndex index="1">onstatuschange</numIndex>
+									</numIndex>
+									<numIndex index="never" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_NEVER</numIndex>
+										<numIndex index="1">never</numIndex>
+									</numIndex>
+									<numIndex index="frontendselection" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_FRONTENDSELECTION</numIndex>
+										<numIndex index="1">frontendselection</numIndex>
+									</numIndex>
+								</items>
+								<minitems>1</minitems>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</notifications_responsible>
+
+					<notifications_observer>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:LABEL_NOTIFICATIONS_OBSERVER</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="oneverychange" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ONEVERYCHANGE</numIndex>
+										<numIndex index="1">oneverychange</numIndex>
+									</numIndex>
+									<numIndex index="onstatuschange" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ONSTATUSCHANGE</numIndex>
+										<numIndex index="1">onstatuschange</numIndex>
+									</numIndex>
+									<numIndex index="never" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_NEVER</numIndex>
+										<numIndex index="1">never</numIndex>
+									</numIndex>
+									<numIndex index="frontendselection" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_FRONTENDSELECTION</numIndex>
+										<numIndex index="1">frontendselection</numIndex>
+									</numIndex>
+								</items>
+								<minitems>1</minitems>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</notifications_observer>
+
+				</el>
+			</ROOT>
+		</defaultSheet>
+
+		<sheetUsers>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.sheet_title_users</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<responsible_singleuser>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.responsible_singleuser</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>fe_users</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</responsible_singleuser>
+
+					<responsible_group_to_choose_from>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.responsible_group_to_choose_from</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>fe_groups</allowed>
+								<size>5</size>
+								<maxitems>50</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</responsible_group_to_choose_from>
+
+					<observer_singleuser>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.observer_singleuser</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>fe_users</allowed>
+								<size>5</size>
+								<maxitems>50</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</observer_singleuser>
+
+					<observer_group_to_choose_from>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.observer_group_to_choose_from</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>fe_groups</allowed>
+								<size>5</size>
+								<maxitems>50</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</observer_group_to_choose_from>
+
+					<ticket_administrators>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.ticket_administrators</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>fe_users</allowed>
+								<size>5</size>
+								<maxitems>50</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</ticket_administrators>
+
+					<internal_users>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.internal_users</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>fe_users</allowed>
+								<size>5</size>
+								<maxitems>50</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</internal_users>
+
+				</el>
+			</ROOT>
+		</sheetUsers>
+	</sheets>
+</T3DataStructure>

@@ -1,0 +1,114 @@
+/*------------------------------------------------------------------------------------------------------*/
+/*** RIGHT COLUMN */
+/*------------------------------------------------------------------------------------------------------*/
+#col2		{ width:2px;}
+#kontext		{ width:2px;}
+#col3		{ margin-right:2px; background: white;}
+
+/*------------------------------------------------------------------------------------------------------*/
+/*** CONTENT TABLE */
+/*------------------------------------------------------------------------------------------------------*/
+.std-table{
+	/*width:524px; */
+	width:724px; 
+	border:0px; 
+	margin-bottom:15px;
+	font-family:arial;
+	font-size:12px;
+}
+	
+/* Head */
+.std-table .head-left{background:#CEE1DD no-repeat top left; width:7px; font-size:1px;}
+.std-table .head-right{background:#CEE1DD no-repeat top right; width:7px; font-size:1px;}
+.std-table .head-middle{background:#CEE1DD; width:auto; color:#006F5C; margin:0px; padding:12px 5px 8px 5px;}
+
+/* Body */
+.std-table .body-left{background:#E6EFEF no-repeat bottom left; width:7px; font-size:1px;}
+.std-table .body-right{background:#E6EFEF no-repeat bottom right; width:7px; font-size:1px;}
+.std-table .body-middle{background:#E6EFEF; width:auto; color:#006F5C; margin:0px; padding:7px 5px 12px 5px;}
+.std-table .body-middle td {font-size:12px;}
+	
+.std-table .headline{color:#006F5C; font-weight:bold;}
+.std-table .colored{color:#006F5C;}
+
+
+/*------------------------------------------------------------------------------------------------------*/
+/*** TICKETS - TROUBLE TICKET SYSTEM  */
+/*------------------------------------------------------------------------------------------------------*/
+.tx-ketroubletickets-pi1 .cleaner {
+	clear:both;
+	height:1px;
+}
+
+.tx-ketroubletickets-pi1 .current_row_is_own_task {
+	/*border:1px solid red;*/
+	/*background: #ffdbdb;*/
+	background: #BFD7D7;
+}
+
+.tx-ketroubletickets-pi1 .due_is_overdue {
+	border: 1px solid red;
+	padding:1px;
+}
+
+.tx-ketroubletickets-pi1 .due_is_not_overdue {
+	padding:1px;
+}
+
+.tx-ketroubletickets-pi1 .current_row_is_not_own_task {
+	/*border:1px solid red;*/
+	background: #cccccc;
+}
+
+.tx-ketroubletickets-pi1 .internalfield {
+	background: lightblue;
+}
+
+.tx-ketroubletickets-pi1 .comment {
+	margin-top:10px;
+}
+
+.tx-ketroubletickets-pi1 select {
+	margin-bottom: 0px;
+}
+
+/* Form */
+.ke_tts .title{color:#000; margin-top:7px;}
+.ke_tts .title input{width:430px; margin-left:5px;}
+.ke_tts p {margin-bottom:10px; color:#000}
+.ke_tts .tab {width:100%; margin-bottom:16px;}
+.ke_tts .tab td {vertical-align:top; padding:5px; width:50%; font-size:12px;}
+/*.ke_tts .tab td input, select {width:100%;}*/
+.ke_tts .tab p {margin-bottom:10px; color:#000}
+.ke_tts .tab .erledigenbis input{}
+.ke_tts #editorWrap1 {margin-bottom:16px;}
+.ke_tts .submit input {font-weight:bold; height:22px; width:100%; font-family:Verdana; font-size:10px; background:#fff;}
+	
+/* Listview */
+.ke-tt-listview-head a {font-weight:normal; font-size:10px;}
+.ke-tt-listview-head td {border-right:1px solid #cccccc; margin-right:3px; padding-right:3px; width:120px; font-size:10px;}
+.tx-ketroubletickets-pi1-modeSelector span a {margin-right:10px;}
+.tx-ketroubletickets-pi1-modeSelector-SCell {
+	background: #cccccc;
+	/*border: 1px solid black;*/
+}
+.tx-ketroubletickets-pi1-browsebox-SCell a {
+	background: #cccccc;
+	 /*border: 1px solid black;*/
+}
+
+/* History */
+.tx-ketroubletickets-pi1 .ticket_history { border:0px solid #ccc; width:496px;}
+.tx-ketroubletickets-pi1 .ticket_history td {vertical-align:top; padding:3px; border-bottom:1px solid #ccc; border-top:1px solid #ccc; border:1px solid #ccc; font-size:10px;}
+.tx-ketroubletickets-pi1 .ticket_history .headline{background:#EBEBEB; color:#000; font-size:11px; font-weight:bold; vertical-align:middle;}
+
+.tx-ketroubletickets-pi1 .teaser_pagename a.link,
+.tx-ketroubletickets-pi1 .teaser_pagename a.visited,
+.tx-ketroubletickets-pi1 .teaser_pagename a.active {
+}
+
+.tx-ketroubletickets-pi1 td .teaser_pagename {
+	color : #bbbbbb;
+	font-family : monospace;
+	font-size : 10px;
+}
