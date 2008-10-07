@@ -791,9 +791,9 @@ function areYouSure(ziel) {
 
 		// Keep Tags
 		if (stristr($param, CONST_KEEP_TAGS_YES)) {
-			$retval = str_replace(htmlentities('<'), '<', $retval);
-			$retval = str_replace(htmlentities('>'), '>', $retval);
-			$retval = str_replace(htmlentities('"'), '"', $retval);
+			$content = str_replace(htmlentities('<'), '<', $content);
+			$content = str_replace(htmlentities('>'), '>', $content);
+			$content = str_replace(htmlentities('"'), '"', $content);
 		}
 
 		return $content;
