@@ -45,6 +45,7 @@ define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
 define(CONST_SHOW_ALL_ALWAYS, 'all_always');
 define(DEFAULT_ORDERBY, 'crdate');
 define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
+define(CONST_KEEP_TAGS_YES, 'keeptags');
 
 // RTE
 require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
@@ -779,13 +780,23 @@ function areYouSure(ziel) {
 	 * Cleanes up HTML-Output:
 	 * removes double html entities but still outputs htmlspecialchars
 	 * 
-	 * @param mixed $content 
+	 * @param string $content 
+	 * @param string $param 
 	 * @access protected
 	 * @return void
 	 */
-	protected function cleanUpHtmlOutput($content) {/*{{{*/
+	protected function cleanUpHtmlOutput($content='', $param='') {/*{{{*/
 		$content = html_entity_decode(t3lib_div::deHSCentities($content), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
-		return $this->sanitizeData($content);
+		$content = $this->sanitizeData($content);
+
+		// Keep Tags
+		if (stristr($param, CONST_KEEP_TAGS_YES)) {
+			$retval = str_replace(htmlentities('<'), '<', $retval);
+			$retval = str_replace(htmlentities('>'), '>', $retval);
+			$retval = str_replace(htmlentities('"'), '"', $retval);
+		}
+
+		return $content;
 	}/*}}}*/
 
 	/**
@@ -1364,8 +1375,11 @@ function areYouSure(ziel) {
 
 		switch ($fieldConf['type']) {
 
-			case 'input':
 			case 'textareaRTE':
+				$returnValue .= $this->piVars[$fieldConf['name']];
+			break;
+
+			case 'input':
 			case 'textarea':
 				$returnValue .= $this->sanitizeData($this->piVars[$fieldConf['name']]);
 			break;
@@ -2677,18 +2691,7 @@ function areYouSure(ziel) {
 					$retval = str_replace("\r", '', $retval);
 				} else if ($renderType == CONST_RENDER_TYPE_EMAIL) {
 					$retval = $this->internal['currentRow']['description'];
-					//$retval = $this->pi_RTEcssText($retval);
-					
-					// Remove existing HTML-Entities
-					$retval = html_entity_decode($retval);
-
-					// Replace all HTML-Entities
-					$retval = $this->cleanUpHtmlOutput($retval);
-
-					// Keep Tags
-					$retval = str_replace($this->cleanUpHtmlOutput('<'), '<', $retval);
-					$retval = str_replace($this->cleanUpHtmlOutput('>'), '>', $retval);
-					$retval = str_replace($this->cleanUpHtmlOutput('"'), '"', $retval);
+					$retval = $this->cleanUpHtmlOutput($retval, CONST_KEEP_TAGS_YES);
 				} else {
 					$retval = $this->pi_RTEcssText($this->internal['currentRow']['description']);
 				}
