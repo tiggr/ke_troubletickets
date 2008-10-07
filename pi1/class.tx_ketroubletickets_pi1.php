@@ -769,8 +769,23 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return string
 	 */
-	function sanitizeData($data='') {/*{{{*/
-		return htmlspecialchars($data, ENT_QUOTES);
+	protected function sanitizeData($data='') {/*{{{*/
+		return htmlspecialchars($data, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+	}/*}}}*/
+
+	/**
+	 * cleanUpHtmlOutput 
+	 *
+	 * Cleanes up HTML-Output:
+	 * removes double html entities but still outputs htmlspecialchars
+	 * 
+	 * @param mixed $content 
+	 * @access protected
+	 * @return void
+	 */
+	protected function cleanUpHtmlOutput($content) {/*{{{*/
+		$content = html_entity_decode(t3lib_div::deHSCentities($content), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+		return $this->sanitizeData($content);
 	}/*}}}*/
 
 	/**
@@ -829,19 +844,23 @@ function areYouSure(ziel) {
 		}
 
 		if ($deleteAllowed) {
+			// dont't really delete the ticket, just set the "deleted" flag
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $ticket_uid, array('deleted' => 1));
 
-			// delete the ticket
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->tablename, 'uid=' . $ticket_uid);
+			// do the same for the comments
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->commentsTablename, 'ticket_uid=' . $ticket_uid, array('deleted' => 1));
+
+			// really delete the ticket
+			//$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->tablename, 'uid=' . $ticket_uid);
 
 			// delete the comments
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->commentsTablename, 'ticket_uid=' . $ticket_uid);
+			//$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->commentsTablename, 'ticket_uid=' . $ticket_uid);
 
 			// delete the history
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->historyTablename, 'ticket_uid=' . $ticket_uid);
+			//$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->historyTablename, 'ticket_uid=' . $ticket_uid);
 
 			// delete the files
-			$this->deleteFiles($row['files']);
-
+			//$this->deleteFiles($row['files']);
 		}
 	}/*}}}*/
 
@@ -1114,15 +1133,6 @@ function areYouSure(ziel) {
 		$content = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION###');
 		$localMarkerArray = array();
 
-		// find out what type of change
-		if (stristr($changedFields, CONST_NEWTICKET)) {
-			$type = 'new';
-		} else if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
-			$type = 'closed';
-		} else {
-			$type = 'changed';
-		}
-
 		// get the markers
 		foreach (explode(',', $this->conf['email_notifications.']['fieldList']) as $fieldName) {
 			if (strtolower(trim($fieldName)) == 'comments') {
@@ -1132,6 +1142,15 @@ function areYouSure(ziel) {
 				$markerContent = $this->getFieldContent(strtolower(trim($fieldName)), CONST_RENDER_TYPE_EMAIL);
 			}
 			$localMarkerArray['EMAIL_FIELD_' . strtoupper(trim($fieldName))] = $markerContent;
+		}
+
+		// find out what type of change
+		if (stristr($changedFields, CONST_NEWTICKET)) {
+			$type = 'new';
+		} else if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
+			$type = 'closed';
+		} else {
+			$type = 'changed';
 		}
 
 		// what has happened?
@@ -1146,15 +1165,17 @@ function areYouSure(ziel) {
 			 $localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_type_' . $type, $type);
 		}
 
-		$localMarkerArray['WHAT_HAS_HAPPENED'] = htmlentities($localMarkerArray['WHAT_HAS_HAPPENED'], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+		$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->cleanUpHtmlOutput($localMarkerArray['WHAT_HAS_HAPPENED']);
 
 		// which fields have changed?
-		$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
-		$localMarkerArray['WHAT_HAS_HAPPENED'] .= htmlentities($this->pi_getLL('email_text_fields_have_changed'), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
-		$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
-		foreach (explode(',', $changedFields) as $fieldName) {
-			$localMarkerArray['WHAT_HAS_HAPPENED'] .= htmlentities($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+		if (!stristr($changedFields, CONST_NEWTICKET)) {
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+			$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('email_text_fields_have_changed'));
+			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+			foreach (explode(',', $changedFields) as $fieldName) {
+				$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
+				$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+			}
 		}
 
 		// generate a link to the ticket
@@ -1312,9 +1333,9 @@ function areYouSure(ziel) {
 				if ($renderType != CONST_RENDER_TYPE_CSV) {
 					// Split up content in order to make single rows
 					$contentParts = explode(':', $row['content'], 2);
-					$content .= '<em>' . htmlentities($contentParts[0], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset) . ':</em>';
+					$content .= '<em>' . $this->cleanUpHtmlOutput($contentParts[0]) . ':</em>';
 					$content .= '</div>';
-					$content .= nl2br(htmlentities($contentParts[1], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset));
+					$content .= nl2br($this->cleanUpHtmlOutput($contentParts[1]));
 					$content .= '</div>';
 				} else {
 					$commentline = ' ' . strip_tags($row['content']);
@@ -1346,8 +1367,7 @@ function areYouSure(ziel) {
 			case 'input':
 			case 'textareaRTE':
 			case 'textarea':
-			case 'inputCustom':
-				$returnValue .= $this->piVars[$fieldConf['name']];
+				$returnValue .= $this->sanitizeData($this->piVars[$fieldConf['name']]);
 			break;
 			
 			case 'inputHoursToMinutes':
@@ -1688,7 +1708,7 @@ function areYouSure(ziel) {
 		foreach (explode(',', $this->conf['locallangLabelList']) as $labelName) {
 			$markerArray['LABEL_' . trim($labelName)] = $this->pi_getLL('LABEL_' . trim($labelName));
 			if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-				$markerArray['LABEL_' . trim($labelName)] = htmlentities($markerArray['LABEL_' . trim($labelName)], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+				$markerArray['LABEL_' . trim($labelName)] = $this->cleanUpHtmlOutput($markerArray['LABEL_' . trim($labelName)]);
 			}
 		}
 
@@ -1811,7 +1831,7 @@ function areYouSure(ziel) {
 				if (strlen($prefillValue) && $fieldConf['type'] == 'inputHoursToMinutes') {
 					$prefillValue = $this->lib->m2h($prefillValue);
 				} else {
-					$prefillValue = htmlspecialchars($prefillValue);
+					$prefillValue = $this->cleanUpHtmlOutput($prefillValue);
 				}
 				$content .= '<input type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
 			break;
@@ -1844,7 +1864,6 @@ function areYouSure(ziel) {
 				break;
 
 			case 'textareaRTE':
-
 				// make RTE instance
 				$this->RTEObj = t3lib_div::makeInstance('tx_rtehtmlarea_pi2');
 
@@ -2190,12 +2209,6 @@ function areYouSure(ziel) {
 				}
 			break;
 
-			case 'inputCustom':
-				if ($this->ffdata['allow_custom_connection']) {
-					$content .= '<input type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
-				}
-			break;
-
 			default:
 
 			break;
@@ -2364,7 +2377,7 @@ function areYouSure(ziel) {
 		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;	
 
 		// fields to search in
-		$this->internal['searchFieldList']='title,description,time_used';
+		$this->internal['searchFieldList'] = 'title,description';
 
 		// fields allowed for the ORDER BY command
 		//$this->internal['orderByList']='uid,title,crdate,until_date';
@@ -2627,13 +2640,12 @@ function areYouSure(ziel) {
 				
 				// don't link the title in the email and csv view
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = htmlentities($this->internal['currentRow']['title'], ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
-					//$retval = htmlentities($retval);
+					$retval = $this->cleanUpHtmlOutput($this->internal['currentRow']['title']);
 				} else if ($renderType == CONST_RENDER_TYPE_CSV) {
 					$retval = $this->internal['currentRow']['title'];
 				} else {
+					// function pi_list_linkSingle($str,$uid,$cache=FALSE,$mergeArr=array(),$urlOnly=FALSE,$altPageId=0)
 					$retval = $this->pi_list_linkSingle($this->internal['currentRow']['title'],$this->internal['currentRow']['uid'],0,0,0,$mainPage);
-					#function pi_list_linkSingle($str,$uid,$cache=FALSE,$mergeArr=array(),$urlOnly=FALSE,$altPageId=0)
 				}
 				return $retval;
 				break;
@@ -2671,12 +2683,12 @@ function areYouSure(ziel) {
 					$retval = html_entity_decode($retval);
 
 					// Replace all HTML-Entities
-					$retval = htmlentities($retval, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+					$retval = $this->cleanUpHtmlOutput($retval);
 
 					// Keep Tags
-					$retval = str_replace(htmlentities('<', ENT_QUOTES, $GLOBALS['TSFE']->renderCharset), '<', $retval);
-					$retval = str_replace(htmlentities('>', ENT_QUOTES, $GLOBALS['TSFE']->renderCharset), '>', $retval);
-					$retval = str_replace(htmlentities('"', ENT_QUOTES, $GLOBALS['TSFE']->renderCharset), '"', $retval);
+					$retval = str_replace($this->cleanUpHtmlOutput('<'), '<', $retval);
+					$retval = str_replace($this->cleanUpHtmlOutput('>'), '>', $retval);
+					$retval = str_replace($this->cleanUpHtmlOutput('"'), '"', $retval);
 				} else {
 					$retval = $this->pi_RTEcssText($this->internal['currentRow']['description']);
 				}
@@ -2693,7 +2705,7 @@ function areYouSure(ziel) {
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], 'fe_users', 'name,username');
 
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = htmlentities($retval, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+					$retval = $this->cleanUpHtmlOutput($retval);
 				}
 
 				return $retval;
@@ -2815,11 +2827,6 @@ function areYouSure(ziel) {
 
 			case 'category':
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], $this->categoryTablename, 'title');
-				/*
-				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = htmlentities($retval, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
-				}
-				*/
 				return $retval;
 				break;
 
@@ -2832,12 +2839,7 @@ function areYouSure(ziel) {
 				break;
 
 			default:
-				$retval = $this->internal['currentRow'][$fieldName];
-				/*
-				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = htmlentities($retval, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
-				}
-				*/
+				$retval = $this->cleanUpHtmlOutput($this->internal['currentRow'][$fieldName]);
 				return $retval;
 				break;
 		}
@@ -3269,7 +3271,7 @@ function areYouSure(ziel) {
 		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;	
 
 		// fields to search in
-		$this->internal['searchFieldList'] = 'title,description,time_used';
+		$this->internal['searchFieldList'] = 'title,description';
 
 		// fields allowed for the ORDER BY command
 		//$this->internal['orderByList']='uid,title,crdate,until_date';
