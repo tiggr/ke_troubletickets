@@ -1923,7 +1923,7 @@ function areYouSure(ziel) {
 								$imageConf['altText'] = $this->pi_getLL('altText_deletefile', 'Delete file.');
 
 								// finally generate the delete icon
-								$imageConf['file'] = $this->getFile($imageConf['file']);
+								$imageConf['file'] = $this->getFilePath($imageConf['file']);
 								$content .= $lcObj->IMAGE($imageConf);
 							}
 
