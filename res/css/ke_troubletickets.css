@@ -1,37 +1,142 @@
-/*------------------------------------------------------------------------------------------------------*/
-/*** RIGHT COLUMN */
-/*------------------------------------------------------------------------------------------------------*/
-#col2		{ width:2px;}
-#kontext		{ width:2px;}
-#col3		{ margin-right:2px; background: white;}
+
+.tx-ketroubletickets-pi1 * {
+  padding: 0;
+  margin: 0;
+  color: #000000;
+  font-family: Verdana;
+  }
+.tx-ketroubletickets-pi1 a { 
+  text-decoration: none;
+  color: #000000;
+  }
+.tx-ketroubletickets-pi1 a:hover { 
+  text-decoration: none;
+  color: #4D87C7;
+  }
+.kett_float_left { float: left; }
+.kett_float_right { float: right; }
+.kett_float_clean { 
+  clear: both;
+  height: 1px;
+  font-size: 1px;
+  line-height: 1px;
+  }
 
 /*------------------------------------------------------------------------------------------------------*/
-/*** CONTENT TABLE */
+/*** Listview  */
 /*------------------------------------------------------------------------------------------------------*/
-.std-table{
-	/*width:524px; */
-	width:724px; 
-	border:0px; 
-	margin-bottom:15px;
-	font-family:arial;
-	font-size:12px;
+
+.kett_listview_toolbar {
+  width: auto;
+  padding: 5px 5px 4px 5px;
+  margin: 0 0 5px 0;
+  background: #dadada url(../images/css_gradient1.gif) top left repeat-x;
+  border: 1px solid #353535;
+  overflow: hidden;
+  }
+
+.kett_toolbar_new_ticket {
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 17px;
+  }
+
+.kett_toolbar_new_ticket img {
+  float: left;
+  margin: 0 5px 0 0;
+  }
+
+.tx-ketroubletickets-pi1-searchbox-sword {
+  float: left;
+  height: 16px;
+  width: 125px;
+  margin: 0 3px 0 0;
+  background: #f3f3f3;
+  border: 1px solid #b7c4c4;
+  font-size: 11px;
+  }
+.tx-ketroubletickets-pi1-searchbox-sword:focus, 
+.tx-ketroubletickets-pi1-searchbox-sword:hover,
+.tx-ketroubletickets-pi1-searchbox-sword:active { background: #fff5d1; }
+.tx-ketroubletickets-pi1-searchbox-button {
+  float: left;
+  height: 18px;
+  padding: 0px 2px 0px 2px;
+  background: #eff4f4;
+  border: 1px solid #b7c4c4;
+  font-size: 11px;
+  font-weight: bold;
+  }
+
+.kett_toolbar_modeselector label{
+  font-size: 11px;
+  font-weight: bold;
+  float: left;
+  display: block;
+  line-height: 16px;
+  }
+.tx-ketroubletickets-pi1-modeSelector { 
+  float: left;
+  font-size: 11px;
+  padding: 0 0 0 5px;
+  line-height: 16px;
+  }
+
+.tx-ketroubletickets-pi1-modeSelector span {
+  float: left;
+  display: block;
+
+  margin: 0 10px 0 0;
+  padding: 0 0 0 0;
+  }
+.tx-ketroubletickets-pi1-modeSelector .tx-ketroubletickets-pi1-modeSelector-SCell {
+    background: transparent url(../images/icon_sort_active.gif) left center no-repeat;
+    background: transparent url(../images/icon_sort_active.gif) left center no-repeat;
+    padding: 0 0 0 11px;
+  }
+
+.kett_toolbar_filter label {
+  font-size: 11px;
+  font-weight: bold;
+  float: left;
+  display: block;
+  padding: 0 5px 0 0;
+  line-height: 16px;
 }
 
+.kett_toolbar_filter select {   
+  float: left;
+  height: 18px;
+  width: auto;
+  margin: 0 5px 0 0;
+  background: #f3f3f3;
+  border: 1px solid #b7c4c4;
+  font-size: 11px;
+  }
 
-/* TEST SVN */
-/* Head */
-.std-table .head-left{background:#CEE1DD no-repeat top left; width:7px; font-size:1px;}
-.std-table .head-right{background:#CEE1DD no-repeat top right; width:7px; font-size:1px;}
-.std-table .head-middle{background:#CEE1DD; width:auto; color:#006F5C; margin:0px; padding:12px 5px 8px 5px;}
+.kett_toolbar_filter input {
+  float: left;
+  height: 18px;
+  padding: 0px 2px 0px 2px;
+  background: #eff4f4;
+  border: 1px solid #b7c4c4;
+  font-size: 11px;
+  font-weight: bold;
+  }
+.kett_toolbar_filter select:focus,
+.kett_toolbar_filter select:hover,
+.kett_toolbar_filter select:active { background: #fff5d1; }
 
-/* Body */
-.std-table .body-left{background:#E6EFEF no-repeat bottom left; width:7px; font-size:1px;}
-.std-table .body-right{background:#E6EFEF no-repeat bottom right; width:7px; font-size:1px;}
-.std-table .body-middle{background:#E6EFEF; width:auto; color:#006F5C; margin:0px; padding:7px 5px 12px 5px;}
-.std-table .body-middle td {font-size:12px;}
-	
-.std-table .headline{color:#006F5C; font-weight:bold;}
-.std-table .colored{color:#006F5C;}
+
+.kett_toolbar_sort { line-height: 16px; font-size: 11px; }
+.kett_toolbar_sort label {
+  font-size: 11px;
+  font-weight: bold;
+  float: left;
+  display: block;
+  padding: 0 5px 0 0;
+  line-height: 16px;
+}
 
 
 /*------------------------------------------------------------------------------------------------------*/
@@ -89,15 +194,8 @@
 /* Listview */
 .ke-tt-listview-head a {font-weight:normal; font-size:10px;}
 .ke-tt-listview-head td {border-right:1px solid #cccccc; margin-right:3px; padding-right:3px; width:120px; font-size:10px;}
-.tx-ketroubletickets-pi1-modeSelector span a {margin-right:10px;}
-.tx-ketroubletickets-pi1-modeSelector-SCell {
-	background: #cccccc;
-	/*border: 1px solid black;*/
-}
-.tx-ketroubletickets-pi1-browsebox-SCell a {
-	background: #cccccc;
-	 /*border: 1px solid black;*/
-}
+
+
 
 /* History */
 .tx-ketroubletickets-pi1 .ticket_history { border:0px solid #ccc; width:496px;}

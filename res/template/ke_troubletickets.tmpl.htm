@@ -253,66 +253,68 @@ Ticket History (in Singleview)
 
 <!-- 
 ***********************************************
-Listview
+Listview 
 ***********************************************
 -->
 <!-- ###LISTVIEW### START-->
 
-<!-- \/ STANDARD TABLE-->
-<table class="std-table">
-	<tr>
-		<td class="head-left">&nbsp;</td>
-		<td class="head-middle">
-			<div style="float:left;">
-			<a href="###LINK_TO_NEW_TICKET_FORM_URL###">###ICONNEWTICKET###</a><span style="line-height:19px;">&nbsp;&nbsp;###LINK_TO_NEW_TICKET_FORM###</span></div>
-			<div style="float:right;">###SEARCHBOX###</div>
-		</td>
-		<td class="head-right">&nbsp;</td>
-	</tr>
-</table>
-<!-- /\ STANDARD TABLE-->
+<!-- Listview Toolbar: new Ticket, Searchbox -->
+
+<div class="kett_listview_toolbar">
+    <div class="kett_float_left">
+      <div class="kett_toolbar_new_ticket">
+        <a href="###LINK_TO_NEW_TICKET_FORM_URL###">###ICONNEWTICKET###</a>###LINK_TO_NEW_TICKET_FORM###
+      </div>
+    </div>
+    <div class="kett_float_right">
+      <div class="kett_searchbox">
+        ###SEARCHBOX###
+      </div>
+    </div>
+    <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+<div class="kett_listview_toolbar">
+  <div class="kett_float_left">
+    <div class="kett_toolbar_modeselector">
+      <label>###LABEL_MODE_SELECTOR###</label>###MODE_SELECTOR###
+    </div>
+  </div>
+  <div class="kett_float_right">
+    <div class="kett_toolbar_filter">
+      <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
+      <label>###LABEL_RESPONSIBLE_FEUSER###</label>###FILTER_RESPONSIBLE_FEUSER### 
+      <label>###LABEL_FILTER_CATEGORY###</label>###FILTER_CATEGORY### ###FILTER_SUBMIT###
+    </div>
+  </div>
+  <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+<div class="kett_listview_toolbar">
+  <div class="kett_float_left">
+    <div class="kett_toolbar_sort">
+      <label>###LABEL_SORTING###</label>###HEADER_CRDATE###&nbsp;&#124;&nbsp;###HEADER_FROM_DATE###&nbsp;&#124;&nbsp;###HEADER_UNTIL_DATE###&nbsp;&#124;&nbsp;###HEADER_PRIORITY### ###HEADER_STATUS###
+    </div>
+  </div>
+  <div class="kett_float_right">
+    <div class="kett_toolbar_csv">
+      <a href="###LINK_URL_CSV_EXPORT###">###ICONCSVEXPORT###</a> <a href="###LINK_URL_CSV_EXPORT###">###LABEL_LINKTEXT_CSV_EXPORT###</a>
+    </div>
+  </div>
+  <div class="kett_float_clean">&nbsp;</div>
+</div>
 
 
-<!-- \/ STANDARD TABLE-->
-<table class="std-table">
-	<tr>
-		<td class="head-left">&nbsp;</td>
-		<td class="head-middle"><div style="float:left; color:#000; margin-right:10px;"><b>Zeige:</b></div>###MODE_SELECTOR###
-		<form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
-		<div style="float:left; color:#000; margin-right:10px;"><b>Verantwortlich:</b> ###FILTER_RESPONSIBLE_FEUSER### <b>Kategorie:</b> ###FILTER_CATEGORY### ###FILTER_SUBMIT###</div> 
-		</form>
-		</td>
-		<td class="head-right">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="body-left">&nbsp;</td>
-		<td class="body-middle">
-<!-- /\ STANDARD TABLE-->
-<div style="border:0px dotted red;">
 
-<table class="ke-tt-listview-head">
-<tr>
-	<td><b>###LABEL_SORTING###:</b></td>
-	<td>###HEADER_CRDATE###</td>
-	<td>###HEADER_FROM_DATE###</td>
-	<td>###HEADER_UNTIL_DATE###</td>
-	<td>###HEADER_PRIORITY###</td>
-	<td>###HEADER_STATUS###</td>
-	<td style="width:250px;" align="right"><a href="###LINK_URL_CSV_EXPORT###">###ICONCSVEXPORT###</a> <a href="###LINK_URL_CSV_EXPORT###">###LABEL_LINKTEXT_CSV_EXPORT###</a></td>
-</tr>
-</table>
 
 ###LISTCONTENT###<br />
 ###PAGEBROWSER###
 
 
-<!-- \/ STANDARD TABLE-->
-		</td>
-		<td class="body-right">&nbsp;</td>
-	</tr>
-</table>
-<!-- /\ STANDARD TABLE-->
 <!-- ###LISTVIEW### END-->
+
+
+
 
 <!-- ###LISTVIEW_SINGLE_ROW### START-->
 <!--<div class="ROW_###PRIORITY###">-->
