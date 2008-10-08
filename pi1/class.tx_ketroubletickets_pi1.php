@@ -173,7 +173,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$templateFile = $this->conf['templateFile'];
 		$this->templateCode = $lcObj->fileResource($templateFile);
 		if (!$this->templateCode) {
-			return '<p class="error">'.$this->pi_getLL('error_no_template').'</p>';
+			return '<p class="error">' . $this->pi_getLL('error_no_template') . '</p>';
 		} 
 
 		// add the "are you sure"-function to the header.
@@ -3313,7 +3313,7 @@ function areYouSure(ziel) {
 
 		// return nothing if there are no records
 		if (!$this->internal['res_count']) {
-			$content = '';
+			$content = '<p class="error">' . $this->pi_getLL('error_no_tickets_found', 'No tickets found.') . '</p>';
 		} else {
 			// Make listing query, pass query to SQL database
 			$res = $this->pi_exec_query($this->tablename, '', $addWhere);

@@ -72,6 +72,7 @@
 			<label index="formerror_hours">Bitte geben Sie die Stundenzahl korrekt ein (z. B. 1,5).</label>
 			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Ticket konnte nicht erstellt werden.</label>
 
+			<label index="error_no_tickets_found">Es wurden keine Aufgaben gefunden.</label>
 			<label index="error_no_template">Fehler: Es wurde kein Template gefunden.</label>
 			<label index="error_no_category">Fehler: Es muss mindestens einen Kategorie angelegt sein.</label>
 			<label index="error_no_upload_directory">Fehler: Das Verzeichnis existiert nicht. Bitte kontaktieren Sie den Administrator.</label>
