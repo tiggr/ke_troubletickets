@@ -787,7 +787,7 @@ function areYouSure(ziel) {
 	 */
 	protected function cleanUpHtmlOutput($content='', $param='') {/*{{{*/
 		$content = html_entity_decode(t3lib_div::deHSCentities($content), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
-		$content = $this->sanitizeData($content);
+		$content = htmlentities($content, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
 		// Keep Tags
 		if (stristr($param, CONST_KEEP_TAGS_YES)) {
@@ -1245,10 +1245,11 @@ function areYouSure(ziel) {
 	public function sendNotificationEmail($toEMail, $subject, $html_body, $sendAsHTML = 1) {/*{{{*/
 
 		// Only ASCII is allowed in the header
+		$subject = html_entity_decode(t3lib_div::deHSCentities($subject), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 		$subject = t3lib_div::encodeHeader($subject, 'base64');
 
 		// create the plain message body
-		$message = html_entity_decode(strip_tags($html_body));
+		$message = html_entity_decode(strip_tags($html_body), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
 		// inspired by code from tt_products, thanks
 		$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_htmlmail');
@@ -3230,12 +3231,12 @@ function areYouSure(ziel) {
 	 * @return string
 	 */
 	function formatCSVContent($data) {/*{{{*/
-		$data=trim($data);
-		$data=html_entity_decode($data);
-		$data=strip_tags($data);
-		$data=str_replace("\"", '', $data);
-		$data=str_replace("\n", '', $data);
-		$data=str_replace("\r", '', $data);
+		$data = trim($data);
+		$data = html_entity_decode($data, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+		$data = strip_tags($data);
+		$data = str_replace("\"", '', $data);
+		$data = str_replace("\n", '', $data);
+		$data = str_replace("\r", '', $data);
 		return $data;
 	}/*}}}*/
 	
