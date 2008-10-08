@@ -192,7 +192,7 @@ function areYouSure(ziel) {
 		// debug($GLOBALS['TSFE']->loginUser);
 
 		// Output database errors
-		$GLOBALS['TYPO3_DB']->debugOutput = true;
+		//$GLOBALS['TYPO3_DB']->debugOutput = true;
 
 		// General permission check: This plugin only makes sense if a user is logged in
 		if (!$GLOBALS['TSFE']->loginUser) {
