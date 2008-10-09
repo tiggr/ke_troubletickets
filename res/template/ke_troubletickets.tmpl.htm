@@ -166,21 +166,21 @@ Optional Labels and Fields
 <!-- ###OPTIONAL_NOTIFICATIONS_OBSERVER_SUBPART### END-->
 
 <!-- ###INTERNAL_TIME_PLANNED_SUBPART### START-->
-	<p class="internalfield"><em>INTERN:</em> 
+	<p class="internalfield"><em>###LABEL_INTERNAL###:</em> 
 	###LABEL_TIME_PLANNED###<br />
 	###FIELD_TIME_PLANNED###
 	</p>
 <!-- ###INTERNAL_TIME_PLANNED_SUBPART### END-->
 
 <!-- ###INTERNAL_TIME_USED_SUBPART### START-->
-	<p class="internalfield"><em>INTERN:</em> 
+	<p class="internalfield"><em>###LABEL_INTERNAL###:</em> 
 	###LABEL_TIME_USED###<br />
 	###FIELD_TIME_USED###
 	</p>
 <!-- ###INTERNAL_TIME_USED_SUBPART### END-->
 
 <!-- ###INTERNAL_ADDITIONAL_INFO_SUBPART### START-->
-	<p class="internalfield"><em>INTERN:</em> 
+	<p class="internalfield"><em>###LABEL_INTERNAL###:</em> 
 	###LABEL_ADDITIONAL_INFO###<br />
 	###FIELD_ADDITIONAL_INFO###
 	</p>
@@ -276,7 +276,7 @@ Listview
 <div class="kett_listview_toolbar">
   <div class="kett_float_left">
     <div class="kett_toolbar_modeselector">
-      <label>###LABEL_MODE_SELECTOR###</label>###MODE_SELECTOR###
+      <label>###LABEL_MODE_SELECTOR###:</label>###MODE_SELECTOR###
     </div>
   </div>
   <div class="kett_float_right">
@@ -292,7 +292,7 @@ Listview
 <div class="kett_listview_toolbar">
   <div class="kett_float_left">
     <div class="kett_toolbar_sort">
-      <label>###LABEL_SORTING###</label>###HEADER_CRDATE###&nbsp;&#124;&nbsp;###HEADER_FROM_DATE###&nbsp;&#124;&nbsp;###HEADER_UNTIL_DATE###&nbsp;&#124;&nbsp;###HEADER_PRIORITY### ###HEADER_STATUS###
+      <label>###LABEL_SORTING###:</label>###HEADER_CRDATE###&nbsp;&#124;&nbsp;###HEADER_FROM_DATE###&nbsp;&#124;&nbsp;###HEADER_UNTIL_DATE###&nbsp;&#124;&nbsp;###HEADER_PRIORITY### ###HEADER_STATUS###
     </div>
   </div>
   <div class="kett_float_right">
@@ -326,15 +326,16 @@ Listview
 		<div style="width:27px; height:60px; float:left;">###STATUS_ICON###</div>
 		<div style="width:313px; height:60px;  float:left; padding-top:3px;"><span style="color:#bbbbbb;">###UID###</span>###CATEGORY###<br />###TITLE###<br />###PRIORITY_WRAPPED### ###STATUS###</div>
 	<div>
-	<div style="height:20px;"><span style="font-size:10px;">Verantwortlich:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###RESPONSIBLE_FEUSER###</span></div>
-	<div style=""><span style="font-size:10px;">Besitzer:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###OWNER_FEUSER###</span></div>
-	<div style=""><span style="font-size:10px;">Beobachter:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###OBSERVERS_FEUSER###</span></div>
+	<div style="height:20px;"><span style="font-size:10px;">###LABEL_RESPONSIBLE_FEUSER###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###RESPONSIBLE_FEUSER###</span></div>
+	<div style=""><span style="font-size:10px;">###LABEL_OWNER_FEUSER###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###OWNER_FEUSER###</span></div>
+	<div style=""><span style="font-size:10px;">###LABEL_OBSERVERS_FEUSER###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###OBSERVERS_FEUSER###</span></div>
 </div>
 <div class="cleaner">&nbsp;</div>
 <div>
-	<div style="width:150px; float:left;"><span style="font-size:10px; ">Erstellt am:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###CRDATE###</span></div>
-	<div style="width:190px; float:left;"><span style="font-size:10px;">Von-bis:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###FROM_DATE### - <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></span></div>
-	<div style="width:auto; float:left;"><span style="font-size:10px; ">Kommentare:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###NUMBER_OF_COMMENTS###</span></div>
+	<div style="width:150px; float:left;"><span style="font-size:10px; ">###LABEL_CRDATE###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###CRDATE###</span></div>
+	<div style="width:150px; float:left;"><span style="font-size:10px; "><span style="font-size:12px; color:#000;">###CLOSE_TIME_WITH_TEXT###</span></div>
+	<div style="width:190px; float:left;"><span style="font-size:10px;">###LABEL_FROM_TO###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###FROM_DATE### - <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></span></div>
+	<div style="width:auto; float:left;"><span style="font-size:10px; ">###LABEL_NUMBER_OF_COMMENTS###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###NUMBER_OF_COMMENTS###</span></div>
 </div>
 
 </div>
@@ -462,7 +463,7 @@ TEASERVIEW
 		<td class="body-middle">
 <!-- /\ STANDARD TABLE-->
 <table>
-<tr><td><b>Datum</b></td><td><b>Titel</b></td><td><b>Von</b></td><td><b>zu erledigen ab</b></td><td><b>zu erledigen bis</b></td></tr>
+<tr><td><b>###LISTFIELDHEADER_CRDATE###</b></td><td><b>###LISTFIELDHEADER_TITLE###</b></td><td><b>###LISTFIELDHEADER_FROM_DATE###</b></td><td><b>###LISTFIELDHEADER_UNTIL_DATE###</b></td><td><b>###LISTFIELDHEADER_STATUS###</b></td></tr>
 ###LISTCONTENT###
 </table>
 <!-- \/ STANDARD TABLE-->
@@ -486,7 +487,7 @@ TEASERVIEW
 		<td class="body-middle">
 <!-- /\ STANDARD TABLE-->
 <table>
-<tr><td><b>Datum</b></td><td><b>Titel</b></td><td><b>An</b></td><td><b>zu erledigen ab</b></td><td><b>zu erledigen bis</b></td></tr>
+<tr><td><b>###LABEL_DATE###</b></td><td><b>###LABEL_TITLE###</b></td><td><b>###LABEL_FROM###</b></td><td><b>###LABEL_TODO_FROM###</b></td><td><b>###LABEL_TODO_UNTIL###</b></td></tr>
 ###LISTCONTENT###
 </table>
 <!-- \/ STANDARD TABLE-->
