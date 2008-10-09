@@ -2656,6 +2656,10 @@ function areYouSure(ziel) {
 				return $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($this->internal['currentRow'][$fieldName])));
 				break;
 
+			case 'priority_number':
+				return $this->internal['currentRow']['priority'];
+				break;
+
 			case 'priority_wrapped':
 				$returnValue = $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($this->internal['currentRow']['priority'])));
 				// add a wrap to priority strings
