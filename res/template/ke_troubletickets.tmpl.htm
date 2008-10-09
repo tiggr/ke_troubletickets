@@ -253,12 +253,12 @@ Ticket History (in Singleview)
 
 <!-- 
 ***********************************************
-Listview 
+LISTVIEW
 ***********************************************
 -->
 <!-- ###LISTVIEW### START-->
 
-<!-- Listview Toolbar -> new ticket, searchbox -->
+<!-- +++ Listview Toolbar +++ new ticket, searchbox -->
 <div class="kett_listview_toolbar">
     <div class="kett_float_left">
       <div class="kett_toolbar_new_ticket">
@@ -272,7 +272,8 @@ Listview
     </div>
     <div class="kett_float_clean">&nbsp;</div>
 </div>
-<!-- Listview Toolbar -> show options, filter -->
+
+<!-- +++ Listview-Toolbar +++ show options, filter -->
 <div class="kett_listview_toolbar">
   <div class="kett_float_left">
     <div class="kett_toolbar_modeselector">
@@ -288,11 +289,14 @@ Listview
   </div>
   <div class="kett_float_clean">&nbsp;</div>
 </div>
-<!-- Listview Toolbar -> sorting, CSV export -->
+
+<!-- +++ Listview-Toolbar +++ sorting, CSV export -->
 <div class="kett_listview_toolbar">
   <div class="kett_float_left">
     <div class="kett_toolbar_sort">
-      <label>###LABEL_SORTING###:</label>###HEADER_CRDATE###&nbsp;&#124;&nbsp;###HEADER_FROM_DATE###&nbsp;&#124;&nbsp;###HEADER_UNTIL_DATE###&nbsp;&#124;&nbsp;###HEADER_PRIORITY### ###HEADER_STATUS###
+
+    <label>###LABEL_SORTING###:</label>###HEADER_CRDATE###&nbsp;&#124;&nbsp;###HEADER_FROM_DATE###&nbsp;&#124;&nbsp;###HEADER_UNTIL_DATE###&nbsp;&#124;&nbsp;###HEADER_PRIORITY###&nbsp;&#124;&nbsp;###HEADER_STATUS###
+
     </div>
   </div>
   <div class="kett_float_right">
@@ -306,12 +310,13 @@ Listview
   <div class="kett_float_clean">&nbsp;</div>
 </div>
 
+<!-- +++ Listview +++ single rows -->
+<div class="kett_listcontent">
+  ###LISTCONTENT###
+</div>
 
-
-
-###LISTCONTENT###<br /><br />
+<!-- +++ Listview +++ pagebrowser -->
 ###PAGEBROWSER###
-
 
 <!-- ###LISTVIEW### END-->
 
@@ -319,7 +324,7 @@ Listview
 
 
 <!-- ###LISTVIEW_SINGLE_ROW### START-->
-<!--<div class="ROW_###PRIORITY###">-->
+<div class="ROW_###PRIORITY###">
 
 <div class="current_row_###OWN_TASK###">
 	<div class="tt_row_###PRIORITY###" style="width:570px; min-height:70px; margin-bottom:5px; padding:4px; float:left;">
@@ -343,7 +348,7 @@ Listview
 <div class="cleaner">&nbsp;</div>
 </div>
 
-<!--</div>-->
+</div>
 <!-- ###LISTVIEW_SINGLE_ROW### END-->
 
 <!-- 
