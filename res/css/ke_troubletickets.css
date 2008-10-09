@@ -138,6 +138,35 @@
   line-height: 16px;
 }
 
+.kett_toolbar_csv {
+  position: relative;
+  margin: -1px 0 -1px 0;
+  background: #f0f0f0;
+  border: 1px solid #bec7c7;
+  font-size: 11px;
+  line-height: 15px;
+  padding: 1px 3px 0px 1px;
+}
+.kett_toolbar_csv:focus,
+.kett_toolbar_csv:hover,
+.kett_toolbar_csv:active { background: #fff5d1; }
+
+.kett_toolbar_csv img { 
+  margin: 0 3px 0 0;
+  float: left;
+  }
+
+
+/* Listview Pagebrowser */
+.tx-ketroubletickets-pi1-browsebox {
+  background:#DADADA url(../images/css_gradient1.gif) repeat-x scroll left top;
+  border:1px solid #353535;
+  margin:0 0 5px;
+  overflow:hidden;
+  padding:5px 5px 4px;
+  width:auto;
+}
+
 
 /*------------------------------------------------------------------------------------------------------*/
 /*** TICKETS - TROUBLE TICKET SYSTEM  */
