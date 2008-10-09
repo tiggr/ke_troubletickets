@@ -2478,23 +2478,8 @@ function areYouSure(ziel) {
 		// create the mode selector
 		$this->markerArray['MODE_SELECTOR'] = $this->pi_list_modeSelector($modeSelectorItems);
 
-		// render the headers
-		// headers are sortlinks!
-		foreach (explode(',', $this->conf['listView.']['headerList']) as $headerName) {
-			$headerName = trim($headerName);
-			// add the sort parameter to the link
-			$additionalParams = '&' . $this->prefixId . '[sort]=' . $headerName . ':' . ($this->internal['descFlag']?0:1);
-			// Mark this Link, if it is the currently active sorting
-			$this->markerArray['HEADER_' . strtoupper(trim($headerName))] = (substr($this->piVars['sort'],0,strlen($headerName)) == $headerName) ? ' -> ' : '';
-			// make the link
-			$this->markerArray['HEADER_' . strtoupper(trim($headerName))] .= $this->cObj->typoLink( 
-				$this->pi_getLL('LABEL_' . strtoupper(trim($headerName)), $headerName),
-				array(
-					'parameter' => $GLOBALS['TSFE']->id,
-					'additionalParams' => $this->getAdditionalParamsFromKeepPiVars() . $additionalParams
-					)
-				);
-		}
+		// render the sorting links
+		$this->renderListSortingLinks();
 
 		// render the filters
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
@@ -2528,7 +2513,7 @@ function areYouSure(ziel) {
 		$wrapper['inactiveLinkWrap'] = '<span class="inactive">|</span>';
 		$wrapper['activeLinkWrap'] = '<span'.$this->pi_classParam('browsebox-SCell').'>|</span>';
 		$wrapper['browseLinksWrap'] = '<div class="browseLinks">|</div>';
-		$wrapper['showResultsWrap'] = '|';
+		$wrapper['showResultsWrap'] = '<p class="resultText">|</p>';
 		$wrapper['browseBoxWrap'] = '<div '.$this->pi_classParam('browsebox').'> | </div>';
 		$this->markerArray['PAGEBROWSER'] = $this->pi_list_browseresults(1, '', $wrapper);
 
@@ -2718,7 +2703,7 @@ function areYouSure(ziel) {
 			case 'number_of_comments':
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, 'ticket_uid =' . $this->internal['currentRow']['uid'] . $lcObj->enableFields($this->commentsTablename));
 				$number_of_comments =  $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-				return $number_of_comments ? $number_of_comments : '';
+				return $number_of_comments;
 				break;
 
 			case 'comments':
@@ -2819,10 +2804,18 @@ function areYouSure(ziel) {
 			case 'from_date':
 			case 'until_date':
 			case 'crdate':
+			case 'close_time':
 				if (empty($this->internal['currentRow'][$fieldName])) {
 					return '';
 				}
 				return date($this->conf['datefield_dateformat'], $this->internal['currentRow'][$fieldName]);
+				break;
+
+			case 'close_time_with_text':
+				if (empty($this->internal['currentRow']['close_time'])) {
+					return '';
+				}
+				return '<span class="close_time">' . $this->pi_getLL('LABEL_CLOSE_TIME','close time') . ': ' . date($this->conf['datefield_dateformat'], $this->internal['currentRow']['close_time']) . '</span>';
 				break;
 
 			case 'files':
@@ -2910,20 +2903,21 @@ function areYouSure(ziel) {
 	}/*}}}*/
 
 	/**
-	 * Returns a Search box, sending search words to piVars "sword" and setting the "no_cache" parameter as well in the form.
-	 * Submits the search request to the current REQUEST_URI
+	 * Returns a Search box, sending search words to piVars "sword" 
 	 *
 	 * @param	string		Attributes for the table tag which is wrapped around the table cells containing the search box
 	 * @return	string		Output HTML, wrapped in <div>-tags with a class attribute
 	 */
 	function pi_list_searchBox($tableParams='')	{/*{{{*/
-		$sTables = '<div'.$this->pi_classParam('searchbox').'>
-			<form action="'.htmlspecialchars(t3lib_div::getIndpEnv('REQUEST_URI')).'" method="post">
-					<input type="text" name="'.$this->prefixId.'[sword]" value="'.htmlspecialchars($this->piVars['sword']).'"'.$this->pi_classParam('searchbox-sword').' />
-					<input type="submit" value="'.$this->pi_getLL('pi_list_searchBox_search','Search',TRUE).'"'.$this->pi_classParam('searchbox-button').' />'.
-						'<input type="hidden" name="no_cache" value="1" />'.
-						'<input type="hidden" name="'.$this->prefixId.'[pointer]" value="" />'.
-						'</form></div>';
+		// if no searchword is set, use the default value from locallang
+		$searchword = $this->piVars['sword'] ? htmlspecialchars($this->piVars['sword']) : $this->pi_getLL('pi_list_searchBox_default_value', 'searchword');
+
+		$sTables = '<div'.$this->pi_classParam('searchbox').'>'
+			. '<form action="'. $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id)) .'" method="post" name="ke_troubletickets_searchbox">'
+				. '<input type="text" name="'.$this->prefixId.'[sword]" value="' . $searchword . '"'.$this->pi_classParam('searchbox-sword').' onFocus="document.ke_troubletickets_searchbox.elements[0].value=\'\'" />'
+				. '<input type="submit" value="'.$this->pi_getLL('pi_list_searchBox_search','Search',TRUE).'"'.$this->pi_classParam('searchbox-button').' />'
+				. '<input type="hidden" name="'.$this->prefixId.'[pointer]" value="" />'
+			. '</form></div>';
 
 		return $sTables;
 	}/*}}}*/
@@ -3239,7 +3233,47 @@ function areYouSure(ziel) {
 		$data = str_replace("\r", '', $data);
 		return $data;
 	}/*}}}*/
+
+	/**
+	 * renderListSortingLinks 
+	 * renders the sortlinks (historically called "headers" in TYPO3 plugins)
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function renderListSortingLinks() {/*{{{*/
+		$mainPage = $this->ffdata['page_of_main_plugin'] ? $this->ffdata['page_of_main_plugin'] : $GLOBALS['TSFE']->id;
+
+		foreach (t3lib_div::trimExplode(',', $this->conf['listView.']['headerList']) as $headerName) {
+
+			// add the sort parameter to the link
+			$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . ':' . ($this->internal['descFlag'] ? 0 : 1);
+
+			// Mark this Link, if it is the currently active sorting
+			$wrap = $this->internal['descFlag'] ? '<span class="sort_active_desc">|</span>' : '<span class="sort_active_asc">|</span>';
+			$wrap = (substr($this->piVars['sort'],0,strlen($headerName)) == $headerName) ? $wrap : '';
+
+			// make the link
+			$this->markerArray['HEADER_' . strtoupper(trim($headerName))] .= $this->cObj->typoLink( 
+					$this->pi_getLL('LABEL_' . strtoupper(trim($headerName)), $headerName),
+					array(
+						'parameter' => $mainPage,
+						'additionalParams' => $this->getAdditionalParamsFromKeepPiVars() . $additionalParams,
+						'wrap' => $wrap
+						)
+					);
+		}
+	}/*}}}*/
 	
+	/**
+	 * teaserView 
+	 *
+	 * generates the teaser view
+	 * TODO: merge the teaser view functions the normal listview functions (teaserView, makeTeaserItem, makeTeaserList)
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function teaserView() {/*{{{*/
 		$lConf = $this->conf['teaserView.'];
 		
@@ -3318,31 +3352,11 @@ function areYouSure(ziel) {
 			// Make listing query, pass query to SQL database
 			$res = $this->pi_exec_query($this->tablename, '', $addWhere);
 
-			// render the headers
-			// headers are sortlinks!
-			if ($this->ffdata['page_of_main_plugin']=='') {
-				$mainPage = $GLOBALS['TSFE']->id;
-			} else {
-				$mainPage = $this->ffdata['page_of_main_plugin'];
-			}
-			foreach (explode(',', $this->conf['listView.']['headerList']) as $headerName) {
-				$headerName = trim($headerName);
-				// add the sort parameter to the link
-				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . ':' . ($this->internal['descFlag']?0:1);
-				// Mark this Link, if it is the currently active sorting
-				$this->markerArray['HEADER_' . strtoupper(trim($headerName))] = (substr($this->piVars['sort'],0,strlen($headerName)) == $headerName) ? ' -> ' : '';
-				// make the link
-				$this->markerArray['HEADER_' . strtoupper(trim($headerName))] .= $this->cObj->typoLink( 
-						$this->pi_getLL('LABEL_' . strtoupper(trim($headerName)), $headerName),
-						array(
-							'parameter' => $mainPage,
-							'additionalParams' => $this->getAdditionalParamsFromKeepPiVars() . $additionalParams
-							)
-						);
-			}
+			// render the sorting links
+			$this->renderListSortingLinks();
 
 			// make the whole list
-			$this->markerArray['LISTCONTENT'] = $this->maketeaser($res);
+			$this->markerArray['LISTCONTENT'] = $this->makeTeaserList($res);
 
 			// create the search box
 			$this->markerArray['SEARCHBOX'] = $this->pi_list_searchBox();
@@ -3352,7 +3366,7 @@ function areYouSure(ziel) {
 			$wrapper['inactiveLinkWrap'] = '<span class="inactive">|</span>';
 			$wrapper['activeLinkWrap'] = '<span'.$this->pi_classParam('browsebox-SCell').'>|</span>';
 			$wrapper['browseLinksWrap'] = '<div class="browseLinks">|</div>';
-			$wrapper['showResultsWrap'] = '|';
+			$wrapper['showResultsWrap'] = '<p class="resultText">|</p>';
 			$wrapper['browseBoxWrap'] = '<div '.$this->pi_classParam('browsebox').'> | </div>';
 			$this->markerArray['PAGEBROWSER'] = $this->pi_list_browseresults(1, '', $wrapper);
 
@@ -3366,20 +3380,30 @@ function areYouSure(ziel) {
 		// Returns the content from the plugin.
 		return $content;
 	}/*}}}*/
-	
-	public function maketeaser($res)	{/*{{{*/
+
+	/**
+	 * makeTeaserList 
+	 *
+	 * renders the teaser list
+	 * 
+	 * @param databaseresult $res 
+	 * @access public
+	 * @return string
+	 */
+	public function makeTeaserList($res) {/*{{{*/
 		$items=array();
-			// Make list table rows
+
+		// Make list table rows
 		while($this->internal['currentRow'] = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 			$items[]=$this->makeTeaserItem();
 		}
+
 		if (count($items)>0) {
 			$out = '<div'.$this->pi_classParam('listrow').'>
 			'.implode(chr(10),$items).'
 			</div>';
 		}
 		
-		$out = str_replace('<td></td>','<td>----</td>',$out);
 		return $out;
 	}/*}}}*/
 	

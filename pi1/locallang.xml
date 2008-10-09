@@ -29,11 +29,13 @@
 			<label index="pi_list_browseresults_next">Next &gt;</label>
 			<label index="pi_list_browseresults_displays">Displaying results ###SPAN_BEGIN###%s to %s&lt;/span&gt; out of ###SPAN_BEGIN###%s&lt;/span&gt;</label>
 			<label index="pi_list_searchBox_search">Search</label>
+			<label index="pi_list_searchBox_default_value">searchword</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="listFieldHeader_title">Titel</label>
 			<label index="listFieldHeader_description">Beschreibung</label>
 			<label index="listFieldHeader_until_date">Zu erledigen bis</label>
+			<label index="listFieldHeader_from_date">Zu erledigen ab</label>
 			<label index="listFieldHeader_owner_feuser">Besitzer</label>
 			<label index="listFieldHeader_responsible_feuser">Verantwortlicher Benutzer</label>
 			<label index="listFieldHeader_observers_feuser">Beobachter</label>
@@ -60,6 +62,7 @@
 			<label index="pi_list_browseresults_next">Nächste &gt;</label>
 			<label index="pi_list_browseresults_displays">Aufgaben ###SPAN_BEGIN###%s bis %s&lt;/span&gt; (insgesamt ###SPAN_BEGIN###%s&lt;/span&gt;)</label>
 			<label index="pi_list_searchBox_search">Suche</label>
+			<label index="pi_list_searchBox_default_value">Suchbegriff</label>
 
 			<label index="pick_a_date">Datum auswählen.</label>
 			<label index="more_files">Weitere Datei</label>
@@ -146,6 +149,8 @@
 			<label index="LABEL_UNTIL_DATE">Zu erledigen bis</label>
 			<label index="LABEL_FROM_DATE">Zu erledigen ab</label>
 			<label index="LABEL_CRDATE">Erstellt am</label>
+			<label index="LABEL_CLOSE_TIME">Geschlossen am</label>
+			<label index="LABEL_FROM_TO">Von-bis</label>
 			<label index="LABEL_TIME_USED">Zeitaufwand tatsächlich (in Stunden)</label>
 			<label index="LABEL_TIME_PLANNED">Zeitaufwand geplant (in Stunden)</label>
 			<label index="LABEL_ADDITIONAL_INFO">Zusatzinformationen</label>
@@ -153,12 +158,13 @@
 			<label index="LABEL_FILES">Dateien</label>
 			<label index="LABEL_CATEGORY">Kategorie</label>
 			<label index="LABEL_OWNER_FEUSER">Besitzer</label>
-			<label index="LABEL_RESPONSIBLE_FEUSER">Verantwortlich</label>
 			<label index="LABEL_OBSERVERS_FEUSER">Beobachter</label>
 			<label index="LABEL_NUMBER_OF_COMMENTS">Kommentare</label>
 			<label index="LABEL_NEWCOMMENT">Ein Kommentar wurde hinzugefügt.</label>
 			<label index="LABEL_REOPENANDNEWCOMMENT">Ein Kommentar wurde hinzugefügt und die Aufgabe damit wieder eröffnet.</label>
 			<label index="LABEL_LINKTEXT_CSV_EXPORT">Export als CSV</label>
+			<label index="LABEL_RESPONSIBLE_FEUSER">Verantwortlich</label>
+			<label index="LABEL_FILTER_CATEGORY">Kategorie</label>
 
 			<label index="LABEL_NOTIFICATIONS_OWNER">Benachrichtigungen an den Besitzer</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Benachrichtigungen an den verantwortlichen Benutzer</label>
@@ -173,11 +179,9 @@
 			<label index="LABEL_RELATED_TICKETS">Verwandte Aufgaben</label>
 			<label index="LABEL_RELATED_TICKETS_ADD">Hinzufügen (Nr. eingeben):</label>
 
-			<label index="LABEL_SORTING">Sortierung:</label>
-			<label index="LABEL_MODE_SELECTOR">Zeige:</label>
-                        
-			<label index="LABEL_RESPONSIBLE_FEUSER">Verantwortlich:</label>
-			<label index="LABEL_FILTER_CATEGORY">Kategorie:</label>
+			<label index="LABEL_SORTING">Sortierung</label>
+			<label index="LABEL_MODE_SELECTOR">Zeige</label>
+			<label index="LABEL_INTERNAL">INTERN</label>
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">Allgemeine Einstellungen</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">Benutzereinstellungen</label>

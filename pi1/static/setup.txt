@@ -84,7 +84,7 @@ plugin.tx_ketroubletickets_pi1 {
 	iconPlus.file = EXT:ke_troubletickets/res/images/button_plus.gif
 
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
-	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY
+	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM_TO, INTERNAL, CLOSE_TIME
 
 	# dateformat used by the datepicker in the form
 	# possible values:
@@ -274,10 +274,10 @@ plugin.tx_ketroubletickets_pi1 {
 
 # Listview defaults
 plugin.tx_ketroubletickets_pi1.listView {
-	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle
+	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text
 	headerList = category, title, crdate, from_date, until_date, status, owner_feuser, responsible_feuser, number_of_comments, priority
 	filterList = responsible_feuser, category
-	csvExportFieldList =  crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments
+	csvExportFieldList =  crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments, close_time
 	results_at_a_time =
 	maxPages =
 	cropSingleviewPagetitle = 8
