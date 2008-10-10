@@ -175,11 +175,158 @@
   overflow:hidden;
   padding:5px 5px 4px;
   width:auto;
+  font-size: 11px;
+  line-height: 18px;
+  }
+.tx-ketroubletickets-pi1-browsebox .resultText {
+  float: left;
+  width: 200px;
+  display: block;
+  line-height: 18px;
   }
 
 /*------------------------------------------------------------------------------------------------------*/
 /*** LISTVIEW CLIENTVIEW */
 /*------------------------------------------------------------------------------------------------------*/
+.kett_listview_row {
+  width: auto;
+  border: 1px solid #333333;
+  margin: 0 0 5px 0;
+  overflow:hidden;
+  }
+.kett_listview_row_head {
+  height:43px;
+  margin: 0 0 1px 0;
+  background:#FFFFFF url(../images/list_item_head_bg_normal.gif) repeat scroll 0 0;
+  line-height: 16px;
+  font-size: 12px;
+  
+  }
+.kett_listview_row_statusicon {
+  float: left;
+  height:30px;
+  padding: 10px 6px 0px 6px;
+  }
+.kett_lvrow_headline_top {
+  padding: 5px 0 0 0;
+  }
+.kett_lvrow_headline_title {
+  font-weight: bold;
+  }
+
+.kett_listview_row_body {
+  height: 69px;
+  background: #FFFFFF url(../images/list_item_subt_bg_normal.gif) repeat scroll 0 0;
+  margin: 0 0 1px 0;
+  }
+.kett_listview_row_subt {
+  font-size: 10px;
+  margin-right: 180px;
+  padding: 5px 0 0 6px;
+  }
+.kett_listview_row_box {
+  float:right;
+  height:61px;
+  background:#EEF3F3;
+  border:1px solid #C1D1D1;
+  margin: 4px 4px 0 0;
+  width:165px;
+  }
+.kett_lvrow_box_l {
+  float: left;
+  width: 70px;
+  font-size: 9px;
+  line-height: 14px;
+  margin: 0 0 0 4px;
+  }
+.kett_lvrow_box_r {
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 14px;
+  }
+
+.kett_listview_row_user { margin: 0 0 1px 0;}
+.kett_listview_row_user table {
+  margin:0;
+  padding: 0;
+  width: 100%;
+  border-collapse:collapse;
+  }
+.kett_listview_row_user table td {
+  width: 33.33%;
+  border-right: 1px solid white;
+  }
+
+.kett_listview_row_user .kett_lvrow_user_head, .kett_listview_row_user .kett_lvrow_user_head_last {
+  height: 19px;
+  padding: 0 5px 0 5px;
+  background:#FFFFFF url(../images/list_item_userhead_bg_norma.gif) repeat scroll 0 0;
+  line-height: 19px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #1b1c1c;
+  }
+.kett_listview_row_user .kett_lvrow_user_head_last {
+  border-right: 0px solid white;
+  }
+
+.kett_listview_row_user .kett_lvrow_user_con {
+  height:35px;
+  background: #D6E1E1;
+  }
+.kett_listview_row_user .kett_lvrow_user_con .kett_lvrow_user_inner {
+  height:26px;
+  overflow-y:scroll;
+  padding:4px 4px 4px 6px;
+  font-size: 12px;
+  }
+
+.kett_listview_row_foot {
+  height: 27px;
+  background:#FFFFFF url(../images/list_item_foot_bg_normal.gif) repeat scroll 0 0;
+  line-height: 26px;
+  font-size: 11px;
+  }
+
+.kett_listview_row_foot .kett_float_left {
+  padding: 0 0 0 5px;
+  }
+.kett_listview_row_foot .kett_lvrf_border {
+  font-size:9px;
+  color: #abc1c1;
+  }
+.tx-ketroubletickets-pi1 .due_is_overdue {
+  border: 1px solid red;
+  background: #e00505;
+  color: white;
+  }
+.kett_listview_row_foot .kett_float_right {
+  padding: 0 ;
+  line-height: 1px;
+  }
+.kett_listview_row_foot .kett_float_right img {
+  margin: 5px 6px 0 0 ;
+  line-height: 0;
+  }
+
+/* ALIEN fremde Tickets */
+
+.current_row_is_not_own_task .kett_listview_row_body { 
+  background: #FFFFFF url(../images/list_item_subt_bg_alien.gif) repeat scroll 0 0; 
+  }
+
+
+.current_row_is_not_own_task .kett_listview_row_user .kett_lvrow_user_head,
+.current_row_is_not_own_task .kett_listview_row_user .kett_lvrow_user_head_last {
+  background:#FFFFFF url(../images/list_item_userhead_bg_alien.gif) repeat scroll 0 0;
+  }
+.current_row_is_not_own_task .kett_listview_row_user .kett_lvrow_user_con {
+  background: #e4e4e4;
+  }
+.current_row_is_not_own_task .kett_listview_row_foot { 
+  background:#FFFFFF url(../images/list_item_foot_bg_alien.gif) repeat scroll 0 0; 
+  }
+
 
 
 /*------------------------------------------------------------------------------------------------------*/
@@ -190,25 +337,15 @@
 	height:1px;
 }
 
-.tx-ketroubletickets-pi1 .current_row_is_own_task {
-	/*border:1px solid red;*/
-	/*background: #ffdbdb;*/
-	background: #BFD7D7;
-}
 
-.tx-ketroubletickets-pi1 .due_is_overdue {
-	border: 1px solid red;
-	padding:1px;
-}
+
+
 
 .tx-ketroubletickets-pi1 .due_is_not_overdue {
 	padding:1px;
 }
 
-.tx-ketroubletickets-pi1 .current_row_is_not_own_task {
-	/*border:1px solid red;*/
-	background: #cccccc;
-}
+
 
 .tx-ketroubletickets-pi1 .internalfield {
 	background: lightblue;

@@ -63,9 +63,9 @@ plugin.tx_ketroubletickets_pi1 {
 	
 	# edit and delete icons
 	icons.edit = IMAGE
-	icons.edit.file = EXT:ke_troubletickets/res/images/fe_edit.gif
+	icons.edit.file = EXT:ke_troubletickets/res/images/icon_edit_ticket.png
 	icons.delete = IMAGE
-	icons.delete.file = EXT:ke_troubletickets/res/images/fe_delete.gif
+	icons.delete.file = EXT:ke_troubletickets/res/images/icon_delete.png
 	icons.close = IMAGE
 	icons.close.file = EXT:ke_troubletickets/res/images/fe_close.gif
 	icons.deleteFile = IMAGE

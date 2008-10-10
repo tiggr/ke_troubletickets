@@ -1,4 +1,4 @@
-<!-- 
+﻿<!-- 
 ***********************************************
 New Ticket / Edit Ticket Form / Singleview
 ***********************************************
@@ -253,9 +253,10 @@ Ticket History (in Singleview)
 
 <!-- 
 ***********************************************
-LISTVIEW
+*+++++++ LISTVIEW ++++++++++++++++++++++++++++*
 ***********************************************
 -->
+
 <!-- ###LISTVIEW### START-->
 
 <!-- +++ Listview Toolbar +++ new ticket, searchbox -->
@@ -321,33 +322,62 @@ LISTVIEW
 <!-- ###LISTVIEW### END-->
 
 
-
+<!-- AUSGELAGERT -->
+<!--###CLOSE_ICON###-->
+<!--###PRIORITY_NUMBER###-->
 
 <!-- ###LISTVIEW_SINGLE_ROW### START-->
-<div class="ROW_###PRIORITY###">
 
-<div class="current_row_###OWN_TASK###">
-	<div class="tt_row_###PRIORITY###" style="width:570px; min-height:70px; margin-bottom:5px; padding:4px; float:left;">
-		<div style="width:27px; height:60px; float:left;">###STATUS_ICON###</div>
-		<div style="width:313px; height:60px;  float:left; padding-top:3px;"><span style="color:#bbbbbb;">###UID###</span>###CATEGORY###<br />###TITLE###<br />###PRIORITY_WRAPPED### ###STATUS###</div>
-	<div>
-	<div style="height:20px;"><span style="font-size:10px;">###LABEL_RESPONSIBLE_FEUSER###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###RESPONSIBLE_FEUSER###</span></div>
-	<div style=""><span style="font-size:10px;">###LABEL_OWNER_FEUSER###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###OWNER_FEUSER###</span></div>
-	<div style=""><span style="font-size:10px;">###LABEL_OBSERVERS_FEUSER###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###OBSERVERS_FEUSER###</span></div>
-</div>
-<div class="cleaner">&nbsp;</div>
-<div>
-	<div style="width:150px; float:left;"><span style="font-size:10px; ">###LABEL_CRDATE###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###CRDATE###</span></div>
-	<div style="width:150px; float:left;"><span style="font-size:10px; "><span style="font-size:12px; color:#000;">###CLOSE_TIME_WITH_TEXT###</span></div>
-	<div style="width:190px; float:left;"><span style="font-size:10px;">###LABEL_FROM_TO###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###FROM_DATE### - <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></span></div>
-	<div style="width:auto; float:left;"><span style="font-size:10px; ">###LABEL_NUMBER_OF_COMMENTS###:&nbsp;&nbsp;</span><span style="font-size:12px; color:#000;">###NUMBER_OF_COMMENTS###</span></div>
-</div>
-
-</div>
-<div style="margin-top:3px;"><div>###EDIT_ICON###</div>###DELETE_ICON###</div><!--<div>###CLOSE_ICON###</div>-->
-<div class="cleaner">&nbsp;</div>
-</div>
-
+<div class="kett_listview_row current_row_###OWN_TASK###">
+  
+  <div class="kett_listview_row_head">
+    <div class="kett_listview_row_statusicon">###STATUS_ICON###</div>
+    <div class="kett_listview_row_headline">
+      <div class="kett_lvrow_headline_top">###UID###[###CATEGORY###]</div>
+      <div class="kett_lvrow_headline_title">###TITLE###</div>
+    </div>
+  </div>
+  
+  <div class="kett_listview_row_body">
+    <div class="kett_listview_row_box">
+      <div class="kett_lvrow_box_l">Status:</div>
+      <div class="kett_lvrow_box_r">###STATUS###</div>
+      <div class="kett_lvrow_box_l">Priorität:</div>
+      <div class="kett_lvrow_box_r">###PRIORITY_WRAPPED###</div>
+      <div class="kett_lvrow_box_l">Aufwand:</div>
+      <div class="kett_lvrow_box_r">fehlt</div>
+      <div class="kett_lvrow_box_l">Abrechnung:</div>
+      <div class="kett_lvrow_box_r">fehlt</div>
+    </div>
+    <div class="kett_listview_row_subt">
+    
+      Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
+      
+    </div>
+  </div>
+ 
+  <div class="kett_listview_row_user">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="kett_lvrow_user_head">###LABEL_RESPONSIBLE_FEUSER###</td>
+        <td class="kett_lvrow_user_head">###LABEL_OWNER_FEUSER###</td>
+        <td class="kett_lvrow_user_head_last">###LABEL_OBSERVERS_FEUSER###</td>
+      </tr>
+      <tr>
+        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###RESPONSIBLE_FEUSER###</div></td>
+        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OWNER_FEUSER###</div></td>
+        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OBSERVERS_FEUSER###</div></td>
+      </tr>
+    </table>
+  </div>
+  
+  <div class="kett_listview_row_foot">
+    <div class="kett_float_left">
+      ###LABEL_CRDATE###: ###CRDATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span><!--###LABEL_FROM_TO###-->Erledigt ab: ###FROM_DATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>Erledigt bis: <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span><span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>###CLOSE_TIME_WITH_TEXT###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span><!--###LABEL_NUMBER_OF_COMMENTS###--> (###NUMBER_OF_COMMENTS###)
+    </div>
+    <div class="kett_float_right">###EDIT_ICON### ###DELETE_ICON###</div>
+  </div>
+  
 </div>
 <!-- ###LISTVIEW_SINGLE_ROW### END-->
 
