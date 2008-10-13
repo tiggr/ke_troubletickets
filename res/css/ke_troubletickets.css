@@ -101,7 +101,6 @@
   }
 .tx-ketroubletickets-pi1-modeSelector .tx-ketroubletickets-pi1-modeSelector-SCell {
     background: transparent url(../images/icon_sort_active.gif) left center no-repeat;
-    background: transparent url(../images/icon_sort_active.gif) left center no-repeat;
     padding: 0 0 0 11px;
   }
 
@@ -145,6 +144,23 @@
   display: block;
   padding: 0 5px 0 0;
   line-height: 16px;
+  }
+
+.kett_toolbar_sort .kett_tbs_border{ 
+  display: block;
+  float:left; 
+  }
+.kett_toolbar_sort a{ 
+  display: block;
+  float: left;
+  }
+.kett_toolbar_sort .sort_active_desc a {
+  background: transparent url(../images/icon_arrow_up.gif) right center no-repeat;
+  padding: 0 13px 0 0;
+  }
+.kett_toolbar_sort .sort_active_asc a {
+  background: transparent url(../images/icon_arrow_down.gif) right center no-repeat;
+  padding: 0 13px 0 0;
   }
 
 /* CSV export */
@@ -311,20 +327,21 @@
 
 /* ALIEN fremde Tickets */
 
+.current_row_is_not_own_task .kett_listview_row_head {
+  background: #FFFFFF url(../images/list_item_head_bg_alien.gif) repeat scroll 0 0;
+  }
 .current_row_is_not_own_task .kett_listview_row_body { 
   background: #FFFFFF url(../images/list_item_subt_bg_alien.gif) repeat scroll 0 0; 
   }
-
-
 .current_row_is_not_own_task .kett_listview_row_user .kett_lvrow_user_head,
 .current_row_is_not_own_task .kett_listview_row_user .kett_lvrow_user_head_last {
-  background:#FFFFFF url(../images/list_item_userhead_bg_alien.gif) repeat scroll 0 0;
+  background: #FFFFFF url(../images/list_item_userhead_bg_alien.gif) repeat scroll 0 0;
   }
 .current_row_is_not_own_task .kett_listview_row_user .kett_lvrow_user_con {
   background: #e4e4e4;
   }
 .current_row_is_not_own_task .kett_listview_row_foot { 
-  background:#FFFFFF url(../images/list_item_foot_bg_alien.gif) repeat scroll 0 0; 
+  background: #FFFFFF url(../images/list_item_foot_bg_alien.gif) repeat scroll 0 0; 
   }
 
 
