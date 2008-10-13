@@ -6,12 +6,58 @@ New Ticket / Edit Ticket Form / Singleview
 
 <!-- ###TICKET_FORM### START-->
 
+<form name="###TICKETFORM_NAME###" id="###TICKETFORM_NAME###" action="###TICKETFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
+###ADDITIONALJS_PRE###
+
+
+<!-- Toolbar -->
+<div class="kett_singleview_toolbar">
+  <div class="kett_svt_headline">
+  ###LABEL_OPEN_NEW_TICKET######LABEL_EDIT_TICKET###
+  </div>
+  <div class="kett_svt_navigation">
+    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_arrow_left" />###BACK_TO_LISTVIEW###
+    <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
+    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" /><a href="#">Kommentare</a>
+    <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
+    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" /><a href="#">Dateianh&auml;nge</a>
+    <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
+    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_history.png" /><a href="#">Verlauf</a>
+    <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
+    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />###FIELD_SUBMIT###
+  </div>
+</div>
+
+<!-- Error  -->
+###ERRORS### 
+
+<div class="kett_singleview">
+  <div class="kett_sv_head">
+  <div class="kett_sv_head_title">
+    <label>###LABEL_TITLE###</label>###FIELD_TITLE###
+  </div>
+  <div class="kett_sv_head_info">
+    <label>Nr.</label>&nbsp;###UID###&nbsp;&nbsp;&nbsp;<label>Besitzer:</label>&nbsp;###VALUE_OWNER_FEUSER###
+  </div>
+  
+  
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
 <!-- \/ STANDARD TABLE-->
 <div class="ke_tts">
 <table class="std-table">
 	<tr>
 		<td class="head-left">&nbsp;</td>
-		<td class="head-middle"><h1>###LABEL_OPEN_NEW_TICKET######LABEL_EDIT_TICKET###</h1>###BACK_TO_LISTVIEW###</td>
+		<td class="head-middle"><h1></h1></td>
 		<td class="head-right">&nbsp;</td>
 	</tr>
 	<tr>
@@ -19,17 +65,16 @@ New Ticket / Edit Ticket Form / Singleview
 		<td class="body-middle">
 <!-- /\ STANDARD TABLE-->
 
-	###ERRORS###
 	
-	###ADDITIONALJS_PRE###
-	<form name="###TICKETFORM_NAME###" id="###TICKETFORM_NAME###" action="###TICKETFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
-	<span style="color:#bbbbbb;">###UID###</span>
+	
+	
+	
+	<span style="color:#bbbbbb;"></span>
 	<p class="title">
-	###LABEL_TITLE###
-	###FIELD_TITLE###
+
 	</p>
 	<p>
-	Besitzer: ###VALUE_OWNER_FEUSER###
+	
 	</p>
 	
 	<table class="tab">
@@ -329,10 +374,9 @@ Ticket History (in Singleview)
 <!-- ###LISTVIEW### END-->
 
 
-<!-- AUSGELAGERT -->
-<!--###CLOSE_ICON###-->
-<!--###PRIORITY_NUMBER###-->
-
+    <!-- AUSGELAGERT -->
+    <!--###CLOSE_ICON###-->
+    <!--###PRIORITY_NUMBER###-->
 <!-- ###LISTVIEW_SINGLE_ROW### START-->
 
 <div class="kett_listview_row current_row_###OWN_TASK###">
@@ -380,7 +424,7 @@ Ticket History (in Singleview)
   
   <div class="kett_listview_row_foot">
     <div class="kett_float_left">
-      ###LABEL_CRDATE###: ###CRDATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span><!--###LABEL_FROM_TO###-->Erledigt ab: ###FROM_DATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>Erledigt bis: <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span><span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>###CLOSE_TIME_WITH_TEXT###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span><!--###LABEL_NUMBER_OF_COMMENTS###--> (###NUMBER_OF_COMMENTS###)
+      ###LABEL_CRDATE###: ###CRDATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span><!--###LABEL_FROM_TO###-->Erledigt ab: ###FROM_DATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>Erledigt bis: <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span><span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>###CLOSE_TIME_WITH_TEXT###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span><!--###LABEL_NUMBER_OF_COMMENTS###--><img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" /> (###NUMBER_OF_COMMENTS###)
     </div>
     <div class="kett_float_right">###EDIT_ICON### ###DELETE_ICON###</div>
   </div>

@@ -29,6 +29,85 @@
   line-height: 1px;
   }
 
+
+/*------------------------------------------------------------------------------------------------------*/
+/*** SINGLEVIEW */
+/*------------------------------------------------------------------------------------------------------*/
+
+.kett_singleview_toolbar {
+  width: auto;
+  height: 52px;
+  overflow: hidden;
+  /*padding: 10px;*/
+  margin: 0 0 5px 0;
+  background: #dadada url(../images/css_gradient2.gif) top left repeat-x;
+  border: 1px solid #353535;
+  }
+
+.kett_svt_headline {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 10px 10px 6px 10px;
+  }
+
+.kett_svt_navigation {
+  padding: 0px 10px 0px 10px;
+  font-size: 11px;
+  line-height: 15px;
+  }
+.kett_svt_navigation input {
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  }
+.kett_svt_navigation a,
+.kett_svt_navigation img { 
+  float: left;
+  }
+.kett_svt_navigation img { 
+  margin: 0 4px 0 0 ;
+  }
+.kett_svt_navborder {
+  display: block;
+  float: left;
+  color: #f2f2f2;
+  }
+
+/* VIEW */
+
+.kett_singleview { 
+  border:1px solid #353535;
+  }
+.kett_sv_head {
+  height: 54px;
+  background:#FFFFFF url(../images/single_item_head_bg_normal.gif) repeat scroll 0 0;
+  }
+.kett_sv_head_title {
+  padding: 8px 0 0 10px;
+  }
+.kett_sv_head_title label {
+  font-weight: bold;
+  font-size: 12px;
+  margin: 0 6px 0 0;
+  }
+.kett_sv_head_title input {
+  background: #fff7de;
+  border: 1px solid #d7b85c;
+  padding: 2px;
+  width: 90%;
+  font-size: 12px;
+  }
+
+.kett_sv_head_info {
+  padding: 5px 0 0 10px;
+  font-size: 11px;
+  }
+.kett_sv_head_info label {
+  font-weight: bold;
+  }
+
 /*------------------------------------------------------------------------------------------------------*/
 /*** LISTVIEW-TOOLBAR */
 /*------------------------------------------------------------------------------------------------------*/
@@ -324,6 +403,9 @@
   margin: 5px 6px 0 0 ;
   line-height: 0;
   }
+.kett_listview_row_foot .kett_float_left img { 
+  display: inline;
+  }
 
 /* ALIEN fremde Tickets */
 
@@ -332,6 +414,10 @@
   }
 .current_row_is_not_own_task .kett_listview_row_body { 
   background: #FFFFFF url(../images/list_item_subt_bg_alien.gif) repeat scroll 0 0; 
+  }
+.current_row_is_not_own_task .kett_listview_row_body .kett_listview_row_box {
+  background:#f4f4f4 none repeat scroll 0 0;
+  border:1px solid #cccccc;
   }
 .current_row_is_not_own_task .kett_listview_row_user .kett_lvrow_user_head,
 .current_row_is_not_own_task .kett_listview_row_user .kett_lvrow_user_head_last {
@@ -343,6 +429,7 @@
 .current_row_is_not_own_task .kett_listview_row_foot { 
   background: #FFFFFF url(../images/list_item_foot_bg_alien.gif) repeat scroll 0 0; 
   }
+
 
 
 
