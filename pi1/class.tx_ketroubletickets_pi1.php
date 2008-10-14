@@ -293,27 +293,6 @@ function areYouSure(ziel) {
 	 */
 	public function checkPermissionForCurrentTicket() {/*{{{*/
 		return $this->checkPermissionForTicket($this->internal['currentRow']['uid']);
-		/*
-		$permission = false;
-		if ($GLOBALS['TSFE']->loginUser) {
-			if ($this->internal['currentRow']['owner_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
-				$permission = 1;
-			}
-			if ($this->internal['currentRow']['responsible_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
-				$permission = 1;
-			}
-			if (t3lib_div::inList($this->internal['currentRow']['observers_feuser'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
-				$permission = 2;
-			}
-			if ($this->ffdata['show_tickets'] == CONST_SHOW_ALL_FOR_ADMINS && $this->ffdata['ticket_administrators'] && t3lib_div::inList($this->ffdata['ticket_administrators'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
-				$permission = 1;
-			}
-			if ($this->ffdata['show_tickets'] == CONST_SHOW_ALL_ALWAYS) {
-				$permission = 1;
-			}
-		}
-		return $permission;
-		*/
 	}/*}}}*/
 
 	/**
@@ -2694,6 +2673,7 @@ function areYouSure(ziel) {
 				if (empty($this->internal['currentRow'][$fieldName])) {
 					return '';
 				}
+
 				// get the user data from fe_users
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], 'fe_users', 'name,username');
 
