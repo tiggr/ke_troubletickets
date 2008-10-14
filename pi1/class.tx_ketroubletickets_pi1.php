@@ -56,7 +56,6 @@ require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php');
 // Mail functions
 require_once (PATH_t3lib.'class.t3lib_htmlmail.php');
 
-
 /**
  * Plugin 'Trouble Ticket System' for the 'ke_troubletickets' extension.
  *
