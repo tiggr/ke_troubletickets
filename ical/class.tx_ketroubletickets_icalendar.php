@@ -303,7 +303,7 @@ class tx_ketroubletickets_icalendar {
 	}
 
 	public function main() {
-		die('Experimental Feature. Disabled.')
+		die('Experimental Feature. Disabled.');
 		$this->init();
 		$this->login();
 		$content = $this->getTheTickets();
