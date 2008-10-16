@@ -151,8 +151,8 @@
 			<label index="LABEL_CRDATE">Erstellt am</label>
 			<label index="LABEL_CLOSE_TIME">Geschlossen am</label>
 			<label index="LABEL_FROM_TO">Von-bis</label>
-			<label index="LABEL_TIME_USED">Zeitaufwand tatsächlich (in Stunden)</label>
-			<label index="LABEL_TIME_PLANNED">Zeitaufwand geplant (in Stunden)</label>
+			<label index="LABEL_TIME_USED">Zeitaufwand tatsächlich (in Std.)</label>
+			<label index="LABEL_TIME_PLANNED">Zeitaufwand geplant (in Std.)</label>
 			<label index="LABEL_ADDITIONAL_INFO">Zusatzinformationen</label>
 			<label index="LABEL_EFFORT">Aufwand</label>
 			<label index="LABEL_FILES">Dateien</label>
