@@ -9,7 +9,6 @@ New Ticket / Edit Ticket Form / Singleview
 <form name="###TICKETFORM_NAME###" id="###TICKETFORM_NAME###" action="###TICKETFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
 ###ADDITIONALJS_PRE###
 
-
 <!-- Toolbar -->
 <div class="kett_singleview_toolbar">
   <div class="kett_svt_headline">
@@ -18,11 +17,11 @@ New Ticket / Edit Ticket Form / Singleview
   <div class="kett_svt_navigation">
     <img src="typo3conf/ext/ke_troubletickets/res/images/icon_arrow_left" />###BACK_TO_LISTVIEW###
     <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
-    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" /><a href="#">Kommentare</a>
+    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" /><a href="#kett_goto_comments">Kommentare</a>
     <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
-    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" /><a href="#">Dateianh&auml;nge</a>
+    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" /><a href="#kett_goto_files">Dateianh&auml;nge</a>
     <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
-    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_history.png" /><a href="#">Verlauf</a>
+    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_history.png" /><a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';">Verlauf</a>
     <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
     <img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />###FIELD_SUBMIT###
   </div>
@@ -32,134 +31,115 @@ New Ticket / Edit Ticket Form / Singleview
 ###ERRORS### 
 
 <div class="kett_singleview">
+
   <div class="kett_sv_head">
-  <div class="kett_sv_head_title">
-    <label>###LABEL_TITLE###</label>###FIELD_TITLE###
-  </div>
-  <div class="kett_sv_head_info">
-    <label>Nr.</label>&nbsp;###UID###&nbsp;&nbsp;&nbsp;<label>Besitzer:</label>&nbsp;###VALUE_OWNER_FEUSER###
+    <div class="kett_sv_head_title">
+      <label>###LABEL_TITLE###</label>###FIELD_TITLE###
+    </div>
+    <div class="kett_sv_head_info">
+      <label>Nr.:</label>&nbsp;###UID###&nbsp;&nbsp;&nbsp;<label>Besitzer:</label>&nbsp;###VALUE_OWNER_FEUSER###&nbsp;&nbsp;###OPTIONAL_CATEGORY###
+    </div>
   </div>
   
-  
+  <div class="kett_sv_boxes">
+    <div class="kett_sv_single_box">
+      <div class="kett_sv_sbox_head">###LABEL_STATUS###</div>
+      <div class="kett_sv_sbox_body">
+        <div class="kett_sv_sboxb_in">###FIELD_STATUS###</div>
+      </div>
+    </div>
+    <div class="kett_sv_single_box">
+      <div class="kett_sv_sbox_head">###LABEL_BILLING###</div>
+      <div class="kett_sv_sbox_body">
+        <div class="kett_sv_sboxb_in">###FIELD_BILLING###</div>
+      </div>
+    </div>
+    <div class="kett_sv_single_box">
+      <div class="kett_sv_sbox_head">###LABEL_FROM_DATE###</div>
+      <div class="kett_sv_sbox_body">
+        <div class="kett_sv_sboxb_in">###FIELD_FROM_DATE###</div>
+      </div>
+    </div>
+    <div class="kett_sv_single_box">
+      <div class="kett_sv_sbox_head">###LABEL_PRIORITY###</div>
+      <div class="kett_sv_sbox_body">
+        <div class="kett_sv_sboxb_in">###FIELD_PRIORITY###</div>
+      </div>
+    </div>
+    ###OPTIONAL_RESPONSIBLE_FEUSER###
+    <div class="kett_sv_single_box">
+      <div class="kett_sv_sbox_head">###LABEL_UNTIL_DATE###</div>
+      <div class="kett_sv_sbox_body">
+        <div class="kett_sv_sboxb_in">###FIELD_UNTIL_DATE###</div>
+      </div>
+    </div>
+    
+    <div class="kett_sv_single_box">
+      <div class="kett_sv_sbox_head">###LABEL_EFFORT###</div>
+      <div class="kett_sv_sbox_body">
+        <div class="kett_sv_sboxb_in">###FIELD_EFFORT###</div>
+      </div>
+    </div>
+    ###INTERNAL_TIME_PLANNED###
+    ###INTERNAL_TIME_USED###
   </div>
+  
+  <div class="kett_sv_save">
+    <div class="kett_sv_save_in">
+      ###FIELD_SUBMIT###<img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />
+    </div>
+    <div class="kett_float_clean"></div>
+  </div>
+  
+  <div class="kett_sv_description">
+    <div class="kett_sv_desc_head">###LABEL_DESCRIPTION###</div>
+    <div class="kett_sv_desc_body"><table><tr><td>###FIELD_DESCRIPTION###</td></tr></table></div>
+  </div>
+  
+  <div class="kett_sv_save">
+    <div class="kett_sv_save_in">
+      ###FIELD_SUBMIT###<img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />
+    </div>
+    <div class="kett_float_clean"></div>
+  </div>
+  
+  ###INTERNAL_ADDITIONAL_INFO###
+  
+  <div class="kett_sv_description">
+    <div class="kett_sv_desc_head">###LABEL_FILES###<a name="kett_goto_files">&nbsp;</a></div>
+    <div class="kett_sv_desc_body">###FIELD_FILES###</div>
+  </div>
+  
+  <div class="kett_sv_description">
+    <div class="kett_sv_desc_head">###LABEL_RELATED_TICKETS###</div>
+    <div class="kett_sv_desc_body">###FIELD_RELATED_TICKETS###</div>
+  </div>
+  
+  ###OPTIONAL_OBSERVERS_FEUSER###
+  ###OPTIONAL_NOTIFICATIONS_OWNER###
+  ###OPTIONAL_NOTIFICATIONS_RESPONSIBLE###
+  ###OPTIONAL_NOTIFICATIONS_OBSERVER###
+  
+  ###HIDDEN_FIELDS###
+  
+  <div class="kett_sv_save">
+    <div class="kett_sv_save_in">
+      ###FIELD_SUBMIT###<img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />
+    </div>
+    <div class="kett_float_clean"></div>
+  </div>
+  ###OPTIONAL_TICKET_COMMENT###
+  
 
+  
+  </form>
+  ###ADDITIONALJS_POST###
+  ###OPTIONAL_TICKET_HISTORY###
 </div>
 
 
 
 
-
-
-
-
-<!-- \/ STANDARD TABLE-->
-<div class="ke_tts">
-<table class="std-table">
-	<tr>
-		<td class="head-left">&nbsp;</td>
-		<td class="head-middle"><h1></h1></td>
-		<td class="head-right">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="body-left">&nbsp;</td>
-		<td class="body-middle">
-<!-- /\ STANDARD TABLE-->
-
-	
-	
-	
-	
-	<span style="color:#bbbbbb;"></span>
-	<p class="title">
-
-	</p>
-	<p>
-	
-	</p>
-	
-	<table class="tab">
-	<tr>
-			<td style="padding-right:7px;">
-			<p>
-			###LABEL_STATUS###<br />
-			###FIELD_STATUS###
-			</p>
-
-			<p>
-			###LABEL_BILLING###<br />
-			###FIELD_BILLING###
-			</p>
-
-			<p>
-			###LABEL_PRIORITY###<br />
-			###FIELD_PRIORITY###
-			</p>
-			
-			<p>
-			###OPTIONAL_RESPONSIBLE_FEUSER###
-			</p>
-		</td>
-		<td style="padding-left:7px;">
-			
-			<div class="erledigenbis"><p>
-			###LABEL_FROM_DATE###<br />
-			###FIELD_FROM_DATE###
-			</p></div>
-			
-			<div class="erledigenbis"><p>
-			###LABEL_UNTIL_DATE###<br />
-			###FIELD_UNTIL_DATE###
-			</p></div>
-
-			<p>
-			###LABEL_EFFORT###<br />
-			###FIELD_EFFORT###
-			</p>
-
-			###INTERNAL_TIME_PLANNED###
-			###INTERNAL_TIME_USED###
-			###OPTIONAL_CATEGORY###
-		</td>
-	</tr>
-	</table>
-	
-	<p>###LABEL_DESCRIPTION###</p>
-	<div>###FIELD_DESCRIPTION###</div>
-	###INTERNAL_ADDITIONAL_INFO###
-
-	<p>
-	<a name="uploadfieldsmark"></a>
-	###LABEL_FILES###<br />
-	<div>###FIELD_FILES###</div>
-	</p>
-
-	<p>
-	###LABEL_RELATED_TICKETS###<br />
-	###FIELD_RELATED_TICKETS###
-	</p>
-
-<table class="tab" style="margin-bottom:7px;"><tr><td>
-	###OPTIONAL_OBSERVERS_FEUSER###
-	###OPTIONAL_NOTIFICATIONS_OWNER###
-	###OPTIONAL_NOTIFICATIONS_RESPONSIBLE###
-	###OPTIONAL_NOTIFICATIONS_OBSERVER###
-	###HIDDEN_FIELDS###
-</td></tr></table>
-	
-	<div class="submit">###FIELD_SUBMIT###</div>
-	###OPTIONAL_TICKET_COMMENT###
-	</form>
-	###ADDITIONALJS_POST###
-
-
-<!-- \/ STANDARD TABLE-->
-		</td>
-		<td class="body-right">&nbsp;</td>
-	</tr>
-</table>
-<!-- /\ STANDARD TABLE-->
-###OPTIONAL_TICKET_HISTORY###
-</div>
 <!-- ###TICKET_FORM### END-->
 
 <!-- 
@@ -169,78 +149,86 @@ Optional Labels and Fields
 -->
 
 <!-- ###OPTIONAL_CATEGORY_SUBPART### START-->
-	<p>
-	###LABEL_CATEGORY###<br />
-	###FIELD_CATEGORY###
-	</p>
+  <label>###LABEL_CATEGORY###:</label>&nbsp;###FIELD_CATEGORY###
 <!-- ###OPTIONAL_CATEGORY_SUBPART### END-->
 
 <!-- ###OPTIONAL_RESPONSIBLE_FEUSER_SUBPART### START-->
-	<p>
-	###LABEL_RESPONSIBLE_FEUSER###<br />
-	###FIELD_RESPONSIBLE_FEUSER###
-	</p>
+ <div class="kett_sv_single_box">
+    <div class="kett_sv_sbox_head">###LABEL_RESPONSIBLE_FEUSER###</div>
+    <div class="kett_sv_sbox_body">
+      <div class="kett_sv_sboxb_in">###FIELD_RESPONSIBLE_FEUSER###</div>
+    </div>
+  </div>
 <!-- ###OPTIONAL_RESPONSIBLE_FEUSER_SUBPART### END-->
 
 <!-- ###OPTIONAL_OBSERVERS_FEUSER_SUBPART### START-->
-	<p>
-	###LABEL_OBSERVERS_FEUSER###<br />
-	###FIELD_OBSERVERS_FEUSER###
-	</p>
+  <div class="kett_sv_description">
+    <div class="kett_sv_desc_head">###LABEL_OBSERVERS_FEUSER###</div>
+    <div class="kett_sv_desc_body">###FIELD_OBSERVERS_FEUSER###</div>
+  </div>
+
 <!-- ###OPTIONAL_OBSERVERS_FEUSER_SUBPART### END-->
 
 <!-- ###OPTIONAL_NOTIFICATIONS_OWNER_SUBPART### START-->
-	<p>
-	###LABEL_NOTIFICATIONS_OWNER###<br />
-	###FIELD_NOTIFICATIONS_OWNER###
-	</p>
+  <div class="kett_sv_description">
+    <div class="kett_sv_desc_head">###LABEL_NOTIFICATIONS_OWNER###</div>
+    <div class="kett_sv_desc_body">###FIELD_NOTIFICATIONS_OWNER###</div>
+  </div>
 <!-- ###OPTIONAL_NOTIFICATIONS_OWNER_SUBPART### END-->
 
 <!-- ###OPTIONAL_NOTIFICATIONS_RESPONSIBLE_SUBPART### START-->
-	<p>
-	###LABEL_NOTIFICATIONS_RESPONSIBLE###<br />
-	###FIELD_NOTIFICATIONS_RESPONSIBLE###
-	</p>
+  <div class="kett_sv_description">
+    <div class="kett_sv_desc_head">###LABEL_NOTIFICATIONS_RESPONSIBLE###</div>
+    <div class="kett_sv_desc_body">###FIELD_NOTIFICATIONS_RESPONSIBLE###</div>
+  </div>
 <!-- ###OPTIONAL_NOTIFICATIONS_RESPONSIBLE_SUBPART### END-->
 
 <!-- ###OPTIONAL_NOTIFICATIONS_OBSERVER_SUBPART### START-->
-	<p>
-	###LABEL_NOTIFICATIONS_OBSERVER###<br />
-	###FIELD_NOTIFICATIONS_OBSERVER###
-	</p>
+  <div class="kett_sv_description">
+    <div class="kett_sv_desc_head">###LABEL_NOTIFICATIONS_OBSERVER###</div>
+    <div class="kett_sv_desc_body">###FIELD_NOTIFICATIONS_OBSERVER###</div>
+  </div>
 <!-- ###OPTIONAL_NOTIFICATIONS_OBSERVER_SUBPART### END-->
 
 <!-- ###INTERNAL_TIME_PLANNED_SUBPART### START-->
-	<p class="internalfield"><em>###LABEL_INTERNAL###:</em> 
-	###LABEL_TIME_PLANNED###<br />
-	###FIELD_TIME_PLANNED###
-	</p>
+  <div class="kett_sv_single_box kett_sv_single_box_intern">
+    <div class="kett_sv_sbox_head">###LABEL_INTERNAL###</div>
+    <div class="kett_sv_sbox_body">
+      <div class="kett_sv_sboxb_in">###FIELD_TIME_PLANNED### ###LABEL_TIME_PLANNED###</div>
+    </div>
+  </div>
 <!-- ###INTERNAL_TIME_PLANNED_SUBPART### END-->
 
 <!-- ###INTERNAL_TIME_USED_SUBPART### START-->
-	<p class="internalfield"><em>###LABEL_INTERNAL###:</em> 
-	###LABEL_TIME_USED###<br />
-	###FIELD_TIME_USED###
-	</p>
+  <div class="kett_sv_single_box kett_sv_single_box_intern">
+    <div class="kett_sv_sbox_head">###LABEL_INTERNAL###</div>
+    <div class="kett_sv_sbox_body">
+      <div class="kett_sv_sboxb_in">###FIELD_TIME_USED### ###LABEL_TIME_USED###</div>
+    </div>
+  </div>
 <!-- ###INTERNAL_TIME_USED_SUBPART### END-->
 
 <!-- ###INTERNAL_ADDITIONAL_INFO_SUBPART### START-->
-	<p class="internalfield"><em>###LABEL_INTERNAL###:</em> 
-	###LABEL_ADDITIONAL_INFO###<br />
-	###FIELD_ADDITIONAL_INFO###
-	</p>
+  <div class="kett_sv_description kett_sv_intern">
+    <div class="kett_sv_desc_head">###LABEL_INTERNAL###: ###LABEL_ADDITIONAL_INFO###</div>
+    <div class="kett_sv_desc_body">###FIELD_ADDITIONAL_INFO###</div>
+  </div>
 <!-- ###INTERNAL_ADDITIONAL_INFO_SUBPART### END-->
-			
+
 <!-- 
 ***********************************************
 Comments (in Singleview)
 ***********************************************
 -->
 <!-- ###TICKET_COMMENT### START-->
-	<h1 style="margin-top:20px;">###LABEL_COMMENT_HEADER###</h1>
-	<div style="margin-bottom:5px;">###COMMENTLIST###</div>
-	<div style="margin-bottom:8px;">###FIELD_CONTENT###</div>
-	<div class="submit">###FIELD_SUBMIT###</div>
+  <div class="kett_sv_box1">
+    <div class="kett_svbox1_head">###LABEL_COMMENT_HEADER###<a name="kett_goto_comments">&nbsp;</a></div>
+    <div class="kett_svbox1_body">
+      <div>###COMMENTLIST###</div>
+      <div>###FIELD_CONTENT###</div>
+    </div>
+  </div>
+
 <!-- ###TICKET_COMMENT### END-->
 
 <!-- 
@@ -249,26 +237,20 @@ Ticket History (in Singleview)
 ***********************************************
 -->
 <!-- ###TICKET_HISTORY### START-->
-<!-- \/ STANDARD TABLE-->
-<table class="std-table">
-	<tr>
-		<td class="head-left">&nbsp;</td>
-		<td class="head-middle">
-			<div style="float:left;"><h1>###LABEL_TICKET_HISTORY_HEADER###</h1></div>
-			<div style="float:right;">
-				<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'none';"><span style="border:0px; float:left; margin:0px; padding:0px;">###ICONMINUS###</span></a>
-				<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';"><span style="border:0px; margin:0px; padding:0px;">###ICONPLUS###</span></a>
-			</div>
-		</td>
-		<td class="head-right">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="body-left">&nbsp;</td>
-		<td class="body-middle">
-<!-- /\ STANDARD TABLE-->
-	
-	<a name="zur_history"></a>
-	<div id="std_tab_grey_body_id" style="display:none;">
+
+  <div class="kett_sv_box2">
+    <div class="kett_svbox2_head">
+      <div class="kett_float_left">###LABEL_TICKET_HISTORY_HEADER###</div>
+      <div class="kett_float_right" >
+        <a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'none';">
+        <span style="border:0px; float:left; margin:5px 0 0 0;">###ICONMINUS###</span></a>
+        <a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';">
+        <span style="border:0px; float:left; margin:5px 0 0 0;">###ICONPLUS###</span></a>
+      </div>  
+    </div>
+    <div class="kett_svbox2_body">
+      <a name="zur_history"></a>
+        <div id="std_tab_grey_body_id" style="display:none;">
 	<table class="ticket_history">
 	<tr>
 		<td class="headline">###LABEL_HISTORY_DATE###<br />###LABEL_HISTORY_USER###<br />###LABEL_HISTORY_FIELD###</td>
@@ -277,22 +259,17 @@ Ticket History (in Singleview)
 	</tr>
 	###TICKET_HISTORY_ROWS###
 	</table>
-	</div>
-<!-- \/ STANDARD TABLE-->
-		</td>
-		<td class="body-right">&nbsp;</td>
-	</tr>
-</table>
-<!-- /\ STANDARD TABLE-->
+    </div>
+  </div>
 
 <!-- ###TICKET_HISTORY### END-->
 
 <!-- ###TICKET_HISTORY_ROW_TEMPLATE### START-->
-	<tr>
-		<td>###HISTORY_DATE###<br />###HISTORY_USER###<br />###HISTORY_FIELD###</td>
-		<td>###HISTORY_OLD_VALUE###</td>
-		<td>###HISTORY_NEW_VALUE###</td>
-	</tr>
+  <tr>
+    <td>###HISTORY_DATE###<br />###HISTORY_USER###<br />###HISTORY_FIELD###</td>
+    <td>###HISTORY_OLD_VALUE###</td>
+    <td>###HISTORY_NEW_VALUE###</td>
+  </tr>
 <!-- ###TICKET_HISTORY_ROW_TEMPLATE### START-->
 
 
@@ -372,6 +349,10 @@ Ticket History (in Singleview)
 ###PAGEBROWSER###
 
 <!-- ###LISTVIEW### END-->
+
+
+
+
 
 
     <!-- AUSGELAGERT -->
@@ -537,51 +518,30 @@ TEASERVIEW
 ***********************************************
 -->
 <!-- ###TEASERVIEW_OWN### START-->
-<!-- \/ STANDARD TABLE-->
-<table class="std-table">
-	<tr>
-		<td class="head-left">&nbsp;</td>
-		<td class="head-middle"><h1>Eigene Aufgaben</h1></td>
-		<td class="head-right">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="body-left">&nbsp;</td>
-		<td class="body-middle">
-<!-- /\ STANDARD TABLE-->
 <table>
-<tr><td><b>###LISTFIELDHEADER_CRDATE###</b></td><td><b>###LISTFIELDHEADER_TITLE###</b></td><td><b>###LISTFIELDHEADER_FROM_DATE###</b></td><td><b>###LISTFIELDHEADER_UNTIL_DATE###</b></td><td><b>###LISTFIELDHEADER_STATUS###</b></td></tr>
+  <tr>
+    <td><b>###HEADER_CRDATE###</b></td>
+    <td><b>###HEADER_TITLE###</b></td>
+    <td><b>###HEADER_FROM_DATE###</b></td>
+    <td><b>###HEADER_UNTIL_DATE###</b></td>
+    <td><b>###HEADER_STATUS###</b></td>
+  </tr>
 ###LISTCONTENT###
 </table>
-<!-- \/ STANDARD TABLE-->
-		</td>
-		<td class="body-right">&nbsp;</td>
-	</tr>
-</table>
-<!-- /\ STANDARD TABLE-->
 <!-- ###TEASERVIEW_OWN### END-->
 
 <!-- ###TEASERVIEW_DEL### START-->
-<!-- \/ STANDARD TABLE-->
-<table class="std-table">
-	<tr>
-		<td class="head-left">&nbsp;</td>
-		<td class="head-middle"><h1>Delegierte Aufgaben</h1></td>
-		<td class="head-right">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="body-left">&nbsp;</td>
-		<td class="body-middle">
-<!-- /\ STANDARD TABLE-->
 <table>
-<tr><td><b>###LABEL_DATE###</b></td><td><b>###LABEL_TITLE###</b></td><td><b>###LABEL_FROM###</b></td><td><b>###LABEL_TODO_FROM###</b></td><td><b>###LABEL_TODO_UNTIL###</b></td></tr>
+  <tr>
+    <td><b>###LABEL_DATE###</b></td>
+    <td><b>###LABEL_TITLE###</b></td>
+    <td><b>###LABEL_FROM###</b></td>
+    <td><b>###LABEL_TODO_FROM###</b></td>
+    <td><b>###LABEL_TODO_UNTIL###</b></td>
+  </tr>
 ###LISTCONTENT###
 </table>
-<!-- \/ STANDARD TABLE-->
-		</td>
-		<td class="body-right">&nbsp;</td>
-	</tr>
-</table>
-<!-- /\ STANDARD TABLE-->
+
 <!-- ###TEASERVIEW_DEL### END-->
 
 <!-- ###TEASER_SINGLE_ROW_OWN### START-->
