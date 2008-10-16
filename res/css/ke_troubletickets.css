@@ -1,3 +1,7 @@
+﻿/*------------------------------------------------------------------------------------------------------*/
+/*** TICKETS - TROUBLE TICKET SYSTEM  */
+/*------------------------------------------------------------------------------------------------------*/
+
 /*------------------------------------------------------------------------------------------------------*/
 /*** default Settings */
 /*------------------------------------------------------------------------------------------------------*/
@@ -81,6 +85,7 @@
   }
 .kett_sv_head {
   height: 54px;
+  margin: 0 0 1px 0;
   background:#FFFFFF url(../images/single_item_head_bg_normal.gif) repeat scroll 0 0;
   }
 .kett_sv_head_title {
@@ -106,6 +111,107 @@
 .kett_sv_head_info label {
   font-weight: bold;
   }
+
+.kett_sv_boxes { overflow:hidden; }
+.kett_sv_single_box {
+  float: left;
+  width: 33.33%;
+  }
+.kett_sv_sbox_head {
+  background:#FFFFFF url(../images/list_item_userhead_bg_norma.gif) repeat scroll 0 0;
+  color:#1B1C1C;
+  font-size:11px;
+  font-weight:bold;
+  height:19px;
+  line-height:19px;
+  padding:0 10px;
+  border-right:1px solid white;
+  }
+.kett_sv_sbox_body {
+  height: 30px; 
+  background:#E6EFEF none repeat scroll 0 0;
+  border-bottom:1px solid white;
+  border-right:1px solid white;
+  font-size:11px;
+  }
+.kett_sv_sboxb_in{
+  padding:3px 6px 6px 10px;
+  }
+
+
+.kett_sv_single_box_intern .kett_sv_sbox_head {
+  color: #000000;
+  background:#bde3f8 url(../images/list_item_userhead_bg_inter.gif) repeat scroll 0 0;
+  }
+.kett_sv_single_box_intern .kett_sv_sbox_body .kett_sv_sboxb_in {
+  font-size: 10px;
+  }
+.kett_sv_single_box_intern .kett_sv_sbox_body {
+  background: #bde3f8;
+  }
+
+
+.kett_sv_desc_head {
+  background:#FFFFFF url(../images/list_item_userhead_bg_norma.gif) repeat scroll 0 0;
+  color:#1B1C1C;
+  font-size:11px;
+  font-weight:bold;
+  height:19px;
+  line-height:19px;
+  padding:0 10px;
+  }
+.kett_sv_desc_body {
+  background:#E6EFEF none repeat scroll 0 0;
+  border-bottom:1px solid white;
+  border-right:1px solid white;
+  font-size:11px;
+  padding:3px 6px 6px 10px;
+  }
+
+.kett_sv_intern .kett_sv_desc_head{
+  background:#bde3f8 url(../images/list_item_userhead_bg_inter.gif) repeat scroll 0 0;
+  }
+.kett_sv_intern .kett_sv_desc_body{
+  padding: 5px 10px 5px 10px;
+  background: #bde3f8;
+  border-right: 0px;
+  }
+
+
+/* Kommentare */
+.kett_sv_box1 .kett_svbox1_head {
+  background:#FFFFFF url(../images/css_gradient3.gif) repeat scroll 0 0;
+  height:35px;
+  line-height:35px;
+  padding:0 10px;
+  color:#011737;
+  font-size:12px;
+  font-weight:bold;
+  }
+.kett_sv_box1 .kett_svbox1_body {
+  background:#fff7cc none repeat scroll 0 0;
+  border-bottom:1px solid white;
+  font-size:11px;
+  padding:3px 6px 6px 10px;
+  }
+
+/* History */
+.kett_sv_box2 .kett_svbox2_head {
+  background:#FFFFFF url(../images/css_gradient4.gif) repeat scroll 0 0;
+  height:35px;
+  line-height:35px;
+  padding:0 10px;
+  color:#011737;
+  font-size:12px;
+  font-weight:bold;
+  }
+.kett_sv_box2 .kett_svbox2_body {
+  background:#e1eaf8 none repeat scroll 0 0;
+  border-bottom:1px solid white;
+  font-size:11px;
+  padding:3px 6px 6px 10px;
+  }
+
 
 /*------------------------------------------------------------------------------------------------------*/
 /*** LISTVIEW-TOOLBAR */
@@ -429,73 +535,51 @@
   background: #FFFFFF url(../images/list_item_foot_bg_alien.gif) repeat scroll 0 0; 
   }
 
-
-
-
-/*------------------------------------------------------------------------------------------------------*/
-/*** TICKETS - TROUBLE TICKET SYSTEM  */
-/*------------------------------------------------------------------------------------------------------*/
-.tx-ketroubletickets-pi1 .cleaner {
-	clear:both;
-	height:1px;
-}
-
-
-
-
-
-.tx-ketroubletickets-pi1 .due_is_not_overdue {
-	padding:1px;
-}
-
-
-
-.tx-ketroubletickets-pi1 .internalfield {
-	background: lightblue;
-}
-
-.tx-ketroubletickets-pi1 .comment {
-	margin-top:10px;
-}
-
-.tx-ketroubletickets-pi1 select {
-	margin-bottom: 0px;
-}
-
-/* Form */
-.ke_tts .title{color:#000; margin-top:7px;}
-.ke_tts .title input{width:430px; margin-left:5px;}
-.ke_tts p {margin-bottom:10px; color:#000}
-.ke_tts .tab {width:100%; margin-bottom:16px;}
-.ke_tts .tab td {vertical-align:top; padding:5px; width:50%; font-size:12px;}
-/*.ke_tts .tab td input, select {width:100%;}*/
-.ke_tts .tab p {margin-bottom:10px; color:#000}
-.ke_tts .tab .erledigenbis input{}
-.ke_tts #editorWrap1 {margin-bottom:16px;}
-.ke_tts .submit input {font-weight:bold; height:22px; width:100%; font-family:Verdana; font-size:10px; background:#fff;}
-	
-/* Listview */
-.ke-tt-listview-head a {font-weight:normal; font-size:10px;}
-.ke-tt-listview-head td {border-right:1px solid #cccccc; margin-right:3px; padding-right:3px; width:120px; font-size:10px;}
-
-
+/* Speichern */
+.kett_sv_save {
+  background: #EFEFEF url(../images/css_gradient5.gif) repeat scroll 0 0;
+  height: 25px;
+  margin: 0 0 1px 0;
+  }
+.kett_sv_save .kett_sv_save_in {
+  float: right; 
+  padding: 0 10px 0 0;
+  }
+.kett_sv_save .kett_sv_save_in input {
+  background:transparent none repeat scroll 0 0;
+  border:0 none;
+  cursor:pointer;
+  margin:4px 2px 0 0;
+  padding:0;
+  float: left;
+  font-size: 11px;
+  font-weight: bold;
+  }
+.kett_sv_save .kett_sv_save_in img {
+  margin: 3px 0 0 0;
+  float: left;
+  }
 
 /* History */
-.tx-ketroubletickets-pi1 .ticket_history { border:0px solid #ccc; width:496px;}
-.tx-ketroubletickets-pi1 .ticket_history td {vertical-align:top; padding:3px; border-bottom:1px solid #ccc; border-top:1px solid #ccc; border:1px solid #ccc; font-size:10px;}
-.tx-ketroubletickets-pi1 .ticket_history .headline{background:#EBEBEB; color:#000; font-size:11px; font-weight:bold; vertical-align:middle;}
+.tx-ketroubletickets-pi1 .ticket_history { 
+  border:0px solid #ccc; 
+  width: 100%;
+  }
+.tx-ketroubletickets-pi1 .ticket_history td {
+  vertical-align:top; 
+  padding:3px; 
+  border-bottom:1px solid #ccc; 
+  border-top:1px solid #ccc; 
+  border:1px solid #ccc; 
+  font-size:10px;
+  }
+.tx-ketroubletickets-pi1 .ticket_history .headline { 
+  background:#EBEBEB; 
+  color:#000; 
+  font-size:11px; 
+  font-weight:bold; 
+  vertical-align:middle;
+  }
 
-.tx-ketroubletickets-pi1 .teaser_pagename a.link,
-.tx-ketroubletickets-pi1 .teaser_pagename a.visited,
-.tx-ketroubletickets-pi1 .teaser_pagename a.active {
-}
 
-.tx-ketroubletickets-pi1 td .teaser_pagename {
-	color : #bbbbbb;
-	font-family : monospace;
-	font-size : 10px;
-}
 
-.tx-ketroubletickets-pi1 .error  {
-	color: red;
-}
