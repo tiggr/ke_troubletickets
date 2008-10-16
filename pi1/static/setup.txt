@@ -18,7 +18,7 @@ plugin.tx_ketroubletickets_pi1 {
 
 	# Image used for the date picker
 	datePickerImage = IMAGE
-	datePickerImage.file = EXT:ke_troubletickets/res/images/cal.gif
+	datePickerImage.file = EXT:ke_troubletickets/res/images/calendar.png
 
 	# Status and Priority Names are stored in locallang
 	# remember to adjust the TCA (tca.php), too, if you change these values
