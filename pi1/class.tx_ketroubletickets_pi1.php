@@ -2730,7 +2730,8 @@ function areYouSure(ziel) {
 				break;
 
 			case 'description_clean':
-				$retval = strip_tags($this->cleanUpHtmlOutput($this->internal['currentRow']['description']));
+				$retval = strip_tags($this->internal['currentRow']['description']);
+				$retval = $this->sanitizeData($retval);
 				$retval = str_replace("\n", '', $retval);
 				$retval = str_replace("\r", '', $retval);
 				return $this->cropSentence($retval, $this->conf['listView.']['cropDescription']);
