@@ -33,6 +33,8 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',
+			'date2cal' => '',
+			'rtehtmlarea' => '',
 		),
 		'conflicts' => array(
 		),

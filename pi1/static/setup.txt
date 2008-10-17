@@ -22,7 +22,8 @@ plugin.tx_ketroubletickets_pi1 {
 
 	# Status and Priority Names are stored in locallang
 	# remember to adjust the TCA (tca.php), too, if you change these values
-	statusList = open,acknowledged,working,closed,onhold,wait,offer
+	# statusList = open,acknowledged,working,closed,onhold,wait,offer
+	statusList = open,working,closed,onhold,wait,offer
 	priorityList = 2,1,3
 	billingList = open,service,invoice,service_invoice
 	notificationBehaviorList = oneverychange,onstatuschange,never
@@ -84,8 +85,21 @@ plugin.tx_ketroubletickets_pi1 {
 	iconPlus.file = EXT:ke_troubletickets/res/images/button_plus.gif
 
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
-	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM_TO, INTERNAL, CLOSE_TIME
+	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME
 
+	# date2cal dateformat (date input fieds) configuration 
+	# german format (always use - as separator, unfortunately date2cal does not work correctly when using dots as a separator)
+	datefield_inputfieldformat = %d-%m-%Y
+	# english format
+	# datefield_inputfieldformat = %m-%d-%Y
+	
+	# Format for outputting the date when not in an input field
+	# german format
+	datefield_dateformat = d.m.Y
+	# english format
+	# datefield_dateformat = m/d/Y
+
+	# DEPRECATED
 	# dateformat used by the datepicker in the form
 	# possible values:
 	# ddmmyyyy
@@ -93,11 +107,14 @@ plugin.tx_ketroubletickets_pi1 {
 	# if you change the format to mmddyyy, you have to change the 
 	# separator to "/" in js/datetimepicker.js
 	# Should be configurable in future versions
-	datepicker_dateformat = ddmmyyyy
-	datefield_dateformat = d.m.Y
+	# datepicker_dateformat = ddmmyyyy
+	# datefield_dateformat = d.m.Y
 
 	# dateformat used by the history
 	history_dateformat = d.m.Y H:i
+	
+	# empty dates
+	emptyDate = --.--.----
 
 	# order of the history entries
 	history_order_by = crdate ASC
@@ -109,6 +126,18 @@ plugin.tx_ketroubletickets_pi1 {
 
 	# empty element in dropdown list
 	emptyDropdownElement = ---
+	
+	# thumbnails for attached files
+	thumbnailImage = IMAGE
+	thumbnailImage.file.maxW = 50
+	
+	# different imges for different mime types (in case a thumbnail cannot be generated) 
+	thumbnailImage.default = IMAGE
+	thumbnailImage.default.file = EXT:ke_troubletickets/res/images/thumb_default.gif
+	thumbnailImage.pdf = IMAGE
+	thumbnailImage.pdf.file = EXT:ke_troubletickets/res/images/thumb_default.gif
+	thumbnailImage.doc = IMAGE
+	thumbnailImage.doc.file = EXT:ke_troubletickets/res/images/thumb_default.gif	
 
 	# definition of the input form
 	# 'name' has to be the same as defined in the database
@@ -198,6 +227,8 @@ plugin.tx_ketroubletickets_pi1 {
 			maxFiles = 20
 			size = 50
 			maxlength = 10000000
+			thumbnails = jpg,jpeg,gif,png,tif,tiff,bmp
+			showThumbsForNonImages = 1
 		}
 		73 {
 			name = related_tickets
@@ -274,13 +305,14 @@ plugin.tx_ketroubletickets_pi1 {
 
 # Listview defaults
 plugin.tx_ketroubletickets_pi1.listView {
-	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number
+	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value
 	headerList = category, title, crdate, from_date, until_date, status, owner_feuser, responsible_feuser, number_of_comments, priority
 	filterList = responsible_feuser, category
 	csvExportFieldList =  crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments, close_time
 	results_at_a_time =
 	maxPages =
 	cropSingleviewPagetitle = 8
+	cropDescription = 400
 }
 
 # Default values for email notifications

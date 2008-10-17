@@ -50,7 +50,10 @@ define(CONST_KEEP_TAGS_YES, 'keeptags');
 // RTE
 require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
 
-// needed for checking filenames when uploading files
+// date2cal, modififed to work in the frontend
+require_once(t3lib_extMgm::extPath('ke_troubletickets').'pi1/class.frontend_JScalendar.php');
+
+// Basic file func, needed for checking filenames when uploading files
 require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php');
 
 // Mail functions
@@ -138,6 +141,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		// make the configurationen class-wide available
 		$this->conf=$conf;
+
+		// make the date2cal instance
+		if (t3lib_extMgm::isLoaded('date2cal')) {
+			$this->date2cal = frontend_JScalendar::getInstance();
+		} else {
+			return '<p class="error">' . $this->pi_getLL('error_date2cal_not_loaded') . '</p>';
+		}
 
 		// a local content object (with clear configuration)
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
@@ -701,7 +711,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return void
 	 */
-	protected function handleSubmittedCommentForm() {/*{{{*/
+	public function handleSubmittedCommentForm() {/*{{{*/
 		// set the crdate
 		$commentInsertFields['crdate'] = time();
 
@@ -748,7 +758,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return string
 	 */
-	protected function sanitizeData($data='') {/*{{{*/
+	public function sanitizeData($data='') {/*{{{*/
 		return htmlspecialchars($data, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 	}/*}}}*/
 
@@ -760,10 +770,10 @@ function areYouSure(ziel) {
 	 *
 	 * @param string $content
 	 * @param string $param
-	 * @access protected
+	 * @access public
 	 * @return void
 	 */
-	protected function cleanUpHtmlOutput($content='', $param='') {/*{{{*/
+	public function cleanUpHtmlOutput($content='', $param='') {/*{{{*/
 		$content = html_entity_decode(t3lib_div::deHSCentities($content), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 		$content = htmlentities($content, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
@@ -788,7 +798,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return array
 	 */
-	function getTicketData($ticket_uid) {/*{{{*/
+	public function getTicketData($ticket_uid) {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 		if ($this->checkPermissionForTicket($ticket_uid)) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->tablename, 'uid=' . $ticket_uid . $lcObj->enableFields($this->tablename));
@@ -957,6 +967,12 @@ function areYouSure(ziel) {
 					$historyInsertFields['value_old'] = $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($historyInsertFields['value_old'])));
 					$historyInsertFields['value_new'] = $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($historyInsertFields['value_new'])));
 				}
+
+				// convert minutes to hours
+				if ($historyInsertFields['databasefield'] == $fieldConf['name'] && $fieldConf['type'] == 'inputHoursToMinutes') {
+					$historyInsertFields['value_old'] = $this->lib->m2h($historyInsertFields['value_old']);
+					$historyInsertFields['value_new'] = $this->lib->m2h($historyInsertFields['value_new']);
+				}
 			}
 
 			// set the pid to the same value as the ticket
@@ -982,12 +998,12 @@ function areYouSure(ziel) {
 	/**
 	 * checkChangesAndSendNotificationEmails
 	 *
-	 * Works also standalone, that means, without calling the main-function
-	 * first (you will still have to instantiate the class, important for the
-	 * notifications sent by a cronjob).
+	 * TODO: Make it work also standalone, that means, without calling the main-function
+	 * first (you will still have to instantiate the class). Needed for the
+	 * notifications sent by a cronjob.
 	 *
-	 * @param mixed $ticket_uid
-	 * @param mixed $changedFields
+	 * @param integer $ticket_uid
+	 * @param string $changedFields
 	 * @param int $sendOverdueTickets
 	 * @access public
 	 * @return void
@@ -1300,38 +1316,49 @@ function areYouSure(ziel) {
 	 *
 	 * renders a html list of all comments for a ticket
 	 *
-	 * TODO: All the HTML should be in a template file ...
-	 *
 	 * @param mixed $ticket_uid
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
-	function renderCommentList($ticket_uid, $renderType='') {/*{{{*/
+	public function renderCommentList($ticket_uid, $renderType='') {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, 'ticket_uid=' . $ticket_uid . $lcObj->enableFields($this->commentsTablename));
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+			if ($renderType != CONST_RENDER_TYPE_CSV) {
+				$content .= '<div class="commentlist">';
+				$commentrow_odd_even = 0;
+			}
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				if ($renderType != CONST_RENDER_TYPE_CSV) {
-					$content .= '<div class="comment">';
-					$content .= '<div style="font-weight:bold; border-top:1px dotted black; border-bottom:1px dotted black; margin:20px 0 10px 0; font-size:10px;">';
-				}
-				$content .= date($this->conf['comment_dateformat'], $row['crdate']);
-				$content .= ', ';
-				if ($renderType != CONST_RENDER_TYPE_CSV) {
-					// Split up content in order to make single rows
+					$commentline = $this->cObj->getSubpart($this->templateCode,'###OPTIONAL_COMMENT_ROW_SUBPART###');
+					$localMarkerArray = array();
+					$localMarkerArray['COMMENT_DATE'] = date($this->conf['comment_dateformat'], $row['crdate']);
+
+					// Split up content into author and content
 					$contentParts = explode(':', $row['content'], 2);
-					$content .= '<em>' . $this->cleanUpHtmlOutput($contentParts[0]) . ':</em>';
-					$content .= '</div>';
-					$content .= nl2br($this->cleanUpHtmlOutput($contentParts[1]));
-					$content .= '</div>';
+					$localMarkerArray['COMMENT_AUTHOR'] = $this->cleanUpHtmlOutput($contentParts[0]);
+					$localMarkerArray['COMMENT_CONTENT'] = nl2br($this->cleanUpHtmlOutput($contentParts[1]));
+					$localMarkerArray['COMMENTROW_ODD_EVEN'] = $commentrow_odd_even;
+					$commentrow_odd_even = 1 - $commentrow_odd_even;
+
+
+					// substitute the markers
+					$commentline = $this->cObj->substituteMarkerArray($commentline,$localMarkerArray,'###|###',true);
+					unset($localMarkerArray);
+					$content .= $commentline;
 				} else {
+					$content = date($this->conf['comment_dateformat'], $row['crdate']);
+					$content .= ', ';
 					$commentline = ' ' . strip_tags($row['content']);
 					str_replace("\n", '', $commentline);
 					str_replace("\r", '', $commentline);
 					$content .= $commentline;
 				}
+			}
+			if ($renderType != CONST_RENDER_TYPE_CSV) {
+				$content .= '</div>';
 			}
 		}
 
@@ -1417,9 +1444,6 @@ function areYouSure(ziel) {
 
 			case 'date':
 				// parse the date to a timestamp
-				// if you change the format to mmddyyy, you have to change the
-				// separator to "/" in js/datetimepicker.js
-				// Should be configurable in future versions
 				$timestamp = strtotime($this->piVars[$fieldConf['name']]);
 				if (!$timestamp) {
 					$this->formErrors[] = $this->pi_getLL('formerror_date');
@@ -1754,6 +1778,9 @@ function areYouSure(ziel) {
 			}
 		}
 
+		// date2cal js for singleview
+		$markerArray['DATE2CAL_JS'] = $this->date2cal->getMainJS();
+
 		return $markerArray;
 
 	}/*}}}*/
@@ -1767,9 +1794,9 @@ function areYouSure(ziel) {
 	 * the posted form vars are also handled as piVars
 	 *
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
-	function getAdditionalParamsFromKeepPiVars() {/*{{{*/
+	public function getAdditionalParamsFromKeepPiVars() {/*{{{*/
 		$additionalParams = '';
 
 		foreach (explode(',',$this->conf['keepPiVars']) as $piVarName) {
@@ -1888,21 +1915,28 @@ function areYouSure(ziel) {
 			break;
 
 			case 'date':
-				// the separator is currently ".", it's defined in js/datetimepicker.js
-				// Should be configurable in future versions
 				if (!empty($prefillValue)) {
 					$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
+
+					// replace the dots and slashes in the datestring
+					$prefillValue = str_replace('.', '-', $prefillValue);
+					$prefillValue = str_replace('/', '-', $prefillValue);
 				} else {
 					$prefillValue = '';
 				}
-				$content .= '<input type="text" id="date_' . $fieldConf['name'] .'" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
-				$content .= ' <a href="javascript:NewCal(\'date_' . $fieldConf['name'] . '\',\'' . $this->conf['datepicker_dateformat'] . '\',false,24)">';
-				$imageConf = $this->conf['datePickerImage.'];
-				$imageConf['file'] = $this->getFilePath($imageConf['file']);
-				$imageConf['altText'] = $this->pi_getLL('pick_a_date');
-				$imageConf['titleText'] = $imageConf['altText'];
-				$content .= $lcObj->IMAGE($imageConf);
-				$content .= '</a>';
+
+				// render the datefield using the date2cal extension
+				$field = $this->prefixId . '[' . $fieldConf['name'] . ']';
+
+				$this->date2cal->config['inputField'] = $field;
+				$this->date2cal->config['calConfig']['ifFormat'] = $this->conf['datefield_inputfieldformat'];
+				$this->date2cal->setConfigOption('ifFormat', $this->conf['datefield_inputfieldformat']);
+
+				$this->date2cal->setConfigOption('showsTime', 0, true);
+				$this->date2cal->setConfigOption('time24', 1, true);
+				$fieldContent = $this->date2cal->render($prefillValue, $field);
+
+				$content .= $fieldContent;
 			break;
 
 			case 'files':
@@ -1937,6 +1971,32 @@ function areYouSure(ziel) {
 								$imageConf['file'] = $this->getFilePath($imageConf['file']);
 								$content .= $lcObj->IMAGE($imageConf);
 							}
+
+							// show thumbnails
+							$filetype = substr(strrchr($filename, '.'), 1);
+							$filetype = strtolower($filetype);
+							unset($imageConf);
+							if (t3lib_div::inList($fieldConf['thumbnails'], $filetype)) {
+								if (file_exists($this->fileUploadDir . $filename)) {
+									$imageConf = $this->conf['thumbnailImage.'];
+									$imageConf['file'] = $this->fileUploadDir . $filename;
+									$content .= $lcObj->IMAGE($imageConf);
+								}
+							} else {
+								if ($fieldConf['showThumbsForNonImages']) {
+									if (is_array($this->conf['thumbnailImage.'][$filetype . '.'])) {
+										$imageConf = $this->conf['thumbnailImage.'][$filetype . '.'];
+									} else {
+										if (is_array($this->conf['thumbnailImage.']['default.'])) {
+											$imageConf = $this->conf['thumbnailImage.']['default.'];
+										}
+									}
+									if (is_array($imageConf)) {
+										$content .= $lcObj->IMAGE($imageConf);
+									}
+								}
+							}
+
 
 							// generate the link to the file
 							$content .= ' ' . $lcObj->typoLink(
@@ -2086,8 +2146,6 @@ function areYouSure(ziel) {
 							// add enableFields
 							$where_clause .= $lcObj->enableFields('fe_users');
 
-							//debug($where_clause);
-
 							$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', $where_clause, $groupBy, $orderBy, $limit);
 							$num_rows = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
@@ -2214,10 +2272,10 @@ function areYouSure(ziel) {
 	 * returns the correct path for a file, parses "EXT:", returns path relative to PATH_site
 	 *
 	 * @param string $filePath
-	 * @access protected
+	 * @access public
 	 * @return string
 	 */
-	protected function getFilePath($filePath) {/*{{{*/
+	public function getFilePath($filePath) {/*{{{*/
 		// Parse EXT: in $filePath into real path
 		$filePath = t3lib_div::getFileAbsFileName($filePath);
 		// Returns relative filename
@@ -2633,6 +2691,12 @@ function areYouSure(ziel) {
 				return $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($this->internal['currentRow'][$fieldName])));
 				break;
 
+			case 'status_raw_value':
+			case 'billing_raw_value':
+			case 'priority_raw_value':
+				return strtoupper(trim($this->internal['currentRow'][str_replace('_raw_value', '', $fieldName)]));
+				break;
+
 			case 'priority_number':
 				return $this->internal['currentRow']['priority'];
 				break;
@@ -2663,6 +2727,13 @@ function areYouSure(ziel) {
 					$retval = $this->pi_RTEcssText($this->internal['currentRow']['description']);
 				}
 				return $retval;
+				break;
+
+			case 'description_clean':
+				$retval = strip_tags($this->cleanUpHtmlOutput($this->internal['currentRow']['description']));
+				$retval = str_replace("\n", '', $retval);
+				$retval = str_replace("\r", '', $retval);
+				return $this->cropSentence($retval, $this->conf['listView.']['cropDescription']);
 				break;
 
 			case 'responsible_feuser':
@@ -2788,16 +2859,13 @@ function areYouSure(ziel) {
 			case 'crdate':
 			case 'close_time':
 				if (empty($this->internal['currentRow'][$fieldName])) {
-					return '';
+					return $this->conf['emptyDate'];
 				}
 				return date($this->conf['datefield_dateformat'], $this->internal['currentRow'][$fieldName]);
 				break;
 
 			case 'close_time_with_text':
-				if (empty($this->internal['currentRow']['close_time'])) {
-					return '';
-				}
-				return '<span class="close_time">' . $this->pi_getLL('LABEL_CLOSE_TIME','close time') . ': ' . date($this->conf['datefield_dateformat'], $this->internal['currentRow']['close_time']) . '</span>';
+				return '<span class="close_time">' . $this->pi_getLL('LABEL_CLOSE_TIME','close time') . ': ' . $this->getFieldContent('close_time', $renderType) . '</span>';
 				break;
 
 			case 'files':
@@ -2815,6 +2883,12 @@ function areYouSure(ziel) {
 				} else {
 					return '';
 				}
+				break;
+
+			case 'effort':
+				$retval = $this->cleanUpHtmlOutput($this->internal['currentRow'][$fieldName]);
+				$retval = $retval ? $retval : '&nbsp;';
+				return $retval;
 				break;
 
 			default:
@@ -3142,7 +3216,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return void
 	 */
-	function outputCSV($res) {/*{{{*/
+	public function outputCSV($res) {/*{{{*/
 		//header("Content-type: text/plain; charset=us-ascii");
 		//header("Content-Transfer-Encoding: 7bit");
 
@@ -3173,7 +3247,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return string
 	 */
-	function renderTable2CSV($res,$table,$fieldList='',$renderHeader=1,$splitChar=",",$wrapChar='"',$endLineChar="\r\n") {/*{{{*/
+	public function renderTable2CSV($res,$table,$fieldList='',$renderHeader=1,$splitChar=",",$wrapChar='"',$endLineChar="\r\n") {/*{{{*/
 		$data='';
 		$fields=t3lib_div::trimExplode(',',$fieldList);
 		if ($renderHeader) {
@@ -3206,7 +3280,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return string
 	 */
-	function formatCSVContent($data) {/*{{{*/
+	public function formatCSVContent($data) {/*{{{*/
 		$data = trim($data);
 		$data = html_entity_decode($data, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 		$data = strip_tags($data);
@@ -3220,10 +3294,10 @@ function areYouSure(ziel) {
 	 * renderListSortingLinks
 	 * renders the sortlinks (historically called "headers" in TYPO3 plugins)
 	 *
-	 * @access protected
+	 * @access public
 	 * @return void
 	 */
-	protected function renderListSortingLinks() {/*{{{*/
+	public function renderListSortingLinks() {/*{{{*/
 		$mainPage = $this->ffdata['page_of_main_plugin'] ? $this->ffdata['page_of_main_plugin'] : $GLOBALS['TSFE']->id;
 
 		foreach (t3lib_div::trimExplode(',', $this->conf['listView.']['headerList']) as $headerName) {
@@ -3422,6 +3496,56 @@ function areYouSure(ziel) {
 
 		return $content;
 	}/*}}}*/
+
+	/**
+	 * cropSentence
+	 * You pass the script a string, a length you want the string     #
+	 * to be and the trailing characters, what the function does,     #
+	 * is takes the string, finds the last word that will fit into    #
+	 * the overall length, and return a string that has been cropped. #
+	 * The function makes sure that a word is not cut in half.        #
+	 *                                                                #
+	 *#################################################################
+	 *        Written by David Speake - david@evilwarus.com           #
+	 *      Adapted from Oliver Southgate's ASP interpretation        #
+	 *     http://www.haneng.com/code/VBScript/CropSentence.txt       #
+	 *#################################################################
+	 *                                                                #
+	 * Examples:                                                      #
+	 *                                                                #
+	 * $strTemp = "Hello, I am a fish and you are not.";              #
+	 * $strTemp = cropSentence($strTemp, 16, "...");                  #
+	 * //returns "Hello, I am a..."                                   #
+	 *                                                                #
+	 * $strTemp = "Hello, I am a fish and you are not.";              #
+	 * $strTemp = cropSentence($strTemp, 17, "...");                  #
+	 * //returns "Hello, I am a fish..."                              #
+	 *
+	 * @param string $strText
+	 * @param integer $intLength
+	 * @param string $strTrail
+	 * @access public
+	 * @return string
+	 */
+	public function cropSentence ($strText, $intLength = 200, $strTrail = '...') {
+		$wsCount = 0;
+		$intTempSize = 0;
+		$intTotalLen = 0;
+		$intLength = $intLength - strlen($strTrail);
+		$strTemp = "";
+
+		if (strlen($strText) > $intLength) {
+			$arrTemp = explode(" ", $strText);
+			foreach ($arrTemp as $x) {
+				if (strlen($strTemp) <= $intLength) $strTemp .= " " . $x;
+			}
+			$CropSentence = $strTemp . $strTrail;
+		} else {
+			$CropSentence = $strText;
+		}
+
+		return $CropSentence;
+	}
 
 }
 

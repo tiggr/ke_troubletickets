@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
 	<meta type="array">
 		<type>module</type>
@@ -75,6 +75,7 @@
 			<label index="formerror_hours">Bitte geben Sie die Stundenzahl korrekt ein (z. B. 1,5).</label>
 			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Ticket konnte nicht erstellt werden.</label>
 
+			<label index="error_date2cal_not_loaded">Fehler: Die Erweiterung date2cal muss installiert sein.</label>
 			<label index="error_no_tickets_found">Es wurden keine Aufgaben gefunden.</label>
 			<label index="error_no_template">Fehler: Es wurde kein Template gefunden.</label>
 			<label index="error_no_category">Fehler: Es muss mindestens einen Kategorie angelegt sein.</label>
@@ -150,7 +151,8 @@
 			<label index="LABEL_FROM_DATE">Zu erledigen ab</label>
 			<label index="LABEL_CRDATE">Erstellt am</label>
 			<label index="LABEL_CLOSE_TIME">Geschlossen am</label>
-			<label index="LABEL_FROM_TO">Von-bis</label>
+			<label index="LABEL_FROM">Zu erledigen ab</label>
+			<label index="LABEL_TO">bis</label>
 			<label index="LABEL_TIME_USED">Zeitaufwand tatsächlich (in Std.)</label>
 			<label index="LABEL_TIME_PLANNED">Zeitaufwand geplant (in Std.)</label>
 			<label index="LABEL_ADDITIONAL_INFO">Zusatzinformationen</label>
