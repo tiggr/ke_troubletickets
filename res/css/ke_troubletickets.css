@@ -115,7 +115,7 @@
 .kett_sv_boxes { overflow:hidden; }
 .kett_sv_single_box {
   float: left;
-  width: 33.33%;
+  width: 33.31%;
   }
 .kett_sv_sbox_head {
   background:#FFFFFF url(../images/list_item_userhead_bg_norma.gif) repeat scroll 0 0;
@@ -137,6 +137,8 @@
 .kett_sv_sboxb_in{
   padding:3px 6px 6px 10px;
   }
+
+.kett_sv_sboxb_in * { float: left;}
 
 
 .kett_sv_single_box_intern .kett_sv_sbox_head {
@@ -211,6 +213,26 @@
   font-size:11px;
   padding:3px 6px 6px 10px;
   }
+
+/* TEASERVIEW */
+.kett_teaserview_own {
+  border-collapse:separate;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.kett_teaserview_own td { padding: 3px; }
+
+.kett_teaserview_own .kett_tw_head {
+ background:#D6D6D6;
+ font-weight: bold;
+}
+
+.kett_teaserview_own .kett_tw_body {
+  background: #F2F2F2;
+}
+
+
 
 
 /*------------------------------------------------------------------------------------------------------*/

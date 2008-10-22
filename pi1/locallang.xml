@@ -139,7 +139,7 @@
 			<label index="LABEL_HISTORY_NEW_VALUE">Neuer Wert</label>
 			<label index="LABEL_TICKET_HISTORY_HEADER">Verlauf der Änderungen</label>
 
-			<label index="LABEL_SUBMIT">Speichern</label>
+			<label index="LABEL_SUBMIT">Aufgabe speichern</label>
 			<label index="LABEL_OPEN_NEW_TICKET">Neue Aufgabe eröffnen</label>
 			<label index="LABEL_EDIT_TICKET">Aufgabe ansehen / bearbeiten</label>
 			<label index="LABEL_TITLE">Titel</label>

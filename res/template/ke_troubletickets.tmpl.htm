@@ -24,8 +24,6 @@ New Ticket / Edit Ticket Form / Singleview
     <img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" /><a href="#kett_goto_files">Dateianh&auml;nge</a>
     <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
     <img src="typo3conf/ext/ke_troubletickets/res/images/icon_history.png" /><a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';">Verlauf</a>
-    <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
-    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />###FIELD_SUBMIT###
   </div>
 </div>
 
@@ -86,13 +84,6 @@ New Ticket / Edit Ticket Form / Singleview
     ###INTERNAL_TIME_USED###
   </div>
   
-  <div class="kett_sv_save">
-    <div class="kett_sv_save_in">
-      ###FIELD_SUBMIT###<img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />
-    </div>
-    <div class="kett_float_clean"></div>
-  </div>
-  
   <div class="kett_sv_description">
     <div class="kett_sv_desc_head">###LABEL_DESCRIPTION###</div>
     <div class="kett_sv_desc_body"><table><tr><td>###FIELD_DESCRIPTION###</td></tr></table></div>
@@ -124,14 +115,14 @@ New Ticket / Edit Ticket Form / Singleview
   
   ###HIDDEN_FIELDS###
   
+  ###OPTIONAL_TICKET_COMMENT###
+  
   <div class="kett_sv_save">
     <div class="kett_sv_save_in">
       ###FIELD_SUBMIT###<img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />
     </div>
     <div class="kett_float_clean"></div>
   </div>
-  
-  ###OPTIONAL_TICKET_COMMENT###
   
   </form>
   ###ADDITIONALJS_POST###
@@ -522,30 +513,31 @@ E-Mail Notification
 
 <!-- 
 ***********************************************
-TEASERVIEW
+TEASERVIEW 
+###HEADER_STATUS###
 ***********************************************
 -->
 <!-- ###TEASERVIEW_OWN### START-->
-<table>
+<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
   <tr>
-    <td><b>###HEADER_CRDATE###</b></td>
-    <td><b>###HEADER_TITLE###</b></td>
-    <td><b>###HEADER_FROM_DATE###</b></td>
-    <td><b>###HEADER_UNTIL_DATE###</b></td>
-    <td><b>###HEADER_STATUS###</b></td>
+    <td class="kett_tw_head">###LABEL_CRDATE###</td>
+    <td class="kett_tw_head">###LABEL_TITLE###</td>
+    <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
+    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
+    <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
   </tr>
 ###LISTCONTENT###
 </table>
 <!-- ###TEASERVIEW_OWN### END-->
 
 <!-- ###TEASERVIEW_DEL### START-->
-<table>
+<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
   <tr>
-    <td><b>###LABEL_DATE###</b></td>
-    <td><b>###LABEL_TITLE###</b></td>
-    <td><b>###LABEL_FROM###</b></td>
-    <td><b>###LABEL_TODO_FROM###</b></td>
-    <td><b>###LABEL_TODO_UNTIL###</b></td>
+    <td class="kett_tw_head">###LABEL_CRDATE###</td>
+    <td class="kett_tw_head">###LABEL_TITLE###</td>
+    <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
+    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
+    <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
   </tr>
 ###LISTCONTENT###
 </table>
@@ -553,9 +545,27 @@ TEASERVIEW
 <!-- ###TEASERVIEW_DEL### END-->
 
 <!-- ###TEASER_SINGLE_ROW_OWN### START-->
-<tr><td>###CRDATE###</td><td><span class="teaser_pagename">###SINGLEVIEW_PAGETITLE### ###UID### ###STATUS_ICON_TEASER###</span> ###TITLE###</td><td>###OWNER_FEUSER###</td><td>###FROM_DATE###</td><td><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td></tr>
+<tr>
+  <td class="kett_tw_body">###CRDATE###</td>
+  <td class="kett_tw_body">
+    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
+    ###TITLE###
+  </td>
+  <td class="kett_tw_body">###OWNER_FEUSER###</td>
+  <td class="kett_tw_body">###FROM_DATE###</td>
+  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
+</tr>
 <!-- ###TEASER_SINGLE_ROW_OWN### END-->
 
 <!-- ###TEASER_SINGLE_ROW_DEL### START-->
-<tr><td>###CRDATE###</td><td><span class="teaser_pagename">###SINGLEVIEW_PAGETITLE### ###UID### ###STATUS_ICON_TEASER###</span> ###TITLE###</td><td>###RESPONSIBLE_FEUSER###</td><td>###FROM_DATE###</td><td><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td></tr>
+<tr>
+  <td class="kett_tw_body">###CRDATE###</td>
+  <td class="kett_tw_body">
+    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
+    ###TITLE###
+  </td>
+  <td class="kett_tw_body">###OWNER_FEUSER###</td>
+  <td class="kett_tw_body">###FROM_DATE###</td>
+  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
+</tr>
 <!-- ###TEASER_SINGLE_ROW_DEL### END-->
