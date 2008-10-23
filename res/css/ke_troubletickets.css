@@ -568,11 +568,14 @@
   padding: 0 10px 0 0;
   }
 .kett_sv_save .kett_sv_save_in input {
-  background:transparent none repeat scroll 0 0;
+  background:transparent url(../images/icon_disk.png) top right no-repeat;
+  height: 16px;
+  line-height: 16px;
   border:0 none;
   cursor:pointer;
-  margin:4px 2px 0 0;
-  padding:0;
+  margin:4px 2px 2px 0;
+  width: 150px;
+  padding:0px 20px 10px 0;
   float: left;
   font-size: 11px;
   font-weight: bold;

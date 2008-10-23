@@ -19,11 +19,11 @@ New Ticket / Edit Ticket Form / Singleview
   <div class="kett_svt_navigation">
     <img src="typo3conf/ext/ke_troubletickets/res/images/icon_arrow_left.png" />###BACK_TO_LISTVIEW###
     <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
-    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" /><a href="#kett_goto_comments">Kommentare</a>
+    <a href="#kett_goto_comments"><img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" />Kommentare</a>
     <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
-    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" /><a href="#kett_goto_files">Dateianh&auml;nge</a>
+    <a href="#kett_goto_files"><img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" />Dateianh&auml;nge</a>
     <span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
-    <img src="typo3conf/ext/ke_troubletickets/res/images/icon_history.png" /><a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';">Verlauf</a>
+    <a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';"><img src="typo3conf/ext/ke_troubletickets/res/images/icon_history.png" />Verlauf</a>
   </div>
 </div>
 
@@ -91,7 +91,7 @@ New Ticket / Edit Ticket Form / Singleview
   
   <div class="kett_sv_save">
     <div class="kett_sv_save_in">
-      ###FIELD_SUBMIT###<img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />
+      ###FIELD_SUBMIT###
     </div>
     <div class="kett_float_clean"></div>
   </div>
@@ -119,7 +119,7 @@ New Ticket / Edit Ticket Form / Singleview
   
   <div class="kett_sv_save">
     <div class="kett_sv_save_in">
-      ###FIELD_SUBMIT###<img src="typo3conf/ext/ke_troubletickets/res/images/icon_disk.png" />
+      ###FIELD_SUBMIT###
     </div>
     <div class="kett_float_clean"></div>
   </div>
@@ -242,15 +242,14 @@ Ticket History (in Singleview)
   <div class="kett_sv_box2">
     <div class="kett_svbox2_head">
       <div class="kett_float_left">###LABEL_TICKET_HISTORY_HEADER###</div>
-      <div class="kett_float_right" >
+      <div class="kett_float_right">
         <a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'none';">
         <span style="border:0px; float:left; margin:5px 0 0 0;">###ICONMINUS###</span></a>
         <a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';">
         <span style="border:0px; float:left; margin:5px 0 0 0;">###ICONPLUS###</span></a>
       </div>  
     </div>
-    <div class="kett_svbox2_body">
-      <a name="zur_history"></a>
+    <div class="kett_svbox2_body"><a name="zur_history"></a>
         <div id="std_tab_grey_body_id" style="display:none;">
 	<table class="ticket_history">
 	<tr>
@@ -260,6 +259,7 @@ Ticket History (in Singleview)
 	</tr>
 	###TICKET_HISTORY_ROWS###
 	</table>
+        </div>
     </div>
   </div>
 
