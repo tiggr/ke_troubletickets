@@ -21,12 +21,12 @@
 									<numIndex index="1">NORMAL</numIndex>
 								</numIndex>
 								<numIndex index="1" type="array">
-									<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype_teaser_own</numIndex>
-									<numIndex index="1">TEASER_OWN</numIndex>
+									<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype_teaser_normal</numIndex>
+									<numIndex index="1">TEASER_NORMAL</numIndex>
 								</numIndex>
 								<numIndex index="2" type="array">
-									<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype_teaser_delegated</numIndex>
-									<numIndex index="1">TEASER_DEL</numIndex>
+									<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype_teaser_own</numIndex>
+									<numIndex index="1">TEASER_OWN</numIndex>
 								</numIndex>
 								</items>
 								<maxitems>1</maxitems>

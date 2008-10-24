@@ -274,6 +274,12 @@ Ticket History (in Singleview)
 <!-- ###TICKET_HISTORY_ROW_TEMPLATE### START-->
 
 
+
+
+
+
+
+
 <!-- 
 ***********************************************
 *+++++++ LISTVIEW ++++++++++++++++++++++++++++*
@@ -300,15 +306,12 @@ Ticket History (in Singleview)
 <!-- +++ Listview-Toolbar +++ show options, filter -->
 <div class="kett_listview_toolbar">
   <div class="kett_float_left">
-    <div class="kett_toolbar_modeselector">
-      <label>###LABEL_MODE_SELECTOR###:</label>###MODE_SELECTOR###
-    </div>
-  </div>
-  <div class="kett_float_right">
     <div class="kett_toolbar_filter">
       <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
+      <label>###LABEL_STATUS###</label>###FILTER_STATUS### 
       <label>###LABEL_RESPONSIBLE_FEUSER###</label>###FILTER_RESPONSIBLE_FEUSER### 
       <label>###LABEL_FILTER_CATEGORY###</label>###FILTER_CATEGORY### ###FILTER_SUBMIT###
+      </form>
     </div>
   </div>
   <div class="kett_float_clean">&nbsp;</div>
@@ -356,9 +359,93 @@ Ticket History (in Singleview)
 
 
 
-    <!-- AUSGELAGERT -->
-    <!--###CLOSE_ICON###-->
-    <!--###PRIORITY_NUMBER###-->
+
+
+<!-- 
+***********************************************
+TEASERVIEW 
+###HEADER_STATUS###
+***********************************************
+-->
+<!-- ###TEASERVIEW### START-->
+<!-- +++ Listview Toolbar +++ new ticket, searchbox -->
+<div class="kett_listview_toolbar">
+    <div class="kett_float_left">
+        <div class="kett_toolbar_filter">
+          	<form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
+      			<label>###LABEL_STATUS###</label>###FILTER_STATUS### ###FILTER_SUBMIT###
+      		</form>
+      </div>
+    </div>
+    <div class="kett_float_right">
+      <div class="kett_searchbox">
+        ###SEARCHBOX###
+      </div>
+    </div>
+    <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+<!-- +++ Listview-Toolbar +++ sorting, CSV export -->
+<div class="kett_listview_toolbar">
+  <div class="kett_float_left">
+    <div class="kett_toolbar_sort">
+      <label>###LABEL_SORTING###:</label>
+      ###HEADER_CRDATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_FROM_DATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_UNTIL_DATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_PRIORITY###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_STATUS###
+    </div>
+  </div>
+  <div class="kett_float_right">
+    <div class="kett_toolbar_csv">
+      <div>
+        <a href="###LINK_URL_CSV_EXPORT###">###ICONCSVEXPORT###</a><a href="###LINK_URL_CSV_EXPORT###">###LABEL_LINKTEXT_CSV_EXPORT###</a>
+      </div>
+      <div class="kett_float_clean">&nbsp;</div>
+    </div>
+  </div>
+  <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+
+<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
+  <tr>
+    <td class="kett_tw_head">###LABEL_CRDATE###</td>
+    <td class="kett_tw_head">###LABEL_TITLE###</td>
+    <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
+    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
+    <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
+  </tr>
+###LISTCONTENT###
+</table>
+<!-- ###TEASERVIEW### END-->
+
+<!-- ###TEASERVIEW_SINGLE_ROW### START-->
+<tr>
+  <td class="kett_tw_body">###CRDATE###</td>
+  <td class="kett_tw_body">
+    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
+    ###TITLE###
+  </td>
+  <td class="kett_tw_body">###OWNER_FEUSER###</td>
+  <td class="kett_tw_body">###FROM_DATE###</td>
+  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
+</tr>
+<!-- ###TEASERVIEW_SINGLE_ROW### END-->
+
+
+
+
+
+
+
+
+
 <!-- ###LISTVIEW_SINGLE_ROW### START-->
 
 <div class="kett_listview_row current_row_###OWN_TASK###">
@@ -510,62 +597,3 @@ E-Mail Notification
 <!-- ###EMAIL_NOTIFICATION_LINKTOTICKET### BEGIN-->
 <a href="###URL_GO_TO_TICKET###" style="background:#bbbbbb; padding:2px 10px 2px 10px; border:1px solid #999999; font-weight:normal; float:right;">###LINKTEXT_GO_TO_TICKET###</a>
 <!-- ###EMAIL_NOTIFICATION_LINKTOTICKET### END-->
-
-<!-- 
-***********************************************
-TEASERVIEW 
-###HEADER_STATUS###
-***********************************************
--->
-<!-- ###TEASERVIEW_OWN### START-->
-<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
-  <tr>
-    <td class="kett_tw_head">###LABEL_CRDATE###</td>
-    <td class="kett_tw_head">###LABEL_TITLE###</td>
-    <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
-    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
-    <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
-  </tr>
-###LISTCONTENT###
-</table>
-<!-- ###TEASERVIEW_OWN### END-->
-
-<!-- ###TEASERVIEW_DEL### START-->
-<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
-  <tr>
-    <td class="kett_tw_head">###LABEL_CRDATE###</td>
-    <td class="kett_tw_head">###LABEL_TITLE###</td>
-    <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
-    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
-    <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
-  </tr>
-###LISTCONTENT###
-</table>
-
-<!-- ###TEASERVIEW_DEL### END-->
-
-<!-- ###TEASER_SINGLE_ROW_OWN### START-->
-<tr>
-  <td class="kett_tw_body">###CRDATE###</td>
-  <td class="kett_tw_body">
-    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
-    ###TITLE###
-  </td>
-  <td class="kett_tw_body">###OWNER_FEUSER###</td>
-  <td class="kett_tw_body">###FROM_DATE###</td>
-  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
-</tr>
-<!-- ###TEASER_SINGLE_ROW_OWN### END-->
-
-<!-- ###TEASER_SINGLE_ROW_DEL### START-->
-<tr>
-  <td class="kett_tw_body">###CRDATE###</td>
-  <td class="kett_tw_body">
-    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
-    ###TITLE###
-  </td>
-  <td class="kett_tw_body">###OWNER_FEUSER###</td>
-  <td class="kett_tw_body">###FROM_DATE###</td>
-  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
-</tr>
-<!-- ###TEASER_SINGLE_ROW_DEL### END-->

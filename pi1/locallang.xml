@@ -114,6 +114,9 @@
 			<label index="SELECTLABEL_2">normal</label>
 			<label index="SELECTLABEL_3">hoch</label>
 
+			<label index="SELECTLABEL_OPEN_AND_WORKING">offen und in Bearbeitung</label>
+			<label index="SELECTLABEL_ALL_NOT_CLOSED">alle nicht geschlossenen</label>
+			<label index="SELECTLABEL_ALL">alle</label>
 			<label index="SELECTLABEL_OPEN">offen</label>
 			<label index="SELECTLABEL_WORKING">in Bearbeitung</label>
 			<label index="SELECTLABEL_CLOSED">erledigt</label>
@@ -189,9 +192,9 @@
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">Benutzereinstellungen</label>
 
 			<label index="tt_content.pi_ketroubletickets.viewtype">Darstellung</label>
-			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normal</label>
-			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own">Kurzübersicht: verantwortliche für</label>
-			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_delegated">Kurzübersicht: delegiert</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normale Liste</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_normal">Kompakte Liste</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own">Kompakte Liste eigener Aufgaben</label>
 
 			<label index="tt_content.pi_ketroubletickets.show_tickets">Zeige Aufgaben</label>
 			<label index="tt_content.pi_ketroubletickets.show_tickets.only_own">nur eigene/zu verantwortende/beobachtete</label>

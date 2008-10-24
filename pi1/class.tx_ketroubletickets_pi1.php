@@ -264,30 +264,32 @@ function areYouSure(ziel) {
 			}
 		}
 
+		// set some default values for the filter
+		// TODO: Should be configurable in Typoscript in future versions
+		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'open_and_working';
+		if ($this->ffdata['view'] == 'TEASER_OWN') {
+			$this->filter['responsible_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
+		}
+
 		// save the filter in piVars
 		// Use base64 because the serialized value contains quotes
 		$this->piVars['filter'] = base64_encode(serialize($this->filter));
-		//$this->piVars['filter'] = serialize($this->filter);
 
 		// Render the main content:
 		// Single View / New Ticket
 		// or List View
-		if ($this->ffdata['view']=='NORMAL') {
-			if ( ($this->piVars['do'] == 'new') || $this->piVars['showUid'] || ($this->piVars['updateUid'] && count($this->formErrors)) || ($this->piVars['newticket'] && count($this->formErrors)) )	{
-				$content .= $this->renderTicketForm();
-			} else {
-				$this->cleanUpPiVars();
-				$content .= $this->listView();
-			}
+		if (
+			($this->piVars['do'] == 'new')
+			|| $this->piVars['showUid']
+			|| ($this->piVars['updateUid'] && count($this->formErrors))
+			|| ($this->piVars['newticket'] && count($this->formErrors))
+			) {
+			$content .= $this->renderTicketForm();
+		} else {
+			$this->cleanUpPiVars();
+			$content .= $this->listView();
 		}
-		else if ($this->ffdata['view']=='TEASER_OWN') {
-			$content .= $this->teaserView();
-		}
-		else if ($this->ffdata['view']=='TEASER_DEL') {
-			$content .= $this->teaserView();
-		}
-		#$content .= t3lib_div::view_array($_POST);
-		#$content .= t3lib_div::view_array($_FILES);
+
 		return $this->pi_wrapInBaseClass($content);
 	}/*}}}*/
 
@@ -1196,8 +1198,9 @@ function areYouSure(ziel) {
 			$singleViewPage = $categoryData['singleviewpage'];
 			$linkToTicketSubpart = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION_LINKTOTICKET###');
 			$linkToTicketURL = $this->pi_getPageLink($categoryData['singleviewpage'],'_blank', array(
-					'tx_ketroubletickets_pi1[showUid]' => $this->internal['currentRow']['uid'],
-					'tx_ketroubletickets_pi1[mode]' => 'not_closed'
+					'tx_ketroubletickets_pi1[showUid]' => $this->internal['currentRow']['uid']
+					// DEPRECATED, CB, 24.10.08
+					// 'tx_ketroubletickets_pi1[mode]' => 'not_closed'
 				)
 			);
 			if (!empty($linkToTicketURL)) {
@@ -1857,7 +1860,29 @@ function areYouSure(ziel) {
 
 			case 'select':
 				$content ='<select name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
-				foreach (explode(',',$this->conf[$fieldConf['valueList']]) as $value) {
+
+				// render empty option
+				if ($renderEmptyDropdownFields) {
+					if (!$prefillValue) {
+						$selected = ' selected';
+					} else {
+						$selected = '';
+					}
+					$content .= '<option value=""' . $selected . '>';
+					$content .= $this->conf['emptyDropdownElement'];
+					$content .= '</option>';
+				}
+
+				$valueList = $this->conf[$fieldConf['valueList']];
+
+				// this is a HACK for the filter option "status". We want to have a filter for "open" and "working" in one option.
+				// TODO: Should be configurable in Typoscript in future versions
+				// $renderEmptyDropdownFields is only set when rendering the filter dropdown
+				if ($fieldConf['name'] == 'status' && $renderEmptyDropdownFields) {
+					$valueList = 'open_and_working,all_not_closed,all,' . $valueList;
+				}
+
+				foreach (explode(',', $valueList) as $value) {
 					if (t3lib_div::inList($prefillValue, $value)) {
 						$selected = ' selected';
 					} else {
@@ -2387,10 +2412,26 @@ function areYouSure(ziel) {
 	 * @return	HTML list of table entries
 	 */
 	public function listView()	{/*{{{*/
-		$content = $this->cObj->getSubpart($this->templateCode,'###LISTVIEW###');
+
+		// which template should be used?
+		switch ($this->ffdata['view']) {
+			case 'TEASER_OWN':
+			case 'TEASER_NORMAL':
+				$templateSubpart = '###TEASERVIEW###';
+				$templateSubpartRow = '###TEASERVIEW_SINGLE_ROW###';
+				break;
+
+			default:
+				$templateSubpart = '###LISTVIEW###';
+				$templateSubpartRow = '###LISTVIEW_SINGLE_ROW###';
+			break;
+		}
+
+		$content = $this->cObj->getSubpart($this->templateCode, $templateSubpart);
 		$lConf = $this->conf['listView.'];
 
 		// Mode-Selecter
+		/*
 		$modeSelectorItems=array();
 		foreach (explode(',', $this->conf['modes']) as $mode) {
 			$mode = strtolower(trim($mode));
@@ -2401,6 +2442,7 @@ function areYouSure(ziel) {
 		if (!isset($this->piVars['mode']))	{
 			$this->piVars['mode'] = $this->conf['defaultMode'];
 		}
+		*/
 
 		// Initialize pointer
 		if (!isset($this->piVars['pointer'])) {
@@ -2465,7 +2507,25 @@ function areYouSure(ziel) {
 		// add filter
 		if (is_array($this->filter)) {
 			foreach ($this->filter as $filterName => $filterValue) {
-				$addWhere .= ' AND ' . $filterName . '="' . mysql_real_escape_string($filterValue) . '"';
+				// HACK for the "open and working" filter
+				// TODO: Should be configurable in Typoscript in future versions
+				if ($filterName == 'status') {
+					switch ($filterValue) {
+						case 'open_and_working':
+							$addWhere .= ' AND (status="open" OR status="working")';
+						break;
+						case 'all_not_closed':
+							$addWhere .= ' AND status NOT LIKE "%' . CONST_STATUS_CLOSED . '%"';
+						break;
+						case 'all':
+						break;
+						default:
+							$addWhere .= ' AND ' . $filterName . '="' . mysql_real_escape_string($filterValue) . '"';
+						break;
+					}
+				} else {
+					$addWhere .= ' AND ' . $filterName . '="' . mysql_real_escape_string($filterValue) . '"';
+				}
 			}
 		}
 
@@ -2474,10 +2534,14 @@ function areYouSure(ziel) {
 		// CONST_STATUS_CLOSED (normally "closed") in their key
 		// So you can invent new "closed"-types like
 		// "closed-without-solution" or "closed-another-reason" ...
+		// DEPRECATED, CB, 24.10.08
+		/*
 		if ($this->piVars['mode'] == 'not_closed') {
 			//$addWhere .= ' AND status!="' . CONST_STATUS_CLOSED . '"';
 			$addWhere .= ' AND status NOT LIKE "%' . CONST_STATUS_CLOSED . '%"';
 		}
+		*/
+
 		if ($this->ffdata['listcategories']!=''){
 			$addWhere .= ' AND category IN (' . $this->ffdata['listcategories'] . ') ';
 		}
@@ -2511,7 +2575,10 @@ function areYouSure(ziel) {
 		}
 
 		// create the mode selector
+		// DEPRECATED, CB, 24.10.08
+		/*
 		$this->markerArray['MODE_SELECTOR'] = $this->pi_list_modeSelector($modeSelectorItems);
+		*/
 
 		// render the sorting links
 		$this->renderListSortingLinks();
@@ -2538,7 +2605,7 @@ function areYouSure(ziel) {
 		$this->markerArray['FILTER_SUBMIT'] = '<input type="submit" name="' . $this->prefixId . '[filter_submit]' . '" value="'.$this->pi_getLL('LABEL_FILTER_SUBMIT').'">';
 
 		// make the whole list
-		$this->markerArray['LISTCONTENT'] = $this->makelist($res);
+		$this->markerArray['LISTCONTENT'] = $this->makelist($res, $templateSubpartRow);
 
 		// create the search box
 		$this->markerArray['SEARCHBOX'] = $this->pi_list_searchBox();
@@ -2567,13 +2634,14 @@ function areYouSure(ziel) {
 	 * Creates a list from a database query
 	 *
 	 * @param	ressource	$res: A database result ressource
-	 * @return	A HTML list if result items
+	 * @param	string	template part
+	 * 	 * @return	A HTML list if result items
 	 */
-	public function makelist($res)	{/*{{{*/
+	public function makelist($res, $templateSubpartRow='')	{/*{{{*/
 		$items=array();
 			// Make list table rows
 		while($this->internal['currentRow'] = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
-			$items[]=$this->makeListItem();
+			$items[]=$this->makeListItem($templateSubpartRow);
 		}
 
 		$out = '<div'.$this->pi_classParam('listrow').'>
@@ -2585,10 +2653,11 @@ function areYouSure(ziel) {
 	/**
 	 * Implodes a single row from a database to a single line
 	 *
+	 * @param	string	template part
 	 * @return	Imploded column values
 	 */
-	public function makeListItem()	{/*{{{*/
-		$content = $this->cObj->getSubpart($this->templateCode,'###LISTVIEW_SINGLE_ROW###');
+	public function makeListItem($templateSubpartRow='')	{/*{{{*/
+		$content = $this->cObj->getSubpart($this->templateCode, $templateSubpartRow);
 
 		// define specific markers
 		if (strlen($this->conf['listView.']['fieldList'])) {
@@ -2731,7 +2800,6 @@ function areYouSure(ziel) {
 
 			case 'description_clean':
 				$retval = strip_tags($this->internal['currentRow']['description']);
-				$retval = $this->sanitizeData($retval);
 				$retval = str_replace("\n", '', $retval);
 				$retval = str_replace("\r", '', $retval);
 				return $this->cropSentence($retval, $this->conf['listView.']['cropDescription']);
@@ -3320,182 +3388,6 @@ function areYouSure(ziel) {
 						)
 					);
 		}
-	}/*}}}*/
-
-	/**
-	 * teaserView
-	 *
-	 * generates the teaser view
-	 * TODO: merge the teaser view functions the normal listview functions (teaserView, makeTeaserItem, makeTeaserList)
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function teaserView() {/*{{{*/
-		$lConf = $this->conf['teaserView.'];
-
-		if ($this->ffdata['view']=='TEASER_DEL') $content = $this->cObj->getSubpart($this->templateCode,'###TEASERVIEW_DEL###');
-		if ($this->ffdata['view']=='TEASER_OWN') $content = $this->cObj->getSubpart($this->templateCode,'###TEASERVIEW_OWN###');
-
-		if (!isset($this->piVars['mode']))	{
-			$this->piVars['mode'] = $this->conf['defaultMode'];
-		}
-
-		// Initialize pointer
-		if (!isset($this->piVars['pointer'])) {
-			$this->piVars['pointer']=0;
-		}
-
-		// Initialize sorting
-		if (!isset($this->piVars['sort'])) {
-			$this->piVars['sort'] = 'crdate';
-		}
-
-		// Initializing the query parameters:
-
-		// Tablename
-		$this->internal['currentTable'] = $this->tablename;
-
-		// ORDER BY
-		list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':',$this->piVars['sort']);
-
-		// Number of results to show in a listing.
-		$this->internal['results_at_a_time'] = 250;
-
-		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
-		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;
-
-		// fields to search in
-		$this->internal['searchFieldList'] = 'title,description';
-
-		// fields allowed for the ORDER BY command
-		//$this->internal['orderByList']='uid,title,crdate,until_date';
-		$this->internal['orderByList'] = $this->conf['listView.']['headerList'];
-
-		// center the page browser
-		$this->internal['pagefloat']='CENTER';
-
-		// PERMISSION CHECKS
-		// 1. show only tickets the current logged in user is owner of, responsible user or observer
-		// 2. If the flexform option "show_tickets" is set to "all_for_admins" and
-		// the current user is one of the "ticket_administrators", or if the option
-		// is set to "all_always", allow the current user to see and edit all
-		// tickets
-
-		$addWhere .= 'AND (';
-		if ($this->ffdata['view']=='TEASER_DEL') {
-			$addWhere .= '(owner_feuser=' . $GLOBALS['TSFE']->fe_user->user['uid'] . ')';
-		} else if ($this->ffdata['view']=='TEASER_OWN') {
-			$addWhere .= '(responsible_feuser=' . $GLOBALS['TSFE']->fe_user->user['uid'] .')';
-		}
-
-		//$addWhere .= 'OR (' . $GLOBALS['TYPO3_DB']->listQuery('observers_feuser', $GLOBALS['TSFE']->fe_user->user['uid'], $this->tablename) . ')';
-		$addWhere .= ')';
-
-		// fetch only tickets which are not closed
-		if ($this->piVars['mode'] == 'not_closed') {
-			//$addWhere .= 'AND status!="' . CONST_STATUS_CLOSED . '"';
-			$addWhere .= ' AND status NOT LIKE "%' . CONST_STATUS_CLOSED . '%"';
-		}
-
-		// Get number of records:
-		$res = $this->pi_exec_query($this->tablename, 1, $addWhere);
-		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-
-		// return nothing if there are no records
-		if (!$this->internal['res_count']) {
-			$content = '<p class="error">' . $this->pi_getLL('error_no_tickets_found', 'No tickets found.') . '</p>';
-		} else {
-			// Make listing query, pass query to SQL database
-			$res = $this->pi_exec_query($this->tablename, '', $addWhere);
-
-			// render the sorting links
-			$this->renderListSortingLinks();
-
-			// make the whole list
-			$this->markerArray['LISTCONTENT'] = $this->makeTeaserList($res);
-
-			// create the search box
-			$this->markerArray['SEARCHBOX'] = $this->pi_list_searchBox();
-
-			// create the result browser
-			$wrapper['disabledLinkWrap'] = '<span class="disable">|</span>';
-			$wrapper['inactiveLinkWrap'] = '<span class="inactive">|</span>';
-			$wrapper['activeLinkWrap'] = '<span'.$this->pi_classParam('browsebox-SCell').'>|</span>';
-			$wrapper['browseLinksWrap'] = '<div class="browseLinks">|</div>';
-			$wrapper['showResultsWrap'] = '<p class="resultText">|</p>';
-			$wrapper['browseBoxWrap'] = '<div '.$this->pi_classParam('browsebox').'> | </div>';
-			$this->markerArray['PAGEBROWSER'] = $this->pi_list_browseresults(1, '', $wrapper);
-
-			// get additional markers (locallang, ...)
-			$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
-
-			// substitute the markers
-			$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
-		}
-
-		// Returns the content from the plugin.
-		return $content;
-	}/*}}}*/
-
-	/**
-	 * makeTeaserList
-	 *
-	 * renders the teaser list
-	 *
-	 * @param databaseresult $res
-	 * @access public
-	 * @return string
-	 */
-	public function makeTeaserList($res) {/*{{{*/
-		$items=array();
-
-		// Make list table rows
-		while($this->internal['currentRow'] = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
-			$items[]=$this->makeTeaserItem();
-		}
-
-		if (count($items)>0) {
-			$out = '<div'.$this->pi_classParam('listrow').'>
-			'.implode(chr(10),$items).'
-			</div>';
-		}
-
-		return $out;
-	}/*}}}*/
-
-	/**
-	 * Implodes a single row from a database to a single line
-	 *
-	 * @return	Imploded column values
-	 */
-	public function makeTeaserItem() {/*{{{*/
-
-		if ($this->ffdata['view']=='TEASER_DEL') $content = $this->cObj->getSubpart($this->templateCode,'###TEASER_SINGLE_ROW_DEL###');
-		if ($this->ffdata['view']=='TEASER_OWN') $content = $this->cObj->getSubpart($this->templateCode,'###TEASER_SINGLE_ROW_OWN###');
-
-		// define specific markers
-		if (strlen($this->conf['listView.']['fieldList'])) {
-			foreach (explode(',', $this->conf['listView.']['fieldList']) as $fieldName) {
-				$this->markerArray[strtoupper(trim($fieldName))] = $this->getFieldContent(strtolower(trim($fieldName)));
-			}
-		}
-
-		// render special marker: own task
-		// set it to 'is_own_task' if the current task belongs to the current user, otherwise set it to 0
-		$this->markerArray['OWN_TASK'] = $this->getFieldContent('own_task');
-
-		// render special marker: is_overdue
-		// set it to 1 if the "until_date" of the current Ticket is in the past
-		$this->markerArray['IS_OVERDUE'] = $this->getFieldContent('is_overdue');
-
-		// get additional markers (locallang, ...)
-		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
-
-		// substitute the markers
-		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
-
-		return $content;
 	}/*}}}*/
 
 	/**
