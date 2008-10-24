@@ -406,6 +406,13 @@
   display: block;
   line-height: 18px;
   }
+.tx-ketroubletickets-pi1-browsebox .browseLinks {
+  float: right;
+}
+.tx-ketroubletickets-pi1-browsebox .browseLinks span.tx-ketroubletickets-pi1-browsebox-SCell a {
+  font-weight: bold;
+}
+
 
 /*------------------------------------------------------------------------------------------------------*/
 /*** LISTVIEW CLIENTVIEW */
