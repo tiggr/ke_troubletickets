@@ -139,7 +139,8 @@
   }
 
 .kett_sv_sboxb_in * { float: left;}
-
+.kett_sv_sboxb_in select,
+.kett_sv_sboxb_in select option{ float: none;}
 
 .kett_sv_single_box_intern .kett_sv_sbox_head {
   color: #000000;
