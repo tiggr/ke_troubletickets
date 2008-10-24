@@ -313,6 +313,14 @@ plugin.tx_ketroubletickets_pi1.listView {
 	maxPages =
 	cropSingleviewPagetitle = 8
 	cropDescription = 400
+	templateSubpart = ###LISTVIEW###
+	templateSubpartRow = ###LISTVIEW_SINGLE_ROW###
+}
+plugin.tx_ketroubletickets_pi1.teaserView < plugin.tx_ketroubletickets_pi1.listView
+plugin.tx_ketroubletickets_pi1.teaserView {
+	results_at_a_time = 500
+	templateSubpart = ###TEASERVIEW###
+	templateSubpartRow = ###TEASERVIEW_SINGLE_ROW###
 }
 
 # Default values for email notifications

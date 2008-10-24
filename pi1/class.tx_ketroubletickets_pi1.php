@@ -43,7 +43,7 @@ define(CONST_RENDER_TYPE_EMAIL, 'email');
 define(CONST_RENDER_TYPE_CSV, 'csv');
 define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
 define(CONST_SHOW_ALL_ALWAYS, 'all_always');
-define(DEFAULT_ORDERBY, 'crdate');
+define(DEFAULT_ORDERBY, 'crdate DESC');
 define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
 define(CONST_KEEP_TAGS_YES, 'keeptags');
 
@@ -2417,18 +2417,17 @@ function areYouSure(ziel) {
 		switch ($this->ffdata['view']) {
 			case 'TEASER_OWN':
 			case 'TEASER_NORMAL':
-				$templateSubpart = '###TEASERVIEW###';
-				$templateSubpartRow = '###TEASERVIEW_SINGLE_ROW###';
+				$lConf = $this->conf['teaserView.'];
 				break;
 
 			default:
-				$templateSubpart = '###LISTVIEW###';
-				$templateSubpartRow = '###LISTVIEW_SINGLE_ROW###';
+				$lConf = $this->conf['listView.'];
 			break;
 		}
 
+		$templateSubpart = $lConf['templateSubpart'];
+		$templateSubpartRow = $lConf['templateSubpartRow'];
 		$content = $this->cObj->getSubpart($this->templateCode, $templateSubpart);
-		$lConf = $this->conf['listView.'];
 
 		// Mode-Selecter
 		/*
