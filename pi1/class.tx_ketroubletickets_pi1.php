@@ -266,7 +266,7 @@ function areYouSure(ziel) {
 
 		// set some default values for the filter
 		// TODO: Should be configurable in Typoscript in future versions
-		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'open_and_working';
+		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'all_not_closed';
 		if ($this->ffdata['view'] == 'TEASER_OWN') {
 			$this->filter['responsible_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
