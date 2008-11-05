@@ -12,23 +12,23 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Trouble Ticket System',
-	'description' => 'Manage your tasks in a trouble ticket system',
+	'description' => 'Manage your troubletickets, tasks or todo-lists or use the extension as a bugtracker. Assign tickets to users, define observers, receive email notifications and group tickets into categories and projects.',
 	'category' => 'fe',
-	'author' => 'Christian Buelter',
+	'author' => 'Christian Buelter, Christos Keramitsis',
 	'author_email' => 'buelter@kennziffer.com',
 	'shy' => '',
 	'dependencies' => 'cms',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => 'mod1',
-	'state' => 'alpha',
+	'state' => 'beta',
 	'internal' => '',
 	'uploadfolder' => 1,
 	'createDirs' => 'uploads/tx_ketroubletickets/rte/',
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 1,
 	'lockType' => '',
-	'author_company' => '',
+	'author_company' => 'www.kennziffer.com GmbH',
 	'version' => '0.0.0',
 	'constraints' => array(
 		'depends' => array(
