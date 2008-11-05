@@ -433,7 +433,7 @@ function areYouSure(ziel) {
 
 		}
 
-		// handle each of the fields defined in the typoscript setup
+		// handle each of the submitted fields as defined in the typoscript setup
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 			// ignore the submit-field
 			if ($fieldConf['type'] != 'submit') {
@@ -442,6 +442,22 @@ function areYouSure(ziel) {
 				if ($fieldConf['required'] && empty($this->piVars[$fieldConf['name']])) {
 					$this->formErrors[] = '<div class="error">' . $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end') . '</div>';
 				}
+
+				// check the "requiredForInternalUsersOnClose" property
+				// This means: If the current user is an "internal" user and
+				// the current field has the
+				// requiredForInternalUsersOnClose-Flag set, he has to fill the
+				// field in case he want's to close the ticket
+				// This is useful for the "time used"-field.
+				if ($fieldConf['requiredForInternalUsersOnClose'] 
+					&& $this->piVars['status'] == CONST_STATUS_CLOSED
+					&& empty($this->piVars[$fieldConf['name']])
+					&& $this->isCurrentUserInternalUser()
+					) {
+					$this->formErrors[] = '<div class="error">' . $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end') . '</div>';
+				}
+
+				//debug($this->piVars);
 
 				// generate the db-insert values
 				if (!empty($this->piVars[$fieldConf['name']]) || $fieldConf['type'] == 'files') {
@@ -1602,10 +1618,12 @@ function areYouSure(ziel) {
 			}
 
 			// If this is an internal field:
-			// If the current user may view internal fields, get the corresponding subpart and copy it into the template in order to replace the correct markers.
+			// If the current user may view internal fields, get the
+			// corresponding subpart and copy it into the template in order to
+			// replace the correct markers.
 			// Otherwise clear the marker for the internal field.
 			if ($fieldConf['internal']) {
-				if (is_array($this->internalUserList) && in_array($GLOBALS['TSFE']->fe_user->user['uid'], $this->internalUserList)) {
+				if ($this->isCurrentUserInternalUser()) {
 					$internalFieldContent = $this->cObj->getSubpart($this->templateCode,'###INTERNAL_' . strtoupper($fieldConf['name']) . '_SUBPART###');
 				} else {
 					$internalFieldContent = '';
@@ -1650,6 +1668,23 @@ function areYouSure(ziel) {
 	}/*}}}*/
 
 	/**
+	 * isCurrentUserInternalUser 
+	 *
+	 * Checks, if the current fe_user is an "internal" user (as defined in the flexform field)
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function isCurrentUserInternalUser() {/*{{{*/
+		if (is_array($this->internalUserList) && in_array($GLOBALS['TSFE']->fe_user->user['uid'], $this->internalUserList)) {
+			$result = true;
+		} else {
+			$result = false;
+		}
+		return $result;
+	}/*}}}*/
+
+	/**
 	 * renderTicketHistory
 	 *
 	 * renders the history elements for a given ticket uid
@@ -1677,7 +1712,7 @@ function areYouSure(ziel) {
 							$is_internal = 1;
 						}
 					}
-					if (!$is_internal || (is_array($this->internalUserList) && in_array($GLOBALS['TSFE']->fe_user->user['uid'], $this->internalUserList))) {
+					if (!$is_internal || $this->isCurrentUserInternalUser()) {
 						$singleRowContent = $this->cObj->getSubpart($this->templateCode,'###TICKET_HISTORY_ROW_TEMPLATE###');
 						$this->markerArray['HISTORY_DATE'] = date ($this->conf['history_dateformat'], $row['crdate']);
 						$this->markerArray['HISTORY_USER'] = $this->lib->getNameListFromUidList($row['feuser_uid'], 'fe_users', 'username');
@@ -2115,16 +2150,20 @@ function areYouSure(ziel) {
 					if ($this->ffdata[$fieldConf['flexformFieldForUsergroupToChoseFrom']] || $fieldConf['addCurrentUserToList'] || $filterMode) {
 
 						$where_clause = '';
-						$orderBy = '';
+						$orderBy = $fieldConf['orderBy'] ? $fieldConf['orderBy'] : 'username';
 						$groupBy = '';
 						$limit = '';
 
 						// special query for "responsible"-filter
 						if ($filterMode && $fieldConf['name'] == 'responsible_feuser') {
-							$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $this->tablename,
+							$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+									'*', 
+									$this->tablename,
 									'pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')'
-									. ' AND status NOT LIKE "' . CONST_STATUS_CLOSED . '%"'
-									. $lcObj->enableFields($this->tablename),'responsible_feuser');
+										. ' AND status NOT LIKE "' . CONST_STATUS_CLOSED . '%"'
+										. $lcObj->enableFields($this->tablename),'responsible_feuser'
+									);
+
 
 							if (count($rows)) {
 								$first_element = true;

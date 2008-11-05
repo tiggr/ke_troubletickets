@@ -145,6 +145,7 @@ plugin.tx_ketroubletickets_pi1 {
 		5 {
 			name = owner_feuser
 			type = feuserSelect
+			orderBy = username
 			required = 0
 			prefillWithCurrentUserIfEmpty = 1
 		}
@@ -205,6 +206,7 @@ plugin.tx_ketroubletickets_pi1 {
 			type = inputHoursToMinutes
 			size = 5
 			maxlength = 10
+			requiredForInternalUsersOnClose = 1
 		}
 		65 {
 			internal = 1
@@ -254,6 +256,7 @@ plugin.tx_ketroubletickets_pi1 {
 			optional = 1
 			name = responsible_feuser
 			type = feuserSelect
+			orderBy = username
 			flexformFieldForPreselectedUser = responsible_singleuser
 			flexformFieldForUsergroupToChoseFrom = responsible_group_to_choose_from
 			size = 1
@@ -264,6 +267,7 @@ plugin.tx_ketroubletickets_pi1 {
 			optional = 1
 			name = observers_feuser
 			type = feuserSelect
+			orderBy = username
 			flexformFieldForPreselectedUser = observer_singleuser
 			flexformFieldForUsergroupToChoseFrom = observer_group_to_choose_from
 			size = 12
