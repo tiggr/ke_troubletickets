@@ -77,7 +77,7 @@
 
 			<label index="error_date2cal_not_loaded">Fehler: Die Erweiterung date2cal muss installiert sein.</label>
 			<label index="error_no_tickets_found">Es wurden keine Aufgaben gefunden.</label>
-			<label index="error_no_template">Fehler: Es wurde kein Template gefunden.</label>
+			<label index="error_no_template">Fehler: Es wurde kein Template gefunden. Wurde das statische Template eingebunden?</label>
 			<label index="error_no_category">Fehler: Es muss mindestens einen Kategorie angelegt sein.</label>
 			<label index="error_no_upload_directory">Fehler: Das Verzeichnis existiert nicht. Bitte kontaktieren Sie den Administrator.</label>
 			<label index="error_file_too_big">Fehler: Die Datei ist zu groß.</label>
