@@ -1515,9 +1515,8 @@ function areYouSure(ziel) {
 
 		if($success && move_uploaded_file($_FILES[$attachmentName]['tmp_name'], $uploadfile)) {
 			// success
-			// $content .= $this->pi_getLL('fileupload.uploadSuccess','File upload was successfull.');
 			// change rights so that everyone can read the file
-			chmod($uploadfile,octdec('0744'));
+			chmod($uploadfile,octdec('0644'));
  		} else {
 			$this->formErrors[] = $this->pi_getLL('error_file_upload_not_successful','Error: File upload was not successfull.');
 			$success=false;
@@ -1919,7 +1918,7 @@ function areYouSure(ziel) {
 				$this->PA['itemFormElValue'] = $prefillValue;
 				$this->thePidValue = $GLOBALS['TSFE']->id;
 				// add 150px to the RTE width:
-				$this->docLarge = true;
+				$this->docLarge = false;
 				$content = $this->RTEObj->drawRTE($this,'',$this->strEntryField,$row=array(), $this->PA, $this->specConf, $this->thisConfig, $this->RTEtypeVal, '', $this->thePidValue);
 
 				// RTE Markers
