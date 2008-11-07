@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
 	<meta type="array">
 		<type>module</type>
@@ -181,6 +181,8 @@
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
 
 			<label index="LABEL_GO_TO_TICKET">Aufgabe aufrufen</label>
+			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">zu den Kommentaren</label>
+                        
 			<label index="LABEL_RELATED_TICKETS">Verwandte Aufgaben</label>
 			<label index="LABEL_RELATED_TICKETS_ADD">Hinzufügen (Nr. eingeben):</label>
 

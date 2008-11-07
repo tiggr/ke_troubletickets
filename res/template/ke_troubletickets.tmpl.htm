@@ -512,80 +512,97 @@ E-Mail Notification
 <meta content="text/html; charset=utf-8" http-equiv="content-type">
 <title>###EMAIL_FIELD_TITLE###</title>
 </head>
-<body>
-<table style="width:98%; padding:0px; background:#e7e7e7; border-top:2px solid #d0d0d0; border-bottom:2px solid #d0d0d0;">
+<body bgcolor="#CFCFCF" style="background:#CFCFCF;">
+
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="width:80%; padding:0px; background:#ffffff; border-top:3px solid #FEBC83; border-bottom:3px solid #ebc345;">
 <tr>
-	<td style="padding:1px 3px 5px 3px; font-size:11pt; font-weight:bold; color:red;">
-	###LINK_TO_SINGLEVIEW_FROM_EMAIL###
-	<p style="width:80%;">###WHAT_HAS_HAPPENED###</p>
+	<td style="border-top:3px solid #F99D4E; background:#F58220; padding:5px;  font-family: Verdana; font-size:11pt; font-weight:bold; color: white;">
+	
+	<table style="width: 100%; padding: 0;">
+		<tr>
+			<td style="font-family: Verdana; font-size: 11pt;"><b><span style="color:#e6e6e6;">###UID###</span> <span style="color:#ffffff;">###EMAIL_FIELD_TITLE###</span></b></td>
+			<td width="155" style="width: 155px; font-family: Verdana; font-size: 10pt; text-align: right;"><div style="float: right; text-align: right; margin: 3px 3px 4px 0"><a href="#go_to_comments" style="display: block; float: right; padding:3px 10px; border:1px solid #cd6913; color:#000000; font-weight:normal; ">###LABEL_GO_TO_COMMENTS_FROM_EMAIL###</a></div></td>
+			<td width="130" style="width: 130px; font-family: Verdana; font-size: 10pt; text-align: right;"><div style="float: right; text-align: right; margin: 3px 3px 4px 0">###LINK_TO_SINGLEVIEW_FROM_EMAIL###</div></td>
+		</tr>
+	</table>
+	
+	<div style="font-family: Verdana; font-size: 10pt; color: #000000; padding: 0 0 0 5px; font-weight: normal;">###WHAT_HAS_HAPPENED###</div>
 	</td>	
 </tr>
 
 <tr>
 	<td style="padding:0px; margin:0px;">
-		<table style="width:100%; background:#f2f2f2; padding:4px 3px;">
+		<table border="0" cellpadding="0" cellspacing="0" style="width:100%; background:#ffffff; padding:0;">
 		<tr>
-			<td style="font-size:10pt; width:20%;">###LABEL_TITLE###:</td>
-			<td style="font-size:11pt; font-weight:bold;"><span style="color:#bbbbbb;">###UID###</span> ###EMAIL_FIELD_TITLE###</td>
+		<td style="width:40%; vertical-align: top; padding: 5px;">
+			<table style="width:100%; background:#ffffff; padding:0px; ">
+			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_CRDATE###:</b></td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_CRDATE###&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"><b>###LABEL_OWNER_FEUSER###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"> ###EMAIL_FIELD_OWNER_FEUSER###&nbsp;</td>
+			</tr>
+			<tr>	
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"><b>###LABEL_RESPONSIBLE_FEUSER###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;">###EMAIL_FIELD_RESPONSIBLE_FEUSER###&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align: top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"><b>###LABEL_OBSERVERS_FEUSER###: </td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align: top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;">###EMAIL_FIELD_OBSERVERS_FEUSER###&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_STATUS###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_STATUS###&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_BILLING###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_BILLING###&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_PRIORITY###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_PRIORITY###&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_UNTIL_DATE###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_UNTIL_DATE###&nbsp;</td>
+			</tr>
+			<tr>	
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_EFFORT###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_EFFORT###&nbsp;</td>
+			</tr>
+			<tr>	
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_CATEGORY###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_CATEGORY###&nbsp;</td>
+			</tr>
+			<tr>	
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_FILES###:</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_FILES###&nbsp;</td>
+			</tr>
+			<tr>	
+				<td style="vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_RELATED_TICKETS###:</td>
+				<td style="vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_RELATED_TICKETS###&nbsp;</td>
+			</tr>
+			</table>
+		</td>
+		
+		<td style="width:60%; vertical-align: top; background: #E6EFEF; font-family: Verdana; padding: 5px;">
+			<!--<div style="font-size:10pt;"><p><b>###LABEL_DESCRIPTION###:</b></p></div>-->
+			<div style="font-size:10pt;">###EMAIL_FIELD_DESCRIPTION###</div>
+		</td>
+
 		</tr>
-		<tr>
-			<td style=" font-size:10pt;  width:20%;">###LABEL_CRDATE###: </td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_CRDATE###</td>
-		</tr>
-		<tr>
-			<td style=" font-size:10pt;  width:20%;">###LABEL_OWNER_FEUSER###:</td>
-			<td style=" font-size:11pt;"> ###EMAIL_FIELD_OWNER_FEUSER###</td>
-		</tr>
-		<tr>	
-			<td style=" font-size:10pt; ">###LABEL_RESPONSIBLE_FEUSER###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_RESPONSIBLE_FEUSER###</td>
-		</tr>
-		<tr>
-			<td style=" font-size:10pt;  width:20%;">###LABEL_OBSERVERS_FEUSER###: </td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_OBSERVERS_FEUSER###</td>
-		</tr>
-		<tr>
-			<td style=" font-size:10pt; ">###LABEL_STATUS###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_STATUS###</td>
-		</tr>
-		<tr>
-			<td style=" font-size:10pt; ">###LABEL_BILLING###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_BILLING###</td>
-		</tr>
-		<tr>
-			<td style=" font-size:10pt; ">###LABEL_PRIORITY###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_PRIORITY###</td>
-		</tr>
-		<tr>
-			<td style=" font-size:10pt; ">###LABEL_UNTIL_DATE###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_UNTIL_DATE###</td>
-		</tr>
-		<tr>	
-			<td style=" font-size:10pt; ">###LABEL_EFFORT###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_EFFORT###</td>
-		</tr>
-		<tr>	
-			<td style=" font-size:10pt; ">###LABEL_CATEGORY###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_CATEGORY###</td>
-		</tr>
-		<tr>	
-			<td style=" font-size:10pt; ">###LABEL_FILES###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_FILES###</td>
-		</tr>
-		<tr>	
-			<td style=" font-size:10pt; ">###LABEL_RELATED_TICKETS###:</td>
-			<td style=" font-size:11pt;">###EMAIL_FIELD_RELATED_TICKETS###</td>
-		</tr>
+		
 		</table>
+	
 	</td>
 </tr>
+
 <tr>
-	<td style="padding:5px 3px 0px 3px; background:#fffedd;">
-		<p><b>###LABEL_DESCRIPTION###:</b><br />###EMAIL_FIELD_DESCRIPTION###</p>
-	</td>
-<tr>
-	<td style="padding:5px 3px;">
-		<p>###EMAIL_FIELD_COMMENTS###</p>
+	<td style="padding:6px 5px 8px 5px; background: #FFF7CC; font-family: Verdana;">
+		<div style="font-size:10pt; ">###EMAIL_FIELD_COMMENTS###</div>
+		<a name="go_to_comments"></a>
 	</td>
 </tr>
 
@@ -595,5 +612,7 @@ E-Mail Notification
 <!-- ###EMAIL_NOTIFICATION### END-->
 
 <!-- ###EMAIL_NOTIFICATION_LINKTOTICKET### BEGIN-->
-<a href="###URL_GO_TO_TICKET###" style="background:#bbbbbb; padding:2px 10px 2px 10px; border:1px solid #999999; font-weight:normal; float:right;">###LINKTEXT_GO_TO_TICKET###</a>
+
+<a href="###URL_GO_TO_TICKET###" style="display: block; float: right; padding:3px 10px; border:1px solid #cd6913; color:#000000; font-weight:normal; ">###LINKTEXT_GO_TO_TICKET###</a>
+
 <!-- ###EMAIL_NOTIFICATION_LINKTOTICKET### END-->

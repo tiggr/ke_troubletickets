@@ -33,6 +33,8 @@
   line-height: 1px;
   }
 
+.tx-ketroubletickets-pi1 img { border: 0;}
+
 /*------------------------------------------------------------------------------------------------------*/
 /*** SINGLEVIEW */
 /*------------------------------------------------------------------------------------------------------*/
@@ -341,6 +343,9 @@
 .kett_toolbar_filter select:focus,
 .kett_toolbar_filter select:hover,
 .kett_toolbar_filter select:active { background: #fff5d1; }
+
+.kett_toolbar_filter select {width: 165px;}
+.kett_toolbar_filter select option {width: auto; overflow: visible;}
 
 /* sorting */
 .kett_toolbar_sort { line-height: 16px; font-size: 11px; }
