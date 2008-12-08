@@ -35,7 +35,7 @@
 			<label index="listFieldHeader_title">Titel</label>
 			<label index="listFieldHeader_description">Beschreibung</label>
 			<label index="listFieldHeader_until_date">Zu erledigen bis</label>
-			<label index="listFieldHeader_from_date">Zu erledigen ab</label>
+			<label index="listFieldHeader_from_date">Geplant ab</label>
 			<label index="listFieldHeader_owner_feuser">Besitzer</label>
 			<label index="listFieldHeader_responsible_feuser">Verantwortlicher Benutzer</label>
 			<label index="listFieldHeader_observers_feuser">Beobachter</label>
@@ -151,11 +151,10 @@
 			<label index="LABEL_PRIORITY">Priorität</label>
 			<label index="LABEL_DESCRIPTION">Beschreibung</label>
 			<label index="LABEL_UNTIL_DATE">Zu erledigen bis</label>
-			<label index="LABEL_FROM_DATE">Zu erledigen ab</label>
+			<label index="LABEL_FROM_DATE">Geplant ab</label>
 			<label index="LABEL_CRDATE">Erstellt am</label>
 			<label index="LABEL_CLOSE_TIME">Geschlossen am</label>
-			<label index="LABEL_FROM">Zu erledigen ab</label>
-			<label index="LABEL_TO">bis</label>
+			<label index="LABEL_TO">Zu erledigen bis</label>
 			<label index="LABEL_TIME_USED">Zeitaufwand tatsächlich (in Std.)</label>
 			<label index="LABEL_TIME_PLANNED">Zeitaufwand geplant (in Std.)</label>
 			<label index="LABEL_ADDITIONAL_INFO">Zusatzinformationen</label>

@@ -189,6 +189,7 @@ plugin.tx_ketroubletickets_pi1 {
 			maxlength = 5000
 		}
 		50 {
+			internal = 1
 			name = from_date
 			type = date
 			size = 10
@@ -310,7 +311,7 @@ plugin.tx_ketroubletickets_pi1 {
 # Listview defaults
 plugin.tx_ketroubletickets_pi1.listView {
 	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value
-	headerList = category, title, crdate, from_date, until_date, status, owner_feuser, responsible_feuser, number_of_comments, priority
+	headerList = category, title, crdate, until_date, status, owner_feuser, responsible_feuser, priority
 	filterList = status, responsible_feuser, category
 	csvExportFieldList =  crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments, close_time
 	results_at_a_time =
@@ -332,7 +333,7 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	subject_prefix = [TROUBLE TICKET]
 	from_email = me@domain.com
 	from_name = TYPO3 Trouble Ticket System
-	fieldList = crdate, title, status, billing, priority, from_date, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets
+	fieldList = crdate, title, status, billing, priority, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets
 }
 
 # Examples from Kickstarter:

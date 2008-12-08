@@ -54,12 +54,7 @@ New Ticket / Edit Ticket Form / Singleview
         <div class="kett_sv_sboxb_in">###FIELD_BILLING###</div>
       </div>
     </div>
-    <div class="kett_sv_single_box">
-      <div class="kett_sv_sbox_head">###LABEL_FROM_DATE###</div>
-      <div class="kett_sv_sbox_body">
-        <div class="kett_sv_sboxb_in">###FIELD_FROM_DATE###</div>
-      </div>
-    </div>
+    ###INTERNAL_FROM_DATE###
     <div class="kett_sv_single_box">
       <div class="kett_sv_sbox_head">###LABEL_PRIORITY###</div>
       <div class="kett_sv_sbox_body">
@@ -167,7 +162,6 @@ Optional Labels and Fields
     <div class="kett_sv_desc_head">###LABEL_OBSERVERS_FEUSER###</div>
     <div class="kett_sv_desc_body">###FIELD_OBSERVERS_FEUSER###</div>
   </div>
-
 <!-- ###OPTIONAL_OBSERVERS_FEUSER_SUBPART### END-->
 
 <!-- ###OPTIONAL_NOTIFICATIONS_OWNER_SUBPART### START-->
@@ -208,6 +202,15 @@ Optional Labels and Fields
     </div>
   </div>
 <!-- ###INTERNAL_TIME_USED_SUBPART### END-->
+
+<!-- ###INTERNAL_FROM_DATE_SUBPART### START-->
+  <div class="kett_sv_single_box kett_sv_single_box_intern">
+    <div class="kett_sv_sbox_head">###LABEL_INTERNAL###</div>
+    <div class="kett_sv_sbox_body">
+      <div class="kett_sv_sboxb_in">###FIELD_FROM_DATE### ###LABEL_FROM_DATE###</div>
+    </div>
+  </div>
+<!-- ###INTERNAL_FROM_DATE_SUBPART### END-->
 
 <!-- ###INTERNAL_ADDITIONAL_INFO_SUBPART### START-->
   <div class="kett_sv_description kett_sv_intern">
@@ -324,8 +327,6 @@ Ticket History (in Singleview)
       <label>###LABEL_SORTING###:</label>
       ###HEADER_CRDATE###
       <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
-      ###HEADER_FROM_DATE###
-      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
       ###HEADER_UNTIL_DATE###
       <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
       ###HEADER_PRIORITY###
@@ -392,8 +393,6 @@ TEASERVIEW
       <label>###LABEL_SORTING###:</label>
       ###HEADER_CRDATE###
       <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
-      ###HEADER_FROM_DATE###
-      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
       ###HEADER_UNTIL_DATE###
       <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
       ###HEADER_PRIORITY###
@@ -418,7 +417,6 @@ TEASERVIEW
     <td class="kett_tw_head">###LABEL_CRDATE###</td>
     <td class="kett_tw_head">###LABEL_TITLE###</td>
     <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
-    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
     <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
   </tr>
 ###LISTCONTENT###
@@ -433,7 +431,6 @@ TEASERVIEW
     ###TITLE###
   </td>
   <td class="kett_tw_body">###OWNER_FEUSER###</td>
-  <td class="kett_tw_body">###FROM_DATE###</td>
   <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
 </tr>
 <!-- ###TEASERVIEW_SINGLE_ROW### END-->
@@ -491,7 +488,7 @@ TEASERVIEW
   
   <div class="kett_listview_row_foot">
     <div class="kett_float_left">
-      ###LABEL_CRDATE###: ###CRDATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>###LABEL_FROM###: ###FROM_DATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>###LABEL_TO###: <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span><span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>###CLOSE_TIME_WITH_TEXT###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span><!--###LABEL_NUMBER_OF_COMMENTS###--><img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" /> (###NUMBER_OF_COMMENTS###)
+      ###LABEL_CRDATE###: ###CRDATE###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>###LABEL_TO###: <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span><span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>###CLOSE_TIME_WITH_TEXT###<span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span><!--###LABEL_NUMBER_OF_COMMENTS###--><img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" /> (###NUMBER_OF_COMMENTS###)
     </div>
     <div class="kett_float_right">###EDIT_ICON### ###DELETE_ICON###</div>
   </div>

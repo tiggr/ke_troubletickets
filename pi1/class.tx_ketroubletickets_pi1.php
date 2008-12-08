@@ -1990,7 +1990,7 @@ function areYouSure(ziel) {
 				$this->date2cal->config['inputField'] = $field;
 				$this->date2cal->config['calConfig']['ifFormat'] = $this->conf['datefield_inputfieldformat'];
 				$this->date2cal->setConfigOption('ifFormat', $this->conf['datefield_inputfieldformat']);
-
+				
 				$this->date2cal->setConfigOption('showsTime', 0, true);
 				$this->date2cal->setConfigOption('time24', 1, true);
 				$fieldContent = $this->date2cal->render($prefillValue, $field);
