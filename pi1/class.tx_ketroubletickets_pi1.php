@@ -2454,6 +2454,9 @@ function areYouSure(ziel) {
 		// which template should be used?
 		switch ($this->ffdata['view']) {
 			case 'TEASER_OWN':
+				$lConf = $this->conf['teaserViewOwn.'];
+				break;
+
 			case 'TEASER_NORMAL':
 				$lConf = $this->conf['teaserView.'];
 				break;

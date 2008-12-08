@@ -54,7 +54,6 @@ New Ticket / Edit Ticket Form / Singleview
         <div class="kett_sv_sboxb_in">###FIELD_BILLING###</div>
       </div>
     </div>
-    ###INTERNAL_FROM_DATE###
     <div class="kett_sv_single_box">
       <div class="kett_sv_sbox_head">###LABEL_PRIORITY###</div>
       <div class="kett_sv_sbox_body">
@@ -75,6 +74,7 @@ New Ticket / Edit Ticket Form / Singleview
         <div class="kett_sv_sboxb_in">###FIELD_EFFORT###</div>
       </div>
     </div>
+    ###INTERNAL_FROM_DATE###
     ###INTERNAL_TIME_PLANNED###
     ###INTERNAL_TIME_USED###
   </div>
@@ -205,9 +205,9 @@ Optional Labels and Fields
 
 <!-- ###INTERNAL_FROM_DATE_SUBPART### START-->
   <div class="kett_sv_single_box kett_sv_single_box_intern">
-    <div class="kett_sv_sbox_head">###LABEL_INTERNAL###</div>
+    <div class="kett_sv_sbox_head">###LABEL_INTERNAL### ###LABEL_FROM_DATE###</div>
     <div class="kett_sv_sbox_body">
-      <div class="kett_sv_sboxb_in">###FIELD_FROM_DATE### ###LABEL_FROM_DATE###</div>
+      <div class="kett_sv_sboxb_in">###FIELD_FROM_DATE###</div>
     </div>
   </div>
 <!-- ###INTERNAL_FROM_DATE_SUBPART### END-->
@@ -365,7 +365,6 @@ Ticket History (in Singleview)
 <!-- 
 ***********************************************
 TEASERVIEW 
-###HEADER_STATUS###
 ***********************************************
 -->
 <!-- ###TEASERVIEW### START-->
@@ -436,6 +435,83 @@ TEASERVIEW
 <!-- ###TEASERVIEW_SINGLE_ROW### END-->
 
 
+
+
+<!-- 
+***********************************************
+TEASERVIEW OWN TASKS
+***********************************************
+-->
+<!-- ###TEASERVIEWOWN### START-->
+<!-- +++ Listview Toolbar +++ new ticket, searchbox -->
+<div class="kett_listview_toolbar">
+    <div class="kett_float_left">
+        <div class="kett_toolbar_filter">
+          	<form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
+      			<label>###LABEL_STATUS###</label>###FILTER_STATUS### ###FILTER_SUBMIT###
+      		</form>
+      </div>
+    </div>
+    <div class="kett_float_right">
+      <div class="kett_searchbox">
+        ###SEARCHBOX###
+      </div>
+    </div>
+    <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+<!-- +++ Listview-Toolbar +++ sorting, CSV export -->
+<div class="kett_listview_toolbar">
+  <div class="kett_float_left">
+    <div class="kett_toolbar_sort">
+      <label>###LABEL_SORTING###:</label>
+      ###HEADER_CRDATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_FROM_DATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_UNTIL_DATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_PRIORITY###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_STATUS###
+    </div>
+  </div>
+  <div class="kett_float_right">
+    <div class="kett_toolbar_csv">
+      <div>
+        <a href="###LINK_URL_CSV_EXPORT###">###ICONCSVEXPORT###</a><a href="###LINK_URL_CSV_EXPORT###">###LABEL_LINKTEXT_CSV_EXPORT###</a>
+      </div>
+      <div class="kett_float_clean">&nbsp;</div>
+    </div>
+  </div>
+  <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+
+<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
+  <tr>
+    <td class="kett_tw_head">###LABEL_CRDATE###</td>
+    <td class="kett_tw_head">###LABEL_TITLE###</td>
+    <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
+    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
+    <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
+  </tr>
+###LISTCONTENT###
+</table>
+<!-- ###TEASERVIEWOWN### END-->
+
+<!-- ###TEASERVIEWOWN_SINGLE_ROW### START-->
+<tr>
+  <td class="kett_tw_body">###CRDATE###</td>
+  <td class="kett_tw_body">
+    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
+    ###TITLE###
+  </td>
+  <td class="kett_tw_body">###OWNER_FEUSER###</td>
+  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###FROM_DATE###</span></td>
+  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
+</tr>
+<!-- ###TEASERVIEWOWN_SINGLE_ROW### END-->
 
 
 
