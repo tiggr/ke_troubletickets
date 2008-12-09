@@ -1302,19 +1302,20 @@ function areYouSure(ziel) {
 	 * @return void
 	 */
 	public function renderChangedInternalFields($changedInternalFields='') {/*{{{*/
-		$content = $this->cObj->getSubpart($this->templateCode,'###INTERNAL_CHANGES_SUBPART###');
-
-		$localMarkerArray = array();
-		$localMarkerArray['INTERNAL_CHANGES'] = '';
-		foreach (explode(',', $changedInternalFields) as $fieldName) {
-			$localMarkerArray['INTERNAL_CHANGES'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
-			$localMarkerArray['INTERNAL_CHANGES'] .= ': ';
-			$localMarkerArray['INTERNAL_CHANGES'] .= $this->getFieldContent($fieldName);
-			$localMarkerArray['INTERNAL_CHANGES'] .= '<br />';
+		if (strlen($changedInternalFields)) {
+			$content = $this->cObj->getSubpart($this->templateCode,'###INTERNAL_CHANGES_SUBPART###');
+			$localMarkerArray = array();
+			$localMarkerArray['INTERNAL_CHANGES'] = '';
+			foreach (explode(',', $changedInternalFields) as $fieldName) {
+				$localMarkerArray['INTERNAL_CHANGES'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
+				$localMarkerArray['INTERNAL_CHANGES'] .= ': ';
+				$localMarkerArray['INTERNAL_CHANGES'] .= $this->getFieldContent($fieldName);
+				$localMarkerArray['INTERNAL_CHANGES'] .= '<br />';
+			}
+			$content = $this->cObj->substituteMarkerArray($content,$localMarkerArray,'###|###',true);
+		} else {
+			$content = '';
 		}
-
-		$content = $this->cObj->substituteMarkerArray($content,$localMarkerArray,'###|###',true);
-
 		return $content;
 	}/*}}}*/
 
