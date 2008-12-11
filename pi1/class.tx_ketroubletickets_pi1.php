@@ -1250,6 +1250,9 @@ function areYouSure(ziel) {
 			} else {
 				$localMarkerArray['INTERNAL_CHANGES'] = '';
 			}
+		} else {
+			// on a new ticket render all internal fields
+			$localMarkerArray['INTERNAL_CHANGES'] = $this->renderChangedInternalFields(CONST_NEWTICKET);
 		}
 
 		// generate a link to the ticket
@@ -1306,6 +1309,18 @@ function areYouSure(ziel) {
 			$content = $this->cObj->getSubpart($this->templateCode,'###INTERNAL_CHANGES_SUBPART###');
 			$localMarkerArray = array();
 			$localMarkerArray['INTERNAL_CHANGES'] = '';
+
+			// on new tickets, render all internal fields
+			if ($changedInternalFields == CONST_NEWTICKET) {
+				$changedInternalFields = '';
+				foreach ($this->conf['formFieldList.'] as $fieldConf) {
+					if ($fieldConf['internal']) {
+						$changedInternalFields .= $fieldConf['name'] . ',';
+					}
+				}
+			}
+			$changedInternalFields = t3lib_div::rm_endcomma($changedInternalFields);
+
 			foreach (explode(',', $changedInternalFields) as $fieldName) {
 				$localMarkerArray['INTERNAL_CHANGES'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
 				$localMarkerArray['INTERNAL_CHANGES'] .= ': ';
