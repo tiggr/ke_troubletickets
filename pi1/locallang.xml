@@ -9,27 +9,183 @@
 			<label index="listFieldHeader_title">Title</label>
 			<label index="listFieldHeader_description">Description</label>
 			<label index="listFieldHeader_until_date">To do until</label>
+			<label index="listFieldHeader_from_date">Planned from</label>
 			<label index="listFieldHeader_owner_feuser">Owner</label>
 			<label index="listFieldHeader_responsible_feuser">Responsible user</label>
-			<label index="listFieldHeader_observers_feuser">Observers</label>
+			<label index="listFieldHeader_observers_feuser">Observer</label>
 			<label index="listFieldHeader_category">Category</label>
 			<label index="listFieldHeader_status">Status</label>
 			<label index="listFieldHeader_priority">Priority</label>
-			<label index="listFieldHeader_notifications_owner">Send notifications to owner</label>
-			<label index="listFieldHeader_notifications_responsible">Send notifications to responsible user</label>
-			<label index="listFieldHeader_notifications_observer">Send notifications to observer</label>
+			<label index="listFieldHeader_notifications_owner">Notify Owner</label>
+			<label index="listFieldHeader_notifications_responsible">Notify responsible user</label>
+			<label index="listFieldHeader_notifications_observer">Notify Observer</label>
 			<label index="listFieldHeader_files">Files</label>
-			<label index="listFieldHeader_time_used">Time used</label>
-			<label index="listFieldHeader_time_planned">Time planned</label>
+			<label index="listFieldHeader_time_used">used time</label>
+			<label index="listFieldHeader_time_planned">planned time</label>
+			<label index="listFieldHeader_additional_info">Additional information</label>
+			<label index="listFieldHeader_crdate">Creation date</label>
+			<label index="listFieldHeader_comments">Comments</label>
 			<label index="listFieldHeader_billing">Billing</label>
 			<label index="listFieldHeader_effort">Effort</label>
+
+			<label index="list_mode_all">All</label>
+			<label index="list_mode_not_closed">Not yet done</label>
 			<label index="back">Back</label>
 			<label index="pi_list_browseresults_prev">&lt; Previous</label>
 			<label index="pi_list_browseresults_page">Page</label>
 			<label index="pi_list_browseresults_next">Next &gt;</label>
-			<label index="pi_list_browseresults_displays">Displaying results ###SPAN_BEGIN###%s to %s&lt;/span&gt; out of ###SPAN_BEGIN###%s&lt;/span&gt;</label>
+			<label index="pi_list_browseresults_displays">Ticket ###SPAN_BEGIN###%s to %s&lt;/span&gt; (of ###SPAN_BEGIN###%s&lt;/span&gt;)</label>
 			<label index="pi_list_searchBox_search">Search</label>
-			<label index="pi_list_searchBox_default_value">searchword</label>
+			<label index="pi_list_searchBox_default_value">search word</label>
+
+			<label index="pick_a_date">Select date.</label>
+			<label index="more_files">One more file</label>
+			<label index="formerror_date">Error: The date has not been entered correctly. Please use the format TT.MM.JJJJ, for example 31.12.2008.</label>
+			<label index="formerror_required_start">Error: Please fill out the field </label>
+			<label index="formerror_required_end">.</label>
+			<label index="formerror_upload_again">Please upload the selected files again.</label>
+			<label index="formerror_could_not_be_deleted"> could not be deleted.</label>
+			<label index="formerror_has_been_deleted"> has been deleted.</label>
+			<label index="formerror_hours">Please enter the amount of hours correctly (for example 1,5).</label>
+			<label index="formerror_could_not_create_related_ticket">Relation to ticket could not be created.</label>
+
+			<label index="error_date2cal_not_loaded">Error: The extension date2cal has to be installed.</label>
+			<label index="error_no_tickets_found">No tickets have been found.</label>
+			<label index="error_no_template">Error: No static template has been found. Did you include the static template?</label>
+			<label index="error_no_category">Error: At least one category has to be created.</label>
+			<label index="error_no_upload_directory">Error: The directory does not exist. Please contact your administrator.</label>
+			<label index="error_file_too_big">Error: The file is too big.</label>
+			<label index="error_filetype_not_allowed">Error: This filetype is not allowed.</label>
+			<label index="error_file_upload_not_successful">Error: File could not be uploaded.</label>
+
+			<label index="link_to_new_ticket">Create new ticket</label>
+			<label index="back_to_listview">Back</label>
+			<label index="altText_edit">Edit ticket</label>
+			<label index="altText_delete">Delete ticket</label>
+			<label index="altText_close">Close ticket</label>
+			<label index="altText_deletefile">Delete file</label>
+			<label index="altText_delete_related_ticket">Delete relation</label>
+			<label index="history_new_ticket">Ticket created</label>
+			<label index="history_new_comment">Comment added</label>
+			<label index="are_you_sure_delete">Are you sure?</label>
+			<label index="email_text_type_new">A new ticket has been created.</label>
+			<label index="email_text_type_changed">The ticket has been changed.</label>
+			<label index="email_text_type_closed">The ticket has been closed.</label>
+			<label index="email_text_type_new_with_user">created a new ticket.</label>
+			<label index="email_text_type_changed_with_user">changed this ticket.</label>
+			<label index="email_text_type_closed_with_user">closed this ticket.</label>
+			<label index="email_text_fields_have_changed">This fields have been changed:</label>
+			<label index="email_text_user">User</label>
+			<label index="email_subject_type_changed">Changed</label>
+			<label index="email_subject_type_new">New</label>
+			<label index="email_subject_type_closed">Closed</label>
+			<label index="email_subject_type_newcomment">Comment</label>
+			<label index="email_subject_type_newcomment_reopen">Comment/opened</label>
+			<label index="error_no_permission">You do not have access rights to this ticket.</label>
+			<label index="error_not_logged_in">Please log in.</label>
+
+			<label index="SELECTLABEL_1">low</label>
+			<label index="SELECTLABEL_2">normal</label>
+			<label index="SELECTLABEL_3">high</label>
+
+			<label index="SELECTLABEL_OPEN_AND_WORKING">open and working</label>
+			<label index="SELECTLABEL_ALL_NOT_CLOSED">all not closed</label>
+			<label index="SELECTLABEL_ALL">all</label>
+			<label index="SELECTLABEL_OPEN">open</label>
+			<label index="SELECTLABEL_WORKING">working</label>
+			<label index="SELECTLABEL_CLOSED">closed</label>
+			<label index="SELECTLABEL_ACKNOWLEDGED">acknowledged</label>
+			<label index="SELECTLABEL_ONHOLD">on hold</label>
+			<label index="SELECTLABEL_WAIT">wait</label>
+			<label index="SELECTLABEL_OFFER">offer</label>
+
+			<label index="SELECTLABEL_SERVICE">Service</label>
+			<label index="SELECTLABEL_INVOICE">Invoice</label>
+			<label index="SELECTLABEL_INVOICE_IS_DONE">Invoice done</label>
+			<label index="SELECTLABEL_SERVICE_INVOICE">Service/invoice</label>
+
+			<label index="SELECTLABEL_ONEVERYCHANGE">On every change</label>
+			<label index="SELECTLABEL_ONSTATUSCHANGE">On every status change</label>
+			<label index="SELECTLABEL_NEVER">Never</label>
+			<label index="SELECTLABEL_FRONTENDSELECTION">Select in frontend</label>
+			
+			<label index="LABEL_HISTORY_DATE">Date</label>
+			<label index="LABEL_HISTORY_USER">User</label>
+			<label index="LABEL_HISTORY_FIELD">Field</label>
+			<label index="LABEL_HISTORY_OLD_VALUE">Old value</label>
+			<label index="LABEL_HISTORY_NEW_VALUE">New value</label>
+			<label index="LABEL_TICKET_HISTORY_HEADER">History</label>
+
+			<label index="LABEL_SUBMIT">Save ticket</label>
+			<label index="LABEL_OPEN_NEW_TICKET">Create new ticket</label>
+			<label index="LABEL_EDIT_TICKET">View / edit ticket</label>
+			<label index="LABEL_TITLE">Title</label>
+			<label index="LABEL_STATUS">Status</label>
+			<label index="LABEL_BILLING">Billing</label>
+			<label index="LABEL_PRIORITY">Priority</label>
+			<label index="LABEL_DESCRIPTION">Description</label>
+			<label index="LABEL_UNTIL_DATE">to do until</label>
+			<label index="LABEL_FROM_DATE">planned from</label>
+			<label index="LABEL_CRDATE">created</label>
+			<label index="LABEL_CLOSE_TIME">closed</label>
+			<label index="LABEL_TO">to do until</label>
+			<label index="LABEL_TIME_USED">actual time effort (hours)</label>
+			<label index="LABEL_TIME_PLANNED">planned time effort (hours)</label>
+			<label index="LABEL_ADDITIONAL_INFO">Additional information</label>
+			<label index="LABEL_EFFORT">Effort</label>
+			<label index="LABEL_FILES">Files</label>
+			<label index="LABEL_CATEGORY">Category</label>
+			<label index="LABEL_OWNER_FEUSER">Owner</label>
+			<label index="LABEL_OBSERVERS_FEUSER">Observer</label>
+			<label index="LABEL_NUMBER_OF_COMMENTS">Comments</label>
+			<label index="LABEL_NEWCOMMENT">A comment has been added.</label>
+			<label index="LABEL_REOPENANDNEWCOMMENT">A comment has been added and the ticket has been re-opened.</label>
+			<label index="LABEL_LINKTEXT_CSV_EXPORT">Export as CSV</label>
+			<label index="LABEL_RESPONSIBLE_FEUSER">Responsible</label>
+			<label index="LABEL_FILTER_CATEGORY">Category</label>
+
+			<label index="LABEL_NOTIFICATIONS_OWNER">Notifications to the owner</label>
+			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Notifications to the responsible user</label>
+			<label index="LABEL_NOTIFICATIONS_OBSERVER">Notifications to the observers</label>
+			
+			<label index="LABEL_COMMENT_HEADER">Comments</label>
+			<label index="LABEL_COMMENT_SUBMIT">Save</label>
+
+			<label index="LABEL_FILTER_SUBMIT">OK</label>
+
+			<label index="LABEL_GO_TO_TICKET">Open this ticket</label>
+			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">Go to the comments</label>
+                        
+			<label index="LABEL_RELATED_TICKETS">Related tickets</label>
+			<label index="LABEL_RELATED_TICKETS_ADD">Add (enter number):</label>
+
+			<label index="LABEL_SORTING">Sorting</label>
+			<label index="LABEL_MODE_SELECTOR">Show</label>
+			<label index="LABEL_INTERNAL">INTERNAL</label>
+
+			<label index="tt_content.pi_ketroubletickets.sheet_title_default">General settings</label>
+			<label index="tt_content.pi_ketroubletickets.sheet_title_users">User settings</label>
+
+			<label index="tt_content.pi_ketroubletickets.viewtype">Display</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normal list</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_normal">Compact list</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own">Compact list of own tickets</label>
+
+			<label index="tt_content.pi_ketroubletickets.show_tickets">Show tickets</label>
+			<label index="tt_content.pi_ketroubletickets.show_tickets.only_own">only own/responsible/observed</label>
+			<label index="tt_content.pi_ketroubletickets.show_tickets.all_for_admins">all only for ticket administrators</label>
+			<label index="tt_content.pi_ketroubletickets.show_tickets.all_always">alway all</label>
+			<label index="tt_content.pi_ketroubletickets.all_categories">Use all categories (found under starting point)?</label>
+			<label index="tt_content.pi_ketroubletickets.categories">Use these categories (selecting only one assings it automatically)</label>
+			<label index="tt_content.pi_ketroubletickets.listcategories">Show ONLY these categories in the list</label>
+
+			<label index="tt_content.pi_ketroubletickets.responsible_singleuser">Responsible user (will be allways assigned)</label>
+			<label index="tt_content.pi_ketroubletickets.responsible_group_to_choose_from">Responsible user (group from which one user can be selected)</label>
+			<label index="tt_content.pi_ketroubletickets.observer_singleuser">Observer (will be allways assigned)</label>
+			<label index="tt_content.pi_ketroubletickets.observer_group_to_choose_from">Observer (group from which one user can be selected)</label>
+
+			<label index="tt_content.pi_ketroubletickets.ticket_administrators">Ticket administrators (see all tickets)</label>
+			<label index="tt_content.pi_ketroubletickets.internal_users">Internal users (see internal fields)</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="listFieldHeader_title">Titel</label>
@@ -66,7 +222,7 @@
 
 			<label index="pick_a_date">Datum auswählen.</label>
 			<label index="more_files">Weitere Datei</label>
-			<label index="formerror_date">Fehler: Das Datum wurde nicht korrekt eingegeben. Verwenden Sie das Format TT.MM.JJJJ, also z. B. 1.12.2007</label>
+			<label index="formerror_date">Fehler: Das Datum wurde nicht korrekt eingegeben. Verwenden Sie das Format TT.MM.JJJJ, also z. B. 31.12.2008.</label>
 			<label index="formerror_required_start">Fehler: Bitte füllen Sie das Feld </label>
 			<label index="formerror_required_end"> aus.</label>
 			<label index="formerror_upload_again">Bitte laden Sie die ausgewählten Dateien erneut hoch.</label>
@@ -206,9 +362,9 @@
 			<label index="tt_content.pi_ketroubletickets.listcategories">NUR folgende Kategorie in der Liste anzeigen</label>
 
 			<label index="tt_content.pi_ketroubletickets.responsible_singleuser">Verantwortlicher Benutzer (fest hinterlegt)</label>
-			<label index="tt_content.pi_ketroubletickets.responsible_group_to_choose_from">Verantwortlicher Benutzer (Benutzergruppe zur Auswahl)</label>
+			<label index="tt_content.pi_ketroubletickets.responsible_group_to_choose_from">Verantwortlicher Benutzer (Benutzergruppe, aus der einer ausgewählt werden kann)</label>
 			<label index="tt_content.pi_ketroubletickets.observer_singleuser">Beobachter (fest hinterlegt)</label>
-			<label index="tt_content.pi_ketroubletickets.observer_group_to_choose_from">Beobachter (Benutzergruppe zur Auswahl)</label>
+			<label index="tt_content.pi_ketroubletickets.observer_group_to_choose_from">Beobachter (Benutzergruppe, aus der einer ausgewählt werden kann)</label>
 
 			<label index="tt_content.pi_ketroubletickets.ticket_administrators">Aufgaben-Administratoren (sehen alle Tickets)</label>
 			<label index="tt_content.pi_ketroubletickets.internal_users">Interne Benutzer (sehen interne Felder)</label>
