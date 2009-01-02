@@ -35,6 +35,19 @@
 
 .tx-ketroubletickets-pi1 img { border: 0;}
 
+.tx-ketroubletickets-pi1 .error {
+	border:1px solid red;
+	background:yellow;
+	color:black;
+	margin:5px;
+	padding:5px;
+}
+.tx-ketroubletickets-pi1 .deleteFile {
+	display:block;
+	float:left;
+	width:20px;
+}
+
 /*------------------------------------------------------------------------------------------------------*/
 /*** SINGLEVIEW */
 /*------------------------------------------------------------------------------------------------------*/

@@ -36,7 +36,7 @@
 			<label index="pi_list_browseresults_next">Next &gt;</label>
 			<label index="pi_list_browseresults_displays">Ticket ###SPAN_BEGIN###%s to %s&lt;/span&gt; (of ###SPAN_BEGIN###%s&lt;/span&gt;)</label>
 			<label index="pi_list_searchBox_search">Search</label>
-			<label index="pi_list_searchBox_default_value">search word</label>
+			<label index="pi_list_searchBox_default_value">searchword</label>
 
 			<label index="pick_a_date">Select date.</label>
 			<label index="more_files">One more file</label>
@@ -136,13 +136,17 @@
 			<label index="LABEL_FILES">Files</label>
 			<label index="LABEL_CATEGORY">Category</label>
 			<label index="LABEL_OWNER_FEUSER">Owner</label>
+			<label index="LABEL_NUMBER">No.</label>
 			<label index="LABEL_OBSERVERS_FEUSER">Observer</label>
+			<label index="LABEL_COMMENTS">Comments</label>
 			<label index="LABEL_NUMBER_OF_COMMENTS">Comments</label>
 			<label index="LABEL_NEWCOMMENT">A comment has been added.</label>
 			<label index="LABEL_REOPENANDNEWCOMMENT">A comment has been added and the ticket has been re-opened.</label>
 			<label index="LABEL_LINKTEXT_CSV_EXPORT">Export as CSV</label>
 			<label index="LABEL_RESPONSIBLE_FEUSER">Responsible</label>
 			<label index="LABEL_FILTER_CATEGORY">Category</label>
+			<label index="LABEL_ATTACHMENTS">Attachments</label>
+			<label index="LABEL_HISTORY">History of changes</label>
 
 			<label index="LABEL_NOTIFICATIONS_OWNER">Notifications to the owner</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Notifications to the responsible user</label>
@@ -174,9 +178,9 @@
 			<label index="tt_content.pi_ketroubletickets.show_tickets">Show tickets</label>
 			<label index="tt_content.pi_ketroubletickets.show_tickets.only_own">only own/responsible/observed</label>
 			<label index="tt_content.pi_ketroubletickets.show_tickets.all_for_admins">all only for ticket administrators</label>
-			<label index="tt_content.pi_ketroubletickets.show_tickets.all_always">alway all</label>
+			<label index="tt_content.pi_ketroubletickets.show_tickets.all_always">always all</label>
 			<label index="tt_content.pi_ketroubletickets.all_categories">Use all categories (found under starting point)?</label>
-			<label index="tt_content.pi_ketroubletickets.categories">Use these categories (selecting only one assings it automatically)</label>
+			<label index="tt_content.pi_ketroubletickets.categories">Use these categories (selecting only one assigns it automatically)</label>
 			<label index="tt_content.pi_ketroubletickets.listcategories">Show ONLY these categories in the list</label>
 
 			<label index="tt_content.pi_ketroubletickets.responsible_singleuser">Responsible user (will be allways assigned)</label>
@@ -318,13 +322,17 @@
 			<label index="LABEL_FILES">Dateien</label>
 			<label index="LABEL_CATEGORY">Kategorie</label>
 			<label index="LABEL_OWNER_FEUSER">Besitzer</label>
+			<label index="LABEL_NUMBER">Nr.</label>
 			<label index="LABEL_OBSERVERS_FEUSER">Beobachter</label>
+			<label index="LABEL_COMMENTS">Kommentare</label>
 			<label index="LABEL_NUMBER_OF_COMMENTS">Kommentare</label>
 			<label index="LABEL_NEWCOMMENT">Ein Kommentar wurde hinzugefügt.</label>
 			<label index="LABEL_REOPENANDNEWCOMMENT">Ein Kommentar wurde hinzugefügt und die Aufgabe damit wieder eröffnet.</label>
 			<label index="LABEL_LINKTEXT_CSV_EXPORT">Export als CSV</label>
 			<label index="LABEL_RESPONSIBLE_FEUSER">Verantwortlich</label>
 			<label index="LABEL_FILTER_CATEGORY">Kategorie</label>
+			<label index="LABEL_ATTACHMENTS">Dateianhänge</label>
+			<label index="LABEL_HISTORY">Verlauf d. Änderungen</label>
 
 			<label index="LABEL_NOTIFICATIONS_OWNER">Benachrichtigungen an den Besitzer</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Benachrichtigungen an den verantwortlichen Benutzer</label>

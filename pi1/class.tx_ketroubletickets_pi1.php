@@ -440,7 +440,7 @@ function areYouSure(ziel) {
 
 				// required-check
 				if ($fieldConf['required'] && empty($this->piVars[$fieldConf['name']])) {
-					$this->formErrors[] = '<div class="error">' . $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end') . '</div>';
+					$this->formErrors[] = $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end');
 				}
 
 				// check the "requiredForInternalUsersOnClose" property
@@ -454,7 +454,7 @@ function areYouSure(ziel) {
 					&& empty($this->piVars[$fieldConf['name']])
 					&& $this->isCurrentUserInternalUser()
 					) {
-					$this->formErrors[] = '<div class="error">' . $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end') . '</div>';
+					$this->formErrors[] = $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end');
 				}
 
 				//debug($this->piVars);
@@ -979,8 +979,16 @@ function areYouSure(ziel) {
 
 				// nice formatted date instead of timestamp
 				if ($historyInsertFields['databasefield'] == $fieldConf['name'] && $fieldConf['type'] == 'date') {
-					$historyInsertFields['value_old'] = date ($this->conf['datefield_dateformat'], $historyInsertFields['value_old']);
-					$historyInsertFields['value_new'] = date ($this->conf['datefield_dateformat'], $historyInsertFields['value_new']);
+					if (!$historyInsertFields['value_old']) {
+						$historyInsertFields['value_old'] = '';
+					} else {
+						$historyInsertFields['value_old'] = date ($this->conf['datefield_dateformat'], $historyInsertFields['value_old']);
+					}
+					if (!$historyInsertFields['value_new']) {
+						$historyInsertFields['value_new'] = '';
+					} else {
+						$historyInsertFields['value_new'] = date ($this->conf['datefield_dateformat'], $historyInsertFields['value_new']);
+					}
 				}
 
 				// add spaces to filelist
@@ -2131,9 +2139,8 @@ function areYouSure(ziel) {
 										'parameter' => $GLOBALS['TSFE']->id,
 										'additionalParams' => $additionalParams
 										);
-								$deleteLink_URL = $this->cObj->typoLink_URL( $deleteLinkConf );
-								//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
-								$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
+								$deleteLink_URL = $this->cObj->typoLink_URL($deleteLinkConf);
+								$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
 
 								// generate the alt text
 								$imageConf['altText'] = $this->pi_getLL('altText_deletefile', 'Delete file.');

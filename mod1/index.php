@@ -193,7 +193,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 						if (!t3lib_extMgm::isLoaded('date2cal')) {
 							$this->content .= $GLOBALS['LANG']->getLL('error_date2cal');
 						} else {
-							include_once($BACK_PATH . '../' . t3lib_extMgm::siteRelPath('date2cal') . 'src/class.jscalendar.php');
+							include_once(t3lib_div::resolveBackPath($BACK_PATH . '../' . t3lib_extMgm::siteRelPath('date2cal') . 'src/class.jscalendar.php'));
 
 							// Render content:
 							$this->moduleContent();

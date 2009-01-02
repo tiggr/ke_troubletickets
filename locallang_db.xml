@@ -50,8 +50,9 @@
 			<label index="tx_ketroubletickets_comments.ticket_uid">Ticket</label>
 			<label index="tx_ketroubletickets_comments.feuser_uid">Frontenduser</label>
 			<label index="tx_ketroubletickets_comments.content">Content</label>
-			<label index="tx_ketroubletickets_categories">Troble Ticket Categories</label>
+			<label index="tx_ketroubletickets_categories">Trouble Ticket Categories</label>
 			<label index="tx_ketroubletickets_categories.title">Title</label>
+			<label index="tx_ketroubletickets_categories.singleviewpage">Page for Singleview</label>
 			<label index="tx_ketroubletickets_history">Trouble Ticket History</label>
 			<label index="tx_ketroubletickets_history.ticket_uid">Ticket</label>
 			<label index="tx_ketroubletickets_history.feuser_uid">Frontenduser</label>

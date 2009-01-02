@@ -6,10 +6,54 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="title">Trouble Tickets</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
-			<label index="function3">Function #3</label>
+			<label index="title">Tickets Analysis</label>
+			<label index="select_tickets_page">There are no tickets on this page. Please select a page with tickets in the pagetree.</label>
+			<label index="all_owners">All Owners</label>
+			<label index="all_responsible_users">All responsible users</label>
+			<label index="all_categories">All Categories</label>
+			<label index="from_date">Opened from</label>
+			<label index="to_date">Opened until</label>
+			<label index="from_date_closing_time">Closed from</label>
+			<label index="to_date_closing_time">Closed until</label>
+			<label index="button_OK">OK</label>
+			<label index="error_date2cal">The TYPO3 extension "date2cal" has to be installed.</label>
+			<label index="error_no_results">No results.</label>
+			<label index="error_from_greater_to">Error: From-date is larger than until-date.</label>
+			<label index="sum">Sum</label>
+			<label index="average">Av.</label>
+			<label index="table_title">Tickets</label>
+			<label index="empty_value">[empty]</label>
+			<label index="all_entries">All entries</label>
+			<label index="page">Page</label>
+			<label index="explanation">Reaction time: Time between opening and first change made by the responsible user.</label>
+
+			<label index="status_all">All Tickets</label>
+			<label index="status_not_closed">Not closed tickets</label>
+			<label index="status_closed">Closed tickets</label>
+			<label index="status_current">Current (open, waiting, working)</label>
+			<label index="status_offer">Offers</label>
+
+			<label index="billing_all">All billing types</label>
+			<label index="billing_service">Service</label>
+			<label index="billing_invoice">Invoice</label>
+
+			<label index="header_line_number">Line</label>
+			<label index="header_uid">UID</label>
+			<label index="header_title">Title</label>
+			<label index="header_owner_feuser">Owner</label>
+			<label index="header_responsible_feuser">Resp.</label>
+			<label index="header_percent">Percentage</label>
+			<label index="header_status">Status</label>
+			<label index="header_crdate">Opened on</label>
+			<label index="header_cat_title">Category</label>
+			<label index="header_until_date">To do until</label>
+			<label index="header_time_used">Act. time</label>
+			<label index="header_time_planned">Plan. time</label>
+			<label index="header_effort">Eff.</label>
+			<label index="header_priority">Priority</label>
+			<label index="header_reaction_time">Reaction</label>
+			<label index="header_close_time">Closed on</label>
+			<label index="header_billing">Billing</label>
 		</languageKey>
 		
 		<languageKey index="de" type="array">
@@ -18,9 +62,6 @@
 			<label index="all_owners">Alle Besitzer</label>
 			<label index="all_responsible_users">Alle Verantwortlichen</label>
 			<label index="all_categories">Alle Kategorien</label>
-			<label index="all_connected_custom">Alle Produkte</label>
-			<label index="all_connected_feuser">Alle Mitglieder</label>
-			<label index="all_connected_connected_addresses">Alle Lieferanten</label>
 			<label index="from_date">Eröffnet von</label>
 			<label index="to_date">Eröffnet bis</label>
 			<label index="from_date_closing_time">Erledigt von</label>
