@@ -7,8 +7,8 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="mlang_tabs_tab">Troubletickets</label>
-			<label index="mlang_labels_tabdescr">Trouble ticket system reports</label>
-			<label index="mlang_labels_tabdescr">Trouble ticket system reports</label>
+			<label index="mlang_labels_tabdescr">Troubletickets reports</label>
+			<label index="mlang_labels_tabdescr">Troubletickets reports</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">Aufgaben</label>

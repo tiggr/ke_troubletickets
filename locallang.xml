@@ -6,12 +6,12 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="pi1_title">Trouble Ticket System</label>
-			<label index="pi1_plus_wiz_description">Adds the trouble ticket system to the page</label>
+			<label index="pi1_title">Troubletickets</label>
+			<label index="pi1_plus_wiz_description">Adds the Troubletickets plugin to the page.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="pi1_title">Trouble Ticket System</label>
-			<label index="pi1_plus_wiz_description">Trouble Ticket System auf der Seite anzeigen</label>
+			<label index="pi1_title">Troubletickets</label>
+			<label index="pi1_plus_wiz_description">Das Troubletickets-Plugin auf der Seite anzeigen.</label>
 		</languageKey>
 	</data>
 </T3locallang>
