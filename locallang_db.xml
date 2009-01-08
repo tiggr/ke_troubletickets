@@ -6,8 +6,8 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="tt_content.list_type_pi1">Trouble Ticket System</label>
-			<label index="tx_ketroubletickets_tickets">Trouble Tickets</label>
+			<label index="tt_content.list_type_pi1">Troubletickets</label>
+			<label index="tx_ketroubletickets_tickets">Troubletickets: Tickets</label>
 			<label index="tx_ketroubletickets_tickets.title">Title</label>
 			<label index="tx_ketroubletickets_tickets.description">Description</label>
 			<label index="tx_ketroubletickets_tickets.additional_info">Additional Info</label>
@@ -46,14 +46,14 @@
 			<label index="tx_ketroubletickets_tickets.time_planned">Time planned</label>
 			<label index="tx_ketroubletickets_tickets.effort">Effort</label>
 			<label index="tx_ketroubletickets_tickets.close_time">Closed on</label>
-			<label index="tx_ketroubletickets_comments">Trouble Ticket Comments</label>
+			<label index="tx_ketroubletickets_comments">Troubletickets: Comments</label>
 			<label index="tx_ketroubletickets_comments.ticket_uid">Ticket</label>
 			<label index="tx_ketroubletickets_comments.feuser_uid">Frontenduser</label>
 			<label index="tx_ketroubletickets_comments.content">Content</label>
-			<label index="tx_ketroubletickets_categories">Trouble Ticket Categories</label>
+			<label index="tx_ketroubletickets_categories">Troubletickets: Categories</label>
 			<label index="tx_ketroubletickets_categories.title">Title</label>
 			<label index="tx_ketroubletickets_categories.singleviewpage">Page for Singleview</label>
-			<label index="tx_ketroubletickets_history">Trouble Ticket History</label>
+			<label index="tx_ketroubletickets_history">Troubletickets: History</label>
 			<label index="tx_ketroubletickets_history.ticket_uid">Ticket</label>
 			<label index="tx_ketroubletickets_history.feuser_uid">Frontenduser</label>
 			<label index="tx_ketroubletickets_history.databasefield">Field</label>
@@ -62,8 +62,8 @@
 			<label index="tx_ketroubletickets_history.value_new">New value</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="tt_content.list_type_pi1">Trouble Ticket System</label>
-			<label index="tx_ketroubletickets_tickets">Trouble Tickets</label>
+			<label index="tt_content.list_type_pi1">Troubletickets</label>
+			<label index="tx_ketroubletickets_tickets">Troubletickets: Aufgaben</label>
 			<label index="tx_ketroubletickets_tickets.title">Titel</label>
 			<label index="tx_ketroubletickets_tickets.description">Beschreibung</label>
 			<label index="tx_ketroubletickets_tickets.additional_info">Zusatzinformationen</label>
@@ -94,15 +94,15 @@
 			<label index="tx_ketroubletickets_tickets.time_planned">Zeitaufwand geplant (in Minuten)</label>
 			<label index="tx_ketroubletickets_tickets.effort">Aufwand</label>
 			<label index="tx_ketroubletickets_tickets.close_time">Geschlossen am</label>
-			<label index="tx_ketroubletickets_comments">Trouble Ticket Kommentare</label>
-			<label index="tx_ketroubletickets_comments.ticket_uid">Ticket</label>
+			<label index="tx_ketroubletickets_comments">Troubletickets: Kommentare</label>
+			<label index="tx_ketroubletickets_comments.ticket_uid">Aufgabe</label>
 			<label index="tx_ketroubletickets_comments.feuser_uid">Frontendbenutzer</label>
 			<label index="tx_ketroubletickets_comments.content">Inhalt</label>
-			<label index="tx_ketroubletickets_categories">Trouble Ticket Kategorien</label>
+			<label index="tx_ketroubletickets_categories">Troubletickets: Kategorien</label>
 			<label index="tx_ketroubletickets_categories.title">Titel</label>
 			<label index="tx_ketroubletickets_categories.singleviewpage">Seite für Einzelansicht</label>
-			<label index="tx_ketroubletickets_history">Trouble Ticket Änderungsverlauf</label>
-			<label index="tx_ketroubletickets_history.ticket_uid">Ticket</label>
+			<label index="tx_ketroubletickets_history">Troubletickets: Änderungsverlauf</label>
+			<label index="tx_ketroubletickets_history.ticket_uid">Aufgabe</label>
 			<label index="tx_ketroubletickets_history.feuser_uid">Frontendbenutzer</label>
 			<label index="tx_ketroubletickets_history.databasefield">Feld</label>
 			<label index="tx_ketroubletickets_history.feuser_username">Frontendbenutzer (Benutzername)</label>
