@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Troubletickets',
-	'description' => 'Manage your troubletickets, tasks or todo-lists or use the extension as a bugtracker. Assign tickets to users, define observers, receive email notifications and group tickets into categories and projects.',
+	'description' => 'Manage your troubletickets, tasks or todo-lists or use the extension as a bugtracker, helpdesk or project management tool. Assign tickets to users, define observers, receive email notifications and group tickets into categories and projects.',
 	'category' => 'fe',
 	'author' => 'Christian Buelter, Christos Keramitsis',
 	'author_email' => 'buelter@kennziffer.com',
