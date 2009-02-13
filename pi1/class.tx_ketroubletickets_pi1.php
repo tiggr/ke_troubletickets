@@ -1990,17 +1990,17 @@ function areYouSure(ziel) {
 		// 1. If the form just has been submitted (new ticket),
 		// prefill the form fields with the already parsed submitted values
 		// ($this->insertFields).
-		// 2. If we wanted to update a ticket, but errors occured, we find the
-		// ticket in the piVars. 
-		// 3. If we are updating an existing ticket, get the values from the database
+		// 2. If we are updating an existing ticket, get the values from the database
 		// ($this->internal['currentRow']).
-		// 4. If we are rendering fields for the listview filter, we find the values
+		// 3. If we are rendering fields for the listview filter, we find the values
 		// in $this->filter.
-		//debug($fieldConf['name'] . ': ' . $this->piVars[$fieldConf['name']]);
+		// 4. TODO: If we wanted to update a ticket, but errors occured, we
+		// find the data in the piVars. But these data have to be processed
+		// first (see function getFieldContent), so we cannot use the raw data
+		// as prefillValue. So for now we use $this->internal['currentRow']
+		// (which resets the fields). But comments will be kept when erros occur!
 		if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
 			$prefillValue = $this->insertFields[$fieldConf['name']];
-		} else if ($this->piVars['updateUid'] && strlen($this->piVars[$fieldConf['name']])) {
-			$prefillValue = $this->piVars[$fieldConf['name']];
 		} else if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
 			$prefillValue = $this->internal['currentRow'][$fieldConf['name']];
 		} else if (is_array($this->filter)) {

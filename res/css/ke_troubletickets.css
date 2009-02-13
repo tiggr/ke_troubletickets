@@ -358,7 +358,7 @@
 .kett_toolbar_filter select:hover,
 .kett_toolbar_filter select:active { background: #fff5d1; }
 
-.kett_toolbar_filter select {width: 140px;}
+.kett_toolbar_filter select {width: 110px;}
 .kett_toolbar_filter select.select_short {width: 75px;}
 .kett_toolbar_filter select option {width: auto; overflow: visible;}
 
