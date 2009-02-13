@@ -357,7 +357,8 @@
 .kett_toolbar_filter select:hover,
 .kett_toolbar_filter select:active { background: #fff5d1; }
 
-.kett_toolbar_filter select {width: 165px;}
+.kett_toolbar_filter select {width: 140px;}
+.kett_toolbar_filter select.select_short {width: 75px;}
 .kett_toolbar_filter select option {width: auto; overflow: visible;}
 
 /* sorting */
@@ -380,11 +381,11 @@
   float: left;
   }
 .kett_toolbar_sort .sort_active_desc a {
-  background: transparent url(../images/icon_arrow_up.gif) right center no-repeat;
+  background: transparent url(../images/icon_arrow_down.gif) right center no-repeat;
   padding: 0 13px 0 0;
   }
 .kett_toolbar_sort .sort_active_asc a {
-  background: transparent url(../images/icon_arrow_down.gif) right center no-repeat;
+  background: transparent url(../images/icon_arrow_up.gif) right center no-repeat;
   padding: 0 13px 0 0;
   }
 

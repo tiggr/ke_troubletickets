@@ -43,7 +43,7 @@ define(CONST_RENDER_TYPE_EMAIL, 'email');
 define(CONST_RENDER_TYPE_CSV, 'csv');
 define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
 define(CONST_SHOW_ALL_ALWAYS, 'all_always');
-define(DEFAULT_ORDERBY, 'crdate DESC');
+define(DEFAULT_ORDERBY, 'crdate:1');
 define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
 define(CONST_KEEP_TAGS_YES, 'keeptags');
 
@@ -1802,8 +1802,6 @@ function areYouSure(ziel) {
 		return $result;
 	}/*}}}*/
 
-
-
 	/**
 	 * renderTicketHistory
 	 *
@@ -2013,7 +2011,8 @@ function areYouSure(ziel) {
 			break;
 
 			case 'select':
-				$content ='<select name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
+				$class = $fieldConf['css_class'] ? ' class="' . $fieldConf['css_class'] . '"' : '';
+				$content ='<select ' . $class . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 
 				// render empty option
 				if ($renderEmptyDropdownFields) {
@@ -2029,21 +2028,62 @@ function areYouSure(ziel) {
 
 				$valueList = $this->conf[$fieldConf['valueList']];
 
-				// this is a HACK for the filter option "status". We want to have a filter for "open" and "working" in one option.
+				// this is a HACK for the filter option "status". We want to
+				// have a filter for "open" and "working" in one option.
 				// TODO: Should be configurable in Typoscript in future versions
-				// $renderEmptyDropdownFields is only set when rendering the filter dropdown
+				// $renderEmptyDropdownFields is only set when rendering the filter dropdown,
+				// so we use this as a condition.
 				if ($fieldConf['name'] == 'status' && $renderEmptyDropdownFields) {
 					$valueList = 'open_and_working,all_not_closed,all,' . $valueList;
 				}
 
+				// Generate the valueList for the closed_in_month-Filter.
+				// This filter gives you the possibility to filter the tickets
+				// according to the month they were closed in. So wie first get
+				// the month in which a ticket has been closed for the first
+				// time and add all months until today.
+				if ($fieldConf['name'] == 'closed_in_month') {
+					// get the first ticket
+					$where_clause = 'close_time != 0';
+					$where_clause .= $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
+					$where_clause .= $lcObj->enableFields($this->tablename);
+					//debug($where_clause);
+					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time ASC', 1);
+					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res_month)) {
+						$row_month = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_month);
+						//debug($row_month);
+						$year = date('Y', $row_month['close_time']);
+						$month = date('m', $row_month['close_time']);
+						//debug($year . ' : ' . $month);
+						$valueList = '';
+						$now = time();
+						while ($year < date('Y', $now) || ($year == date('Y', $now) && $month <= date('m', $now))) {
+							if ($valueList) {
+								$valueList .= ',';
+							}
+							$valueList .= mktime(0, 0, 0, $month, 1, $year);
+							$month++;
+							if ($month>12) {
+								$month = 1;
+								$year++;
+							}
+						}
+					}
+				}
+
+				// render the list
 				foreach (explode(',', $valueList) as $value) {
 					if (t3lib_div::inList($prefillValue, $value)) {
 						$selected = ' selected';
 					} else {
 						$selected = '';
 					}
-					$value = trim($value);
-					$content .= '<option value="' . $value . '"' . $selected . '>' . $this->pi_getLL('SELECTLABEL_' . strtoupper($value), $value) . '</option>';
+					if ($fieldConf['name'] == 'closed_in_month') {
+						$content .= '<option value="' . $value . '"' . $selected . '>' . date(($this->conf['listView.']['closed_in_month_dateformat'] ? $this->conf['listView.']['closed_in_month_dateformat'] : 'm-Y'), $value) . '</option>';
+					} else {
+						$value = trim($value);
+						$content .= '<option value="' . $value . '"' . $selected . '>' . $this->pi_getLL('SELECTLABEL_' . strtoupper($value), $value) . '</option>';
+					}
 				}
 				$content .= '</select>';
 			break;
@@ -2589,20 +2629,6 @@ function areYouSure(ziel) {
 		$templateSubpartRow = $lConf['templateSubpartRow'];
 		$content = $this->cObj->getSubpart($this->templateCode, $templateSubpart);
 
-		// Mode-Selecter
-		/*
-		$modeSelectorItems=array();
-		foreach (explode(',', $this->conf['modes']) as $mode) {
-			$mode = strtolower(trim($mode));
-			$modeSelectorItems[$mode] = $this->pi_getLL('list_mode_' . $mode, $mode);
-		}
-
-		// Initialize mode
-		if (!isset($this->piVars['mode']))	{
-			$this->piVars['mode'] = $this->conf['defaultMode'];
-		}
-		*/
-
 		// Initialize pointer
 		if (!isset($this->piVars['pointer'])) {
 			$this->piVars['pointer']=0;
@@ -2640,28 +2666,7 @@ function areYouSure(ziel) {
 		//function pi_list_query($table,$count=0,$addWhere='',$mm_cat='',$groupBy='',$orderBy='',$query='',$returnQueryArray=false)
 
 		// PERMISSION CHECKS
-		// 1. show only tickets the current logged in user is owner of, responsible user or observer
-		// 2. If the flexform option "show_tickets" is set to "all_for_admins" and
-		// the current user is one of the "ticket_administrators", or if the option
-		// is set to "all_always", allow the current user to see and edit all
-		// tickets
-		if ($this->ffdata['show_tickets'] == CONST_SHOW_ALL_ALWAYS
-				||
-				($this->ffdata['show_tickets'] == CONST_SHOW_ALL_FOR_ADMINS
-				&& $this->ffdata['ticket_administrators']
-				&& t3lib_div::inList($this->ffdata['ticket_administrators'], $GLOBALS['TSFE']->fe_user->user['uid']))) {
-
-			$addWhere = '';
-
-		} else {
-
-			$addWhere .= ' AND (';
-			$addWhere .= '(owner_feuser=' . $GLOBALS['TSFE']->fe_user->user['uid'] . ')';
-			$addWhere .= ' OR (responsible_feuser=' . $GLOBALS['TSFE']->fe_user->user['uid'] . ')';
-			$addWhere .= 'OR (' . $GLOBALS['TYPO3_DB']->listQuery('observers_feuser', $GLOBALS['TSFE']->fe_user->user['uid'], $this->tablename) . ')';
-			$addWhere .= ')';
-
-		}
+		$addWhere = $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
 
 		// add filter
 		if (is_array($this->filter)) {
@@ -2674,6 +2679,11 @@ function areYouSure(ziel) {
 							$addWhere .= ' AND (status="open" OR status="working")';
 						break;
 						case 'all_not_closed':
+							// fetch only tickets which are not closed
+							// closed tickets are all ticket types that have the
+							// CONST_STATUS_CLOSED (normally "closed") in their key
+							// So you can invent new "closed"-types like
+							// "closed-without-solution" or "closed-another-reason" ...
 							$addWhere .= ' AND status NOT LIKE "%' . CONST_STATUS_CLOSED . '%"';
 						break;
 						case 'all':
@@ -2682,25 +2692,26 @@ function areYouSure(ziel) {
 							$addWhere .= ' AND ' . $filterName . '="' . mysql_real_escape_string($filterValue) . '"';
 						break;
 					}
+				} else if ($filterName == 'closed_in_month') {
+					$from = intval($filterValue);
+					$month_to = date('m', $from) + 1;
+					$year_to = date('Y', $from);
+					if ($month_to > 12) {
+						$month_to = 1;
+						$year_to++;
+
+					}
+					$to = mktime(0,0,0, $month_to, 1, $year_to);
+					//debug(date('d.m.Y H:i', $from), 'from' );
+					//debug(date('d.m.Y H:i', $to), 'to' );
+					$addWhere .= ' AND close_time >=' . $from . ' AND close_time <= ' . $to;
 				} else {
 					$addWhere .= ' AND ' . $filterName . '="' . mysql_real_escape_string($filterValue) . '"';
 				}
 			}
 		}
 
-		// fetch only tickets which are not closed
-		// closed tickets are all ticket types that have the
-		// CONST_STATUS_CLOSED (normally "closed") in their key
-		// So you can invent new "closed"-types like
-		// "closed-without-solution" or "closed-another-reason" ...
-		// DEPRECATED, CB, 24.10.08
-		/*
-		if ($this->piVars['mode'] == 'not_closed') {
-			//$addWhere .= ' AND status!="' . CONST_STATUS_CLOSED . '"';
-			$addWhere .= ' AND status NOT LIKE "%' . CONST_STATUS_CLOSED . '%"';
-		}
-		*/
-
+		// filter for categories
 		if ($this->ffdata['listcategories']!=''){
 			$addWhere .= ' AND category IN (' . $this->ffdata['listcategories'] . ') ';
 		}
@@ -2720,7 +2731,7 @@ function areYouSure(ziel) {
 			$orderBy .= ', priority DESC';
 		}
 
-		// No limit for the csv export
+		// Increase limit for the csv export
 		if (isset($this->piVars['export']) && $this->piVars['export']=='csv') {
 			$this->internal['results_at_a_time'] = 1000000;
 		}
@@ -2728,16 +2739,10 @@ function areYouSure(ziel) {
 		// exec the query
 		$res = $this->pi_exec_query($this->tablename, '', $addWhere, '', '', $orderBy);
 
-		// Now that we have the query, we can do the excel-export
+		// Now that we have the query, we can do the csv-export
 		if (isset($this->piVars['export']) && $this->piVars['export']=='csv') {
 			$this->outputCSV($res);
 		}
-
-		// create the mode selector
-		// DEPRECATED, CB, 24.10.08
-		/*
-		$this->markerArray['MODE_SELECTOR'] = $this->pi_list_modeSelector($modeSelectorItems);
-		*/
 
 		// render the sorting links
 		$this->renderListSortingLinks();
@@ -2788,6 +2793,43 @@ function areYouSure(ziel) {
 		return $content;
 
 	}/*}}}*/
+
+	/**
+	 * getUserAccessibleTicketsWhereClause 
+	 *
+	 * PERMISSION CHECKS
+	 * compile a where-clause:
+	 * 1. show only tickets the user is owner of, responsible user or observer
+	 * 2. If the flexform option "show_tickets" is set to "all_for_admins" and
+	 * the current user is one of the "ticket_administrators", or if the option
+	 * is set to "all_always", allow the current user to see (and edit) all
+	 * tickets
+	 * 
+	 * @param int $fe_user_uid 
+	 * @access public
+	 * @return string
+	 */
+	public function getUserAccessibleTicketsWhereClause($fe_user_uid=0) {/*{{{*/
+		if ($this->ffdata['show_tickets'] == CONST_SHOW_ALL_ALWAYS
+				||
+				($this->ffdata['show_tickets'] == CONST_SHOW_ALL_FOR_ADMINS
+				&& $this->ffdata['ticket_administrators']
+				&& t3lib_div::inList($this->ffdata['ticket_administrators'], $fe_user_uid))) {
+
+			$addWhere = '';
+
+		} else {
+
+			$addWhere .= ' AND (';
+			$addWhere .= '(owner_feuser=' . $fe_user_uid . ')';
+			$addWhere .= ' OR (responsible_feuser=' . $fe_user_uid . ')';
+			$addWhere .= ' OR (' . $GLOBALS['TYPO3_DB']->listQuery('observers_feuser', $fe_user_uid, $this->tablename) . ')';
+			$addWhere .= ')';
+
+		}
+		return $addWhere;
+	}/*}}}*/
+	
 
 	/**
 	 * Creates a list from a database query
@@ -3580,7 +3622,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return string
 	 */
-	public function cropSentence ($strText, $intLength = 200, $strTrail = '...') {
+	public function cropSentence ($strText, $intLength = 200, $strTrail = '...') {/*{{{*/
 		$wsCount = 0;
 		$intTempSize = 0;
 		$intTotalLen = 0;
@@ -3598,7 +3640,7 @@ function areYouSure(ziel) {
 		}
 
 		return $CropSentence;
-	}
+	}/*}}}*/
 
 }
 
