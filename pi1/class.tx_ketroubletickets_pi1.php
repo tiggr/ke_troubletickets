@@ -457,8 +457,6 @@ function areYouSure(ziel) {
 					$this->formErrors[] = $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end');
 				}
 
-				//debug($this->piVars);
-
 				// generate the db-insert values
 				if (!empty($this->piVars[$fieldConf['name']]) || $fieldConf['type'] == 'files') {
 
@@ -548,7 +546,8 @@ function areYouSure(ziel) {
 				}
 
 				// If a commented has been submitted, process it now.
-				// Comments are not normal fields but have an own table, so we cannot process them like the ticket fields.
+				// Comments are not normal fields but have an own table, so we
+				// cannot process them like the ticket fields.
 				// Remember the fields that have changed for the notification mail.
 				if (isset($this->piVars['content']) && !empty($this->piVars['content'])) {
 					$this->handleSubmittedCommentForm();
@@ -1414,8 +1413,18 @@ function areYouSure(ziel) {
 	public function renderCommentForm($ticket_uid) {/*{{{*/
 		$content = $this->cObj->getSubpart($this->templateCode,'###TICKET_COMMENT###');
 
+		// get the prefillValue 
+		// For example: If we wanted to update a ticket, but errors occurred.
+		// Then the comment has not been written, but we don't want to loose
+		// it, so we prefill the form with it.
+		if (($this->piVars['newticket'] || $this->piVars['updateUid']) && $this->piVars['content']) {
+			$prefillValue = $this->sanitizeData($this->piVars['content']);
+		} else {
+			$prefillValue = '';
+		}
+
 		// the form fields
-		$localMarkerArray['FIELD_CONTENT'] =  '<textarea name="' . $this->prefixId . '[content]" cols="' . $this->conf['comment_cols'] . '" rows="' . $this->conf['comment_rows'] . '"></textarea>';
+		$localMarkerArray['FIELD_CONTENT'] =  '<textarea name="' . $this->prefixId . '[content]" cols="' . $this->conf['comment_cols'] . '" rows="' . $this->conf['comment_rows'] . '">' . $prefillValue . '</textarea>';
 		$localMarkerArray['FIELD_SUBMIT'] = '<input type="submit" name="' . $this->prefixId . '[comment_submit]' . '" value="'.$this->pi_getLL('LABEL_COMMENT_SUBMIT').'">';
 
 		// show the existing comments
@@ -1977,14 +1986,21 @@ function areYouSure(ziel) {
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
 
-		// if the form just has been submitted, prefill the form fields with the
-		// already parsed submitted values ($this->insertFields)
-		// if we are updating an existing ticket, get the values from the database
-		// ($this->internal['currentRow'])
-		// if we are rendering fields for the listview filter, we find the values
-		// in $this->filter
+		// Get the prefillValue:
+		// 1. If the form just has been submitted (new ticket),
+		// prefill the form fields with the already parsed submitted values
+		// ($this->insertFields).
+		// 2. If we wanted to update a ticket, but errors occured, we find the
+		// ticket in the piVars. 
+		// 3. If we are updating an existing ticket, get the values from the database
+		// ($this->internal['currentRow']).
+		// 4. If we are rendering fields for the listview filter, we find the values
+		// in $this->filter.
+		//debug($fieldConf['name'] . ': ' . $this->piVars[$fieldConf['name']]);
 		if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
 			$prefillValue = $this->insertFields[$fieldConf['name']];
+		} else if ($this->piVars['updateUid'] && strlen($this->piVars[$fieldConf['name']])) {
+			$prefillValue = $this->piVars[$fieldConf['name']];
 		} else if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
 			$prefillValue = $this->internal['currentRow'][$fieldConf['name']];
 		} else if (is_array($this->filter)) {
@@ -2043,20 +2059,23 @@ function areYouSure(ziel) {
 				// the month in which a ticket has been closed for the first
 				// time and add all months until today.
 				if ($fieldConf['name'] == 'closed_in_month') {
-					// get the first ticket
+
+					// Get the first closed ticket the user has access to.
+					// IMPORTENT: Tickets may be re-opened, but the closing time remains in the ticket!
 					$where_clause = 'close_time != 0';
 					$where_clause .= $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
 					$where_clause .= $lcObj->enableFields($this->tablename);
-					//debug($where_clause);
 					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time ASC', 1);
+					$valueList = '';
+
 					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res_month)) {
 						$row_month = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_month);
-						//debug($row_month);
 						$year = date('Y', $row_month['close_time']);
 						$month = date('m', $row_month['close_time']);
-						//debug($year . ' : ' . $month);
-						$valueList = '';
 						$now = time();
+
+						// render a list from the starting month until now, the
+						// timestamp is the beginning of each month
 						while ($year < date('Y', $now) || ($year == date('Y', $now) && $month <= date('m', $now))) {
 							if ($valueList) {
 								$valueList .= ',';
@@ -2073,11 +2092,7 @@ function areYouSure(ziel) {
 
 				// render the list
 				foreach (explode(',', $valueList) as $value) {
-					if (t3lib_div::inList($prefillValue, $value)) {
-						$selected = ' selected';
-					} else {
-						$selected = '';
-					}
+					$selected = $prefillValue == $value ? ' selected' : '';
 					if ($fieldConf['name'] == 'closed_in_month') {
 						$content .= '<option value="' . $value . '"' . $selected . '>' . date(($this->conf['listView.']['closed_in_month_dateformat'] ? $this->conf['listView.']['closed_in_month_dateformat'] : 'm-Y'), $value) . '</option>';
 					} else {
@@ -2916,17 +2931,17 @@ function areYouSure(ziel) {
 				break;
 
 			case 'singleview_pagetitle':
-					// used for displaying the pagetitle in the teaser view
-					$singleViewPageId = $this->getSingleViewPageIdForCurrentTicket();
-					if ($singleViewPageId) {
-						$res_page = $GLOBALS['TYPO3_DB']->exec_SELECTquery('title', 'pages', 'uid=' . $singleViewPageId . $lcObj->enableFields('pages'));
-						$page = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_page);
-						$GLOBALS['TYPO3_DB']->sql_free_result($res_page);
-						if (strlen($page['title']) > intval($this->conf['listView.']['cropSingleviewPagetitle'])) {
-							$page['title'] = substr($page['title'], 0, intval($this->conf['listView.']['cropSingleviewPagetitle']));
-						}
-						return '[' . $page['title'] . ']';
+				// used for displaying the pagetitle in the teaser view
+				$singleViewPageId = $this->getSingleViewPageIdForCurrentTicket();
+				if ($singleViewPageId) {
+					$res_page = $GLOBALS['TYPO3_DB']->exec_SELECTquery('title', 'pages', 'uid=' . $singleViewPageId . $lcObj->enableFields('pages'));
+					$page = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_page);
+					$GLOBALS['TYPO3_DB']->sql_free_result($res_page);
+					if (strlen($page['title']) > intval($this->conf['listView.']['cropSingleviewPagetitle'])) {
+						$page['title'] = substr($page['title'], 0, intval($this->conf['listView.']['cropSingleviewPagetitle']));
 					}
+					return '[' . $page['title'] . ']';
+				}
 				break;
 
 			case 'is_overdue':
@@ -3190,16 +3205,16 @@ function areYouSure(ziel) {
 			$categorydata = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		}
 
-		// find out the singleview pid
+		// find out the singleview page id
 		if (is_array($categorydata) && !empty($categorydata['singleviewpage'])) {
-			$mainpage = $categorydata['singleviewpage'];
+			$singleviewpage = $categorydata['singleviewpage'];
 		} else if (!empty($this->ffdata['page_of_main_plugin'])) {
-			$mainpage = $this->ffdata['page_of_main_plugin'];
+			$singleviewpage = $this->ffdata['page_of_main_plugin'];
 		} else {
-			$mainpage = $GLOBALS['TSFE']->id;
+			$singleviewpage = $GLOBALS['TSFE']->id;
 		}
 
-		return $mainpage;
+		return $singleviewpage;
 	}/*}}}*/
 
 	/**

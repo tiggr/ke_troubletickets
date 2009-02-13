@@ -36,10 +36,11 @@
 .tx-ketroubletickets-pi1 img { border: 0;}
 
 .tx-ketroubletickets-pi1 .error {
+	font-size:12px;
 	border:1px solid red;
 	background:yellow;
 	color:black;
-	margin:5px;
+	margin:5px 0px 5px 0px;
 	padding:5px;
 }
 .tx-ketroubletickets-pi1 .deleteFile {
