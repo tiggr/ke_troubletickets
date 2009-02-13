@@ -15,5 +15,9 @@
 			<label index="mlang_labels_tabdescr">Aufgaben Auswertungen</label>
 			<label index="mlang_labels_tablabel">Aufgaben Auswertungen</label>
 		</languageKey>
+		<languageKey index="pl" type="array">
+			<label index="mlang_tabs_tab">System zgłoszeń</label>
+			<label index="mlang_labels_tabdescr">Raporty systemu zgłoszeń</label>
+		</languageKey>
 	</data>
 </T3locallang>

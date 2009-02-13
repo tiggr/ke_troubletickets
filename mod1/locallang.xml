@@ -107,5 +107,52 @@
 			<label index="header_billing">Abrechnung</label>
 
 		</languageKey>
+		<languageKey index="pl" type="array">
+			<label index="title">Analiza zgłoszeń</label>
+			<label index="select_tickets_page">Na tej stronie nie ma żadnych zgłoszeń. Wybierz stronę zawierającą zgłoszenia z drzewa witryny.</label>
+			<label index="all_owners">Wszyscy właściciele</label>
+			<label index="all_responsible_users">Wszyscy odpowiedzialni użytkownicy</label>
+			<label index="all_categories">Wszystkie kategorie</label>
+			<label index="from_date">Otwarte od</label>
+			<label index="to_date">Otwarte do</label>
+			<label index="from_date_closing_time">Zamknięte od</label>
+			<label index="to_date_closing_time">Zamknięte do</label>
+			<label index="button_OK">OK</label>
+			<label index="error_date2cal">Rozszerzenie date2cal musi być zainstalowane</label>
+			<label index="error_no_results">Brak wyników</label>
+			<label index="error_from_greater_to">Błąd: data OD jest większa od daty DO</label>
+			<label index="sum">Suma</label>
+			<label index="average">Średnio</label>
+			<label index="table_title">Zgłoszenia</label>
+			<label index="empty_value">[puste]</label>
+			<label index="all_entries">Wszystkie wpisy</label>
+			<label index="page">Strona</label>
+			<label index="explanation">Czas reakcji: Czas pomiędzy otwarciem a pierwdzą zmianą dokonaną przez odpowiedzialnego użytkownika.</label>
+			<label index="status_all">Wszystkie zgłoszenia</label>
+			<label index="status_not_closed">Zgłoszenia otwarte</label>
+			<label index="status_closed">Zamknięte zgłoszenia</label>
+			<label index="status_current">Aktualne (otwarte, oczekujące, w trakcie realizacji)</label>
+			<label index="status_offer">Oferty</label>
+			<label index="billing_all">Wszystkie formy rozrachunków</label>
+			<label index="billing_service">Należność za</label>
+			<label index="billing_invoice">Faktura</label>
+			<label index="header_line_number">Linia</label>
+			<label index="header_uid">UID</label>
+			<label index="header_title">Tytuł</label>
+			<label index="header_owner_feuser">Właściciel</label>
+			<label index="header_responsible_feuser">Osoba odpowiedzialna</label>
+			<label index="header_percent">Procent</label>
+			<label index="header_status">Status</label>
+			<label index="header_crdate">Otwarty dnia</label>
+			<label index="header_cat_title">Kategoria</label>
+			<label index="header_until_date">Zrobić do</label>
+			<label index="header_time_used">Aktualny czas</label>
+			<label index="header_time_planned">Planowany czas</label>
+			<label index="header_effort">Wysiłek</label>
+			<label index="header_priority">Priorytet</label>
+			<label index="header_reaction_time">Reakcja</label>
+			<label index="header_close_time">Zamknięty dnia</label>
+			<label index="header_billing">Rachunek</label>
+		</languageKey>
 	</data>
 </T3locallang>

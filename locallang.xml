@@ -13,5 +13,9 @@
 			<label index="pi1_title">Troubletickets</label>
 			<label index="pi1_plus_wiz_description">Das Troubletickets-Plugin auf der Seite anzeigen.</label>
 		</languageKey>
+		<languageKey index="pl" type="array">
+			<label index="pi1_title">System zgłoszeń</label>
+			<label index="pi1_plus_wiz_description">Dodaje plugin systemu zgłoszeń na Twojej stronie</label>
+		</languageKey>
 	</data>
 </T3locallang>
