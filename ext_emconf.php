@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext: "ke_troubletickets"
 #
-# Auto generated 18-10-2007 16:27
+# Auto generated 16-02-2009 11:34
 #
 # Manual updates:
 # Only the data in the array - anything else is removed by next write.
@@ -17,7 +17,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'author' => 'Christian Buelter, Christos Keramitsis',
 	'author_email' => 'buelter@kennziffer.com',
 	'shy' => '',
-	'dependencies' => 'cms',
+	'dependencies' => 'cms,date2cal,rtehtmlarea',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => 'mod1',
@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 1,
 	'lockType' => '',
 	'author_company' => 'www.kennziffer.com GmbH',
-	'version' => '0.0.0',
+	'version' => '1.0.1',
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',
@@ -41,7 +41,9 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:28:{s:9:"ChangeLog";s:4:"35eb";s:10:"README.txt";s:4:"ee2d";s:12:"ext_icon.gif";s:4:"1bdc";s:17:"ext_localconf.php";s:4:"a958";s:14:"ext_tables.php";s:4:"6075";s:14:"ext_tables.sql";s:4:"263b";s:39:"icon_tx_ketroubletickets_categories.gif";s:4:"475a";s:37:"icon_tx_ketroubletickets_comments.gif";s:4:"475a";s:36:"icon_tx_ketroubletickets_history.gif";s:4:"475a";s:36:"icon_tx_ketroubletickets_tickets.gif";s:4:"475a";s:13:"locallang.xml";s:4:"d7eb";s:16:"locallang_db.xml";s:4:"5ade";s:7:"tca.php";s:4:"4035";s:14:"mod1/clear.gif";s:4:"cc11";s:13:"mod1/conf.php";s:4:"074f";s:14:"mod1/index.php";s:4:"0373";s:18:"mod1/locallang.xml";s:4:"8655";s:22:"mod1/locallang_mod.xml";s:4:"f0e4";s:19:"mod1/moduleicon.gif";s:4:"8074";s:14:"pi1/ce_wiz.gif";s:4:"02b6";s:37:"pi1/class.tx_ketroubletickets_pi1.php";s:4:"0aeb";s:45:"pi1/class.tx_ketroubletickets_pi1_wizicon.php";s:4:"1e72";s:13:"pi1/clear.gif";s:4:"cc11";s:17:"pi1/locallang.xml";s:4:"c4a2";s:24:"pi1/static/editorcfg.txt";s:4:"ac64";s:20:"pi1/static/setup.txt";s:4:"d381";s:19:"doc/wizard_form.dat";s:4:"ab54";s:20:"doc/wizard_form.html";s:4:"d682";}',
+	'_md5_values_when_last_written' => 'a:90:{s:9:"ChangeLog";s:4:"cbd0";s:10:"README.txt";s:4:"ee2d";s:12:"ext_icon.gif";s:4:"bd76";s:17:"ext_localconf.php";s:4:"762e";s:14:"ext_tables.php";s:4:"5f65";s:14:"ext_tables.sql";s:4:"b051";s:15:"flexform_ds.xml";s:4:"4434";s:39:"icon_tx_ketroubletickets_categories.gif";s:4:"475a";s:37:"icon_tx_ketroubletickets_comments.gif";s:4:"475a";s:36:"icon_tx_ketroubletickets_history.gif";s:4:"475a";s:36:"icon_tx_ketroubletickets_tickets.gif";s:4:"475a";s:13:"locallang.xml";s:4:"6604";s:16:"locallang_db.xml";s:4:"03c1";s:7:"tca.php";s:4:"146c";s:26:"mod1/backendmenu.class.php";s:4:"c1c3";s:14:"mod1/clear.gif";s:4:"cc11";s:13:"mod1/conf.php";s:4:"074f";s:14:"mod1/index.php";s:4:"f380";s:18:"mod1/locallang.xml";s:4:"0d31";s:22:"mod1/locallang_mod.xml";s:4:"41b8";s:19:"mod1/moduleicon.gif";s:4:"8e6e";s:37:"lib/class.tx_ketroubletickets_lib.php";s:4:"8999";s:44:"ical/class.tx_ketroubletickets_icalendar.php";s:4:"9c82";s:33:"ical/iCalendar/class.iCal.inc.php";s:4:"db4e";s:38:"ical/iCalendar/class.iCalAlarm.inc.php";s:4:"1210";s:37:"ical/iCalendar/class.iCalBase.inc.php";s:4:"82b4";s:38:"ical/iCalendar/class.iCalEvent.inc.php";s:4:"265b";s:41:"ical/iCalendar/class.iCalFreeBusy.inc.php";s:4:"f0a4";s:40:"ical/iCalendar/class.iCalJournal.inc.php";s:4:"5c94";s:37:"ical/iCalendar/class.iCalToDo.inc.php";s:4:"e9f9";s:14:"doc/manual.sxw";s:4:"d3f7";s:27:"res/images/button_minus.gif";s:4:"10d6";s:26:"res/images/button_plus.gif";s:4:"0440";s:18:"res/images/cal.gif";s:4:"e05d";s:23:"res/images/calendar.png";s:4:"5307";s:28:"res/images/css_gradient1.gif";s:4:"e42b";s:28:"res/images/css_gradient2.gif";s:4:"c7b1";s:28:"res/images/css_gradient3.gif";s:4:"e863";s:28:"res/images/css_gradient4.gif";s:4:"bed1";s:28:"res/images/css_gradient5.gif";s:4:"8229";s:18:"res/images/csv.gif";s:4:"414e";s:23:"res/images/fe_close.gif";s:4:"13ed";s:24:"res/images/fe_delete.gif";s:4:"0ef9";s:30:"res/images/fe_delete_small.png";s:4:"7bd3";s:22:"res/images/fe_edit.gif";s:4:"a913";s:20:"res/images/green.png";s:4:"a078";s:30:"res/images/icon_arrow_down.gif";s:4:"77f8";s:30:"res/images/icon_arrow_left.png";s:4:"5050";s:28:"res/images/icon_arrow_up.gif";s:4:"b202";s:26:"res/images/icon_attach.png";s:4:"0cb6";s:28:"res/images/icon_comments.png";s:4:"7f92";s:26:"res/images/icon_delete.png";s:4:"6846";s:24:"res/images/icon_disk.png";s:4:"bb6d";s:31:"res/images/icon_edit_ticket.png";s:4:"2161";s:27:"res/images/icon_history.png";s:4:"19bf";s:30:"res/images/icon_new_ticket.png";s:4:"148a";s:31:"res/images/icon_sort_active.gif";s:4:"914a";s:38:"res/images/list_item_foot_bg_alien.gif";s:4:"e52a";s:39:"res/images/list_item_foot_bg_normal.gif";s:4:"7288";s:38:"res/images/list_item_head_bg_alien.gif";s:4:"8d12";s:39:"res/images/list_item_head_bg_normal.gif";s:4:"bd6f";s:38:"res/images/list_item_subt_bg_alien.gif";s:4:"d74f";s:39:"res/images/list_item_subt_bg_normal.gif";s:4:"1d82";s:42:"res/images/list_item_userhead_bg_alien.gif";s:4:"7942";s:42:"res/images/list_item_userhead_bg_inter.gif";s:4:"e2fa";s:42:"res/images/list_item_userhead_bg_norma.gif";s:4:"4378";s:18:"res/images/new.gif";s:4:"b429";s:21:"res/images/orange.png";s:4:"9144";s:18:"res/images/red.png";s:4:"a7c6";s:41:"res/images/single_item_head_bg_normal.gif";s:4:"bddd";s:36:"res/images/status_acknowledgment.gif";s:4:"3b99";s:26:"res/images/status_edit.gif";s:4:"c8a2";s:30:"res/images/status_finished.gif";s:4:"dd85";s:27:"res/images/status_offer.gif";s:4:"f777";s:26:"res/images/status_open.gif";s:4:"31ca";s:28:"res/images/status_parked.gif";s:4:"42db";s:26:"res/images/status_wait.gif";s:4:"cdc5";s:28:"res/images/thumb_default.gif";s:4:"d095";s:21:"res/images/yellow.png";s:4:"b9dd";s:29:"res/css/ke_troubletickets.css";s:4:"c9db";s:39:"res/template/ke_troubletickets.tmpl.htm";s:4:"e580";s:20:"js/datetimepicker.js";s:4:"ab5d";s:14:"pi1/ce_wiz.gif";s:4:"3833";s:33:"pi1/class.frontend_JScalendar.php";s:4:"4ab0";s:37:"pi1/class.tx_ketroubletickets_pi1.php";s:4:"ec5b";s:45:"pi1/class.tx_ketroubletickets_pi1_wizicon.php";s:4:"1e72";s:13:"pi1/clear.gif";s:4:"cc11";s:17:"pi1/locallang.xml";s:4:"7975";s:24:"pi1/static/editorcfg.txt";s:4:"ac64";s:20:"pi1/static/setup.txt";s:4:"5dd0";}',
+	'suggests' => array(
+	),
 );
 
 ?>
