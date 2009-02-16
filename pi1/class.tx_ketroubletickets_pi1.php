@@ -43,7 +43,7 @@ define(CONST_RENDER_TYPE_EMAIL, 'email');
 define(CONST_RENDER_TYPE_CSV, 'csv');
 define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
 define(CONST_SHOW_ALL_ALWAYS, 'all_always');
-define(DEFAULT_ORDERBY, 'crdate:1');
+define(DEFAULT_SORT, 'crdate:1');
 define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
 define(CONST_KEEP_TAGS_YES, 'keeptags');
 
@@ -201,7 +201,7 @@ function areYouSure(ziel) {
 		// debug($GLOBALS['TSFE']->loginUser);
 
 		// Output database errors
-		//$GLOBALS['TYPO3_DB']->debugOutput = true;
+		$GLOBALS['TYPO3_DB']->debugOutput = true;
 
 		// General permission check: This plugin only makes sense if a user is logged in
 		if (!$GLOBALS['TSFE']->loginUser) {
@@ -2367,7 +2367,7 @@ function areYouSure(ziel) {
 							}
 						}
 
-						// add the currend fe-user if configured so
+						// add the current fe-user if configured so
 						if ($fieldConf['prefillWithCurrentUserIfEmpty'] && $GLOBALS['TSFE']->fe_user->user['uid']) {
 							if (!empty($where_clause)) {
 								$where_clause .= ' OR ';
@@ -2650,8 +2650,8 @@ function areYouSure(ziel) {
 		}
 
 		// Initialize sorting
-		if (!isset($this->piVars['sort'])) {
-			$this->piVars['sort'] = DEFAULT_ORDERBY;
+		if (empty($this->piVars['sort'])) {
+			$this->piVars['sort'] = DEFAULT_SORT;
 		}
 
 		// Initializing the query parameters:
@@ -2659,7 +2659,7 @@ function areYouSure(ziel) {
 		// Tablename
 		$this->internal['currentTable'] = $this->tablename;
 
-		// ORDER BY
+		// set orderBy and descFlag
 		list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':',$this->piVars['sort']);
 
 		// Number of results to show in a listing.
@@ -2699,7 +2699,7 @@ function areYouSure(ziel) {
 							// CONST_STATUS_CLOSED (normally "closed") in their key
 							// So you can invent new "closed"-types like
 							// "closed-without-solution" or "closed-another-reason" ...
-							$addWhere .= ' AND status NOT LIKE "%' . CONST_STATUS_CLOSED . '%"';
+							$addWhere .= ' AND status NOT LIKE "' . CONST_STATUS_CLOSED . '%"';
 						break;
 						case 'all':
 						break;
@@ -2735,19 +2735,21 @@ function areYouSure(ziel) {
 		$res = $this->pi_exec_query($this->tablename, 1, $addWhere);
 		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-		// Make listing query, pass query to SQL database
-		if (t3lib_div::inList(t3lib_div::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
-			$orderBy = $this->internal['orderBy'].($this->internal['descFlag']?' DESC':'');
-		} else {
-			$orderBy = DEFAULT_ORDERBY;
-		}
+		// Check if submitted sort is allowed, if not, set it to default 
+		if ($this->piVars['sort'] && $this->piVars['sort'] != DEFAULT_SORT && !t3lib_div::inList(t3lib_div::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
+			list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':', DEFAULT_SORT);
+		} 
+
+		// compile orderBy-parameter
+		$orderBy = $this->internal['orderBy'].($this->internal['descFlag']?' DESC':'');
+
 		// add a second sorting (if sorting is not "priority"), second sorting is always priority
-		if ($this->internal['orderBy']!='priority') {
+		if ($this->internal['orderBy'] != 'priority') {
 			$orderBy .= ', priority DESC';
 		}
 
 		// Increase limit for the csv export
-		if (isset($this->piVars['export']) && $this->piVars['export']=='csv') {
+		if (isset($this->piVars['export']) && $this->piVars['export'] == 'csv') {
 			$this->internal['results_at_a_time'] = 1000000;
 		}
 
@@ -2838,7 +2840,7 @@ function areYouSure(ziel) {
 			$addWhere .= ' AND (';
 			$addWhere .= '(owner_feuser=' . $fe_user_uid . ')';
 			$addWhere .= ' OR (responsible_feuser=' . $fe_user_uid . ')';
-			$addWhere .= ' OR (' . $GLOBALS['TYPO3_DB']->listQuery('observers_feuser', $fe_user_uid, $this->tablename) . ')';
+			$addWhere .= ' OR ' . $GLOBALS['TYPO3_DB']->listQuery('observers_feuser', $fe_user_uid, $this->tablename);
 			$addWhere .= ')';
 
 		}
