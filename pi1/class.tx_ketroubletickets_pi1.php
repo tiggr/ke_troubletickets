@@ -201,7 +201,7 @@ function areYouSure(ziel) {
 		// debug($GLOBALS['TSFE']->loginUser);
 
 		// Output database errors
-		$GLOBALS['TYPO3_DB']->debugOutput = true;
+		// $GLOBALS['TYPO3_DB']->debugOutput = true;
 
 		// General permission check: This plugin only makes sense if a user is logged in
 		if (!$GLOBALS['TSFE']->loginUser) {
@@ -3201,10 +3201,12 @@ function areYouSure(ziel) {
 		// may be set in the flexform of the plugin (first priority)
 		// or in the category data (second priority)
 
-		// get the category data
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('singleviewpage',$this->categoryTablename,'uid=' . $this->internal['currentRow']['category'] . $lcObj->enableFields($this->categoryTablename));
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-			$categorydata = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		// Get the category data. Normally, every ticket should have a category. But maybe, there isn't a category ...
+		if ($this->internal['currentRow']['category']) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('singleviewpage',$this->categoryTablename,'uid=' . $this->internal['currentRow']['category'] . $lcObj->enableFields($this->categoryTablename));
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+				$categorydata = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			}
 		}
 
 		// find out the singleview page id
