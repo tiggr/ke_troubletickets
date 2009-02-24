@@ -2064,6 +2064,7 @@ function areYouSure(ziel) {
 					// IMPORTENT: Tickets may be re-opened, but the closing time remains in the ticket!
 					$where_clause = 'close_time != 0';
 					$where_clause .= $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
+					$where_clause .= ' AND pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
 					$where_clause .= $lcObj->enableFields($this->tablename);
 					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time ASC', 1);
 					$valueList = '';
@@ -2092,12 +2093,14 @@ function areYouSure(ziel) {
 
 				// render the list
 				foreach (explode(',', $valueList) as $value) {
-					$selected = $prefillValue == $value ? ' selected' : '';
-					if ($fieldConf['name'] == 'closed_in_month') {
-						$content .= '<option value="' . $value . '"' . $selected . '>' . date(($this->conf['listView.']['closed_in_month_dateformat'] ? $this->conf['listView.']['closed_in_month_dateformat'] : 'm-Y'), $value) . '</option>';
-					} else {
-						$value = trim($value);
-						$content .= '<option value="' . $value . '"' . $selected . '>' . $this->pi_getLL('SELECTLABEL_' . strtoupper($value), $value) . '</option>';
+					if (strlen($value)) {
+						$selected = $prefillValue == $value ? ' selected' : '';
+						if ($fieldConf['name'] == 'closed_in_month') {
+							$content .= '<option value="' . $value . '"' . $selected . '>' . date(($this->conf['listView.']['closed_in_month_dateformat'] ? $this->conf['listView.']['closed_in_month_dateformat'] : 'm-Y'), intval($value)) . '</option>';
+						} else {
+							$value = trim($value);
+							$content .= '<option value="' . $value . '"' . $selected . '>' . $this->pi_getLL('SELECTLABEL_' . strtoupper($value), $value) . '</option>';
+						}
 					}
 				}
 				$content .= '</select>';
