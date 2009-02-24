@@ -2091,7 +2091,7 @@ function areYouSure(ziel) {
 					}
 				}
 
-				// render the list
+				// render the list 
 				foreach (explode(',', $valueList) as $value) {
 					if (strlen($value)) {
 						$selected = $prefillValue == $value ? ' selected' : '';
