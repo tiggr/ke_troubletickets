@@ -1691,7 +1691,7 @@ function areYouSure(ziel) {
 			if (!$num_rows) {
 				return '<p class="error">' . $this->pi_getLL('error_no_category') . '</p>';
 			}
-
+			$this->markerArray['UID'] = $this->pi_getLL('LABEL_NOT_AVAILABLE','n/a');
 		} else {
 			$this->hiddenFormFields['updateUid'] = '<input type="hidden" name="' . $this->prefixId . '[updateUid]" value="' . $this->internal['currentRow']['uid'] . '">';
 			// remember the related tickets
@@ -1723,7 +1723,17 @@ function areYouSure(ziel) {
 			if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
 				$this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
 			} else {
+				// clear the markers if we open a new ticket (no ticket-uid is given)
 				$this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = '';
+
+				// fill in the current user for "owner" (the user who opens a ticket is always the owner)
+                if ($fieldConf['name'] == 'owner_feuser') {
+                    if ($GLOBALS['TSFE']->fe_user->user['name']) {
+                        $this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = $GLOBALS['TSFE']->fe_user->user['name'];
+                    } else {
+                        $this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = $GLOBALS['TSFE']->fe_user->user['username'];
+                    }
+                }
 			}
 
 			// If this is an internal field:

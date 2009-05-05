@@ -168,6 +168,8 @@
 			<label index="LABEL_INTERNAL">INTERNAL</label>
 			<label index="LABEL_CLOSED_IN_MONTH">Closed in</label>
 
+			<label index="LABEL_NOT_AVAILABLE">n/a</label>
+
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">General settings</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">User settings</label>
 
@@ -354,6 +356,8 @@
 			<label index="LABEL_MODE_SELECTOR">Zeige</label>
 			<label index="LABEL_INTERNAL">INTERN</label>
 			<label index="LABEL_CLOSED_IN_MONTH">Geschlossen</label>
+
+			<label index="LABEL_NOT_AVAILABLE">n/a</label>
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">Allgemeine Einstellungen</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">Benutzereinstellungen</label>
