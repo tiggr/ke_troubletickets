@@ -2181,6 +2181,12 @@ function areYouSure(ziel) {
 				
 				$this->date2cal->setConfigOption('showsTime', 0, true);
 				$this->date2cal->setConfigOption('time24', 1, true);
+
+				// additional config options, see http://forge.typo3.org/issues/show/2674
+				$this->date2cal->setConfigOption('inputField', $field.'_hr');
+				$this->date2cal->setConfigOption('button', $field.'_trigger');
+
+				// render the datepicker field
 				$fieldContent = $this->date2cal->render($prefillValue, $field);
 
 				$content .= $fieldContent;
