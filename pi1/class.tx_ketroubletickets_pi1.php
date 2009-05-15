@@ -1088,14 +1088,28 @@ function areYouSure(ziel) {
 			$subject .= $this->internal['currentRow']['title'];
 
 			// send notifications to owner
+			
+			// Andreas Kiefer, kiefer@kennziffer.com, 15:15 15.05.2009
+			// don't send if only internal fields are changed, that are configured as "don't send notification" in TS
+			$internalFieldsWithoutNotification = t3lib_div::trimExplode(',', $this->conf['email_notifications.']['internalFieldsWithoutNotification']);
+			// check if only fields without notification are changed
+			$changedInternalFieldsArray = explode(',',$changedInternalFields);
+			$sendNotification = false;
+			foreach ($changedInternalFieldsArray as $internalField) {
+				if (!in_array($internalField, $internalFieldsWithoutNotification)) {
+					$sendNotification = true;
+				}
+			}
+			
 			// (don't send it if the current user is the owner, because the user normally should know that he just changed the ticket.)
 			if ($this->internal['currentRow']['owner_feuser']
 					&& ($this->internal['currentRow']['owner_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
 					&& ( $this->internal['currentRow']['notifications_owner'] == CONST_ONEVERYCHANGE
 						|| ($this->internal['currentRow']['notifications_owner'] == CONST_ONSTATUSCHANGE 
 						|| stristr($changedFields, CONST_ONSTATUSCHANGE))
-						)) {
-
+						)
+					&& $sendNotification==true ) {
+				
 				// get the user data of the owner
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['owner_feuser']);
 
@@ -1119,8 +1133,9 @@ function areYouSure(ziel) {
 					&& ( $this->internal['currentRow']['notifications_responsible'] == CONST_ONEVERYCHANGE
 						|| ($this->internal['currentRow']['notifications_responsible'] == CONST_ONSTATUSCHANGE 
 						|| stristr($changedFields, CONST_ONSTATUSCHANGE))
-					   )) {
-
+					   )
+					&& $sendNotification==true) {
+				
 				// get the user data of the responsible user
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['responsible_feuser']);
 
@@ -1138,11 +1153,12 @@ function areYouSure(ziel) {
 			// send notifications to observers
 			if (strlen($this->internal['currentRow']['observers_feuser'])) {
 				foreach (explode(',', $this->internal['currentRow']['observers_feuser']) as $observer_uid) {
-					if ( $this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
+					if ( ($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
 							|| ($this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE 
 							|| stristr($changedFields, CONST_ONSTATUSCHANGE)
-							)) {
-
+							))
+							&& $sendNotification==true) {
+						
 						// get the user data of the observer
 						$fe_user_data = $this->getFeUserData($observer_uid);
 

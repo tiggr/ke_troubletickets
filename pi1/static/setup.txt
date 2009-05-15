@@ -353,7 +353,11 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	from_email = me@domain.com
 	from_name = TYPO3 Trouble Ticket System
 	fieldList = crdate, title, status, billing, priority, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets
+	# Don't send notification when only the following internal fields are changed (comma seperated list)
+	internalFieldsWithoutNotification = time_used
 }
+
+
 
 # Examples from Kickstarter:
 /*
