@@ -2926,7 +2926,11 @@ function areYouSure(ziel) {
 		// render special marker: is_overdue
 		// set it to 1 if the "until_date" of the current Ticket is in the past
 		$this->markerArray['IS_OVERDUE'] = $this->getFieldContent('is_overdue');
-
+		
+		// render special marker: has_attachment
+		// set it to 1 if the "until_date" of the current Ticket is in the past
+		$this->markerArray['IS_OVERDUE'] = $this->getFieldContent('is_overdue');
+		
 		// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
@@ -3079,6 +3083,14 @@ function areYouSure(ziel) {
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, 'ticket_uid =' . $this->internal['currentRow']['uid'] . $lcObj->enableFields($this->commentsTablename));
 				$number_of_comments =  $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 				return $number_of_comments;
+				break;
+			
+			case 'number_of_attachments':
+				if (empty($this->internal['currentRow']['files'])) 	return 0;
+				else {
+					$attachments = explode(',',$this->internal['currentRow']['files']);
+					return count($attachments);
+				}
 				break;
 
 			case 'comments':
