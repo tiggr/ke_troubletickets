@@ -323,7 +323,7 @@ plugin.tx_ketroubletickets_pi1.listView {
 	headerList = category, title, crdate, from_date, until_date, status, owner_feuser, responsible_feuser, number_of_comments, priority
 	filterList = status, responsible_feuser, category, closed_in_month
 	closed_in_month_dateformat = m/Y
-	csvExportFieldList =  crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments, close_time
+	csvExportFieldList =  uid, crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments, close_time
 	results_at_a_time =
 	maxPages =
 	cropSingleviewPagetitle = 8
