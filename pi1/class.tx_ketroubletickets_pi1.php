@@ -1936,7 +1936,9 @@ function areYouSure(ziel) {
 				);
 
 		// current url
-		$markerArray['CURRENT_URL'] = t3lib_div::linkThisScript();
+		#$markerArray['CURRENT_URL'] = t3lib_div::linkThisScript();
+		$markerArray['CURRENT_URL'] = htmlspecialchars(t3lib_div::getIndpEnv('REQUEST_URI'));
+
 
 		// TODO: link to the current ticket singleview
 		// The single-view of this ticket is defined in the category this ticket belongs to.
