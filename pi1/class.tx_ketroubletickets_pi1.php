@@ -1073,7 +1073,10 @@ function areYouSure(ziel) {
 			} else {
 				$subject = '';
 			}
-
+			
+			// add ticket uid to subject
+			$subject .= '[' . sprintf("%05d",$ticket_uid) . '] ';
+			
 			// add the status to the subject if it has changed
 			// otherwise just add the word "changed"
 			if (stristr($changedFields, CONST_NEWTICKET)) {
