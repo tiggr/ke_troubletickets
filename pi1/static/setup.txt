@@ -355,6 +355,8 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	fieldList = crdate, title, status, billing, priority, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets
 	# Don't send notification when only the following internal fields are changed (comma seperated list)
 	internalFieldsWithoutNotification = time_used
+	# Add ticket UID to notification subject?
+	add_uid_to_subject = 1
 }
 
 

@@ -1074,8 +1074,10 @@ function areYouSure(ziel) {
 				$subject = '';
 			}
 			
-			// add ticket uid to subject
-			$subject .= '[' . sprintf("%05d",$ticket_uid) . '] ';
+			// add ticket uid to subject if set in conf
+			if ($this->conf['email_notifications.']['add_uid_to_subject']) {
+				$subject .= '[' . sprintf("%05d",$ticket_uid) . '] ';
+			}
 			
 			// add the status to the subject if it has changed
 			// otherwise just add the word "changed"
