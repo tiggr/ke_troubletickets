@@ -207,7 +207,14 @@ function areYouSure(ziel) {
 		if (!$GLOBALS['TSFE']->loginUser) {
 				return $this->pi_wrapInBaseClass($this->pi_getLL('error_not_logged_in', 'Please log in.'));
 		}
-
+		
+		// show single view if searchword is ticket UID
+		if ($this->isValidTicketUid($this->piVars['sword'])) {
+			$this->piVars['showUid'] = intval($this->piVars['sword']);
+			$this->piVars['sword'] = '';
+		}
+		
+		
 		// single view / update
 		// get the database entry for the single view / the entry that will be updated.
 		if ( $this->piVars['showUid'] || $this->piVars['updateUid'] )	{
@@ -3720,7 +3727,26 @@ function areYouSure(ziel) {
 
 		return $CropSentence;
 	}/*}}}*/
-
+	
+	
+	
+	/**
+	 * checks if uid is a valid ticket uid
+	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
+	 * @param int $uid
+	 * @return bool
+	 */ 
+	function isValidTicketUid($uid) {
+		$where = 'uid="'.intval($uid).'" ';
+		$where .= $this->cObj->enableFields($this->tablename);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->tablename,$where,$groupBy='',$orderBy='',$limit='');
+		$anz = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		if ($anz) return true;
+		else return false;
+	}
+	
+	
+	
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ke_troubletickets/pi1/class.tx_ketroubletickets_pi1.php'])	{

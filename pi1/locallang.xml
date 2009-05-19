@@ -36,7 +36,7 @@
 			<label index="pi_list_browseresults_next">Next &gt;</label>
 			<label index="pi_list_browseresults_displays">Ticket ###SPAN_BEGIN###%s to %s&lt;/span&gt; (of ###SPAN_BEGIN###%s&lt;/span&gt;)</label>
 			<label index="pi_list_searchBox_search">Search</label>
-			<label index="pi_list_searchBox_default_value">searchword</label>
+			<label index="pi_list_searchBox_default_value">searchword / number</label>
 
 			<label index="pick_a_date">Select date.</label>
 			<label index="more_files">One more file</label>
@@ -226,7 +226,7 @@
 			<label index="pi_list_browseresults_next">Nächste &gt;</label>
 			<label index="pi_list_browseresults_displays">Aufgaben ###SPAN_BEGIN###%s bis %s&lt;/span&gt; (insgesamt ###SPAN_BEGIN###%s&lt;/span&gt;)</label>
 			<label index="pi_list_searchBox_search">Suche</label>
-			<label index="pi_list_searchBox_default_value">Suchbegriff</label>
+			<label index="pi_list_searchBox_default_value">Suchbegriff / Nummer</label>
 
 			<label index="pick_a_date">Datum auswählen.</label>
 			<label index="more_files">Weitere Datei</label>
