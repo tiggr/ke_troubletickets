@@ -269,6 +269,8 @@ function areYouSure(ziel) {
 					$this->filter[$filterName] = $this->piVars[$filterName];
 				}
 			}
+			// go to page 1 if a new filter has been set
+			$this->piVars['pointer'] = 0;
 		}
 
 		// set some default values for the filter
@@ -2845,7 +2847,7 @@ function areYouSure(ziel) {
 
 		// create the search box
 		$this->markerArray['SEARCHBOX'] = $this->pi_list_searchBox();
-
+		
 		// create the result browser
 		$wrapper['disabledLinkWrap'] = '<span class="disable">|</span>';
 		$wrapper['inactiveLinkWrap'] = '<span class="inactive">|</span>';
