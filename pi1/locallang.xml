@@ -146,6 +146,7 @@
 			<label index="LABEL_RESPONSIBLE_FEUSER">Responsible</label>
 			<label index="LABEL_FILTER_CATEGORY">Category</label>
 			<label index="LABEL_ATTACHMENTS">Attachments</label>
+			<label index="LABEL_PERMALINK">Permalink</label>
 			<label index="LABEL_HISTORY">History of changes</label>
 
 			<label index="LABEL_NOTIFICATIONS_OWNER">Notifications to the owner</label>
@@ -335,6 +336,7 @@
 			<label index="LABEL_RESPONSIBLE_FEUSER">Verantwortlich</label>
 			<label index="LABEL_FILTER_CATEGORY">Kategorie</label>
 			<label index="LABEL_ATTACHMENTS">Dateianhänge</label>
+			<label index="LABEL_PERMALINK">Permalink</label>
 			<label index="LABEL_HISTORY">Verlauf d. Änderungen</label>
 
 			<label index="LABEL_NOTIFICATIONS_OWNER">Benachrichtigungen an den Besitzer</label>

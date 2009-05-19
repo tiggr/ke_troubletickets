@@ -1975,7 +1975,13 @@ function areYouSure(ziel) {
 
 		// date2cal js for singleview
 		$markerArray['DATE2CAL_JS'] = $this->date2cal->getMainJS();
-
+		
+		// Permalink URL
+		unset($linkconf);
+		$linkconf['parameter'] = $GLOBALS['TSFE']->id;
+		$linkconf['additionalParams'] = '&tx_ketroubletickets_pi1[showUid]='.$this->piVars['showUid'];
+		$markerArray['PERMALINK_URL'] = $this->cObj->typoLink_URL($linkconf);
+		
 		return $markerArray;
 
 	}/*}}}*/
@@ -3076,7 +3082,7 @@ function areYouSure(ziel) {
 
 				// get the user data from fe_users
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], 'fe_users', 'name,username');
-
+				
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
 					$retval = $this->cleanUpHtmlOutput($retval);
 				}
@@ -3192,7 +3198,7 @@ function areYouSure(ziel) {
 				$imageConf['file'] = $this->getFilePath($imageConf['file']);
 				return $lcObj->IMAGE($imageConf);
 				break;
-
+			
 			case 'from_date':
 			case 'until_date':
 			case 'crdate':
