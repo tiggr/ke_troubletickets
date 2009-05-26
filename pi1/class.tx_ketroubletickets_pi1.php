@@ -3147,7 +3147,7 @@ function switchLatestComment(objectID) {
 				$latest_comment = trim(strip_tags($latest_comment));
 				return $latest_comment;
 				break;
-				
+			
 			case 'related_tickets':
 				// public function renderRelatedTicketListForCurrentTicket($renderLinks = true, $renderDeleteButton = true, $renderWrapDiv = true, $separator = '<br />')
 				if ($renderType == CONST_RENDER_TYPE_CSV) {
@@ -3256,7 +3256,8 @@ function switchLatestComment(objectID) {
 			case 'files':
 				return str_replace(',', ', ',$this->internal['currentRow'][$fieldName]);
 				break;
-
+				
+			
 			case 'category':
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], $this->categoryTablename, 'title');
 				return $retval;

@@ -319,7 +319,7 @@ plugin.tx_ketroubletickets_pi1 {
 
 # Listview defaults
 plugin.tx_ketroubletickets_pi1.listView {
-	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value, number_of_attachments, latest_comment
+	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value, number_of_attachments, latest_comment, files
 	headerList = category, title, crdate, from_date, until_date, status, owner_feuser, responsible_feuser, number_of_comments, priority
 	filterList = status, responsible_feuser, category, closed_in_month
 	closed_in_month_dateformat = m/Y
