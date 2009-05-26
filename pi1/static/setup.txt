@@ -133,12 +133,50 @@ plugin.tx_ketroubletickets_pi1 {
 	
 	# different imges for different mime types (in case a thumbnail cannot be generated) 
 	thumbnailImage.default = IMAGE
-	thumbnailImage.default.file = EXT:ke_troubletickets/res/images/thumb_default.gif
-	thumbnailImage.pdf = IMAGE
-	thumbnailImage.pdf.file = EXT:ke_troubletickets/res/images/thumb_default.gif
+	thumbnailImage.default.file = EXT:ke_troubletickets/res/images/fileicons/default.gif
+	thumbnailImage.avi = IMAGE
+	thumbnailImage.avi.file = EXT:ke_troubletickets/res/images/fileicons/avi.gif
+	thumbnailImage.css = IMAGE
+	thumbnailImage.css.file = EXT:ke_troubletickets/res/images/fileicons/css.gif
+	thumbnailImage.csv = IMAGE
+	thumbnailImage.csv.file = EXT:ke_troubletickets/res/images/fileicons/csv.gif
 	thumbnailImage.doc = IMAGE
-	thumbnailImage.doc.file = EXT:ke_troubletickets/res/images/thumb_default.gif	
-
+	thumbnailImage.doc.file = EXT:ke_troubletickets/res/images/fileicons/doc.gif
+	thumbnailImage.htm = IMAGE
+	thumbnailImage.htm.file = EXT:ke_troubletickets/res/images/fileicons/htm.gif
+	thumbnailImage.html = IMAGE
+	thumbnailImage.html.file = EXT:ke_troubletickets/res/images/fileicons/html.gif
+	thumbnailImage.js = IMAGE
+	thumbnailImage.js.file = EXT:ke_troubletickets/res/images/fileicons/js.gif
+	thumbnailImage.mov = IMAGE
+	thumbnailImage.mov.file = EXT:ke_troubletickets/res/images/fileicons/mov.gif
+	thumbnailImage.mp3 = IMAGE
+	thumbnailImage.mp3.file = EXT:ke_troubletickets/res/images/fileicons/mp3.gif
+	thumbnailImage.mpeg = IMAGE
+	thumbnailImage.mpeg.file = EXT:ke_troubletickets/res/images/fileicons/mpeg.gif
+	thumbnailImage.mpg = IMAGE
+	thumbnailImage.mpg.file = EXT:ke_troubletickets/res/images/fileicons/mpg.gif
+	thumbnailImage.pdf = IMAGE
+	thumbnailImage.pdf.file = EXT:ke_troubletickets/res/images/fileicons/pdf.gif
+	thumbnailImage.psd = IMAGE
+	thumbnailImage.psd.file = EXT:ke_troubletickets/res/images/fileicons/psd.gif
+	thumbnailImage.rtf = IMAGE
+	thumbnailImage.rtf.file = EXT:ke_troubletickets/res/images/fileicons/rtf.gif
+	thumbnailImage.tmpl = IMAGE
+	thumbnailImage.tmpl.file = EXT:ke_troubletickets/res/images/fileicons/tmpl.gif
+	thumbnailImage.ttf = IMAGE
+	thumbnailImage.ttf.file = EXT:ke_troubletickets/res/images/fileicons/ttf.gif
+	thumbnailImage.txt = IMAGE
+	thumbnailImage.txt.file = EXT:ke_troubletickets/res/images/fileicons/txt.gif
+	thumbnailImage.wav = IMAGE
+	thumbnailImage.wav.file = EXT:ke_troubletickets/res/images/fileicons/wav.gif
+	thumbnailImage.xls = IMAGE
+	thumbnailImage.xls.file = EXT:ke_troubletickets/res/images/fileicons/xls.gif
+	thumbnailImage.xml = IMAGE
+	thumbnailImage.xml.file = EXT:ke_troubletickets/res/images/fileicons/xml.gif
+	thumbnailImage.zip = IMAGE
+	thumbnailImage.zip.file = EXT:ke_troubletickets/res/images/fileicons/zip.gif
+	
 	# definition of the input form
 	# 'name' has to be the same as defined in the database
 	formFieldList {
