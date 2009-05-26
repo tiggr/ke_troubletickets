@@ -122,7 +122,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if ($this->conf['includeDefaultCSS']) {
 			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_css'] = '<link rel="stylesheet" type="text/css" href="' . $this->extPath . $this->defaultCSS . '" />';
 		}
-
+		
 		// create instance of the extension library
 		$this->lib = t3lib_div::makeInstance('tx_ketroubletickets_lib');
 
@@ -192,6 +192,14 @@ function areYouSure(ziel) {
 		window.location.href = ziel;
 	}
 }
+
+function switchLatestComment(objectID) {
+	obj = document.getElementById(objectID);
+	if (obj.style.display == \'none\') obj.style.display = \'inline\';
+	else obj.style.display = \'none\';
+}
+
+
 </script>';
 
 		// Some debugging ...
@@ -1478,11 +1486,16 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return string
 	 */
-	public function renderCommentList($ticket_uid, $renderType='') {/*{{{*/
+	public function renderCommentList($ticket_uid, $renderType='', $latest=0) {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
-
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, 'ticket_uid=' . $ticket_uid . $lcObj->enableFields($this->commentsTablename));
+		
+		// build query
+		$where = 'ticket_uid=' . $ticket_uid . $lcObj->enableFields($this->commentsTablename);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where);
+		// overwrite if latest only
+		if ($latest) $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where,$groupBy='',$orderBy='uid desc',$limit=1);
+		
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			if ($renderType != CONST_RENDER_TYPE_CSV) {
 				$content .= '<div class="commentlist">';
@@ -1923,7 +1936,15 @@ function areYouSure(ziel) {
 		} else {
 			$markerArray['UID'] = '';
 		}
-
+		
+		
+		// "CLEAN" UID WITHOUT FORMATTING -- AK 17:18 25.05.2009
+		if (is_array($this->internal['currentRow']) && !empty($this->internal['currentRow']['uid'])) {
+			$markerArray['CLEANUID'] = $this->internal['currentRow']['uid'];
+		} else {
+			$markerArray['CLEANUID'] = '';
+		}
+		
 		// get the label markers from locallang
 		foreach (explode(',', $this->conf['locallangLabelList']) as $labelName) {
 			$markerArray['LABEL_' . trim($labelName)] = $this->pi_getLL('LABEL_' . trim($labelName));
@@ -3114,11 +3135,19 @@ function areYouSure(ziel) {
 					return count($attachments);
 				}
 				break;
-
+			
 			case 'comments':
 				return $this->renderCommentList($this->internal['currentRow']['uid'], $renderType);
 				break;
-
+			
+			case 'latest_comment':
+				// get latest comment 
+				$latest_comment = $this->renderCommentList($this->internal['currentRow']['uid'], $renderType, $latest=1);
+				// strip tags and trim
+				$latest_comment = trim(strip_tags($latest_comment));
+				return $latest_comment;
+				break;
+				
 			case 'related_tickets':
 				// public function renderRelatedTicketListForCurrentTicket($renderLinks = true, $renderDeleteButton = true, $renderWrapDiv = true, $separator = '<br />')
 				if ($renderType == CONST_RENDER_TYPE_CSV) {

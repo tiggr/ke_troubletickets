@@ -148,7 +148,7 @@
 			<label index="LABEL_ATTACHMENTS">Attachments</label>
 			<label index="LABEL_PERMALINK">Permalink</label>
 			<label index="LABEL_HISTORY">History of changes</label>
-
+			
 			<label index="LABEL_NOTIFICATIONS_OWNER">Notifications to the owner</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Notifications to the responsible user</label>
 			<label index="LABEL_NOTIFICATIONS_OBSERVER">Notifications to the observers</label>
@@ -338,7 +338,7 @@
 			<label index="LABEL_ATTACHMENTS">Dateianhänge</label>
 			<label index="LABEL_PERMALINK">Permalink</label>
 			<label index="LABEL_HISTORY">Verlauf d. Änderungen</label>
-
+			
 			<label index="LABEL_NOTIFICATIONS_OWNER">Benachrichtigungen an den Besitzer</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Benachrichtigungen an den verantwortlichen Benutzer</label>
 			<label index="LABEL_NOTIFICATIONS_OBSERVER">Benachrichtigungen an den/die Beobachter</label>
