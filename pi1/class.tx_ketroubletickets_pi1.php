@@ -1093,7 +1093,7 @@ function switchLatestComment(objectID) {
 			
 			// add ticket uid to subject if set in conf
 			if ($this->conf['email_notifications.']['add_uid_to_subject']) {
-				$subject .= '[' . sprintf("%05d",$ticket_uid) . '] ';
+				$subject .= sprintf($this->conf['ticket_uid_formatstring'],$ticket_uid).' ';
 			}
 			
 			// add the status to the subject if it has changed
@@ -1932,7 +1932,7 @@ function switchLatestComment(objectID) {
 
 		// UID
 		if (is_array($this->internal['currentRow']) && !empty($this->internal['currentRow']['uid'])) {
-			$markerArray['UID'] = '[' . sprintf("%05d",$this->internal['currentRow']['uid']) . ']';
+			$markerArray['UID'] = sprintf($this->conf['ticket_uid_formatstring'],$this->internal['currentRow']['uid']);
 		} else {
 			$markerArray['UID'] = '';
 		}
@@ -2669,7 +2669,7 @@ function switchLatestComment(objectID) {
 								$content .= ' ';
 							}
 
-							$linktext = '[' . sprintf("%05d",$row['uid']) . ']';
+							$linktext = sprintf($this->conf['ticket_uid_formatstring'],$row['uid']);
 							$linktext .= ' ' . $row['title'];
 							$linkConf = array(
 									'parameter' => $GLOBALS['TSFE']->id,
@@ -2681,7 +2681,7 @@ function switchLatestComment(objectID) {
 							$content .= ' (' . $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($row['status']))) . ')';
 						} else {
 							if ($content) $content .= $separator;
-							$content .= '[' . sprintf("%05d",$row['uid']) . ']' . ' ' . $row['title'] ;
+							$content .= sprintf($this->conf['ticket_uid_formatstring'],$row['uid']) . ' ' . $row['title'] ;
 						}
 					}
 				}

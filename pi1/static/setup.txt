@@ -118,7 +118,10 @@ plugin.tx_ketroubletickets_pi1 {
 
 	# order of the history entries
 	history_order_by = crdate ASC
-
+	
+	# formatting of ticket UID (sprintf format)
+	ticket_uid_formatstring = [%05d]
+	
 	# some definitions for the comment form
 	comment_cols = 95
 	comment_rows = 15
