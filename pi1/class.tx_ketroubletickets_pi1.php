@@ -2867,9 +2867,11 @@ function areYouSure(ziel) {
 					$fieldConf['prefillWithCurrentUserIfEmpty'] = 0;
 				}
 				$this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, RENDER_EMPTY_DRODOWN_ELEMENT);
+				
+				
 			}
 		}
-
+		
 		// add the filter form markers
 		$this->markerArray['FILTERFORM_NAME'] = $this->ticketformname . '_filter';
 		$this->markerArray['FILTERFORM_ACTION'] = $this->cObj->typoLink_URL(
@@ -2900,7 +2902,18 @@ function areYouSure(ziel) {
 
 		// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
-
+		
+		// check every filter if there is content for every filter, otherwise substitute 
+		// whole filter block subpart with empty content
+		foreach ($this->conf['formFieldList.'] as $fieldConf) {
+			if (t3lib_div::inList(t3lib_div::uniqueList($this->conf['listView.']['filterList']),$fieldConf['name'])) {
+				if ($this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] == '' ) {
+					$content = $this->cObj->substituteSubpart ($content, '###FILTER_BLOCK_' . strtoupper(trim($fieldConf['name'])), '');
+				}
+			}
+		}
+		
+		
 		// Returns the content from the plugin.
 		return $content;
 

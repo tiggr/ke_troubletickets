@@ -362,6 +362,15 @@
 .kett_toolbar_filter select.select_short {width: 75px;}
 .kett_toolbar_filter select option {width: auto; overflow: visible;}
 
+.kett_toolbar_filter .single_filter {
+	float:left; 
+	padding: 0 10px 0 10px; 
+	border-right: 1px dashed #666;
+}
+.kett_toolbar_filter .last_filter {
+	border-right: none;
+}
+
 /* sorting */
 .kett_toolbar_sort { line-height: 16px; font-size: 11px; }
 .kett_toolbar_sort label {

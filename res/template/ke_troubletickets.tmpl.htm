@@ -313,10 +313,37 @@ Ticket History (in Singleview)
   <div class="kett_float_right">
     <div class="kett_toolbar_filter">
       <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
-      <label>###LABEL_STATUS###</label>###FILTER_STATUS### 
-      <label>###LABEL_RESPONSIBLE_FEUSER###</label>###FILTER_RESPONSIBLE_FEUSER### 
-      <label>###LABEL_CLOSED_IN_MONTH###</label>###FILTER_CLOSED_IN_MONTH### 
-      <label>###LABEL_FILTER_CATEGORY###</label>###FILTER_CATEGORY### ###FILTER_SUBMIT###
+		<!-- ###FILTER_BLOCK_STATUS### start -->
+		<div class="single_filter">
+			<label>###LABEL_STATUS###:</label><br />
+			###FILTER_STATUS###
+		</div>
+		<!-- ###FILTER_BLOCK_STATUS### start -->
+		<!-- ###FILTER_BLOCK_RESPONSIBLE_FEUSER### start -->
+		<div class="single_filter">
+			<label>###LABEL_RESPONSIBLE_FEUSER###:</label><br />
+			###FILTER_RESPONSIBLE_FEUSER###
+		</div>
+		<!-- ###FILTER_BLOCK_RESPONSIBLE_FEUSER### end -->
+		<!-- ###FILTER_BLOCK_CLOSED_IN_MONTH### start -->
+		<div class="single_filter">
+			<label>###LABEL_CLOSED_IN_MONTH###:</label><br />
+			###FILTER_CLOSED_IN_MONTH###
+		</div>
+		<!-- ###FILTER_BLOCK_CLOSED_IN_MONTH### end -->
+		<!-- ###FILTER_BLOCK_BILLING### start -->
+		<div class="single_filter">
+			<label>###LABEL_BILLING###:</label><br />
+			###FILTER_BILLING###
+		</div>
+		<!-- ###FILTER_BLOCK_BILLING### end -->
+		<!-- ###FILTER_BLOCK_CATEGORY### start -->
+		<div class="single_filter last_filter">
+			<label>###LABEL_FILTER_CATEGORY###:</label><br />
+			###FILTER_CATEGORY### ###FILTER_SUBMIT###
+		</div>
+		<!-- ###FILTER_BLOCK_CATEGORY### end -->
+		
       </form>
     </div>
   </div>
