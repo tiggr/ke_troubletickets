@@ -96,9 +96,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	var $additionalJS_post = array();	// Additional JavaScript to be printed after the form
 	var $additionalJS_submit = array();	// Additional JavaScript to be executed on submit
     var $PA = array(
-            'itemFormElName' =>  '',
-            'itemFormElValue' => '',
-            );
+		'itemFormElName' =>  '',
+		'itemFormElValue' => '',
+	);
     var $specConf = array();
     var $thisConfig = array();
     var $RTEtypeVal = 'text';
@@ -106,11 +106,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	/**
 	 * Plugin Main Method
 	 *
-	 * @param	string		$content: The content of the PlugIn
+	 * @param	string	$content: The content of the PlugIn
 	 * @param	array		$conf: The PlugIn Configuration
 	 * @return	The content that should be displayed on the website
 	 */
 	public function main($content,$conf)	{/*{{{*/
+		
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
@@ -192,14 +193,6 @@ function areYouSure(ziel) {
 		window.location.href = ziel;
 	}
 }
-
-function switchLatestComment(objectID) {
-	obj = document.getElementById(objectID);
-	if (obj.style.display == \'none\') obj.style.display = \'inline\';
-	else obj.style.display = \'none\';
-}
-
-
 </script>';
 
 		// Some debugging ...
@@ -213,7 +206,7 @@ function switchLatestComment(objectID) {
 
 		// General permission check: This plugin only makes sense if a user is logged in
 		if (!$GLOBALS['TSFE']->loginUser) {
-				return $this->pi_wrapInBaseClass($this->pi_getLL('error_not_logged_in', 'Please log in.'));
+			return $this->pi_wrapInBaseClass($this->pi_getLL('error_not_logged_in', 'Please log in.'));
 		}
 		
 		// show single view if searchword is ticket UID
@@ -261,13 +254,32 @@ function switchLatestComment(objectID) {
 		if ($this->piVars['deleteRelatedTicket']) {
 			$this->removeRelatedTicketFromCurrentTicket($this->piVars['deleteRelatedTicket']);
 		}
-
+		
+		
+		
+		// Initialize sorting
+		// read session data 
+		$this->sessionData = $GLOBALS['TSFE']->fe_user->getKey('ses',$this->prefixId);
+		$sessionVars = $this->sessionData;
+		// set default sort when no sorting chosen and no sorting set in session data
+		if (empty($this->piVars['sort']) && empty($this->sessionData[$GLOBALS['TSFE']->id]['sort'])) {
+			$this->piVars['sort'] = DEFAULT_SORT;
+		}
+		// use sorting from form
+		else if(empty($this->piVars['sort']) && !empty($this->sessionData[$GLOBALS['TSFE']->id]['sort'])) {
+			$this->piVars['sort'] = $this->sessionData[$GLOBALS['TSFE']->id]['sort'];
+		}
+		// store chosen sorting in session
+		$sessionVars[$GLOBALS['TSFE']->id]['sort'] = $this->piVars['sort'];
+		
+		
 		// keep existing filter
 		if ($this->piVars['filter']) {
 			$this->filter = unserialize(base64_decode($this->piVars['filter']));
-			//$this->filter = unserialize($this->piVars['filter']);
 		}
-
+		// if no filter is set use stored data from session
+		else $this->filter = unserialize(base64_decode($this->sessionData[$GLOBALS['TSFE']->id]['filter']));
+		
 		// a new filter for listview is set
 		if ($this->piVars['filter_submit']) {
 			$this->filter = array();
@@ -280,18 +292,27 @@ function switchLatestComment(objectID) {
 			// go to page 1 if a new filter has been set
 			$this->piVars['pointer'] = 0;
 		}
-
+		
 		// set some default values for the filter
 		// TODO: Should be configurable in Typoscript in future versions
-		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'all_not_closed';
+		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'all_not_closed'; // AK 18:17 27.05.2009
 		if ($this->ffdata['view'] == 'TEASER_OWN') {
 			$this->filter['responsible_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
-
+		
 		// save the filter in piVars
 		// Use base64 because the serialized value contains quotes
 		$this->piVars['filter'] = base64_encode(serialize($this->filter));
-
+		
+		// store chosen filter in session
+		$sessionVars[$GLOBALS['TSFE']->id]['filter'] = $this->piVars['filter'];
+		
+		// store session data
+		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->prefixId, $sessionVars);
+		$GLOBALS['TSFE']->storeSessionData();
+		
+		
+		
 		// Render the main content:
 		// Single View / New Ticket
 		// or List View
@@ -2726,12 +2747,8 @@ function switchLatestComment(objectID) {
 		if (!isset($this->piVars['pointer'])) {
 			$this->piVars['pointer']=0;
 		}
-
-		// Initialize sorting
-		if (empty($this->piVars['sort'])) {
-			$this->piVars['sort'] = DEFAULT_SORT;
-		}
-
+		
+		
 		// Initializing the query parameters:
 
 		// Tablename
@@ -3769,13 +3786,17 @@ function switchLatestComment(objectID) {
 	 * @return bool
 	 */ 
 	function isValidTicketUid($uid) {
+		// uid cannot be zero or negative
+		if ($uid<=0) return false;
+		
+		// check if ticket uid can be found in db
 		$where = 'uid="'.intval($uid).'" ';
 		$where .= $this->cObj->enableFields($this->tablename);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->tablename,$where,$groupBy='',$orderBy='',$limit='');
-		$anz = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-		if ($anz) return true;
-		else return false;
+		$num = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		return $num ? true : false;
 	}
+	
 	
 	
 	
