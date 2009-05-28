@@ -3373,12 +3373,14 @@ function areYouSure(ziel) {
 	function pi_list_searchBox($tableParams='')	{/*{{{*/
 		// if no searchword is set, use the default value from locallang
 		$searchword = $this->piVars['sword'] ? htmlspecialchars($this->piVars['sword']) : $this->pi_getLL('pi_list_searchBox_default_value', 'searchword');
-
+		
 		$sTables = '<div'.$this->pi_classParam('searchbox').'>'
 			. '<form action="'. $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id)) .'" method="post" name="ke_troubletickets_searchbox">'
 				. '<input type="text" name="'.$this->prefixId.'[sword]" value="' . $searchword . '"'.$this->pi_classParam('searchbox-sword').' onFocus="document.ke_troubletickets_searchbox.elements[0].value=\'\'" />'
 				. '<input type="submit" value="'.$this->pi_getLL('pi_list_searchBox_search','Search',TRUE).'"'.$this->pi_classParam('searchbox-button').' />'
 				. '<input type="hidden" name="'.$this->prefixId.'[pointer]" value="" />'
+				. '<input type="hidden" name="'.$this->prefixId.'[sort]" value="'.$this->piVars['sort'].'" />'
+				. '<input type="hidden" name="'.$this->prefixId.'[filter]" value="'.$this->piVars['filter'].'" />'
 			. '</form></div>';
 
 		return $sTables;
