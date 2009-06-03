@@ -354,6 +354,7 @@ plugin.tx_ketroubletickets_pi1 {
 			size = 1
 			multiple = 0
 			#css_class = select_short
+			doNotSaveInDB = 1
 		}
 	}
 }

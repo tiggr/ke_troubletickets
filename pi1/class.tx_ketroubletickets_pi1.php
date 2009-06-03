@@ -473,9 +473,16 @@ function areYouSure(ziel) {
 
 		// handle each of the submitted fields as defined in the typoscript setup
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-			// ignore the submit-field
-			if ($fieldConf['type'] != 'submit') {
-
+			
+			// ignore the submit-field and
+			// ignore internal fields if not permitted for current user
+			// and ignore fields that are configured as "doNotSaveInDB = 1"
+			if ( 
+				$fieldConf['type'] != 'submit'
+				&& (!$fieldConf['internal'] || $this->isUserInternalUser($GLOBALS['TSFE']->fe_user->user['uid']))
+				&& !$fieldConf['doNotSaveInDB'] 
+			) {
+				
 				// required-check
 				if ($fieldConf['required'] && empty($this->piVars[$fieldConf['name']])) {
 					$this->formErrors[] = $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end');
@@ -496,7 +503,7 @@ function areYouSure(ziel) {
 				}
 
 				// generate the db-insert values
-				if (!empty($this->piVars[$fieldConf['name']]) || $fieldConf['type'] == 'files') {
+				#if (!empty($this->piVars[$fieldConf['name']]) || $fieldConf['type'] == 'files') {
 
 					// combine the "file" type fields --> use the already set value as default value for the next round
 					if ($fieldConf['type'] == 'files') {
@@ -511,7 +518,7 @@ function areYouSure(ziel) {
 
 					// parse and clean up the submitted value
 					$this->insertFields[$fieldConf['name']] = $this->generateDBInsertValue($fieldConf, $defaultValue);
-				}
+				#}
 			}
 		}
 
@@ -527,31 +534,31 @@ function areYouSure(ziel) {
 
 		// if everything is OK, insert the ticket into the database or update it
 		if (!count($this->formErrors)) {
-
 			if (!$this->piVars['updateUid']) {
 				$GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $this->insertFields);
 				$new_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 				$this->addHistoryEntry( array(
-							'ticket_uid' => $new_uid,
-							'databasefield' => '',
-							'value_old' => '',
-							'value_new' => $this->pi_getLL('history_new_ticket', 'new')
-							));
-
+					'ticket_uid' => $new_uid,
+					'databasefield' => '',
+					'value_old' => '',
+					'value_new' => $this->pi_getLL('history_new_ticket', 'new')
+					));
 				// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($new_uid, CONST_NEWTICKET);
-
 			} else {
 
 				// go through the form fields and check what has changend
 				// add a history entry for every change
 				$changedFields = '';
 				$changedInternalFields = '';
-
+				
+				$GLOBALS['TYPO3_DB']->debugOutput = true;
+				
 				foreach ($this->conf['formFieldList.'] as $fieldConf) {
 					$value_old = $this->internal['currentRow'][$fieldConf['name']];
 					$value_new = $this->insertFields[$fieldConf['name']];
-					if ( (!empty($value_new) && !empty($value_new)) && ($value_old != $value_new)) {
+					#if ( (!empty($value_new) && !empty($value_new)) && ($value_old != $value_new)) {
+					if ( !empty($value_new) && ($value_old != $value_new)) {
 						$this->addHistoryEntry( array(
 									'ticket_uid' => $this->internal['currentRow']['uid'],
 									'databasefield' => $fieldConf['name'],
@@ -1569,7 +1576,7 @@ function areYouSure(ziel) {
 	 */
 	public function generateDBInsertValue($fieldConf, $returnValue = '') {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
-
+		
 		switch ($fieldConf['type']) {
 
 			case 'textareaRTE':
@@ -1637,7 +1644,7 @@ function areYouSure(ziel) {
 			case 'date':
 				// parse the date to a timestamp
 				$timestamp = strtotime($this->piVars[$fieldConf['name']]);
-				if (!$timestamp) {
+				if (!$timestamp && $fieldConf['required']) {
 					$this->formErrors[] = $this->pi_getLL('formerror_date');
 				} else {
 					$returnValue = $timestamp;
