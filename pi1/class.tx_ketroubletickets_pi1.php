@@ -1853,7 +1853,12 @@ function areYouSure(ziel) {
 
 		// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
-
+		
+		// overwrite subpart in toolbar with empty ocntent if we create a new ticket
+		if (empty($this->piVars['showUid']) && empty($this->piVars['updateUid'])) {
+			$content = $this->cObj->substituteSubpart ($content, '###TOOLBAR_EDITONLY###', '');
+		}
+		
 		return $content;
 	}/*}}}*/
 
