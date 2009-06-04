@@ -48,7 +48,7 @@
 			<label index="formerror_has_been_deleted"> has been deleted.</label>
 			<label index="formerror_hours">Please enter the amount of hours correctly (for example 1,5).</label>
 			<label index="formerror_could_not_create_related_ticket">Relation to ticket could not be created.</label>
-
+			
 			<label index="error_date2cal_not_loaded">Error: The extension date2cal has to be installed.</label>
 			<label index="error_no_tickets_found">No tickets have been found.</label>
 			<label index="error_no_template">Error: No static template has been found. Did you include the static template?</label>
@@ -57,7 +57,11 @@
 			<label index="error_file_too_big">Error: The file is too big.</label>
 			<label index="error_filetype_not_allowed">Error: This filetype is not allowed.</label>
 			<label index="error_file_upload_not_successful">Error: File could not be uploaded.</label>
-
+			
+			<label index="status_fields_only">Your changes have been saved.</label>
+			<label index="status_comment_only">Your comment has been saved.</label>
+			<label index="status_fields_and_comment">Your changes and your comment have been saved.</label>
+			
 			<label index="link_to_new_ticket">Create new ticket</label>
 			<label index="back_to_listview">Back</label>
 			<label index="altText_edit">Edit ticket</label>
@@ -238,7 +242,7 @@
 			<label index="formerror_has_been_deleted"> wurde gelöscht.</label>
 			<label index="formerror_hours">Bitte geben Sie die Stundenzahl korrekt ein (z. B. 1,5).</label>
 			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Ticket konnte nicht erstellt werden.</label>
-
+			
 			<label index="error_date2cal_not_loaded">Fehler: Die Erweiterung date2cal muss installiert sein.</label>
 			<label index="error_no_tickets_found">Es wurden keine Aufgaben gefunden.</label>
 			<label index="error_no_template">Fehler: Es wurde kein Template gefunden. Wurde das statische Template eingebunden?</label>
@@ -247,7 +251,11 @@
 			<label index="error_file_too_big">Fehler: Die Datei ist zu groß.</label>
 			<label index="error_filetype_not_allowed">Fehler: Dieser Dateityp ist nicht erlaubt.</label>
 			<label index="error_file_upload_not_successful">Fehler: Die Datei konnte nicht hochgeladen werden.</label>
-
+			
+			<label index="status_fields_only">Ihre Änderungen wurden gespeichert.</label>
+			<label index="status_comment_only">Ihr Kommentar wurde gespeichert.</label>
+			<label index="status_fields_and_comment">Ihre Änderungen und Ihr Kommentar wurden gespeichert.</label>
+			
 			<label index="link_to_new_ticket">Neue Aufgabe eröffnen</label>
 			<label index="back_to_listview">Zurück</label>
 			<label index="altText_edit">Aufgabe bearbeiten</label>

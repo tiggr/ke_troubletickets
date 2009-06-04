@@ -110,7 +110,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @param	array		$conf: The PlugIn Configuration
 	 * @return	The content that should be displayed on the website
 	 */
-	public function main($content,$conf)	{/*{{{*/
+	public function main($content,$conf) {/*{{{*/
 		
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
@@ -311,8 +311,6 @@ function areYouSure(ziel) {
 		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->prefixId, $sessionVars);
 		$GLOBALS['TSFE']->storeSessionData();
 		
-		
-		
 		// Render the main content:
 		// Single View / New Ticket
 		// or List View
@@ -327,7 +325,7 @@ function areYouSure(ziel) {
 			$this->cleanUpPiVars();
 			$content .= $this->listView();
 		}
-
+		
 		return $this->pi_wrapInBaseClass($content);
 	}/*}}}*/
 
@@ -470,7 +468,7 @@ function areYouSure(ziel) {
 			}
 
 		}
-
+		
 		// handle each of the submitted fields as defined in the typoscript setup
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 			
@@ -534,8 +532,8 @@ function areYouSure(ziel) {
 
 		// if everything is OK, insert the ticket into the database or update it
 		if (!count($this->formErrors)) {
-			if (!$this->piVars['updateUid']) {
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $this->insertFields);
+			if (!$this->piVars['updateUid']) { // new ticket
+				$saveFieldsSatus = $GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $this->insertFields) ? true : false;
 				$new_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 				$this->addHistoryEntry( array(
 					'ticket_uid' => $new_uid,
@@ -545,14 +543,12 @@ function areYouSure(ziel) {
 					));
 				// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($new_uid, CONST_NEWTICKET);
-			} else {
+			} else { // update ticket
 
 				// go through the form fields and check what has changend
 				// add a history entry for every change
 				$changedFields = '';
 				$changedInternalFields = '';
-				
-				$GLOBALS['TYPO3_DB']->debugOutput = true;
 				
 				foreach ($this->conf['formFieldList.'] as $fieldConf) {
 					$value_old = $this->internal['currentRow'][$fieldConf['name']];
@@ -590,12 +586,12 @@ function areYouSure(ziel) {
 					}
 				}
 
-				// If a commented has been submitted, process it now.
+				// If a comment has been submitted, process it now.
 				// Comments are not normal fields but have an own table, so we
 				// cannot process them like the ticket fields.
 				// Remember the fields that have changed for the notification mail.
 				if (isset($this->piVars['content']) && !empty($this->piVars['content'])) {
-					$this->handleSubmittedCommentForm();
+					$saveCommentStatus = $this->handleSubmittedCommentForm();
 
 					// if the ticket is currently is closed, re-open it.
 					if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
@@ -623,11 +619,39 @@ function areYouSure(ziel) {
 					}
 
 				}
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], $this->insertFields);
+				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], $this->insertFields) ? true : false;
 
 				// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($this->internal['currentRow']['uid'], $changedFields, $changedInternalFields);
 			}
+			
+			// check if saving of fields and comments went fine 
+			// and set status texts
+			// fields changed and new comment
+			if (( !empty($changedFields) && strstr($changedFields,CONST_NEWCOMMENT) && trim($changedFields) != CONST_NEWCOMMENT )
+				|| ( !empty($changedInternalFields) && (strstr($changedFields,CONST_NEWCOMMENT)))) {
+				if ($saveFieldsStatus && $saveCommentStatus) {
+					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
+					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_and_comment');
+				}
+			}
+			// new comment only 
+			else if (empty($changedInternalFields) && trim($changedFields) == CONST_NEWCOMMENT) {
+				if ($saveCommentStatus) {
+					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
+					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_comment_only');
+				}
+			}
+			// fields changed
+			else if ((!empty($changedFields) && !strstr($changedFields,CONST_NEWCOMMENT)) || !empty($changedInternalFields)) {
+				if ($saveFieldsStatus) {
+					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
+					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_only');
+				}
+			}
+			
+			
+			
 		}
 	}/*}}}*/
 
@@ -644,7 +668,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return void
 	 */
-	public function removeFileFromTicket($filename) {/*{{{*/
+	public function removeFileFromTicket($filename) { /*{{{*/
 		$deleteAllowed = false;
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 
@@ -780,7 +804,7 @@ function areYouSure(ziel) {
 	 * handle the incoming post data of a submitted comment form
 	 *
 	 * @access public
-	 * @return void
+	 * @return bool $status
 	 */
 	public function handleSubmittedCommentForm() {/*{{{*/
 		// set the crdate
@@ -809,7 +833,7 @@ function areYouSure(ziel) {
 		$commentInsertFields['content'] = $this->lib->getNameListFromUidList($commentInsertFields['feuser_uid'], 'fe_users', 'name,username') . ': ' . $this->sanitizeData($this->piVars['content']);
 
 		// insert the comment
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery($this->commentsTablename, $commentInsertFields);
+		$status = $GLOBALS['TYPO3_DB']->exec_INSERTquery($this->commentsTablename, $commentInsertFields) ? true : false;
 
 		// add a history entry
 		$this->addHistoryEntry( array(
@@ -818,6 +842,8 @@ function areYouSure(ziel) {
 					'value_old' => '',
 					'value_new' => $this->pi_getLL('history_new_comment', 'new comment')
 					));
+		
+		return $status;
 	}/*}}}*/
 
 	/**
@@ -1589,6 +1615,7 @@ function areYouSure(ziel) {
 			break;
 
 			case 'inputHoursToMinutes':
+				if (empty($this->piVars[$fieldConf['name']])) return '';
 				// convert the hours to minutes
 				$hours = floatval(str_replace(',','.',$this->piVars[$fieldConf['name']]));
 				$returnValue = round( $hours * 60 );
@@ -2923,6 +2950,12 @@ function areYouSure(ziel) {
 					$content = $this->cObj->substituteSubpart ($content, '###FILTER_BLOCK_' . strtoupper(trim($fieldConf['name'])), '');
 				}
 			}
+		}
+		
+		
+		// overwrite status message subpart if no status message is set
+		if (empty($this->markerArray['STATUS_MESSAGE_TEXT'])) {
+			$content = $this->cObj->substituteSubpart ($content, '###STATUS_MESSAGE###', '');
 		}
 		
 		

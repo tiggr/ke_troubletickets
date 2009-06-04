@@ -642,3 +642,17 @@
   font-weight:bold; 
   vertical-align:middle;
   }
+  
+  
+/* Status message after saving */
+.tx-ketroubletickets-pi1 .kett_status  { 
+	padding: 5px;
+	font-weight: bold;
+	margin: 0 0 5px;
+	font-size: 12px;
+}
+.tx-ketroubletickets-pi1  .status_ok { 
+	background: #A2EF68;
+	border: 1px solid #025600;
+	background: #33c92f url(../images/status_message_bgr.gif) top left repeat-x;
+}
