@@ -527,8 +527,6 @@ function areYouSure(ziel) {
 			}
 		}
 
-		debug($this->insertFields, 'insertFields');
-		
 		// if there are errors, delete the uploaded files
 		// don't delete when UPDATING a ticket
 		if (!$this->piVars['updateUid']) {
