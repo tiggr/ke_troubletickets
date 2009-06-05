@@ -180,6 +180,7 @@ plugin.tx_ketroubletickets_pi1 {
 	thumbnailImage.zip = IMAGE
 	thumbnailImage.zip.file = EXT:ke_troubletickets/res/images/fileicons/zip.gif
 	
+	
 	# definition of the input form
 	# 'name' has to be the same as defined in the database
 	formFieldList {
@@ -189,6 +190,9 @@ plugin.tx_ketroubletickets_pi1 {
 			orderBy = username
 			required = 0
 			prefillWithCurrentUserIfEmpty = 1
+			# the owner is set only by creating a new ticket 
+			# and must not be changed when updating a ticket
+			doNotSaveInDB = 1
 		}
 		10 {
 			name = title

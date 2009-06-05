@@ -270,10 +270,10 @@
 			<label index="are_you_sure_delete">Sind Sie sicher?</label>
 			<label index="email_text_type_new">Eine neue Aufgabe wurde eröffnet.</label>
 			<label index="email_text_type_changed">Die Aufgabe wurde geändert.</label>
-			<label index="email_text_type_closed">Die Aufgabe wurde geschlossen.</label>
+			<label index="email_text_type_closed">Die Aufgabe wurde erledigt.</label>
 			<label index="email_text_type_new_with_user">hat eine neue Aufgabe eröffnet.</label>
 			<label index="email_text_type_changed_with_user">hat diese Aufgabe geändert.</label>
-			<label index="email_text_type_closed_with_user">hat diese Aufgabe geschlossen.</label>
+			<label index="email_text_type_closed_with_user">hat diese Aufgabe erledigt.</label>
 			<label index="email_text_fields_have_changed">Diese Felder wurden geändert:</label>
 			<label index="email_text_user">Benutzer</label>
 			<label index="email_subject_type_changed">Geändert</label>
@@ -289,7 +289,7 @@
 			<label index="SELECTLABEL_3">hoch</label>
 
 			<label index="SELECTLABEL_OPEN_AND_WORKING">offen und in Bearbeitung</label>
-			<label index="SELECTLABEL_ALL_NOT_CLOSED">alle nicht geschlossenen</label>
+			<label index="SELECTLABEL_ALL_NOT_CLOSED">alle nicht erledigten</label>
 			<label index="SELECTLABEL_ALL">alle</label>
 			<label index="SELECTLABEL_OPEN">offen</label>
 			<label index="SELECTLABEL_WORKING">in Bearbeitung</label>
@@ -327,7 +327,7 @@
 			<label index="LABEL_UNTIL_DATE">Zu erledigen bis</label>
 			<label index="LABEL_FROM_DATE">Geplant ab</label>
 			<label index="LABEL_CRDATE">Erstellt am</label>
-			<label index="LABEL_CLOSE_TIME">Geschlossen am</label>
+			<label index="LABEL_CLOSE_TIME">Erledigt am</label>
 			<label index="LABEL_TO">Zu erledigen bis</label>
 			<label index="LABEL_TIME_USED">Zeitaufwand tatsächlich (in Std.)</label>
 			<label index="LABEL_TIME_PLANNED">Zeitaufwand geplant (in Std.)</label>
@@ -367,7 +367,7 @@
 			<label index="LABEL_SORTING">Sortierung</label>
 			<label index="LABEL_MODE_SELECTOR">Zeige</label>
 			<label index="LABEL_INTERNAL">INTERN</label>
-			<label index="LABEL_CLOSED_IN_MONTH">Geschlossen in</label>
+			<label index="LABEL_CLOSED_IN_MONTH">Erledigt in</label>
 
 			<label index="LABEL_NOT_AVAILABLE">n/a</label>
 		
