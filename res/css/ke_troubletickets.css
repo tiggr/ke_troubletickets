@@ -331,7 +331,6 @@
 .kett_toolbar_filter label {
   font-size: 11px;
   font-weight: bold;
-  float: left;
   display: block;
   padding: 0 5px 0 0;
   line-height: 16px;
@@ -419,6 +418,23 @@
   float: left;
   }
 
+/* Entries per page select */
+.kett_entries_per_page {
+	font-size: 11px;
+	line-height:18px;
+	float: left;
+	padding: 0 0 0 11px;
+	margin: 0 0 0 11px;
+	border-left: 1px dashed #8F8F8F;
+}
+.kett_entries_per_page label{
+	float: left;
+}
+.kett_entries_per_page form{
+	float: left;
+	padding: 0 0 0 4px;
+}
+  
 /* Listview Pagebrowser */
 .tx-ketroubletickets-pi1-browsebox {
   background:#DADADA url(../images/css_gradient1.gif) repeat-x scroll left top;
@@ -656,3 +672,4 @@
 	border: 1px solid #025600;
 	background: #33c92f url(../images/status_message_bgr.gif) top left repeat-x;
 }
+

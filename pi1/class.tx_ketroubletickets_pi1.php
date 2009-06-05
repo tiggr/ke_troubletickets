@@ -255,8 +255,6 @@ function areYouSure(ziel) {
 			$this->removeRelatedTicketFromCurrentTicket($this->piVars['deleteRelatedTicket']);
 		}
 		
-		
-		
 		// Initialize sorting
 		// read session data 
 		$this->sessionData = $GLOBALS['TSFE']->fe_user->getKey('ses',$this->prefixId);
@@ -306,6 +304,15 @@ function areYouSure(ziel) {
 		
 		// store chosen filter in session
 		$sessionVars[$GLOBALS['TSFE']->id]['filter'] = $this->piVars['filter'];
+		
+		
+		// Entries per page - get value from form or from session
+		if (!$this->piVars['entries_per_page'] && $this->sessionData[$GLOBALS['TSFE']->id]['entries_per_page']) {
+			$this->piVars['entries_per_page'] = $this->sessionData[$GLOBALS['TSFE']->id]['entries_per_page'];
+		}
+		
+		// store entries per page in session
+		$sessionVars[$GLOBALS['TSFE']->id]['entries_per_page'] = $this->piVars['entries_per_page'];
 		
 		// store session data
 		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->prefixId, $sessionVars);
@@ -2798,7 +2805,8 @@ function areYouSure(ziel) {
 
 		// Number of results to show in a listing.
 		$this->internal['results_at_a_time']=t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,10);
-
+		if ($this->piVars['entries_per_page']) $this->internal['results_at_a_time'] = $this->piVars['entries_per_page'];
+		
 		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
 		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;
 
@@ -2932,6 +2940,10 @@ function areYouSure(ziel) {
 		$wrapper['inactiveLinkWrap'] = '<span class="inactive">|</span>';
 		$wrapper['activeLinkWrap'] = '<span'.$this->pi_classParam('browsebox-SCell').'>|</span>';
 		$wrapper['browseLinksWrap'] = '<div class="browseLinks">|</div>';
+		$wrapper['browseLinksWrap'] .= '<div class="kett_entries_per_page">';
+		$wrapper['browseLinksWrap'] .= '<label>'. $this->pi_getLL('LABEL_ENTRIES_PER_PAGE').'</label>';
+		$wrapper['browseLinksWrap'] .= $this->getEntriesPerPageSelection();
+		$wrapper['browseLinksWrap'] .= '</div>';
 		$wrapper['showResultsWrap'] = '<p class="resultText">|</p>';
 		$wrapper['browseBoxWrap'] = '<div '.$this->pi_classParam('browsebox').'> | </div>';
 		$this->markerArray['PAGEBROWSER'] = $this->pi_list_browseresults(1, '', $wrapper);
@@ -3858,6 +3870,27 @@ function areYouSure(ziel) {
 	}
 	
 	
+	/**
+	 * Description:
+	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
+	 *
+	 */ 
+	 function getEntriesPerPageSelection() {
+		$formAction = $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id));
+		$fieldContent .= '<form method="post" action="'.$formAction.'"><select name="'.$this->prefixId.'[entries_per_page]" onchange="this.form.submit();">';
+		$entriesPerPageOptions = explode(',',trim($this->conf['listView.']['entries_per_page_options']));
+		foreach ($entriesPerPageOptions as $opt) {
+			$fieldContent .= '<option value="'.$opt.'" ';
+			if ($this->piVars['entries_per_page'] == $opt) $fieldContent .= ' selected="selected" ';
+			$fieldContent .= '>'.$opt.'</option>';
+		}
+		$fieldContent .= '</select>';
+		$fieldContent .= '<input type="hidden" name="'.$this->prefixId.'[filter]" value="'.$this->piVars['filter'].'">';
+		$fieldContent .= '<input type="hidden" name="'.$this->prefixId.'[sorting]" value="'.$this->piVars['sorting'].'">';
+		$fieldContent .= '<input type="hidden" name="'.$this->prefixId.'[pointer]" value="0">';
+		$fieldContent .= '</form>';
+		return $fieldContent;
+	}
 	
 	
 }

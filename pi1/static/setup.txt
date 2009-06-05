@@ -366,12 +366,13 @@ plugin.tx_ketroubletickets_pi1.listView {
 	filterList = status, responsible_feuser, category, closed_in_month, billing
 	closed_in_month_dateformat = m/Y
 	csvExportFieldList =  uid, crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments, close_time
-	results_at_a_time =
+	results_at_a_time = 
 	maxPages =
 	cropSingleviewPagetitle = 8
 	cropDescription = 400
 	templateSubpart = ###LISTVIEW###
 	templateSubpartRow = ###LISTVIEW_SINGLE_ROW###
+	entries_per_page_options = 10,20,50
 }
 
 plugin.tx_ketroubletickets_pi1.teaserView < plugin.tx_ketroubletickets_pi1.listView
