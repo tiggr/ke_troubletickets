@@ -196,7 +196,7 @@ function areYouSure(ziel) {
 </script>';
 
 		// Some debugging ...
-		// debug($this->piVars);
+		#debug($this->piVars);
 		// debug(t3lib_div::_POST());
 		// debug($GLOBALS['TSFE']->fe_user->user);
 		// debug($GLOBALS['TSFE']->loginUser);
@@ -440,6 +440,7 @@ function areYouSure(ziel) {
 	 * @return void
 	 */
 	public function handleSubmittedForm() {/*{{{*/
+		
 		// set some values for NEW tickets
 		// and UPDATED tickets
 		if ($this->piVars['newticket']) {
@@ -1642,8 +1643,6 @@ function areYouSure(ziel) {
 				} else {
 					$returnValue .= $this->piVars[$fieldConf['name']];
 				}
-				
-				if ($this->piVars['updateUid'])
 				
 				//debug ($fieldConf['name'] . ', ' . $fieldConf['type'] . ', ' . $fieldConf['multiple'] . ': ' . $returnValue);
 			break;
