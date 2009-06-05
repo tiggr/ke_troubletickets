@@ -23,9 +23,9 @@ plugin.tx_ketroubletickets_pi1 {
 	# Status and Priority Names are stored in locallang
 	# remember to adjust the TCA (tca.php), too, if you change these values
 	# statusList = open,acknowledged,working,closed,onhold,wait,offer
-	statusList = open,working,closed,onhold,wait,offer
+	statusList = open,working,closed,onhold,wait
 	priorityList = 2,1,3
-	billingList = open,service,invoice,service_invoice
+	billingList = open,service,invoice,offer
 	notificationBehaviorList = oneverychange,onstatuschange,never
 	priorityWrap.1 = 
 	priorityWrap.2 = <span style="color:#ffcc00;">|</span>
