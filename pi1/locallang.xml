@@ -299,10 +299,10 @@
 			<label index="SELECTLABEL_WAIT">warten</label>
 			<label index="SELECTLABEL_OFFER">Angebot</label>
 
-			<label index="SELECTLABEL_SERVICE">Pflege</label>
-			<label index="SELECTLABEL_INVOICE">zu berechnen</label>
+			<label index="SELECTLABEL_SERVICE">Service</label>
+			<label index="SELECTLABEL_INVOICE">Angebot</label>
 			<label index="SELECTLABEL_INVOICE_IS_DONE">ist berechnet</label>
-			<label index="SELECTLABEL_SERVICE_INVOICE">Pflege (zu berechnen)</label>
+			<label index="SELECTLABEL_SERVICE_INVOICE">Pflege</label>
 
 			<label index="SELECTLABEL_ONEVERYCHANGE">Bei jeder Änderung</label>
 			<label index="SELECTLABEL_ONSTATUSCHANGE">Bei Änderung des Status</label>
