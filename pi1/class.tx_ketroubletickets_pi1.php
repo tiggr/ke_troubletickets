@@ -541,7 +541,7 @@ function areYouSure(ziel) {
 		// if everything is OK, insert the ticket into the database or update it
 		if (!count($this->formErrors)) {
 			if (!$this->piVars['updateUid']) { // new ticket
-				$saveFieldsSatus = $GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $this->insertFields) ? true : false;
+				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $this->insertFields) ? true : false;
 				$new_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 				$this->addHistoryEntry( array(
 					'ticket_uid' => $new_uid,
@@ -551,6 +551,11 @@ function areYouSure(ziel) {
 					));
 				// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($new_uid, CONST_NEWTICKET);
+				// status message after saving new ticket
+				if ($saveFieldsStatus) {
+					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
+					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_new_ticket');
+				}
 			} else { // update ticket
 
 				// go through the form fields and check what has changend
@@ -631,34 +636,33 @@ function areYouSure(ziel) {
 
 				// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($this->internal['currentRow']['uid'], $changedFields, $changedInternalFields);
-			}
-			
-			// check if saving of fields and comments went fine 
-			// and set status texts
-			// fields changed and new comment
-			if (( !empty($changedFields) && strstr($changedFields,CONST_NEWCOMMENT) && trim($changedFields) != CONST_NEWCOMMENT )
-				|| ( !empty($changedInternalFields) && (strstr($changedFields,CONST_NEWCOMMENT)))) {
-				if ($saveFieldsStatus && $saveCommentStatus) {
-					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
-					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_and_comment');
+				
+				// check if saving of fields and comments went fine 
+				// and set status texts
+				// fields changed and new comment
+				if (( !empty($changedFields) && strstr($changedFields,CONST_NEWCOMMENT) && trim($changedFields) != CONST_NEWCOMMENT )
+					|| ( !empty($changedInternalFields) && (strstr($changedFields,CONST_NEWCOMMENT)))) {
+					if ($saveFieldsStatus && $saveCommentStatus) {
+						$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
+						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_and_comment');
+					}
 				}
-			}
-			// new comment only 
-			else if (empty($changedInternalFields) && trim($changedFields) == CONST_NEWCOMMENT) {
-				if ($saveCommentStatus) {
-					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
-					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_comment_only');
+				// new comment only 
+				else if (empty($changedInternalFields) && trim($changedFields) == CONST_NEWCOMMENT) {
+					if ($saveCommentStatus) {
+						$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
+						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_comment_only');
+					}
 				}
-			}
-			// fields changed
-			else if ((!empty($changedFields) && !strstr($changedFields,CONST_NEWCOMMENT)) || !empty($changedInternalFields)) {
-				if ($saveFieldsStatus) {
-					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
-					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_only');
+				// fields changed
+				else if ((!empty($changedFields) && !strstr($changedFields,CONST_NEWCOMMENT)) || !empty($changedInternalFields)) {
+					if ($saveFieldsStatus) {
+						$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
+						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_only');
+					}
 				}
+				
 			}
-			
-			
 			
 		}
 	}/*}}}*/
