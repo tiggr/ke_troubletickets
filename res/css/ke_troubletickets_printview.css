@@ -1,0 +1,16 @@
+/* hide all elements in printview  */ 
+html * {
+	visibility: hidden;
+}
+
+/* only troubletickets elements are visible  */ 
+html .tx-ketroubletickets-pi1  * { 
+	visibility: visible;
+}
+
+/* move troubletickets content to top left  */ 
+.tx-ketroubletickets-pi1 {
+	position: absolute;
+	left:0;
+	top:0;
+}

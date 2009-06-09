@@ -153,6 +153,7 @@
 			<label index="LABEL_ATTACHMENTS">Attachments</label>
 			<label index="LABEL_PERMALINK">Permalink</label>
 			<label index="LABEL_HISTORY">History of changes</label>
+			<label index="LABEL_PRINTLINK">Printview</label>
 			
 			<label index="LABEL_NOTIFICATIONS_OWNER">Notifications to the owner</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Notifications to the responsible user</label>
@@ -331,8 +332,8 @@
 			<label index="LABEL_CRDATE">Erstellt am</label>
 			<label index="LABEL_CLOSE_TIME">Erledigt am</label>
 			<label index="LABEL_TO">Zu erledigen bis</label>
-			<label index="LABEL_TIME_USED">Zeitaufwand tatsächlich (in Std.)</label>
-			<label index="LABEL_TIME_PLANNED">Zeitaufwand geplant (in Std.)</label>
+			<label index="LABEL_TIME_USED">Zeit tatsächlich (in Std.)</label>
+			<label index="LABEL_TIME_PLANNED">Zeit geplant (in Std.)</label>
 			<label index="LABEL_ADDITIONAL_INFO">Zusatzinformationen</label>
 			<label index="LABEL_EFFORT">Aufwand</label>
 			<label index="LABEL_FILES">Dateien</label>
@@ -350,6 +351,7 @@
 			<label index="LABEL_ATTACHMENTS">Dateianhänge</label>
 			<label index="LABEL_PERMALINK">Permalink</label>
 			<label index="LABEL_HISTORY">Verlauf d. Änderungen</label>
+			<label index="LABEL_PRINTLINK">Druckansicht</label>
 			
 			<label index="LABEL_NOTIFICATIONS_OWNER">Benachrichtigungen an den Besitzer</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Benachrichtigungen an den verantwortlichen Benutzer</label>

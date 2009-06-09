@@ -673,3 +673,34 @@
 	background: #33c92f url(../images/status_message_bgr.gif) top left repeat-x;
 }
 
+
+
+/* Printview */
+.tx-ketroubletickets-pi1 .kett_printview {
+	font-size: 12px;
+	margin-top: 30px;
+}
+.tx-ketroubletickets-pi1  .kett_printview .printview_header { 
+	font-weight: bold;
+	font-size: 150%;
+	margin-bottom: 5px;
+}
+.tx-ketroubletickets-pi1  .kett_printview .label { 
+	font-weight: bold;
+}
+.tx-ketroubletickets-pi1  .kett_printview .printview_block  { 
+	padding: 3px;
+	margin: 20px 0 20px 0;
+	border:1px solid #cecece;
+}
+.tx-ketroubletickets-pi1  .kett_printview .printview_floatblock  { 
+	border: 1px solid #cecece;
+	width: 30%;
+	float:left;
+	padding: 3px;
+	margin: 3px;
+}
+.tx-ketroubletickets-pi1  .kett_printview  label { 
+	font-weight: bold;
+	display:block;
+}

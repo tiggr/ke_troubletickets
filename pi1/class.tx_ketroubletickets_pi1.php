@@ -216,10 +216,10 @@ function areYouSure(ziel) {
 		}
 		
 		
-		// single view / update
-		// get the database entry for the single view / the entry that will be updated.
-		if ( $this->piVars['showUid'] || $this->piVars['updateUid'] )	{
-			$uid = $this->piVars['showUid'] ? $this->piVars['showUid'] : $this->piVars['updateUid'];
+		// single view / update / print view
+		// get the database entry for the single or print view / the entry that will be updated.
+		if ( $this->piVars['showUid'] || $this->piVars['updateUid'] || $this->piVars['printview'] )	{
+			$uid = $this->piVars['showUid'] ? $this->piVars['showUid'] : ( $this->piVars['updateUid'] ? $this->piVars['updateUid'] : $this->piVars['printview'] );
 			$this->internal['currentTable'] = $this->tablename;
 			$this->internal['currentRow'] = $this->pi_getRecord($this->tablename, $uid);
 
@@ -328,7 +328,11 @@ function areYouSure(ziel) {
 			|| ($this->piVars['newticket'] && count($this->formErrors))
 			) {
 			$content .= $this->renderTicketForm();
-		} else {
+		} 
+		else if ($this->piVars['printview']) {
+			$content .= $this->printview();
+		}
+		else {
 			$this->cleanUpPiVars();
 			$content .= $this->listView();
 		}
@@ -1901,7 +1905,63 @@ function areYouSure(ziel) {
 		
 		return $content;
 	}/*}}}*/
-
+	
+	
+	
+	
+	
+	/**
+	 * printview
+	 *
+	 * Render print optimized view of single ticket
+	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
+	 *
+	 * @access public
+	 * @return void
+	 */ 
+	public function printview() {
+		
+		// include special css for printview
+		$cssfile = t3lib_extMgm::siteRelPath($this->extKey).'res/css/ke_troubletickets_printview.css';
+		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId] .= '<link rel="stylesheet" type="text/css" href="'.$cssfile.'" />';
+		
+		// include Javascript for printview
+		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId] .= '
+			<script type="text/javascript">
+				window.print();
+			</script>';
+		
+		// get the template subpart
+		$content = $this->cObj->getSubpart($this->templateCode,'###PRINTVIEW###');
+		
+		// get additional markers (locallang, ...)
+		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
+		
+		// get the field markers (render the form fields)
+		foreach ($this->conf['formFieldList.'] as $fieldConf) {
+			// show internal fields  if internal user is logged in
+			if ($fieldConf['internal'] && $this->isCurrentUserInternalUser()) {
+				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
+			}
+			// clear subpart if internal fields are not shown
+			else if ($fieldConf['internal'] && !$this->isCurrentUserInternalUser()) {
+				$content = $this->cObj->substituteSubpart ($content, '###INTERNAL_' . strtoupper(trim($fieldConf['name'])), '');
+			}
+			// get content for other fields
+			else $this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
+		}
+		
+		// get comments
+		$this->markerArray['FIELD_TICKET_COMMENT'] = $this->renderCommentList($this->internal['currentRow']['uid'], $renderType);
+		
+		// substitute the markers
+		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
+		
+		return $content;    
+	}
+	
+	
+	
 	/**
 	 * isCurrentUserInternalUser 
 	 *
@@ -2086,6 +2146,14 @@ function areYouSure(ziel) {
 		$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 		$linkconf['additionalParams'] = '&tx_ketroubletickets_pi1[showUid]='.$this->piVars['showUid'];
 		$markerArray['PERMALINK_URL'] = $this->cObj->typoLink_URL($linkconf);
+		
+		// printview URL
+		unset($linkconf);
+		$linkconf['parameter'] = $GLOBALS['TSFE']->id.' 800x600';
+		$linkconf['additionalParams'] = '&tx_ketroubletickets_pi1[printview]='.$this->piVars['showUid'];
+		$linkconf['JSwindow'] = 1;
+		$linkconf['JSwindow_params'] = 'status=0,menubar=0,scrollbars=1,resizable=1,location=0,directories=0,toolbar=0';
+		$markerArray['PRINTLINK'] = $this->cObj->typoLink($this->pi_getLL('LABEL_PRINTLINK'),$linkconf);
 		
 		return $markerArray;
 

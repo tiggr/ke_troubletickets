@@ -27,6 +27,8 @@ New Ticket / Edit Ticket Form / Singleview
 		<a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';"><img src="typo3conf/ext/ke_troubletickets/res/images/icon_history.png" />###LABEL_HISTORY###</a>
 		<span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
 		<a href="###PERMALINK_URL###"><img src="typo3conf/ext/ke_troubletickets/res/images/permalink.png" />###LABEL_PERMALINK###</a>
+		<span class="kett_svt_navborder">&nbsp;&nbsp;&#124;&nbsp;&nbsp;</span>
+		<img src="typo3conf/ext/ke_troubletickets/res/images/printlink.png" />###PRINTLINK###
 	<!-- ###TOOLBAR_EDITONLY### end -->
   </div>
 </div>
@@ -735,3 +737,118 @@ E-Mail Notification
 	</td>	
 </tr>
 <!-- ###INTERNAL_CHANGES_SUBPART### END-->
+
+
+
+<!-- ###PRINTVIEW### START-->
+
+<div class="kett_printview">
+
+    <div class="printview_header">###FIELD_TITLE###</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_NUMBER###:</label>
+		###UID###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_OWNER_FEUSER###:</label>
+		###FIELD_OWNER_FEUSER###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_CATEGORY###:</label>
+		###FIELD_CATEGORY###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_STATUS###:</label>
+		###FIELD_STATUS###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_BILLING###:</label>
+		###FIELD_BILLING###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_PRIORITY###:</label>
+		###FIELD_PRIORITY###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_RESPONSIBLE_FEUSER###:</label>
+		###FIELD_RESPONSIBLE_FEUSER###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_UNTIL_DATE###:</label>
+		###FIELD_UNTIL_DATE###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_EFFORT###:</label>
+		###FIELD_EFFORT###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<!-- ###INTERNAL_FROM_DATE### start -->
+	<div class="printview_floatblock">
+		<label>###LABEL_FROM_DATE###:</label>
+		###FIELD_FROM_DATE###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<!-- ###INTERNAL_FROM_DATE### end -->
+	<!-- ###INTERNAL_TIME_PLANNED### start  -->
+	<div class="printview_floatblock">
+		<label>###LABEL_TIME_PLANNED###:</label>
+		###FIELD_TIME_PLANNED###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<!-- ###INTERNAL_TIME_PLANNED### end  -->
+	<!-- ###INTERNAL_TIME_USED### start  -->
+    <div class="printview_floatblock">
+		<label>###LABEL_TIME_USED###:</label>
+		###FIELD_TIME_USED###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<!-- ###INTERNAL_TIME_USED### end  -->
+	
+	<div class="kett_float_clean">&nbsp;</div>
+	
+	<div class="printview_block">
+		<span class="label">###LABEL_DESCRIPTION###:</span><br />
+		###FIELD_DESCRIPTION###
+	</div>
+	
+	<!-- ###INTERNAL_ADDITIONAL_INFO### start -->
+	<div class="printview_block">
+		<label>###LABEL_ADDITIONAL_INFO###:</label>
+		###FIELD_ADDITIONAL_INFO###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<!-- ###INTERNAL_ADDITIONAL_INFO### end -->
+	<div class="printview_block">
+		<label>###LABEL_FILES###:</label>
+		###FIELD_FILES###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_block">
+		<label>###LABEL_RELATED_TICKETS###:</label>
+		###FIELD_RELATED_TICKETS###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_block">
+		<label>###LABEL_OBSERVERS_FEUSER###:</label>
+		###FIELD_OBSERVERS_FEUSER###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_block">
+		<label>###LABEL_COMMENTS###:</label>
+		###FIELD_TICKET_COMMENT###
+	</div>
+	
+	
+	
+</div>
+
+
+<!-- ###PRINTVIEW### END-->
