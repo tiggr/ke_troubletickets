@@ -365,9 +365,24 @@
 	float:left; 
 	padding: 0 10px 0 10px; 
 	border-right: 1px dashed #666;
+	font-size: 12px;
 }
 .kett_toolbar_filter .last_filter {
 	border-right: none;
+}
+.kett_toolbar_filter .buttons {
+	border-right: none;
+	margin-top: 6px;
+}
+.kett_toolbar_filter .buttons input {
+	height: 25px;
+}
+.kett_toolbar_filter .buttons img {
+	margin-top: 2px;
+}
+
+.kett_toolbar_filter .filter_statusicon {
+	margin-left: 10px;
 }
 
 /* sorting */

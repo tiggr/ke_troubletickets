@@ -2994,7 +2994,7 @@ function areYouSure(ziel) {
 		}
 		
 		// add the filter form markers
-		$this->markerArray['FILTERFORM_NAME'] = $this->ticketformname . '_filter';
+		$this->markerArray['FILTERFORM_NAME'] = $this->ticketFormName . '_filter';
 		$this->markerArray['FILTERFORM_ACTION'] = $this->cObj->typoLink_URL(
 				array(
 					'parameter' => $GLOBALS['TSFE']->id,
@@ -3002,7 +3002,11 @@ function areYouSure(ziel) {
 				)
 			);
 		$this->markerArray['FILTER_SUBMIT'] = '<input type="submit" name="' . $this->prefixId . '[filter_submit]' . '" value="'.$this->pi_getLL('LABEL_FILTER_SUBMIT').'">';
-
+		
+		// show filter reset button / status icon
+		$this->markerArray['FILTER_STATUSICON'] = $this->getFieldContent('filter_statusicon');
+		
+		
 		// make the whole list
 		$this->markerArray['LISTCONTENT'] = $this->makelist($res, $templateSubpartRow);
 
@@ -3438,7 +3442,37 @@ function areYouSure(ziel) {
 				$retval = $retval ? $retval : '&nbsp;';
 				return $retval;
 				break;
-
+			
+			case 'filter_statusicon':
+				// no filter is set and status filter is set to default "all_not_closed"
+				if (count($this->filter)==1 && $this->filter['status'] == 'all_not_closed') {
+					unset($imageConf);
+					$imageConf['file'] = t3lib_extMgm::siteRelPath($this->extKey).'res/images/reset_gray.gif';
+					$imageConf['altText'] = $this->pi_getLL('LABEL_FILTER_NOT_SET');
+					return $this->cObj->IMAGE($imageConf);
+				}
+				// filter is set
+				else {
+					unset($imageConf);
+					$imageConf['file'] = t3lib_extMgm::siteRelPath($this->extKey).'res/images/reset.gif';
+					$imageConf['altText'] = $this->pi_getLL('LABEL_FILTER_RESET');
+					$resetImage = $this->cObj->IMAGE($imageConf);
+					//build link with reset filters
+					unset($linkconf);
+					$linkconf['parameter'] = $GLOBALS['TSFE']->id;
+					$linkconf['additionalParams'] = '&'.$this->prefixId.'[pointer]=0';
+					// reset every single filter
+					$filterList = t3lib_div::trimExplode(',',$this->conf['listView.']['filterList'],1);
+					foreach($filterList as $filter) {
+						$linkconf['additionalParams'] .= '&'.$this->prefixId.'['.$filter.']=';
+					}
+					$linkconf['additionalParams'] .= '&'.$this->prefixId.'[filter]=1';
+					$resetLink = $this->cObj->typoLink($resetImage,$linkconf);
+					return $resetLink;
+				}
+				break;
+			
+			
 			default:
 				$retval = $this->cleanUpHtmlOutput($this->internal['currentRow'][$fieldName]);
 				return $retval;

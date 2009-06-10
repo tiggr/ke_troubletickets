@@ -163,6 +163,8 @@
 			<label index="LABEL_COMMENT_SUBMIT">Save</label>
 
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
+			<label index="LABEL_FILTER_NOT_SET">filter not set</label>
+			<label index="LABEL_FILTER_RESET">reset filter</label>
 
 			<label index="LABEL_GO_TO_TICKET">Open this ticket</label>
 			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">Go to the comments</label>
@@ -361,6 +363,8 @@
 			<label index="LABEL_COMMENT_SUBMIT">Speichern</label>
 
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
+			<label index="LABEL_FILTER_NOT_SET">kein Filter gesetzt</label>
+			<label index="LABEL_FILTER_RESET">Filter zurücksetzen</label>
 
 			<label index="LABEL_GO_TO_TICKET">Aufgabe aufrufen</label>
 			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">zu den Kommentaren</label>
