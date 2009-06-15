@@ -1,7 +1,9 @@
 /* hide all elements in printview  */ 
 html * {
 	visibility: hidden;
+	background: white !important;
 }
+
 
 /* only troubletickets elements are visible  */ 
 html .tx-ketroubletickets-pi1  * { 
