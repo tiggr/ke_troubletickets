@@ -2499,7 +2499,10 @@ function areYouSure(ziel) {
 					$where_clause .= ' AND uid IN (' . $this->ffdata['categories'] . ')';
 				}
 				$where_clause .= $lcObj->enableFields($this->categoryTablename);
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->categoryTablename,$where_clause,'','sorting');
+				
+				// if special sorting is set in TYPOScript: use this instead of default value "sorting"
+				$sorting = !empty($this->conf['filter.']['category.']['sortField']) ? $this->conf['filter.']['category.']['sortField'] : 'sorting';
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->categoryTablename,$where_clause,'',$sorting);
 				$num_rows = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
 				// render the dropdown

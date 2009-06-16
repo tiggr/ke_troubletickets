@@ -379,6 +379,11 @@ plugin.tx_ketroubletickets_pi1.listView {
 	entries_per_page_options = 10,20,50
 }
 
+# Category sorting
+plugin.tx_ketroubletickets_pi1.filter {
+	category.sortField = sorting
+}
+
 plugin.tx_ketroubletickets_pi1.teaserView < plugin.tx_ketroubletickets_pi1.listView
 plugin.tx_ketroubletickets_pi1.teaserView {
 	results_at_a_time = 500
