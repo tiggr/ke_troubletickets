@@ -305,7 +305,7 @@
 			<label index="SELECTLABEL_OFFER">Angebot</label>
 
 			<label index="SELECTLABEL_SERVICE">Service</label>
-			<label index="SELECTLABEL_INVOICE">Angebot</label>
+			<label index="SELECTLABEL_INVOICE">Auftrag</label>
 			<label index="SELECTLABEL_INVOICE_IS_DONE">ist berechnet</label>
 			<label index="SELECTLABEL_SERVICE_INVOICE">Pflege</label>
 
