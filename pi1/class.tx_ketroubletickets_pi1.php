@@ -1183,15 +1183,20 @@ function areYouSure(ziel) {
 			
 			// Andreas Kiefer, kiefer@kennziffer.com, 15:15 15.05.2009
 			// don't send if only internal fields are changed, that are configured as "don't send notification" in TS
-			$internalFieldsWithoutNotification = t3lib_div::trimExplode(',', $this->conf['email_notifications.']['internalFieldsWithoutNotification']);
-			// check if only fields without notification are changed
-			$changedInternalFieldsArray = explode(',',$changedInternalFields);
 			$sendNotification = false;
-			foreach ($changedInternalFieldsArray as $internalField) {
-				if (!in_array($internalField, $internalFieldsWithoutNotification)) {
-					$sendNotification = true;
+			// always send notification if "normal" fields are changed
+			if ($changedFields != "" ) $sendNotification = true;
+			// check if only fields are changed where no notification is wanted
+			else {
+				$internalFieldsWithoutNotification = t3lib_div::trimExplode(',', $this->conf['email_notifications.']['internalFieldsWithoutNotification']);
+				$changedInternalFieldsArray = explode(',',$changedInternalFields);
+				foreach ($changedInternalFieldsArray as $internalField) {
+					if (!in_array($internalField, $internalFieldsWithoutNotification)) {
+						$sendNotification = true;
+					}
 				}
 			}
+			#debug($sendNotification,'senden');
 			
 			// (don't send it if the current user is the owner, because the user normally should know that he just changed the ticket.)
 			if ($this->internal['currentRow']['owner_feuser']
