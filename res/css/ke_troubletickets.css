@@ -369,6 +369,7 @@
 }
 .kett_toolbar_filter .last_filter {
 	border-right: none;
+	padding: 0 0 0 10px;
 }
 .kett_toolbar_filter .buttons {
 	border-right: none;
