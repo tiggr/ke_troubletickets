@@ -281,7 +281,7 @@
 .tx-ketroubletickets-pi1-searchbox-sword {
   float: left;
   height: 16px;
-  width: 125px;
+  width: 131px;
   margin: 0 3px 0 0;
   background: #f3f3f3;
   border: 1px solid #b7c4c4;
@@ -424,12 +424,16 @@
   line-height: 15px;
   padding: 1px 3px 0px 1px;
   }
+.kett_toolbar_csv .kett_float_clean {
+	width: 1px;
+} 
 .kett_toolbar_csv:focus,
 .kett_toolbar_csv:hover,
 .kett_toolbar_csv:active { 
   background: #fff5d1; 
   }
-.kett_toolbar_csv img { 
+.kett_toolbar_csv img {
+	position: relative;
   margin: 0 3px 0 0;
   float: left;
   }
