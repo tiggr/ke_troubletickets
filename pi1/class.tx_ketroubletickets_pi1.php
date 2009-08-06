@@ -1398,9 +1398,10 @@ function areYouSure(ziel) {
 					'tx_ketroubletickets_pi1[showUid]' => $this->internal['currentRow']['uid']
 				)
 			);
+
 			if (!empty($linkToTicketURL)) {
 				$localSubpartMarkerArray = array(
-					'URL_GO_TO_TICKET' => dirname(t3lib_div::getIndpEnv('TYPO3_REQUEST_URL')) . '/' . $linkToTicketURL,
+					'URL_GO_TO_TICKET' => t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $linkToTicketURL,
 					'LINKTEXT_GO_TO_TICKET' => $this->pi_getLL('LABEL_GO_TO_TICKET')
 				);
 				$linkToTicketSubpart = $this->cObj->substituteMarkerArray($linkToTicketSubpart,$localSubpartMarkerArray,'###|###',true);
