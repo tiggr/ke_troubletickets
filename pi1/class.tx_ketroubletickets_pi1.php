@@ -46,6 +46,7 @@ define(CONST_SHOW_ALL_ALWAYS, 'all_always');
 define(DEFAULT_SORT, 'crdate:1');
 define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
 define(CONST_KEEP_TAGS_YES, 'keeptags');
+define(CONST_RENDER_ALL_INTERNAL_FIELDS, 'render_all_internal_fields');
 
 // RTE
 require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
@@ -111,7 +112,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return	The content that should be displayed on the website
 	 */
 	public function main($content,$conf) {/*{{{*/
-		
+
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
@@ -123,7 +124,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if ($this->conf['includeDefaultCSS']) {
 			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_css'] = '<link rel="stylesheet" type="text/css" href="' . $this->extPath . $this->defaultCSS . '" />';
 		}
-		
+
 		// create instance of the extension library
 		$this->lib = t3lib_div::makeInstance('tx_ketroubletickets_lib');
 
@@ -195,27 +196,18 @@ function areYouSure(ziel) {
 }
 </script>';
 
-		// Some debugging ...
-		#debug($this->piVars);
-		// debug(t3lib_div::_POST());
-		// debug($GLOBALS['TSFE']->fe_user->user);
-		// debug($GLOBALS['TSFE']->loginUser);
-
-		// Output database errors
-		// $GLOBALS['TYPO3_DB']->debugOutput = true;
-
 		// General permission check: This plugin only makes sense if a user is logged in
 		if (!$GLOBALS['TSFE']->loginUser) {
 			return $this->pi_wrapInBaseClass($this->pi_getLL('error_not_logged_in', 'Please log in.'));
 		}
-		
+
 		// show single view if searchword is ticket UID
 		if ($this->isValidTicketUid($this->piVars['sword'])) {
 			$this->piVars['showUid'] = intval($this->piVars['sword']);
 			$this->piVars['sword'] = '';
 		}
-		
-		
+
+
 		// single view / update / print view
 		// get the database entry for the single or print view / the entry that will be updated.
 		if ( $this->piVars['showUid'] || $this->piVars['updateUid'] || $this->piVars['printview'] )	{
@@ -254,9 +246,9 @@ function areYouSure(ziel) {
 		if ($this->piVars['deleteRelatedTicket']) {
 			$this->removeRelatedTicketFromCurrentTicket($this->piVars['deleteRelatedTicket']);
 		}
-		
+
 		// Initialize sorting
-		// read session data 
+		// read session data
 		$this->sessionData = $GLOBALS['TSFE']->fe_user->getKey('ses',$this->prefixId);
 		$sessionVars = $this->sessionData;
 		// set default sort when no sorting chosen and no sorting set in session data
@@ -269,15 +261,15 @@ function areYouSure(ziel) {
 		}
 		// store chosen sorting in session
 		$sessionVars[$GLOBALS['TSFE']->id]['sort'] = $this->piVars['sort'];
-		
-		
+
+
 		// keep existing filter
 		if ($this->piVars['filter']) {
 			$this->filter = unserialize(base64_decode($this->piVars['filter']));
 		}
 		// if no filter is set use stored data from session
 		else $this->filter = unserialize(base64_decode($this->sessionData[$GLOBALS['TSFE']->id]['filter']));
-		
+
 		// a new filter for listview is set
 		if ($this->piVars['filter_submit']) {
 			$this->filter = array();
@@ -290,34 +282,34 @@ function areYouSure(ziel) {
 			// go to page 1 if a new filter has been set
 			$this->piVars['pointer'] = 0;
 		}
-		
+
 		// set some default values for the filter
 		// TODO: Should be configurable in Typoscript in future versions
 		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'all_not_closed'; // AK 18:17 27.05.2009
 		if ($this->ffdata['view'] == 'TEASER_OWN') {
 			$this->filter['responsible_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
-		
+
 		// save the filter in piVars
 		// Use base64 because the serialized value contains quotes
 		$this->piVars['filter'] = base64_encode(serialize($this->filter));
-		
+
 		// store chosen filter in session
 		$sessionVars[$GLOBALS['TSFE']->id]['filter'] = $this->piVars['filter'];
-		
-		
+
+
 		// Entries per page - get value from form or from session
 		if (!$this->piVars['entries_per_page'] && $this->sessionData[$GLOBALS['TSFE']->id]['entries_per_page']) {
 			$this->piVars['entries_per_page'] = $this->sessionData[$GLOBALS['TSFE']->id]['entries_per_page'];
 		}
-		
+
 		// store entries per page in session
 		$sessionVars[$GLOBALS['TSFE']->id]['entries_per_page'] = $this->piVars['entries_per_page'];
-		
+
 		// store session data
 		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->prefixId, $sessionVars);
 		$GLOBALS['TSFE']->storeSessionData();
-		
+
 		// Render the main content:
 		// Single View / New Ticket
 		// or List View
@@ -328,7 +320,7 @@ function areYouSure(ziel) {
 			|| ($this->piVars['newticket'] && count($this->formErrors))
 			) {
 			$content .= $this->renderTicketForm();
-		} 
+		}
 		else if ($this->piVars['printview']) {
 			$content .= $this->printview();
 		}
@@ -336,7 +328,7 @@ function areYouSure(ziel) {
 			$this->cleanUpPiVars();
 			$content .= $this->listView();
 		}
-		
+
 		return $this->pi_wrapInBaseClass($content);
 	}/*}}}*/
 
@@ -444,7 +436,7 @@ function areYouSure(ziel) {
 	 * @return void
 	 */
 	public function handleSubmittedForm() {/*{{{*/
-		
+
 		// set some values for NEW tickets
 		// and UPDATED tickets
 		if ($this->piVars['newticket']) {
@@ -480,19 +472,19 @@ function areYouSure(ziel) {
 			}
 
 		}
-		
+
 		// handle each of the submitted fields as defined in the typoscript setup
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-			
+
 			// ignore the submit-field and
 			// ignore internal fields if not permitted for current user
 			// and ignore fields that are configured as "doNotSaveInDB = 1"
-			if ( 
+			if (
 				$fieldConf['type'] != 'submit'
 				&& (!$fieldConf['internal'] || $this->isUserInternalUser($GLOBALS['TSFE']->fe_user->user['uid']))
-				&& !$fieldConf['doNotSaveInDB'] 
+				&& !$fieldConf['doNotSaveInDB']
 			) {
-				
+
 				// required-check
 				if ($fieldConf['required'] && empty($this->piVars[$fieldConf['name']])) {
 					$this->formErrors[] = $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end');
@@ -504,7 +496,7 @@ function areYouSure(ziel) {
 				// requiredForInternalUsersOnClose-Flag set, he has to fill the
 				// field in case he want's to close the ticket
 				// This is useful for the "time used"-field.
-				if ($fieldConf['requiredForInternalUsersOnClose'] 
+				if ($fieldConf['requiredForInternalUsersOnClose']
 					&& $this->piVars['status'] == CONST_STATUS_CLOSED
 					&& empty($this->piVars[$fieldConf['name']])
 					&& $this->isCurrentUserInternalUser()
@@ -566,7 +558,7 @@ function areYouSure(ziel) {
 				// add a history entry for every change
 				$changedFields = '';
 				$changedInternalFields = '';
-				
+
 				foreach ($this->conf['formFieldList.'] as $fieldConf) {
 					$value_old = $this->internal['currentRow'][$fieldConf['name']];
 					$value_new = $this->insertFields[$fieldConf['name']];
@@ -640,8 +632,8 @@ function areYouSure(ziel) {
 
 				// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($this->internal['currentRow']['uid'], $changedFields, $changedInternalFields);
-				
-				// check if saving of fields and comments went fine 
+
+				// check if saving of fields and comments went fine
 				// and set status texts
 				// fields changed and new comment
 				if (( !empty($changedFields) && strstr($changedFields,CONST_NEWCOMMENT) && trim($changedFields) != CONST_NEWCOMMENT )
@@ -651,7 +643,7 @@ function areYouSure(ziel) {
 						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_and_comment');
 					}
 				}
-				// new comment only 
+				// new comment only
 				else if (empty($changedInternalFields) && trim($changedFields) == CONST_NEWCOMMENT) {
 					if ($saveCommentStatus) {
 						$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
@@ -665,9 +657,9 @@ function areYouSure(ziel) {
 						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_only');
 					}
 				}
-				
+
 			}
-			
+
 		}
 	}/*}}}*/
 
@@ -771,7 +763,6 @@ function areYouSure(ziel) {
 
 			// update the ticket entry in the database
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $ticketUid, array('related_tickets' => $new_related_ticket_list));
-			//debug($GLOBALS['TYPO3_DB']->UPDATEquery($this->tablename, 'uid=' . $ticketUid, array('related_tickets' => $new_related_ticket_list)));
 
 			// and add a history entry
 			$this->addHistoryEntry( array(
@@ -858,7 +849,7 @@ function areYouSure(ziel) {
 					'value_old' => '',
 					'value_new' => $this->pi_getLL('history_new_comment', 'new comment')
 					));
-		
+
 		return $status;
 	}/*}}}*/
 
@@ -1148,11 +1139,19 @@ function areYouSure(ziel) {
 			$this->internal['currentTable'] = $this->tablename;
 			$this->internal['currentRow'] = $this->pi_getRecord($this->tablename, $ticket_uid);
 
-			// render the mailbody for standard mails
-			$emailbody = $this->renderNotificationMail($changedFields);
+			// render the mailbody for standard mails to non-internal users
+			// the second parameter has to be empty, because we don't want any
+			// changes of internal fields sent to non-internal users!
+			$emailbody = $this->renderNotificationMail($changedFields,'');
 
 			// render the mailbody for internal mails
-			$emailbody_internal = $this->renderNotificationMail($changedFields, $changedInternalFields);
+			// on new tickets, render all internal fields, on updated tickets, render
+			// only fields which have changed
+			if (stristr($changedFields, CONST_NEWTICKET)) {
+				$emailbody_internal = $this->renderNotificationMail($changedFields, CONST_RENDER_ALL_INTERNAL_FIELDS);
+			} else {
+				$emailbody_internal = $this->renderNotificationMail($changedFields, $changedInternalFields);
+			}
 
 			// render the subject
 			if ($this->conf['email_notifications.']['subject_prefix']) {
@@ -1160,12 +1159,12 @@ function areYouSure(ziel) {
 			} else {
 				$subject = '';
 			}
-			
+
 			// add ticket uid to subject if set in conf
 			if ($this->conf['email_notifications.']['add_uid_to_subject']) {
 				$subject .= sprintf($this->conf['ticket_uid_formatstring'],$ticket_uid).' ';
 			}
-			
+
 			// add the status to the subject if it has changed
 			// otherwise just add the word "changed"
 			if (stristr($changedFields, CONST_NEWTICKET)) {
@@ -1179,8 +1178,7 @@ function areYouSure(ziel) {
 			}
 			$subject .= $this->internal['currentRow']['title'];
 
-			// send notifications to owner
-			
+
 			// Andreas Kiefer, kiefer@kennziffer.com, 15:15 15.05.2009
 			// don't send if only internal fields are changed, that are configured as "don't send notification" in TS
 			$sendNotification = false;
@@ -1196,17 +1194,17 @@ function areYouSure(ziel) {
 					}
 				}
 			}
-			#debug($sendNotification,'senden');
-			
+
+			// send notifications to owner
 			// (don't send it if the current user is the owner, because the user normally should know that he just changed the ticket.)
 			if ($this->internal['currentRow']['owner_feuser']
 					&& ($this->internal['currentRow']['owner_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
 					&& ( $this->internal['currentRow']['notifications_owner'] == CONST_ONEVERYCHANGE
-						|| ($this->internal['currentRow']['notifications_owner'] == CONST_ONSTATUSCHANGE 
+						|| ($this->internal['currentRow']['notifications_owner'] == CONST_ONSTATUSCHANGE
 						|| stristr($changedFields, CONST_ONSTATUSCHANGE))
 						)
 					&& $sendNotification==true ) {
-				
+
 				// get the user data of the owner
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['owner_feuser']);
 
@@ -1228,11 +1226,11 @@ function areYouSure(ziel) {
 					&& ($this->internal['currentRow']['responsible_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
 					&& ($this->internal['currentRow']['owner_feuser'] != $this->internal['currentRow']['responsible_feuser'])
 					&& ( $this->internal['currentRow']['notifications_responsible'] == CONST_ONEVERYCHANGE
-						|| ($this->internal['currentRow']['notifications_responsible'] == CONST_ONSTATUSCHANGE 
+						|| ($this->internal['currentRow']['notifications_responsible'] == CONST_ONSTATUSCHANGE
 						|| stristr($changedFields, CONST_ONSTATUSCHANGE))
 					   )
 					&& $sendNotification==true) {
-				
+
 				// get the user data of the responsible user
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['responsible_feuser']);
 
@@ -1251,11 +1249,11 @@ function areYouSure(ziel) {
 			if (strlen($this->internal['currentRow']['observers_feuser'])) {
 				foreach (explode(',', $this->internal['currentRow']['observers_feuser']) as $observer_uid) {
 					if ( ($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
-							|| ($this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE 
+							|| ($this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE
 							|| stristr($changedFields, CONST_ONSTATUSCHANGE)
 							))
 							&& $sendNotification==true) {
-						
+
 						// get the user data of the observer
 						$fe_user_data = $this->getFeUserData($observer_uid);
 
@@ -1347,11 +1345,17 @@ function areYouSure(ziel) {
 
 		$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->cleanUpHtmlOutput($localMarkerArray['WHAT_HAS_HAPPENED']);
 
+
+		// clear the internal changes marker
+		$localMarkerArray['INTERNAL_CHANGES'] = '';
+
 		// which fields have changed?
+		// on new tickets, nothing has changed, so we don't render the changed fields
 		if (!stristr($changedFields, CONST_NEWTICKET)) {
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('email_text_fields_have_changed'));
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+
 			// standard fields
 			if (strlen($changedFields)) {
 				foreach (explode(',', $changedFields) as $fieldName) {
@@ -1359,19 +1363,21 @@ function areYouSure(ziel) {
 					$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
 				}
 			}
+
 			// internal fields
 			if (strlen($changedInternalFields)) {
 				foreach (explode(',', $changedInternalFields) as $fieldName) {
 					$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
 					$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
 				}
+
 				// render the changes in the internal fields (if there are any)
 				$localMarkerArray['INTERNAL_CHANGES'] = $this->renderChangedInternalFields($changedInternalFields);
-			} else {
-				$localMarkerArray['INTERNAL_CHANGES'] = '';
 			}
-		} else {
-			// on a new ticket render all internal fields
+		}
+
+		// for internal users (only!) we render all internal fields on a new ticket
+		if (stristr($changedFields, CONST_NEWTICKET) && $changedInternalFields == CONST_RENDER_ALL_INTERNAL_FIELDS) {
 			$localMarkerArray['INTERNAL_CHANGES'] = $this->renderChangedInternalFields(CONST_NEWTICKET);
 		}
 
@@ -1390,13 +1396,11 @@ function areYouSure(ziel) {
 			$linkToTicketSubpart = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION_LINKTOTICKET###');
 			$linkToTicketURL = $this->pi_getPageLink($categoryData['singleviewpage'],'_blank', array(
 					'tx_ketroubletickets_pi1[showUid]' => $this->internal['currentRow']['uid']
-					// DEPRECATED, CB, 24.10.08
-					// 'tx_ketroubletickets_pi1[mode]' => 'not_closed'
 				)
 			);
 			if (!empty($linkToTicketURL)) {
 				$localSubpartMarkerArray = array(
-					'URL_GO_TO_TICKET' => $linkToTicketURL,
+					'URL_GO_TO_TICKET' => dirname(t3lib_div::getIndpEnv('TYPO3_REQUEST_URL')) . '/' . $linkToTicketURL,
 					'LINKTEXT_GO_TO_TICKET' => $this->pi_getLL('LABEL_GO_TO_TICKET')
 				);
 				$linkToTicketSubpart = $this->cObj->substituteMarkerArray($linkToTicketSubpart,$localSubpartMarkerArray,'###|###',true);
@@ -1418,9 +1422,9 @@ function areYouSure(ziel) {
 	}/*}}}*/
 
 	/**
-	 * renderChangedInternalFields 
-	 * 
-	 * @param string $changedInternalFields 
+	 * renderChangedInternalFields
+	 *
+	 * @param string $changedInternalFields
 	 * @access public
 	 * @return void
 	 */
@@ -1526,7 +1530,7 @@ function areYouSure(ziel) {
 	public function renderCommentForm($ticket_uid) {/*{{{*/
 		$content = $this->cObj->getSubpart($this->templateCode,'###TICKET_COMMENT###');
 
-		// get the prefillValue 
+		// get the prefillValue
 		// For example: If we wanted to update a ticket, but errors occurred.
 		// Then the comment has not been written, but we don't want to loose
 		// it, so we prefill the form with it.
@@ -1564,13 +1568,13 @@ function areYouSure(ziel) {
 	public function renderCommentList($ticket_uid, $renderType='', $latest=0) {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
-		
+
 		// build query
 		$where = 'ticket_uid=' . $ticket_uid . $lcObj->enableFields($this->commentsTablename);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where);
 		// overwrite if latest only
 		if ($latest) $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where,$groupBy='',$orderBy='uid desc',$limit=1);
-		
+
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			if ($renderType != CONST_RENDER_TYPE_CSV) {
 				$content .= '<div class="commentlist">';
@@ -1623,7 +1627,7 @@ function areYouSure(ziel) {
 	 */
 	public function generateDBInsertValue($fieldConf, $returnValue = '') {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
-		
+
 		switch ($fieldConf['type']) {
 
 			case 'textareaRTE':
@@ -1656,8 +1660,6 @@ function areYouSure(ziel) {
 				} else {
 					$returnValue .= $this->piVars[$fieldConf['name']];
 				}
-				
-				//debug ($fieldConf['name'] . ', ' . $fieldConf['type'] . ', ' . $fieldConf['multiple'] . ': ' . $returnValue);
 			break;
 
 			case 'input_related_tickets':
@@ -1902,19 +1904,15 @@ function areYouSure(ziel) {
 
 		// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
-		
+
 		// overwrite subpart in toolbar with empty ocntent if we create a new ticket
 		if (empty($this->piVars['showUid']) && empty($this->piVars['updateUid'])) {
 			$content = $this->cObj->substituteSubpart ($content, '###TOOLBAR_EDITONLY###', '');
 		}
-		
+
 		return $content;
 	}/*}}}*/
-	
-	
-	
-	
-	
+
 	/**
 	 * printview
 	 *
@@ -1922,26 +1920,26 @@ function areYouSure(ziel) {
 	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
 	 *
 	 * @access public
-	 * @return void
-	 */ 
+	 * @return string
+	 */
 	public function printview() {
-		
+
 		// include special css for printview
 		$cssfile = t3lib_extMgm::siteRelPath($this->extKey).'res/css/ke_troubletickets_printview.css';
 		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId] .= '<link rel="stylesheet" type="text/css" href="'.$cssfile.'" />';
-		
+
 		// include Javascript for printview
 		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId] .= '
 			<script type="text/javascript">
 				window.print();
 			</script>';
-		
+
 		// get the template subpart
 		$content = $this->cObj->getSubpart($this->templateCode,'###PRINTVIEW###');
-		
+
 		// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
-		
+
 		// get the field markers (render the form fields)
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 			// show internal fields  if internal user is logged in
@@ -1955,23 +1953,23 @@ function areYouSure(ziel) {
 			// get content for other fields
 			else $this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
 		}
-		
+
 		// get comments
 		$this->markerArray['FIELD_TICKET_COMMENT'] = $this->renderCommentList($this->internal['currentRow']['uid'], $renderType);
-		
+
 		// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
-		
-		return $content;    
+
+		return $content;
 	}
-	
-	
-	
+
+
+
 	/**
-	 * isCurrentUserInternalUser 
+	 * isCurrentUserInternalUser
 	 *
 	 * Checks, if the current fe_user is an "internal" user (as defined in the flexform field)
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
@@ -1985,11 +1983,11 @@ function areYouSure(ziel) {
 	}/*}}}*/
 
 	/**
-	 * isUserInternalUser 
+	 * isUserInternalUser
 	 *
 	 * Checks, if a given uid belongs to an internal user.
-	 * 
-	 * @param integer $user_uid 
+	 *
+	 * @param integer $user_uid
 	 * @access public
 	 * @return void
 	 */
@@ -2074,15 +2072,15 @@ function areYouSure(ziel) {
 		} else {
 			$markerArray['UID'] = '';
 		}
-		
-		
+
+
 		// "CLEAN" UID WITHOUT FORMATTING -- AK 17:18 25.05.2009
 		if (is_array($this->internal['currentRow']) && !empty($this->internal['currentRow']['uid'])) {
 			$markerArray['CLEANUID'] = $this->internal['currentRow']['uid'];
 		} else {
 			$markerArray['CLEANUID'] = '';
 		}
-		
+
 		// get the label markers from locallang
 		foreach (explode(',', $this->conf['locallangLabelList']) as $labelName) {
 			$markerArray['LABEL_' . trim($labelName)] = $this->pi_getLL('LABEL_' . trim($labelName));
@@ -2109,9 +2107,7 @@ function areYouSure(ziel) {
 				);
 
 		// current url
-		#$markerArray['CURRENT_URL'] = t3lib_div::linkThisScript();
 		$markerArray['CURRENT_URL'] = htmlspecialchars(t3lib_div::getIndpEnv('REQUEST_URI'));
-
 
 		// TODO: link to the current ticket singleview
 		// The single-view of this ticket is defined in the category this ticket belongs to.
@@ -2145,13 +2141,13 @@ function areYouSure(ziel) {
 
 		// date2cal js for singleview
 		$markerArray['DATE2CAL_JS'] = $this->date2cal->getMainJS();
-		
+
 		// Permalink URL
 		unset($linkconf);
 		$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 		$linkconf['additionalParams'] = '&tx_ketroubletickets_pi1[showUid]='.$this->piVars['showUid'];
 		$markerArray['PERMALINK_URL'] = $this->cObj->typoLink_URL($linkconf);
-		
+
 		// printview URL
 		unset($linkconf);
 		$linkconf['parameter'] = $GLOBALS['TSFE']->id.' 800x600';
@@ -2159,7 +2155,7 @@ function areYouSure(ziel) {
 		$linkconf['JSwindow'] = 1;
 		$linkconf['JSwindow_params'] = 'status=0,menubar=0,scrollbars=1,resizable=1,location=0,directories=0,toolbar=0';
 		$markerArray['PRINTLINK'] = $this->cObj->typoLink($this->pi_getLL('LABEL_PRINTLINK'),$linkconf);
-		
+
 		return $markerArray;
 
 	}/*}}}*/
@@ -2306,7 +2302,7 @@ function areYouSure(ziel) {
 					}
 				}
 
-				// render the list 
+				// render the list
 				foreach (explode(',', $valueList) as $value) {
 					if (strlen($value)) {
 						$selected = $prefillValue == $value ? ' selected' : '';
@@ -2383,7 +2379,7 @@ function areYouSure(ziel) {
 				$this->date2cal->config['inputField'] = $field;
 				$this->date2cal->config['calConfig']['ifFormat'] = $this->conf['datefield_inputfieldformat'];
 				$this->date2cal->setConfigOption('ifFormat', $this->conf['datefield_inputfieldformat']);
-				
+
 				$this->date2cal->setConfigOption('showsTime', 0, true);
 				$this->date2cal->setConfigOption('time24', 1, true);
 
@@ -2504,7 +2500,7 @@ function areYouSure(ziel) {
 					$where_clause .= ' AND uid IN (' . $this->ffdata['categories'] . ')';
 				}
 				$where_clause .= $lcObj->enableFields($this->categoryTablename);
-				
+
 				// if special sorting is set in TYPOScript: use this instead of default value "sorting"
 				$sorting = !empty($this->conf['filter.']['category.']['sortField']) ? $this->conf['filter.']['category.']['sortField'] : 'sorting';
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->categoryTablename,$where_clause,'',$sorting);
@@ -2558,7 +2554,7 @@ function areYouSure(ziel) {
 						// special query for "responsible"-filter
 						if ($filterMode && $fieldConf['name'] == 'responsible_feuser') {
 							$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-									'*', 
+									'*',
 									$this->tablename,
 									'pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')'
 										. ' AND status NOT LIKE "' . CONST_STATUS_CLOSED . '%"'
@@ -2875,8 +2871,8 @@ function areYouSure(ziel) {
 		if (!isset($this->piVars['pointer'])) {
 			$this->piVars['pointer']=0;
 		}
-		
-		
+
+
 		// Initializing the query parameters:
 
 		// Tablename
@@ -2888,7 +2884,7 @@ function areYouSure(ziel) {
 		// Number of results to show in a listing.
 		$this->internal['results_at_a_time']=t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,10);
 		if ($this->piVars['entries_per_page']) $this->internal['results_at_a_time'] = $this->piVars['entries_per_page'];
-		
+
 		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
 		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;
 
@@ -2941,8 +2937,6 @@ function areYouSure(ziel) {
 
 					}
 					$to = mktime(0,0,0, $month_to, 1, $year_to);
-					//debug(date('d.m.Y H:i', $from), 'from' );
-					//debug(date('d.m.Y H:i', $to), 'to' );
 					$addWhere .= ' AND close_time >=' . $from . ' AND close_time <= ' . $to;
 				} else {
 					$addWhere .= ' AND ' . $filterName . '="' . mysql_real_escape_string($filterValue) . '"';
@@ -2959,10 +2953,10 @@ function areYouSure(ziel) {
 		$res = $this->pi_exec_query($this->tablename, 1, $addWhere);
 		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-		// Check if submitted sort is allowed, if not, set it to default 
+		// Check if submitted sort is allowed, if not, set it to default
 		if ($this->piVars['sort'] && $this->piVars['sort'] != DEFAULT_SORT && !t3lib_div::inList(t3lib_div::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
 			list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':', DEFAULT_SORT);
-		} 
+		}
 
 		// compile orderBy-parameter
 		$orderBy = $this->internal['orderBy'].($this->internal['descFlag']?' DESC':'');
@@ -2996,11 +2990,11 @@ function areYouSure(ziel) {
 					$fieldConf['prefillWithCurrentUserIfEmpty'] = 0;
 				}
 				$this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, RENDER_EMPTY_DRODOWN_ELEMENT);
-				
-				
+
+
 			}
 		}
-		
+
 		// add the filter form markers
 		$this->markerArray['FILTERFORM_NAME'] = $this->ticketFormName . '_filter';
 		$this->markerArray['FILTERFORM_ACTION'] = $this->cObj->typoLink_URL(
@@ -3010,17 +3004,17 @@ function areYouSure(ziel) {
 				)
 			);
 		$this->markerArray['FILTER_SUBMIT'] = '<input type="submit" name="' . $this->prefixId . '[filter_submit]' . '" value="'.$this->pi_getLL('LABEL_FILTER_SUBMIT').'">';
-		
+
 		// show filter reset button / status icon
 		$this->markerArray['FILTER_STATUSICON'] = $this->getFieldContent('filter_statusicon');
-		
-		
+
+
 		// make the whole list
 		$this->markerArray['LISTCONTENT'] = $this->makelist($res, $templateSubpartRow);
 
 		// create the search box
 		$this->markerArray['SEARCHBOX'] = $this->pi_list_searchBox();
-		
+
 		// create the result browser
 		$wrapper['disabledLinkWrap'] = '<span class="disable">|</span>';
 		$wrapper['inactiveLinkWrap'] = '<span class="inactive">|</span>';
@@ -3039,8 +3033,8 @@ function areYouSure(ziel) {
 
 		// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
-		
-		// check every filter if there is content for every filter, otherwise substitute 
+
+		// check every filter if there is content for every filter, otherwise substitute
 		// whole filter block subpart with empty content
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 			if (t3lib_div::inList(t3lib_div::uniqueList($this->conf['listView.']['filterList']),$fieldConf['name'])) {
@@ -3049,21 +3043,21 @@ function areYouSure(ziel) {
 				}
 			}
 		}
-		
-		
+
+
 		// overwrite status message subpart if no status message is set
 		if (empty($this->markerArray['STATUS_MESSAGE_TEXT'])) {
 			$content = $this->cObj->substituteSubpart ($content, '###STATUS_MESSAGE###', '');
 		}
-		
-		
+
+
 		// Returns the content from the plugin.
 		return $content;
 
 	}/*}}}*/
 
 	/**
-	 * getUserAccessibleTicketsWhereClause 
+	 * getUserAccessibleTicketsWhereClause
 	 *
 	 * PERMISSION CHECKS
 	 * compile a where-clause:
@@ -3072,8 +3066,8 @@ function areYouSure(ziel) {
 	 * the current user is one of the "ticket_administrators", or if the option
 	 * is set to "all_always", allow the current user to see (and edit) all
 	 * tickets
-	 * 
-	 * @param int $fe_user_uid 
+	 *
+	 * @param int $fe_user_uid
 	 * @access public
 	 * @return string
 	 */
@@ -3097,7 +3091,7 @@ function areYouSure(ziel) {
 		}
 		return $addWhere;
 	}/*}}}*/
-	
+
 
 	/**
 	 * Creates a list from a database query
@@ -3142,11 +3136,11 @@ function areYouSure(ziel) {
 		// render special marker: is_overdue
 		// set it to 1 if the "until_date" of the current Ticket is in the past
 		$this->markerArray['IS_OVERDUE'] = $this->getFieldContent('is_overdue');
-		
+
 		// render special marker: has_attachment
 		// set it to 1 if the "until_date" of the current Ticket is in the past
 		$this->markerArray['IS_OVERDUE'] = $this->getFieldContent('is_overdue');
-		
+
 		// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
@@ -3287,7 +3281,7 @@ function areYouSure(ziel) {
 
 				// get the user data from fe_users
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], 'fe_users', 'name,username');
-				
+
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
 					$retval = $this->cleanUpHtmlOutput($retval);
 				}
@@ -3300,7 +3294,7 @@ function areYouSure(ziel) {
 				$number_of_comments =  $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 				return $number_of_comments;
 				break;
-			
+
 			case 'number_of_attachments':
 				if (empty($this->internal['currentRow']['files'])) 	return 0;
 				else {
@@ -3308,19 +3302,19 @@ function areYouSure(ziel) {
 					return count($attachments);
 				}
 				break;
-			
+
 			case 'comments':
 				return $this->renderCommentList($this->internal['currentRow']['uid'], $renderType);
 				break;
-			
+
 			case 'latest_comment':
-				// get latest comment 
+				// get latest comment
 				$latest_comment = $this->renderCommentList($this->internal['currentRow']['uid'], $renderType, $latest=1);
 				// strip tags and trim
 				$latest_comment = trim(strip_tags($latest_comment));
 				return $latest_comment;
 				break;
-			
+
 			case 'related_tickets':
 				// public function renderRelatedTicketListForCurrentTicket($renderLinks = true, $renderDeleteButton = true, $renderWrapDiv = true, $separator = '<br />')
 				if ($renderType == CONST_RENDER_TYPE_CSV) {
@@ -3411,7 +3405,7 @@ function areYouSure(ziel) {
 				$imageConf['file'] = $this->getFilePath($imageConf['file']);
 				return $lcObj->IMAGE($imageConf);
 				break;
-			
+
 			case 'from_date':
 			case 'until_date':
 			case 'crdate':
@@ -3429,8 +3423,8 @@ function areYouSure(ziel) {
 			case 'files':
 				return str_replace(',', ', ',$this->internal['currentRow'][$fieldName]);
 				break;
-				
-			
+
+
 			case 'category':
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], $this->categoryTablename, 'title');
 				return $retval;
@@ -3450,7 +3444,7 @@ function areYouSure(ziel) {
 				$retval = $retval ? $retval : '&nbsp;';
 				return $retval;
 				break;
-			
+
 			case 'filter_statusicon':
 				// no filter is set and status filter is set to default "all_not_closed"
 				if (count($this->filter)==1 && $this->filter['status'] == 'all_not_closed') {
@@ -3479,8 +3473,8 @@ function areYouSure(ziel) {
 					return $resetLink;
 				}
 				break;
-			
-			
+
+
 			default:
 				$retval = $this->cleanUpHtmlOutput($this->internal['currentRow'][$fieldName]);
 				return $retval;
@@ -3559,7 +3553,7 @@ function areYouSure(ziel) {
 	function pi_list_searchBox($tableParams='')	{/*{{{*/
 		// if no searchword is set, use the default value from locallang
 		$searchword = $this->piVars['sword'] ? htmlspecialchars($this->piVars['sword']) : $this->pi_getLL('pi_list_searchBox_default_value', 'searchword');
-		
+
 		$sTables = '<div'.$this->pi_classParam('searchbox').'>'
 			. '<form action="'. $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id)) .'" method="post" name="ke_troubletickets_searchbox">'
 				. '<input type="text" name="'.$this->prefixId.'[sword]" value="' . $searchword . '"'.$this->pi_classParam('searchbox-sword').' onFocus="document.ke_troubletickets_searchbox.elements[0].value=\'\'" />'
@@ -3964,19 +3958,19 @@ function areYouSure(ziel) {
 
 		return $CropSentence;
 	}/*}}}*/
-	
-	
-	
+
+
+
 	/**
 	 * checks if uid is a valid ticket uid
 	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
 	 * @param int $uid
 	 * @return bool
-	 */ 
+	 */
 	function isValidTicketUid($uid) {
 		// uid cannot be zero or negative
 		if ($uid<=0) return false;
-		
+
 		// check if ticket uid can be found in db
 		$where = 'uid="'.intval($uid).'" ';
 		$where .= $this->cObj->enableFields($this->tablename);
@@ -3984,13 +3978,13 @@ function areYouSure(ziel) {
 		$num = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 		return $num ? true : false;
 	}
-	
-	
+
+
 	/**
 	 * Description:
 	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
 	 *
-	 */ 
+	 */
 	 function getEntriesPerPageSelection() {
 		$formAction = $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id));
 		$fieldContent .= '<form method="post" action="'.$formAction.'"><select name="'.$this->prefixId.'[entries_per_page]" onchange="this.form.submit();">';
@@ -4007,8 +4001,8 @@ function areYouSure(ziel) {
 		$fieldContent .= '</form>';
 		return $fieldContent;
 	}
-	
-	
+
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ke_troubletickets/pi1/class.tx_ketroubletickets_pi1.php'])	{
