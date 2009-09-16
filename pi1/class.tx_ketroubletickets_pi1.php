@@ -3816,8 +3816,21 @@ function areYouSure(ziel) {
 
 		// Set file name
 		header('Content-Disposition: attachment; filename="' . str_replace('###DATE###', date('Y-m-d'), $this->csv_filename) . '"');
-
-		echo $this->renderTable2CSV($res, $this->tablename, $this->conf['listView.']['csvExportFieldList']);
+		$endLineChar = $this->conf['csvView.']['endLineChar'];
+		$endLineChar = str_replace('\r', "\r", $endLineChar);
+		$endLineChar = str_replace('\n', "\n", $endLineChar);
+		$endLineChar = str_replace('\t', "\t", $endLineChar);
+		
+		$wrapChar = $this->conf['csvView.']['wrapChar'];
+		$wrapChar = str_replace('\r', "\r", $wrapChar);
+		$wrapChar = str_replace('\n', "\n", $wrapChar);
+		$wrapChar = str_replace('\t', "\t", $wrapChar);
+		
+		$splitChar = $this->conf['csvView.']['splitChar'];
+		$splitChar = str_replace('\r', "\r", $splitChar);
+		$splitChar = str_replace('\n', "\n", $splitChar);
+		$splitChar = str_replace('\t', "\t", $splitChar);
+		echo $this->renderTable2CSV($res, $this->tablename, $this->conf['listView.']['csvExportFieldList'],1, $splitChar, $wrapChar, $endLineChar);
 		exit();
 	}/*}}}*/
 
@@ -3836,7 +3849,7 @@ function areYouSure(ziel) {
 	 * @access public
 	 * @return string
 	 */
-	public function renderTable2CSV($res,$table,$fieldList='',$renderHeader=1,$splitChar=",",$wrapChar='"',$endLineChar="\r\n") {/*{{{*/
+	public function renderTable2CSV($res,$table,$fieldList='',$renderHeader=1,$splitChar=',',$wrapChar='"',$endLineChar="\r\n") {/*{{{*/
 		$data='';
 		$fields=t3lib_div::trimExplode(',',$fieldList);
 		if ($renderHeader) {

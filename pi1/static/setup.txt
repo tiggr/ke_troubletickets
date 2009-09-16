@@ -27,7 +27,7 @@ plugin.tx_ketroubletickets_pi1 {
 	priorityList = 2,1,3
 	billingList = open,service,invoice,offer,service_invoice
 	notificationBehaviorList = oneverychange,onstatuschange,never
-	priorityWrap.1 = 
+	priorityWrap.1 =
 	priorityWrap.2 = <span style="color:#ffcc00;">|</span>
 	priorityWrap.3 = <span style="color:red;">|</span>
 
@@ -61,7 +61,7 @@ plugin.tx_ketroubletickets_pi1 {
 	statusImageTeaser.wait.file = EXT:ke_troubletickets/res/images/orange.png
 	statusImageTeaser.offer = IMAGE
 	statusImageTeaser.offer.file = EXT:ke_troubletickets/res/images/orange.png
-	
+
 	# edit and delete icons
 	icons.edit = IMAGE
 	icons.edit.file = EXT:ke_troubletickets/res/images/icon_edit_ticket.png
@@ -87,12 +87,12 @@ plugin.tx_ketroubletickets_pi1 {
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
 	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT
 
-	# date2cal dateformat (date input fieds) configuration 
+	# date2cal dateformat (date input fieds) configuration
 	# german format (always use - as separator, unfortunately date2cal does not work correctly when using dots as a separator)
 	datefield_inputfieldformat = %d-%m-%Y
 	# english format
 	# datefield_inputfieldformat = %m-%d-%Y
-	
+
 	# Format for outputting the date when not in an input field
 	# german format
 	datefield_dateformat = d.m.Y
@@ -104,7 +104,7 @@ plugin.tx_ketroubletickets_pi1 {
 	# possible values:
 	# ddmmyyyy
 	# mmddyyyy
-	# if you change the format to mmddyyy, you have to change the 
+	# if you change the format to mmddyyy, you have to change the
 	# separator to "/" in js/datetimepicker.js
 	# Should be configurable in future versions
 	# datepicker_dateformat = ddmmyyyy
@@ -112,16 +112,16 @@ plugin.tx_ketroubletickets_pi1 {
 
 	# dateformat used by the history
 	history_dateformat = d.m.Y H:i
-	
+
 	# empty dates
 	emptyDate = --.--.----
 
 	# order of the history entries
 	history_order_by = crdate ASC
-	
+
 	# formatting of ticket UID (sprintf format)
 	ticket_uid_formatstring = [%05d]
-	
+
 	# some definitions for the comment form
 	comment_cols = 95
 	comment_rows = 15
@@ -129,12 +129,12 @@ plugin.tx_ketroubletickets_pi1 {
 
 	# empty element in dropdown list
 	emptyDropdownElement = ---
-	
+
 	# thumbnails for attached files
 	thumbnailImage = IMAGE
 	thumbnailImage.file.maxW = 50
-	
-	# different imges for different mime types (in case a thumbnail cannot be generated) 
+
+	# different imges for different mime types (in case a thumbnail cannot be generated)
 	thumbnailImage.default = IMAGE
 	thumbnailImage.default.file = EXT:ke_troubletickets/res/images/fileicons/default.gif
 	thumbnailImage.avi = IMAGE
@@ -179,8 +179,8 @@ plugin.tx_ketroubletickets_pi1 {
 	thumbnailImage.xml.file = EXT:ke_troubletickets/res/images/fileicons/xml.gif
 	thumbnailImage.zip = IMAGE
 	thumbnailImage.zip.file = EXT:ke_troubletickets/res/images/fileicons/zip.gif
-	
-	
+
+
 	# definition of the input form
 	# 'name' has to be the same as defined in the database
 	formFieldList {
@@ -190,7 +190,7 @@ plugin.tx_ketroubletickets_pi1 {
 			orderBy = username
 			required = 0
 			prefillWithCurrentUserIfEmpty = 1
-			# the owner is set only by creating a new ticket 
+			# the owner is set only by creating a new ticket
 			# and must not be changed when updating a ticket
 			doNotSaveInDB = 1
 		}
@@ -266,7 +266,7 @@ plugin.tx_ketroubletickets_pi1 {
 			name = additional_info
 			type = textarea
 			cols = 85
-			rows = 5 
+			rows = 5
 			maxlength = 5000
 		}
 		70 {
@@ -350,7 +350,7 @@ plugin.tx_ketroubletickets_pi1 {
 			name = submit
 			type = submit
 		}
-		
+
 		# This one is only used for the filter in the list view. It's not rendered in the single view.
 		180 {
 			name = closed_in_month
@@ -370,13 +370,21 @@ plugin.tx_ketroubletickets_pi1.listView {
 	filterList = status, responsible_feuser, category, closed_in_month, billing
 	closed_in_month_dateformat = m/Y
 	csvExportFieldList =  uid, crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments, close_time
-	results_at_a_time = 
+	results_at_a_time =
 	maxPages =
 	cropSingleviewPagetitle = 8
 	cropDescription = 400
 	templateSubpart = ###LISTVIEW###
 	templateSubpartRow = ###LISTVIEW_SINGLE_ROW###
 	entries_per_page_options = 10,20,50
+}
+
+# csvView defaults
+# change comma to semicolon for excel
+plugin.tx_ketroubletickets_pi1.csvView {
+	splitChar = ,
+	wrapChar = "
+	endLineChar = \r\n
 }
 
 # Category sorting
