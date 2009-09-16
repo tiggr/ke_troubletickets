@@ -1384,7 +1384,7 @@ function areYouSure(ziel) {
 		// generate a link to the ticket
 
 		// get the category data
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('singleviewpage',$this->categoryTablename,'uid=' . $this->internal['currentRow']['category'] . $lcObj->enableFields($this->categoryTablename));
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('singleviewpage',$this->categoryTablename,'uid="' . $this->internal['currentRow']['category'].'" ' . $lcObj->enableFields($this->categoryTablename));
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			$categoryData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		}
