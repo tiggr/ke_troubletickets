@@ -1334,14 +1334,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		// what has happened?
 		if ($GLOBALS['TSFE']->loginUser) {
-			 $localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_user', 'user:');
-			 $localMarkerArray['WHAT_HAS_HAPPENED'] .= ' ' . $GLOBALS['TSFE']->fe_user->user['username'] . ' ';
-			 if ($GLOBALS['TSFE']->fe_user->user['name']) {
-				 $localMarkerArray['WHAT_HAS_HAPPENED'] .= '('. $GLOBALS['TSFE']->fe_user->user['name'] . ') ';
-			 }
-			 $localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->pi_getLL('email_text_type_' . $type . '_with_user', $type);
+			$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_user', 'user:');
+
+				// add name
+			$localMarkerArray['WHAT_HAS_HAPPENED'] .= ' ' . $this->renderNameFromFeUserUid($GLOBALS['TSFE']->fe_users->user['uid']) . ' ';
+
+			$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->pi_getLL('email_text_type_' . $type . '_with_user', $type);
 		}  else {
-			 $localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_type_' . $type, $type);
+			$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_type_' . $type, $type);
 		}
 
 		$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->cleanUpHtmlOutput($localMarkerArray['WHAT_HAS_HAPPENED']);
@@ -1859,14 +1859,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// clear the markers if we open a new ticket (no ticket-uid is given)
 				$this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = '';
 
-				// fill in the current user for "owner" (the user who opens a ticket is always the owner)
-                if ($fieldConf['name'] == 'owner_feuser') {
-                    if ($GLOBALS['TSFE']->fe_user->user['name']) {
-                        $this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = $GLOBALS['TSFE']->fe_user->user['name'];
-                    } else {
-                        $this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = $GLOBALS['TSFE']->fe_user->user['username'];
-                    }
-                }
+					// fill in the current user for "owner" (the user who opens a ticket is always the owner)
+				if ($fieldConf['name'] == 'owner_feuser') {
+					$this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] =
+						$this->renderNameFromFeUserUid($GLOBALS['TSFE']->fe_user->user['uid']);
+				}
 			}
 
 			// If this is an internal field:
@@ -2647,8 +2644,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 										$selected = '';
 									}
 									$content .= '<option value="' . $row['uid'] . '"' . $selected . '>';
-									$content .= $row['name'];
-									$content .= ' (' . $row['username'] . ')';
+
+										// render name
+									$content .= $this->renderNameFromFeUserUid($row['uid']);
+
 									$content .= '</option>';
 								}
 								$content .= '</select>';
@@ -2736,6 +2735,44 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 		return $content;
 	}/*}}}*/
+
+	/**
+	 * renderNameFromFeUserUid
+	 *
+	 * returns the name of a fe_user
+	 * 1. name (if set)
+	 * 2. first_name + last_name (if set)
+	 * 3. username (always set ...)
+	 *
+	 * @param integer $uid
+	 * @access public
+	 * @return string
+	 */
+	public function renderNameFromFeUserUid($uid=0) {
+		$name = '';
+
+		$feUserData = $this->getFeUserData($uid);
+
+		if ($feUserData['name']) {
+			$name = $feUserData['name'];
+			if ($this->conf['addUsername']) {
+				$name .= ' (' . $feUserData['username'] . ')';
+			}
+		} else if ($feUserData['last_name']) {
+			$name = $feUserData['first_name'];
+			if ($name) {
+				$name .= ' ';
+			}
+			$name .= $feUserData['last_name'];
+			if ($this->conf['addUsername']) {
+				$name .= ' (' . $feUserData['username'] . ')';
+			}
+		} else {
+			$name .= $feUserData['username'];
+		}
+
+		return $name;
+	}
 
 	/**
 	 * getFilePath
@@ -3291,7 +3328,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 
 				// get the user data from fe_users
-				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], 'fe_users', 'name,username');
+				//$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], 'fe_users', 'name,username');
+				$retval = '';
+				foreach (t3lib_div::trimExplode(',', $this->internal['currentRow'][$fieldName]) as $feuserUid) {
+					if ($retval) {
+						$retval .= ', ';
+					}
+					$retval .= $this->renderNameFromFeUserUid($feuserUid);
+				}
 
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
 					$retval = $this->cleanUpHtmlOutput($retval);

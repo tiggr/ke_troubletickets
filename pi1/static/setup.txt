@@ -130,6 +130,9 @@ plugin.tx_ketroubletickets_pi1 {
 	# empty element in dropdown list
 	emptyDropdownElement = ---
 
+	# add the username to the cleartext name (for example in dropdowns)
+	addUsername = 0
+
 	# thumbnails for attached files
 	thumbnailImage = IMAGE
 	thumbnailImage.file.maxW = 50
