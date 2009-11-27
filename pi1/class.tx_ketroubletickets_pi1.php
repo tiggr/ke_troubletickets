@@ -189,11 +189,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		// add the "are you sure"-function to the header.
 		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId.'_areyousure'] = '<script type="text/javascript">
-function areYouSure(ziel) {
-	if ( confirm("' . $this->pi_getLL('are_you_sure_delete', 'Are you sure?') . '") ) {
-		window.location.href = ziel;
+	function areYouSure(ziel) {
+		if ( confirm("' . $this->pi_getLL('are_you_sure_delete', 'Are you sure?') . '") ) {
+			window.location.href = ziel;
+		}
 	}
-}
 </script>';
 
 		// General permission check: This plugin only makes sense if a user is logged in
@@ -505,22 +505,23 @@ function areYouSure(ziel) {
 				}
 
 				// generate the db-insert values
-				#if (!empty($this->piVars[$fieldConf['name']]) || $fieldConf['type'] == 'files') {
 
-					// combine the "file" type fields --> use the already set value as default value for the next round
-					if ($fieldConf['type'] == 'files') {
-						if (strlen($this->insertFields[$fieldConf['name']])) {
-							$defaultValue = $this->insertFields[$fieldConf['name']];
-						} else {
-							$defaultValue = '';
-						}
+				// combine the "file" type fields
+				// use the already set value as default value, since files must be
+				// deletedy by clicking on the "delete"-icon, not by submitting
+				// an empty "files"-field
+				if ($fieldConf['type'] == 'files') {
+					if (strlen($this->insertFields[$fieldConf['name']])) {
+						$defaultValue = $this->insertFields[$fieldConf['name']];
 					} else {
 						$defaultValue = '';
 					}
+				} else {
+					$defaultValue = '';
+				}
 
-					// parse and clean up the submitted value
-					$this->insertFields[$fieldConf['name']] = $this->generateDBInsertValue($fieldConf, $defaultValue);
-				#}
+				// parse and clean up the submitted value
+				$this->insertFields[$fieldConf['name']] = $this->generateDBInsertValue($fieldConf, $defaultValue);
 			}
 		}
 
@@ -1689,6 +1690,15 @@ function areYouSure(ziel) {
 						}
 					} else {
 						$this->formErrors[] = $this->pi_getLL('formerror_could_not_create_related_ticket');
+					}
+				} else {
+					// bugfix version 1.1.3, CB, 27.11.09
+					// if there is no ticket uid given (so the input field ist empty),
+					// make sure, that at least the already given tickets will not be deleted!
+					// relations to other tickets must be deletedy by clicking on the
+					// "delete"-icon, not by submitting an empty "related tickets"-field
+					if ($this->piVars['updateUid']) {
+						$returnValue = $this->piVars['related_tickets_old'];
 					}
 				}
 				break;
@@ -3820,12 +3830,12 @@ function areYouSure(ziel) {
 		$endLineChar = str_replace('\r', "\r", $endLineChar);
 		$endLineChar = str_replace('\n', "\n", $endLineChar);
 		$endLineChar = str_replace('\t', "\t", $endLineChar);
-		
+
 		$wrapChar = $this->conf['csvView.']['wrapChar'];
 		$wrapChar = str_replace('\r', "\r", $wrapChar);
 		$wrapChar = str_replace('\n', "\n", $wrapChar);
 		$wrapChar = str_replace('\t', "\t", $wrapChar);
-		
+
 		$splitChar = $this->conf['csvView.']['splitChar'];
 		$splitChar = str_replace('\r', "\r", $splitChar);
 		$splitChar = str_replace('\n', "\n", $splitChar);
