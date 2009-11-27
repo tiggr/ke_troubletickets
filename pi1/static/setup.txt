@@ -133,6 +133,10 @@ plugin.tx_ketroubletickets_pi1 {
 	# add the username to the cleartext name (for example in dropdowns)
 	addUsername = 0
 
+	# order of the comments, normally it is orderd from old (top) to new (bottom)
+	# set to "uid DESC" for reverse order
+	commentListOrderBy = uid ASC
+
 	# thumbnails for attached files
 	thumbnailImage = IMAGE
 	thumbnailImage.file.maxW = 50

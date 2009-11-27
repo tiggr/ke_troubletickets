@@ -117,6 +117,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 
+		$GLOBALS['TYPO3_DB']->debugOutput = true;
+
 		// path to this extension
 		$this->extPath = t3lib_extMgm::siteRelPath($this->extKey);
 
@@ -838,7 +840,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		// set the content
 		// the user that committed the comment may be deleted later, so we write the
 		// username into the comment content
-		$commentInsertFields['content'] = $this->lib->getNameListFromUidList($commentInsertFields['feuser_uid'], 'fe_users', 'name,username') . ': ' . $this->sanitizeData($this->piVars['content']);
+		$commentInsertFields['content'] =
+			$this->renderNamesFromFeUserUids($commentInsertFields['feuser_uid'])
+			. ': ' . $this->sanitizeData($this->piVars['content']);
 
 		// insert the comment
 		$status = $GLOBALS['TYPO3_DB']->exec_INSERTquery($this->commentsTablename, $commentInsertFields) ? true : false;
@@ -1284,11 +1288,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function getFeUserData($fe_user_uid=0) {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', 'uid=' . $fe_user_uid . $lcObj->enableFields('fe_users'));
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-			return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		} else {
-			return false;
+		if ($fe_user_uid) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', 'uid=' . $fe_user_uid . $lcObj->enableFields('fe_users'));
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+				return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			} else {
+				return false;
+			}
 		}
 	}/*}}}*/
 
@@ -1334,10 +1340,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		// what has happened?
 		if ($GLOBALS['TSFE']->loginUser) {
-			$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_user', 'user:');
+				// this is too much
+			//$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_user', 'user:');
 
 				// add name
-			$localMarkerArray['WHAT_HAS_HAPPENED'] .= ' ' . $this->renderNameFromFeUserUid($GLOBALS['TSFE']->fe_users->user['uid']) . ' ';
+			$localMarkerArray['WHAT_HAS_HAPPENED'] .= ' ' . $this->renderNameFromFeUserUid($GLOBALS['TSFE']->fe_user->user['uid']) . ' ';
 
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->pi_getLL('email_text_type_' . $type . '_with_user', $type);
 		}  else {
@@ -1345,7 +1352,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 		$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->cleanUpHtmlOutput($localMarkerArray['WHAT_HAS_HAPPENED']);
-
 
 		// clear the internal changes marker
 		$localMarkerArray['INTERNAL_CHANGES'] = '';
@@ -1573,7 +1579,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		// build query
 		$where = 'ticket_uid=' . $ticket_uid . $lcObj->enableFields($this->commentsTablename);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where, '', $this->conf['commentListOrderBy']);
+
 		// overwrite if latest only
 		if ($latest) $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where,$groupBy='',$orderBy='uid desc',$limit=1);
 
@@ -2775,6 +2782,28 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	}
 
 	/**
+	 * renderNamesFromFeUserUids
+	 *
+	 * renders names from a comma separated list of fe-users
+	 *
+	 * @param string $uidList
+	 * @access public
+	 * @return string
+	 */
+	public function renderNamesFromFeUserUids($uidList) {
+		$retval = '';
+
+		foreach (t3lib_div::trimExplode(',', $uidList) as $feuserUid) {
+			if ($retval) {
+				$retval .= ', ';
+			}
+			$retval .= $this->renderNameFromFeUserUid($feuserUid);
+		}
+
+		return $retval;
+	}
+
+	/**
 	 * getFilePath
 	 *
 	 * returns the correct path for a file, parses "EXT:", returns path relative to PATH_site
@@ -3327,15 +3356,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					return '';
 				}
 
-				// get the user data from fe_users
-				//$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], 'fe_users', 'name,username');
-				$retval = '';
-				foreach (t3lib_div::trimExplode(',', $this->internal['currentRow'][$fieldName]) as $feuserUid) {
-					if ($retval) {
-						$retval .= ', ';
-					}
-					$retval .= $this->renderNameFromFeUserUid($feuserUid);
-				}
+					// get the user data from fe_users
+				$retval = $this->renderNamesFromFeUserUids($this->internal['currentRow'][$fieldName]);
 
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
 					$retval = $this->cleanUpHtmlOutput($retval);
