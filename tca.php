@@ -8,7 +8,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 	),
 	"feInterface" => $TCA["tx_ketroubletickets_tickets"]["feInterface"],
 	"columns" => array (
-		't3ver_label' => array (		
+		't3ver_label' => array (
 			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
 			'config' => array (
 				'type' => 'input',
@@ -16,7 +16,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				'max'  => '30',
 			)
 		),
-		'sys_language_uid' => array (		
+		'sys_language_uid' => array (
 			'exclude' => 1,
 			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
 			'config' => array (
@@ -29,7 +29,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				)
 			)
 		),
-		'l18n_parent' => array (		
+		'l18n_parent' => array (
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude'     => 1,
 			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
@@ -42,12 +42,12 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				'foreign_table_where' => 'AND tx_ketroubletickets_tickets.pid=###CURRENT_PID### AND tx_ketroubletickets_tickets.sys_language_uid IN (-1,0)',
 			)
 		),
-		'l18n_diffsource' => array (		
+		'l18n_diffsource' => array (
 			'config' => array (
 				'type' => 'passthrough'
 			)
 		),
-		'hidden' => array (		
+		'hidden' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -55,7 +55,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (		
+		'starttime' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -67,7 +67,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (		
+		'endtime' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -83,7 +83,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				)
 			)
 		),
-		'fe_group' => array (		
+		'fe_group' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
 			'config'  => array (
@@ -97,18 +97,18 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				'foreign_table' => 'fe_groups'
 			)
 		),
-		"title" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.title",		
+		"title" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.title",
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",	
+				"type" => "input",
+				"size" => "30",
 				"eval" => "required",
 			)
 		),
-		"description" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.description",		
+		"description" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.description",
 			"config" => Array (
 				"type" => "text",
 				"cols" => "30",
@@ -126,9 +126,9 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				),
 			)
 		),
-		"until_date" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.until_date",		
+		"until_date" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.until_date",
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "8",
@@ -138,9 +138,9 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				"default"  => "0"
 			)
 		),
-		"from_date" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.from_date",		
+		"from_date" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.from_date",
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "8",
@@ -150,57 +150,57 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				"default"  => "0"
 			)
 		),
-		"owner_feuser" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.owner_feuser",		
+		"owner_feuser" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.owner_feuser",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "fe_users",	
-				"size" => 1,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "fe_users",
+				"size" => 1,
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"responsible_feuser" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.responsible_feuser",		
+		"responsible_feuser" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.responsible_feuser",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "fe_users",	
-				"size" => 1,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "fe_users",
+				"size" => 1,
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"observers_feuser" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.observers_feuser",		
+		"observers_feuser" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.observers_feuser",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "fe_users",	
-				"size" => 5,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "fe_users",
+				"size" => 5,
 				"minitems" => 0,
 				"maxitems" => 50,
 			)
 		),
-		"category" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.category",		
+		"category" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.category",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_ketroubletickets_categories",	
-				"size" => 5,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "tx_ketroubletickets_categories",
+				"size" => 1,
 				"minitems" => 0,
-				"maxitems" => 50,
+				"maxitems" => 1,
 			)
 		),
-		"status" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.status",		
+		"status" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.status",
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
@@ -219,13 +219,13 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_OFFER", "offer"),
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ONHOLD", "onhold"),
 				),
-				"size" => 1,	
+				"size" => 1,
 				"maxitems" => 1,
 			)
 		),
-		"billing" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.billing",		
+		"billing" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.billing",
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
@@ -234,13 +234,13 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_INVOICE", "invoice"),
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_SERVICE_INVOICE", "service_invoice"),
 				),
-				"size" => 1,	
+				"size" => 1,
 				"maxitems" => 1,
 			)
 		),
-		"priority" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.priority",		
+		"priority" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.priority",
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
@@ -248,13 +248,13 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_1", "1"),
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_3", "3"),
 				),
-				"size" => 1,	
+				"size" => 1,
 				"maxitems" => 1,
 			)
 		),
-		"notifications_owner" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_owner",		
+		"notifications_owner" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_owner",
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
@@ -262,13 +262,13 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_owner.I.1", "oneverychange"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_owner.I.2", "onstatuschange"),
 				),
-				"size" => 1,	
+				"size" => 1,
 				"maxitems" => 1,
 			)
 		),
-		"notifications_responsible" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_responsible",		
+		"notifications_responsible" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_responsible",
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
@@ -276,13 +276,13 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_responsible.I.1", "oneverychange"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_responsible.I.2", "onstatuschange"),
 				),
-				"size" => 1,	
+				"size" => 1,
 				"maxitems" => 1,
 			)
 		),
-		"notifications_observer" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_observer",		
+		"notifications_observer" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_observer",
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
@@ -290,56 +290,56 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_observer.I.1", "oneverychange"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_observer.I.2", "onstatuschange"),
 				),
-				"size" => 1,	
+				"size" => 1,
 				"maxitems" => 1,
 			)
 		),
-		"files" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.files",		
+		"files" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.files",
 			"config" => Array (
 				"type" => "group",
 				"internal_type" => "file",
-				"allowed" => "",	
-				"disallowed" => "php,php3",	
-				"max_size" => 20000,	
+				"allowed" => "",
+				"disallowed" => "php,php3",
+				"max_size" => 20000,
 				"uploadfolder" => "uploads/tx_ketroubletickets",
-				"size" => 5,	
+				"size" => 5,
 				"minitems" => 0,
 				"maxitems" => 200,
 				"show_thumbs" => 1,
 			)
 		),
-		"time_used" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.time_used",		
+		"time_used" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.time_used",
 			"config" => Array (
-				"type" => "input",	
-				"size" => "5",	
+				"type" => "input",
+				"size" => "5",
 				"eval" => "int",
 			)
 		),
-		"time_planned" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.time_planned",		
+		"time_planned" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.time_planned",
 			"config" => Array (
-				"type" => "input",	
-				"size" => "5",	
+				"type" => "input",
+				"size" => "5",
 				"eval" => "int",
 			)
 		),
-		"effort" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.effort",		
+		"effort" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.effort",
 			"config" => Array (
-				"type" => "input",	
-				"size" => "10",	
+				"type" => "input",
+				"size" => "10",
 				"eval" => "",
 			)
 		),
-		'close_time' => array (		
+		'close_time' => array (
 			'exclude' => 1,
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.close_time",		
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.close_time",
 			'config'  => array (
 				'type'     => 'input',
 				'size'     => '8',
@@ -349,21 +349,21 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				'checkbox' => '0'
 			)
 		),
-		"related_tickets" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.related_tickets",		
+		"related_tickets" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.related_tickets",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_ketroubletickets_tickets",	
-				"size" => 5,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "tx_ketroubletickets_tickets",
+				"size" => 5,
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"additional_info" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.additional_info",		
+		"additional_info" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.additional_info",
 			"config" => Array (
 				"type" => "text",
 				"cols" => "30",
@@ -388,7 +388,7 @@ $TCA["tx_ketroubletickets_comments"] = array (
 	),
 	"feInterface" => $TCA["tx_ketroubletickets_comments"]["feInterface"],
 	"columns" => array (
-		't3ver_label' => array (		
+		't3ver_label' => array (
 			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
 			'config' => array (
 				'type' => 'input',
@@ -396,7 +396,7 @@ $TCA["tx_ketroubletickets_comments"] = array (
 				'max'  => '30',
 			)
 		),
-		'sys_language_uid' => array (		
+		'sys_language_uid' => array (
 			'exclude' => 1,
 			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
 			'config' => array (
@@ -409,7 +409,7 @@ $TCA["tx_ketroubletickets_comments"] = array (
 				)
 			)
 		),
-		'l18n_parent' => array (		
+		'l18n_parent' => array (
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude'     => 1,
 			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
@@ -422,12 +422,12 @@ $TCA["tx_ketroubletickets_comments"] = array (
 				'foreign_table_where' => 'AND tx_ketroubletickets_comments.pid=###CURRENT_PID### AND tx_ketroubletickets_comments.sys_language_uid IN (-1,0)',
 			)
 		),
-		'l18n_diffsource' => array (		
+		'l18n_diffsource' => array (
 			'config' => array (
 				'type' => 'passthrough'
 			)
 		),
-		'hidden' => array (		
+		'hidden' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -435,7 +435,7 @@ $TCA["tx_ketroubletickets_comments"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (		
+		'starttime' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -447,7 +447,7 @@ $TCA["tx_ketroubletickets_comments"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (		
+		'endtime' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -463,7 +463,7 @@ $TCA["tx_ketroubletickets_comments"] = array (
 				)
 			)
 		),
-		'fe_group' => array (		
+		'fe_group' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
 			'config'  => array (
@@ -477,33 +477,33 @@ $TCA["tx_ketroubletickets_comments"] = array (
 				'foreign_table' => 'fe_groups'
 			)
 		),
-		"ticket_uid" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_comments.ticket_uid",		
+		"ticket_uid" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_comments.ticket_uid",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_ketroubletickets_tickets",	
-				"size" => 1,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "tx_ketroubletickets_tickets",
+				"size" => 1,
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"feuser_uid" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_comments.feuser_uid",		
+		"feuser_uid" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_comments.feuser_uid",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "fe_users",	
-				"size" => 1,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "fe_users",
+				"size" => 1,
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"content" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_comments.content",		
+		"content" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_comments.content",
 			"config" => Array (
 				"type" => "text",
 				"cols" => "30",
@@ -539,7 +539,7 @@ $TCA["tx_ketroubletickets_categories"] = array (
 	),
 	"feInterface" => $TCA["tx_ketroubletickets_categories"]["feInterface"],
 	"columns" => array (
-		't3ver_label' => array (		
+		't3ver_label' => array (
 			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
 			'config' => array (
 				'type' => 'input',
@@ -547,7 +547,7 @@ $TCA["tx_ketroubletickets_categories"] = array (
 				'max'  => '30',
 			)
 		),
-		'sys_language_uid' => array (		
+		'sys_language_uid' => array (
 			'exclude' => 1,
 			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
 			'config' => array (
@@ -560,7 +560,7 @@ $TCA["tx_ketroubletickets_categories"] = array (
 				)
 			)
 		),
-		'l18n_parent' => array (		
+		'l18n_parent' => array (
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude'     => 1,
 			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
@@ -573,12 +573,12 @@ $TCA["tx_ketroubletickets_categories"] = array (
 				'foreign_table_where' => 'AND tx_ketroubletickets_categories.pid=###CURRENT_PID### AND tx_ketroubletickets_categories.sys_language_uid IN (-1,0)',
 			)
 		),
-		'l18n_diffsource' => array (		
+		'l18n_diffsource' => array (
 			'config' => array (
 				'type' => 'passthrough'
 			)
 		),
-		'hidden' => array (		
+		'hidden' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -586,7 +586,7 @@ $TCA["tx_ketroubletickets_categories"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (		
+		'starttime' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -598,7 +598,7 @@ $TCA["tx_ketroubletickets_categories"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (		
+		'endtime' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -614,7 +614,7 @@ $TCA["tx_ketroubletickets_categories"] = array (
 				)
 			)
 		),
-		'fe_group' => array (		
+		'fe_group' => array (
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
 			'config'  => array (
@@ -628,22 +628,22 @@ $TCA["tx_ketroubletickets_categories"] = array (
 				'foreign_table' => 'fe_groups'
 			)
 		),
-		"title" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_categories.title",		
+		"title" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_categories.title",
 			"config" => Array (
-				"type" => "input",	
+				"type" => "input",
 				"size" => "30",
 			)
 		),
-		"singleviewpage" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_categories.singleviewpage",		
+		"singleviewpage" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_categories.singleviewpage",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "pages",	
-				"size" => 1,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "pages",
+				"size" => 1,
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
@@ -666,54 +666,54 @@ $TCA["tx_ketroubletickets_history"] = array (
 	),
 	"feInterface" => $TCA["tx_ketroubletickets_history"]["feInterface"],
 	"columns" => array (
-		"ticket_uid" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.ticket_uid",		
+		"ticket_uid" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.ticket_uid",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_ketroubletickets_tickets",	
-				"size" => 1,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "tx_ketroubletickets_tickets",
+				"size" => 1,
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"feuser_uid" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.feuser_uid",		
+		"feuser_uid" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.feuser_uid",
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "fe_users",	
-				"size" => 1,	
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "fe_users",
+				"size" => 1,
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"databasefield" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.databasefield",		
+		"databasefield" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.databasefield",
 			"config" => Array (
 				"type" => "none",
 			)
 		),
-		"feuser_username" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.feuser_username",		
+		"feuser_username" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.feuser_username",
 			"config" => Array (
 				"type" => "none",
 			)
 		),
-		"value_old" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.value_old",		
+		"value_old" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.value_old",
 			"config" => Array (
 				"type" => "none",
 			)
 		),
-		"value_new" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.value_new",		
+		"value_new" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history.value_new",
 			"config" => Array (
 				"type" => "none",
 			)

@@ -2292,7 +2292,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$where_clause .= $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
 					$where_clause .= ' AND pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
 					$where_clause .= $lcObj->enableFields($this->tablename);
-					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time ASC', 1);
+					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time DESC', 1);
 					$valueList = '';
 
 					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res_month)) {
@@ -2653,7 +2653,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 									$content .= '<option value="' . $row['uid'] . '"' . $selected . '>';
 
 										// render name
-									$content .= $this->renderNameFromFeUserUid($row['uid']);
+									$content .= $this->renderNameFromFeUserUid($row['uid'], $fieldConf['lastNameFirst']);
 
 									$content .= '</option>';
 								}
@@ -2755,7 +2755,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @access public
 	 * @return string
 	 */
-	public function renderNameFromFeUserUid($uid=0) {
+	public function renderNameFromFeUserUid($uid=0, $lastNameFirst = 0) {
 		$name = '';
 
 		$feUserData = $this->getFeUserData($uid);
@@ -2766,11 +2766,21 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$name .= ' (' . $feUserData['username'] . ')';
 			}
 		} else if ($feUserData['last_name']) {
-			$name = $feUserData['first_name'];
-			if ($name) {
+			if ($lastNameFirst) {
+				$name .= $feUserData['last_name'];
+			} else {
+				$name .= $feUserData['first_name'];
+			}
+			if ($name && $lastNameFirst) {
+				$name .= ', ';
+			} else if ($name) {
 				$name .= ' ';
 			}
-			$name .= $feUserData['last_name'];
+			if ($lastNameFirst) {
+				$name .= $feUserData['first_name'];
+			} else {
+				$name .= $feUserData['last_name'];
+			}
 			if ($this->conf['addUsername']) {
 				$name .= ' (' . $feUserData['username'] . ')';
 			}
@@ -3501,7 +3511,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				return str_replace(',', ', ',$this->internal['currentRow'][$fieldName]);
 				break;
 
-
 			case 'category':
 				$retval = $this->lib->getNameListFromUidList($this->internal['currentRow'][$fieldName], $this->categoryTablename, 'title');
 				return $retval;
@@ -3551,6 +3560,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 				break;
 
+			case 'additional_info':
+				$retval = nl2br($this->cleanUpHtmlOutput($this->internal['currentRow'][$fieldName]));
+				return $retval;
+				break;
 
 			default:
 				$retval = $this->cleanUpHtmlOutput($this->internal['currentRow'][$fieldName]);

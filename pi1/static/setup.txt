@@ -2,7 +2,8 @@ plugin.tx_ketroubletickets_pi1 {
 	# include CSS?
 	includeDefaultCSS = 1
 
-	# PID List. Sysfolder on which the tickets and categories are stored
+	# PID List. Sysfolder on which the tickets and categories are stored.
+	# May be overwritten in flexform.
 	pidList =
 	recursive =
 
@@ -195,6 +196,7 @@ plugin.tx_ketroubletickets_pi1 {
 			name = owner_feuser
 			type = feuserSelect
 			orderBy = username
+			lastNameFirst = 1
 			required = 0
 			prefillWithCurrentUserIfEmpty = 1
 			# the owner is set only by creating a new ticket
@@ -310,6 +312,7 @@ plugin.tx_ketroubletickets_pi1 {
 			name = responsible_feuser
 			type = feuserSelect
 			orderBy = username
+			lastNameFirst = 1
 			flexformFieldForPreselectedUser = responsible_singleuser
 			flexformFieldForUsergroupToChoseFrom = responsible_group_to_choose_from
 			size = 1
@@ -321,6 +324,7 @@ plugin.tx_ketroubletickets_pi1 {
 			name = observers_feuser
 			type = feuserSelect
 			orderBy = username
+			lastNameFirst = 1
 			flexformFieldForPreselectedUser = observer_singleuser
 			flexformFieldForUsergroupToChoseFrom = observer_group_to_choose_from
 			size = 12
@@ -425,21 +429,3 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	# Add ticket UID to notification subject?
 	add_uid_to_subject = 1
 }
-
-
-
-# Examples from Kickstarter:
-/*
-# Example of default set CSS styles (these go into the document header):
-plugin.tx_ketroubletickets_pi1._CSS_DEFAULT_STYLE (
-  .tx-ketroubletickets-pi1 H2 { margin-top: 0px; margin-bottom: 0px; }
-)
-
-# Example of how to overrule LOCAL_LANG values for the plugin:
-plugin.tx_ketroubletickets_pi1._LOCAL_LANG.default {
-  pi_list_searchBox_search = Search!
-}
-
-# Example of how to set default values from TS in the incoming array, $this->piVars of the plugin:
-plugin.tx_ketroubletickets_pi1._DEFAULT_PI_VARS.test = test
-*/
