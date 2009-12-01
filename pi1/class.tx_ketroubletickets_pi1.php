@@ -2292,7 +2292,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$where_clause .= $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
 					$where_clause .= ' AND pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
 					$where_clause .= $lcObj->enableFields($this->tablename);
-					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time DESC', 1);
+					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time ASC', 1);
 					$valueList = '';
 
 					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res_month)) {
@@ -2315,9 +2315,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							}
 						}
 					}
+
+					// render newest on top
+					$valueListArray = explode(',', $valueList);
+					arsort($valueListArray);
+					$valueList = implode(',', $valueListArray);
+					unset($valueListArray);
 				}
 
-				// render the list
 				foreach (explode(',', $valueList) as $value) {
 					if (strlen($value)) {
 						$selected = $prefillValue == $value ? ' selected' : '';
