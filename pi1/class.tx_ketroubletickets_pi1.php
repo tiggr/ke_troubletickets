@@ -117,8 +117,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 
-		$GLOBALS['TYPO3_DB']->debugOutput = true;
-
 		// path to this extension
 		$this->extPath = t3lib_extMgm::siteRelPath($this->extKey);
 
