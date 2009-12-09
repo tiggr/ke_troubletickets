@@ -526,6 +526,7 @@
   border:1px solid #C1D1D1;
   margin: 4px 4px 0 0;
   width:165px;
+  overflow-y:scroll;
   }
 .kett_lvrow_box_l {
   float: left;
