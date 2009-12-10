@@ -31,11 +31,7 @@
  */
 
 // include the date2cal library
-if (t3lib_extMgm::isLoaded('date2cal')) {
-	require_once(t3lib_extMgm::extPath('date2cal').'src/class.jscalendar.php');
-} else {
-	die('Fatal error: date2cal not loaded.');
-}
+require_once(t3lib_extMgm::extPath('date2cal') . 'src/class.jscalendar.php');
 
 class frontend_JScalendar extends JScalendar {
 

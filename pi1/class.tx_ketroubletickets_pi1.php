@@ -52,7 +52,10 @@ define(CONST_RENDER_ALL_INTERNAL_FIELDS, 'render_all_internal_fields');
 require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
 
 // date2cal, modififed to work in the frontend
-require_once(t3lib_extMgm::extPath('ke_troubletickets').'pi1/class.frontend_JScalendar.php');
+// date2cal works only in versions below 4.3
+if (t3lib_div::int_from_ver(TYPO3_version) < 4003000 && t3lib_extMgm::isLoaded('date2cal')) {
+	require_once(t3lib_extMgm::extPath('ke_troubletickets').'pi1/class.frontend_JScalendar.php');
+}
 
 // Basic file func, needed for checking filenames when uploading files
 require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php');
@@ -144,11 +147,16 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		// make the configurationen class-wide available
 		$this->conf=$conf;
 
+		// use date2cal only in TYPO3 below 4.3 (date2cal does not work with 4.3)
+		$this->useDate2Cal = (t3lib_div::int_from_ver(TYPO3_version) < 4003000) && t3lib_extMgm::isLoaded('date2cal');
+
 		// make the date2cal instance
-		if (t3lib_extMgm::isLoaded('date2cal')) {
+		if (t3lib_extMgm::isLoaded('date2cal') && $this->useDate2Cal) {
 			$this->date2cal = frontend_JScalendar::getInstance();
 		} else {
-			return '<p class="error">' . $this->pi_getLL('error_date2cal_not_loaded') . '</p>';
+			if ($this->useDate2Cal) {
+				return '<p class="error">' . $this->pi_getLL('error_date2cal_not_loaded') . '</p>';
+			}
 		}
 
 		// a local content object (with clear configuration)
@@ -2156,7 +2164,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 		// date2cal js for singleview
-		$markerArray['DATE2CAL_JS'] = $this->date2cal->getMainJS();
+		if ($this->useDate2Cal) {
+			$markerArray['DATE2CAL_JS'] = $this->date2cal->getMainJS();
+		} else {
+			$markerArray['DATE2CAL_JS'] = '';
+		}
 
 		// Permalink URL
 		unset($linkconf);
@@ -2390,21 +2402,26 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 
 				// render the datefield using the date2cal extension
-				$field = $this->prefixId . '[' . $fieldConf['name'] . ']';
+				if ($this->useDate2Cal) {
+					$field = $this->prefixId . '[' . $fieldConf['name'] . ']';
 
-				$this->date2cal->config['inputField'] = $field;
-				$this->date2cal->config['calConfig']['ifFormat'] = $this->conf['datefield_inputfieldformat'];
-				$this->date2cal->setConfigOption('ifFormat', $this->conf['datefield_inputfieldformat']);
+					$this->date2cal->config['inputField'] = $field;
+					$this->date2cal->config['calConfig']['ifFormat'] = $this->conf['datefield_inputfieldformat'];
+					$this->date2cal->setConfigOption('ifFormat', $this->conf['datefield_inputfieldformat']);
 
-				$this->date2cal->setConfigOption('showsTime', 0, true);
-				$this->date2cal->setConfigOption('time24', 1, true);
+					$this->date2cal->setConfigOption('showsTime', 0, true);
+					$this->date2cal->setConfigOption('time24', 1, true);
 
-				// additional config options, see http://forge.typo3.org/issues/show/2674
-				$this->date2cal->setConfigOption('inputField', $field.'_hr');
-				$this->date2cal->setConfigOption('button', $field.'_trigger');
+					// additional config options, see http://forge.typo3.org/issues/show/2674
+					$this->date2cal->setConfigOption('inputField', $field.'_hr');
+					$this->date2cal->setConfigOption('button', $field.'_trigger');
 
-				// render the datepicker field
-				$fieldContent = $this->date2cal->render($prefillValue, $field);
+					// render the datepicker field
+					$fieldContent = $this->date2cal->render($prefillValue, $field);
+				} else {
+					$prefillValue = $this->cleanUpHtmlOutput($prefillValue);
+					$fieldContent .= '<input type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '"> ' . '(' . str_replace('%', '', $this->conf['datefield_inputfieldformat']) . ')';
+				}
 
 				$content .= $fieldContent;
 			break;
