@@ -3128,7 +3128,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$wrapper['browseLinksWrap'] .= '<div class="kett_entries_per_page">';
 		$wrapper['browseLinksWrap'] .= '<label>'. $this->pi_getLL('LABEL_ENTRIES_PER_PAGE').'</label>';
 		$wrapper['browseLinksWrap'] .= $this->getEntriesPerPageSelection();
-		$wrapper['browseLinksWrap'] .= '</div><class="kett_float_clean">&nbsp;</div>';
+		$wrapper['browseLinksWrap'] .= '</div><div class="kett_float_clean">&nbsp;</div>';
 		$wrapper['showResultsWrap'] = '<p class="resultText">|</p>';
 		$wrapper['browseBoxWrap'] = '<div '.$this->pi_classParam('browsebox').'> | </div>';
 		$this->markerArray['PAGEBROWSER'] = $this->pi_list_browseresults(1, '', $wrapper);
