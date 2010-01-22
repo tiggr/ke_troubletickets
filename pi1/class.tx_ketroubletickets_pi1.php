@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Christian Bülter <buelter@kennziffer.com>
+*  (c) 2007-2010 Christian Bülter <buelter@kennziffer.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -297,7 +297,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if ($this->ffdata['view'] == 'TEASER_OWN') {
 			$this->filter['responsible_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
-		if ($this->ffdata['view'] == 'TEASER_DELEGATED') {
+		if ($this->ffdata['view'] == 'TEASER_DEL') {
 			$this->filter['owner_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
 
@@ -2964,7 +2964,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				break;
 
 				// tickets the user delegated to other users
-			case 'TEASER_DELEGATED':
+			case 'TEASER_DEL':
 				$lConf = $this->conf['teaserViewDelegated.'];
 				break;
 
@@ -3211,14 +3211,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function makelist($res, $templateSubpartRow='')	{/*{{{*/
 		$items=array();
+	
 			// Make list table rows
 		while($this->internal['currentRow'] = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 			$items[]=$this->makeListItem($templateSubpartRow);
 		}
 
-		$out = '<div'.$this->pi_classParam('listrow').'>
-			'.implode(chr(10),$items).'
-			</div>';
+		$out = implode(chr(10),$items);
 		return $out;
 	}/*}}}*/
 
