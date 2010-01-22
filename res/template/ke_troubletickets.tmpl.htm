@@ -1,4 +1,4 @@
-<!-- 
+<!--
 ***********************************************
 New Ticket / Edit Ticket Form / Singleview
 ***********************************************
@@ -34,7 +34,7 @@ New Ticket / Edit Ticket Form / Singleview
 </div>
 
 <!-- Error  -->
-###ERRORS### 
+###ERRORS###
 
 <div class="kett_singleview">
 
@@ -46,7 +46,7 @@ New Ticket / Edit Ticket Form / Singleview
       <label>###LABEL_NUMBER###:</label>&nbsp;###UID###&nbsp;&nbsp;&nbsp;<label>###LABEL_OWNER_FEUSER###:</label>&nbsp;###VALUE_OWNER_FEUSER###&nbsp;&nbsp;###OPTIONAL_CATEGORY###
     </div>
   </div>
-  
+
   <div class="kett_sv_boxes">
     <div class="kett_sv_single_box">
       <div class="kett_sv_sbox_head">###LABEL_STATUS###</div>
@@ -73,7 +73,7 @@ New Ticket / Edit Ticket Form / Singleview
         <div class="kett_sv_sboxb_in">###FIELD_UNTIL_DATE###</div>
       </div>
     </div>
-    
+
     <div class="kett_sv_single_box">
       <div class="kett_sv_sbox_head">###LABEL_EFFORT###</div>
       <div class="kett_sv_sbox_body">
@@ -84,47 +84,47 @@ New Ticket / Edit Ticket Form / Singleview
     ###INTERNAL_TIME_PLANNED###
     ###INTERNAL_TIME_USED###
   </div>
-  
+
   <div class="kett_sv_description">
     <div class="kett_sv_desc_head">###LABEL_DESCRIPTION###</div>
     <div class="kett_sv_desc_body"><table><tr><td>###FIELD_DESCRIPTION###</td></tr></table></div>
   </div>
-  
+
   <div class="kett_sv_save">
     <div class="kett_sv_save_in">
       ###FIELD_SUBMIT###
     </div>
     <div class="kett_float_clean"></div>
   </div>
-  
+
   ###INTERNAL_ADDITIONAL_INFO###
-  
+
   <div class="kett_sv_description">
     <div class="kett_sv_desc_head">###LABEL_FILES###<a name="kett_goto_files">&nbsp;</a></div>
     <div class="kett_sv_desc_body">###FIELD_FILES###</div>
   </div>
-  
+
   <div class="kett_sv_description">
     <div class="kett_sv_desc_head">###LABEL_RELATED_TICKETS###</div>
     <div class="kett_sv_desc_body">###FIELD_RELATED_TICKETS###</div>
   </div>
-  
+
   ###OPTIONAL_OBSERVERS_FEUSER###
   ###OPTIONAL_NOTIFICATIONS_OWNER###
   ###OPTIONAL_NOTIFICATIONS_RESPONSIBLE###
   ###OPTIONAL_NOTIFICATIONS_OBSERVER###
-  
+
   ###HIDDEN_FIELDS###
-  
+
   ###OPTIONAL_TICKET_COMMENT###
-  
+
   <div class="kett_sv_save">
     <div class="kett_sv_save_in">
       ###FIELD_SUBMIT###
     </div>
     <div class="kett_float_clean"></div>
   </div>
-  
+
   </form>
   ###ADDITIONALJS_POST###
   ###OPTIONAL_TICKET_HISTORY###
@@ -135,7 +135,7 @@ New Ticket / Edit Ticket Form / Singleview
 
 <!-- ###TICKET_FORM### END-->
 
-<!-- 
+<!--
 ***********************************************
 Optional Labels and Fields
 ***********************************************
@@ -146,7 +146,7 @@ Optional Labels and Fields
 <!-- ###OPTIONAL_CATEGORY_SUBPART### END-->
 
 <!-- ###OPTIONAL_COMMENT_ROW_SUBPART### START-->
-  <div class="commentrow_###COMMENTROW_ODD_EVEN###"> 
+  <div class="commentrow_###COMMENTROW_ODD_EVEN###">
   <div style="font-weight:bold; border-top:1px dotted black; border-bottom:1px dotted black; margin:20px 0 10px 0; font-size:10px;">
   ###COMMENT_DATE###, <em>###COMMENT_AUTHOR###</em>
   </div>
@@ -225,7 +225,7 @@ Optional Labels and Fields
   </div>
 <!-- ###INTERNAL_ADDITIONAL_INFO_SUBPART### END-->
 
-<!-- 
+<!--
 ***********************************************
 Comments (in Singleview)
 ***********************************************
@@ -241,7 +241,7 @@ Comments (in Singleview)
 
 <!-- ###TICKET_COMMENT### END-->
 
-<!-- 
+<!--
 ***********************************************
 Ticket History (in Singleview)
 ***********************************************
@@ -256,7 +256,7 @@ Ticket History (in Singleview)
         <span style="border:0px; float:left; margin:5px 0 0 0;">###ICONMINUS###</span></a>
         <a href="###CURRENT_URL####zur_history" onClick="document.getElementById('std_tab_grey_body_id').style.display = 'block';">
         <span style="border:0px; float:left; margin:5px 0 0 0;">###ICONPLUS###</span></a>
-      </div>  
+      </div>
     </div>
     <div class="kett_svbox2_body"><a name="zur_history"></a>
         <div id="std_tab_grey_body_id" style="display:none;">
@@ -289,7 +289,7 @@ Ticket History (in Singleview)
 
 
 
-<!-- 
+<!--
 ***********************************************
 *+++++++ LISTVIEW ++++++++++++++++++++++++++++*
 ***********************************************
@@ -317,7 +317,7 @@ Ticket History (in Singleview)
   <div class="kett_float_right">
     <div class="kett_toolbar_filter">
       <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
-		
+
 		<!-- ###FILTER_BLOCK_STATUS### start -->
 		<div class="single_filter"><label>###LABEL_STATUS###:</label>###FILTER_STATUS###</div>
 		<!-- ###FILTER_BLOCK_STATUS### end -->
@@ -357,7 +357,7 @@ Ticket History (in Singleview)
       ###HEADER_STATUS###
     </div>
   </div>
-  
+
   <div class="kett_float_right">
 	<div class="kett_toolbar_csv">
 	  <div>
@@ -367,7 +367,7 @@ Ticket History (in Singleview)
     </div>
   </div>
   <div class="kett_float_clean">&nbsp;</div>
-  
+
 </div>
 
 
@@ -388,14 +388,9 @@ Ticket History (in Singleview)
 
 
 
-
-
-
-
-
-<!-- 
+<!--
 ***********************************************
-TEASERVIEW 
+TEASERVIEW
 ***********************************************
 -->
 <!-- ###TEASERVIEW### START-->
@@ -441,7 +436,6 @@ TEASERVIEW
   <div class="kett_float_clean">&nbsp;</div>
 </div>
 
-
 <table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
   <tr>
     <td class="kett_tw_head">###LABEL_CRDATE###</td>
@@ -467,8 +461,7 @@ TEASERVIEW
 
 
 
-
-<!-- 
+<!--
 ***********************************************
 TEASERVIEW OWN TASKS
 ***********************************************
@@ -545,15 +538,92 @@ TEASERVIEW OWN TASKS
 <!-- ###TEASERVIEWOWN_SINGLE_ROW### END-->
 
 
+<!--
+***********************************************
+TEASERVIEW DELEGATED TASKS
+***********************************************
+-->
+<!-- ###TEASERVIEWDELEGATED### START-->
+<!-- +++ Listview Toolbar +++ new ticket, searchbox -->
+<div class="kett_listview_toolbar">
+    <div class="kett_float_left">
+        <div class="kett_toolbar_filter">
+          	<form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
+      			<label>###LABEL_STATUS###</label>###FILTER_STATUS### ###FILTER_SUBMIT###
+      		</form>
+      </div>
+    </div>
+    <div class="kett_float_right">
+      <div class="kett_searchbox">
+        ###SEARCHBOX###
+      </div>
+    </div>
+    <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+<!-- +++ Listview-Toolbar +++ sorting, CSV export -->
+<div class="kett_listview_toolbar">
+  <div class="kett_float_left">
+    <div class="kett_toolbar_sort">
+      <label>###LABEL_SORTING###:</label>
+      ###HEADER_CRDATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_FROM_DATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_UNTIL_DATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_PRIORITY###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_STATUS###
+    </div>
+  </div>
+  <div class="kett_float_right">
+    <div class="kett_toolbar_csv">
+      <div>
+        <a href="###LINK_URL_CSV_EXPORT###">###ICONCSVEXPORT###</a><a href="###LINK_URL_CSV_EXPORT###">###LABEL_LINKTEXT_CSV_EXPORT###</a>
+      </div>
+      <div class="kett_float_clean">&nbsp;</div>
+    </div>
+  </div>
+  <div class="kett_float_clean">&nbsp;</div>
+</div>
 
 
+<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
+  <tr>
+    <td class="kett_tw_head">###LABEL_CRDATE###</td>
+    <td class="kett_tw_head">###LABEL_TITLE###</td>
+    <td class="kett_tw_head">###LABEL_RESPONSIBLE_FEUSER###</td>
+    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
+    <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
+  </tr>
+###LISTCONTENT###
+</table>
+<!-- ###TEASERVIEWDELEGATED### END-->
 
+<!-- ###TEASERVIEWDELEGATED_SINGLE_ROW### START-->
+<tr>
+  <td class="kett_tw_body">###CRDATE###</td>
+  <td class="kett_tw_body">
+    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
+    ###TITLE###
+  </td>
+  <td class="kett_tw_body">###RESPONSIBLE_FEUSER###</td>
+  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###FROM_DATE###</span></td>
+  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
+</tr>
+<!-- ###TEASERVIEWDELEGATED_SINGLE_ROW### END-->
 
+<!--
+***********************************************
+LISTVIEW ROW
+***********************************************
+-->
 
 <!-- ###LISTVIEW_SINGLE_ROW### START-->
 
 <div class="kett_listview_row current_row_###OWN_TASK###">
-  
+
   <div class="kett_listview_row_head">
     <div class="kett_listview_row_statusicon">###STATUS_ICON###</div>
     <div class="kett_listview_row_headline">
@@ -561,7 +631,7 @@ TEASERVIEW OWN TASKS
       <div class="kett_lvrow_headline_title">###TITLE###</div>
     </div>
   </div>
-  
+
   <div class="kett_listview_row_body">
     <div class="kett_listview_row_box">
       <div class="kett_lvrow_box_l">###LABEL_STATUS###:</div>
@@ -577,7 +647,7 @@ TEASERVIEW OWN TASKS
       ###DESCRIPTION_CLEAN###
     </div>
   </div>
- 
+
   <div class="kett_listview_row_user">
     <table cellpadding="0" cellspacing="0">
       <tr>
@@ -592,7 +662,7 @@ TEASERVIEW OWN TASKS
       </tr>
     </table>
   </div>
-  
+
   <div class="kett_listview_row_foot">
     <div class="kett_float_left">
       ###LABEL_CRDATE###: ###CRDATE###
@@ -608,12 +678,12 @@ TEASERVIEW OWN TASKS
     </div>
     <div class="kett_float_right">###EDIT_ICON### ###DELETE_ICON###</div>
   </div>
-  
+
 
   </div>
 <!-- ###LISTVIEW_SINGLE_ROW### END-->
 
-<!-- 
+<!--
 ***********************************************
 E-Mail Notification
 ***********************************************
@@ -631,7 +701,7 @@ E-Mail Notification
 <table border="0" cellpadding="0" cellspacing="0" align="center" style="width:80%; padding:0px; background:#ffffff; border-top:3px solid #FEBC83; border-bottom:3px solid #ebc345;">
 <tr>
 	<td style="border-top:3px solid #F99D4E; background:#F58220; padding:5px;  font-family: Verdana; font-size:11pt; font-weight:bold; color: white;">
-	
+
 	<table style="width: 100%; padding: 0;">
 		<tr>
 			<td style="font-family: Verdana; font-size: 11pt;"><b><span style="color:#e6e6e6;">###UID###</span> <span style="color:#ffffff;">###EMAIL_FIELD_TITLE###</span></b></td>
@@ -639,9 +709,9 @@ E-Mail Notification
 			<td width="130" style="width: 130px; font-family: Verdana; font-size: 10pt; text-align: right;"><div style="float: right; text-align: right; margin: 3px 3px 4px 0">###LINK_TO_SINGLEVIEW_FROM_EMAIL###</div></td>
 		</tr>
 	</table>
-	
+
 	<div style="font-family: Verdana; font-size: 10pt; color: #000000; padding: 0 0 0 5px; font-weight: normal;">###WHAT_HAS_HAPPENED###</div>
-	</td>	
+	</td>
 </tr>
 
 ###INTERNAL_CHANGES###
@@ -660,7 +730,7 @@ E-Mail Notification
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"><b>###LABEL_OWNER_FEUSER###:</td>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"> ###EMAIL_FIELD_OWNER_FEUSER###&nbsp;</td>
 			</tr>
-			<tr>	
+			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"><b>###LABEL_RESPONSIBLE_FEUSER###:</td>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;">###EMAIL_FIELD_RESPONSIBLE_FEUSER###&nbsp;</td>
 			</tr>
@@ -684,34 +754,34 @@ E-Mail Notification
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_UNTIL_DATE###:</td>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_UNTIL_DATE###&nbsp;</td>
 			</tr>
-			<tr>	
+			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_EFFORT###:</td>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_EFFORT###&nbsp;</td>
 			</tr>
-			<tr>	
+			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_CATEGORY###:</td>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_CATEGORY###&nbsp;</td>
 			</tr>
-			<tr>	
+			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_FILES###:</td>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_FILES###&nbsp;</td>
 			</tr>
-			<tr>	
+			<tr>
 				<td style="vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_RELATED_TICKETS###:</td>
 				<td style="vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_RELATED_TICKETS###&nbsp;</td>
 			</tr>
 			</table>
 		</td>
-		
+
 		<td style="width:60%; vertical-align: top; background: #E6EFEF; font-family: Verdana; padding: 5px;">
 			<!--<div style="font-size:10pt;"><p><b>###LABEL_DESCRIPTION###:</b></p></div>-->
 			<div style="font-size:10pt;">###EMAIL_FIELD_DESCRIPTION###</div>
 		</td>
 
 		</tr>
-		
+
 		</table>
-	
+
 	</td>
 </tr>
 
@@ -737,7 +807,7 @@ E-Mail Notification
 <tr>
 	<td style="border-top:3px solid #F99D4E; background:#bde3f8; padding:5px;  font-family: Verdana; font-size:11pt; font-weight:bold; color: white;">
 	<div style="font-family: Verdana; font-size: 10pt; color: #000000; padding: 0 0 0 5px; font-weight: normal;">###INTERNAL_CHANGES###</div>
-	</td>	
+	</td>
 </tr>
 <!-- ###INTERNAL_CHANGES_SUBPART### END-->
 
@@ -814,14 +884,14 @@ E-Mail Notification
 		<div class="kett_float_clean">&nbsp;</div>
 	</div>
 	<!-- ###INTERNAL_TIME_USED### end  -->
-	
+
 	<div class="kett_float_clean">&nbsp;</div>
-	
+
 	<div class="printview_block">
 		<span class="label">###LABEL_DESCRIPTION###:</span><br />
 		###FIELD_DESCRIPTION###
 	</div>
-	
+
 	<!-- ###INTERNAL_ADDITIONAL_INFO### start -->
 	<div class="printview_block">
 		<label>###LABEL_ADDITIONAL_INFO###:</label>
@@ -848,9 +918,9 @@ E-Mail Notification
 		<label>###LABEL_COMMENTS###:</label>
 		###FIELD_TICKET_COMMENT###
 	</div>
-	
-	
-	
+
+
+
 </div>
 
 

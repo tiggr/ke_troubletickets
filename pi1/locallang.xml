@@ -48,7 +48,7 @@
 			<label index="formerror_has_been_deleted"> has been deleted.</label>
 			<label index="formerror_hours">Please enter the amount of hours correctly (for example 1,5).</label>
 			<label index="formerror_could_not_create_related_ticket">Relation to ticket could not be created.</label>
-			
+
 			<label index="error_date2cal_not_loaded">Error: The extension date2cal has to be installed.</label>
 			<label index="error_no_tickets_found">No tickets have been found.</label>
 			<label index="error_no_template">Error: No static template has been found. Did you include the static template?</label>
@@ -57,12 +57,12 @@
 			<label index="error_file_too_big">Error: The file is too big.</label>
 			<label index="error_filetype_not_allowed">Error: This filetype is not allowed.</label>
 			<label index="error_file_upload_not_successful">Error: File could not be uploaded.</label>
-			
+
 			<label index="status_fields_only">Your changes have been saved.</label>
 			<label index="status_comment_only">Your comment has been saved.</label>
 			<label index="status_fields_and_comment">Your changes and your comment have been saved.</label>
 			<label index="status_new_ticket">Your ticket has been created.</label>
-			
+
 			<label index="link_to_new_ticket">Create new ticket</label>
 			<label index="back_to_listview">Back</label>
 			<label index="altText_edit">Edit ticket</label>
@@ -113,7 +113,7 @@
 			<label index="SELECTLABEL_ONSTATUSCHANGE">On every status change</label>
 			<label index="SELECTLABEL_NEVER">Never</label>
 			<label index="SELECTLABEL_FRONTENDSELECTION">Select in frontend</label>
-			
+
 			<label index="LABEL_HISTORY_DATE">Date</label>
 			<label index="LABEL_HISTORY_USER">User</label>
 			<label index="LABEL_HISTORY_FIELD">Field</label>
@@ -154,11 +154,11 @@
 			<label index="LABEL_PERMALINK">Permalink</label>
 			<label index="LABEL_HISTORY">History of changes</label>
 			<label index="LABEL_PRINTLINK">Printview</label>
-			
+
 			<label index="LABEL_NOTIFICATIONS_OWNER">Notifications to the owner</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Notifications to the responsible user</label>
 			<label index="LABEL_NOTIFICATIONS_OBSERVER">Notifications to the observers</label>
-			
+
 			<label index="LABEL_COMMENT_HEADER">Comments</label>
 			<label index="LABEL_COMMENT_SUBMIT">Save</label>
 
@@ -168,7 +168,7 @@
 
 			<label index="LABEL_GO_TO_TICKET">Open this ticket</label>
 			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">Go to the comments</label>
-                        
+
 			<label index="LABEL_RELATED_TICKETS">Related tickets</label>
 			<label index="LABEL_RELATED_TICKETS_ADD">Add (enter number):</label>
 
@@ -180,7 +180,7 @@
 			<label index="LABEL_NOT_AVAILABLE">n/a</label>
 
 			<label index="LABEL_ENTRIES_PER_PAGE">Entries per page</label>
-			
+
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">General settings</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">User settings</label>
 
@@ -188,6 +188,7 @@
 			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normal list</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_normal">Compact list</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own">Compact list of own tickets</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_delegated">Compact list of tickets delegated</label>
 
 			<label index="tt_content.pi_ketroubletickets.show_tickets">Show tickets</label>
 			<label index="tt_content.pi_ketroubletickets.show_tickets.only_own">only own/responsible/observed</label>
@@ -248,7 +249,7 @@
 			<label index="formerror_has_been_deleted"> wurde gelöscht.</label>
 			<label index="formerror_hours">Bitte geben Sie die Stundenzahl korrekt ein (z. B. 1,5).</label>
 			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Ticket konnte nicht erstellt werden.</label>
-			
+
 			<label index="error_date2cal_not_loaded">Fehler: Die Erweiterung date2cal muss installiert sein.</label>
 			<label index="error_no_tickets_found">Es wurden keine Aufgaben gefunden.</label>
 			<label index="error_no_template">Fehler: Es wurde kein Template gefunden. Wurde das statische Template eingebunden?</label>
@@ -257,12 +258,12 @@
 			<label index="error_file_too_big">Fehler: Die Datei ist zu groß.</label>
 			<label index="error_filetype_not_allowed">Fehler: Dieser Dateityp ist nicht erlaubt.</label>
 			<label index="error_file_upload_not_successful">Fehler: Die Datei konnte nicht hochgeladen werden.</label>
-			
+
 			<label index="status_fields_only">Ihre Änderungen wurden gespeichert.</label>
 			<label index="status_comment_only">Ihr Kommentar wurde gespeichert.</label>
 			<label index="status_fields_and_comment">Ihre Änderungen und Ihr Kommentar wurden gespeichert.</label>
 			<label index="status_new_ticket">Ihre Aufgabe wurde gespeichert.</label>
-			
+
 			<label index="link_to_new_ticket">Neue Aufgabe eröffnen</label>
 			<label index="back_to_listview">Zurück</label>
 			<label index="altText_edit">Aufgabe bearbeiten</label>
@@ -313,7 +314,7 @@
 			<label index="SELECTLABEL_ONSTATUSCHANGE">Bei Änderung des Status</label>
 			<label index="SELECTLABEL_NEVER">Nie</label>
 			<label index="SELECTLABEL_FRONTENDSELECTION">Auswahl im Frontend</label>
-			
+
 			<label index="LABEL_HISTORY_DATE">Datum</label>
 			<label index="LABEL_HISTORY_USER">Benutzer</label>
 			<label index="LABEL_HISTORY_FIELD">Feld</label>
@@ -354,11 +355,11 @@
 			<label index="LABEL_PERMALINK">Permalink</label>
 			<label index="LABEL_HISTORY">Verlauf d. Änderungen</label>
 			<label index="LABEL_PRINTLINK">Druckansicht</label>
-			
+
 			<label index="LABEL_NOTIFICATIONS_OWNER">Benachrichtigungen an den Besitzer</label>
 			<label index="LABEL_NOTIFICATIONS_RESPONSIBLE">Benachrichtigungen an den verantwortlichen Benutzer</label>
 			<label index="LABEL_NOTIFICATIONS_OBSERVER">Benachrichtigungen an den/die Beobachter</label>
-			
+
 			<label index="LABEL_COMMENT_HEADER">Kommentare</label>
 			<label index="LABEL_COMMENT_SUBMIT">Speichern</label>
 
@@ -368,7 +369,7 @@
 
 			<label index="LABEL_GO_TO_TICKET">Aufgabe aufrufen</label>
 			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">zu den Kommentaren</label>
-                        
+
 			<label index="LABEL_RELATED_TICKETS">Verwandte Aufgaben</label>
 			<label index="LABEL_RELATED_TICKETS_ADD">Hinzufügen (Nr. eingeben):</label>
 
@@ -378,9 +379,9 @@
 			<label index="LABEL_CLOSED_IN_MONTH">Erledigt in</label>
 
 			<label index="LABEL_NOT_AVAILABLE">n/a</label>
-		
+
 			<label index="LABEL_ENTRIES_PER_PAGE">Einträge pro Seite</label>
-			
+
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">Allgemeine Einstellungen</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">Benutzereinstellungen</label>
 
@@ -388,6 +389,7 @@
 			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normale Liste</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_normal">Kompakte Liste</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own">Kompakte Liste eigener Aufgaben</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_delegated">Kompakte Liste delegierter Aufgaben</label>
 
 			<label index="tt_content.pi_ketroubletickets.show_tickets">Zeige Aufgaben</label>
 			<label index="tt_content.pi_ketroubletickets.show_tickets.only_own">nur eigene/zu verantwortende/beobachtete</label>

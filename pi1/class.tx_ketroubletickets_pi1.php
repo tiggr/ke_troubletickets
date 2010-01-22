@@ -297,6 +297,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if ($this->ffdata['view'] == 'TEASER_OWN') {
 			$this->filter['responsible_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
+		if ($this->ffdata['view'] == 'TEASER_DELEGATED') {
+			$this->filter['owner_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
+		}
 
 		// save the filter in piVars
 		// Use base64 because the serialized value contains quotes
@@ -2960,7 +2963,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$lConf = $this->conf['teaserViewOwn.'];
 				break;
 
-			/* teaser view */
+				// tickets the user delegated to other users
+			case 'TEASER_DELEGATED':
+				$lConf = $this->conf['teaserViewDelegated.'];
+				break;
+
+			// teaser view
 			case 'TEASER_NORMAL':
 				$lConf = $this->conf['teaserView.'];
 				break;

@@ -410,12 +410,20 @@ plugin.tx_ketroubletickets_pi1.teaserView {
 	templateSubpartRow = ###TEASERVIEW_SINGLE_ROW###
 }
 
-# Teaserview of own tasks
+# Teaserview of own tickets
 plugin.tx_ketroubletickets_pi1.teaserViewOwn < plugin.tx_ketroubletickets_pi1.listView
 plugin.tx_ketroubletickets_pi1.teaserViewOwn {
 	results_at_a_time = 500
 	templateSubpart = ###TEASERVIEWOWN###
 	templateSubpartRow = ###TEASERVIEWOWN_SINGLE_ROW###
+}
+
+# Teaserview of tickets delegated to others
+plugin.tx_ketroubletickets_pi1.teaserViewDelegated < plugin.tx_ketroubletickets_pi1.listView
+plugin.tx_ketroubletickets_pi1.teaserViewDelegated {
+	results_at_a_time = 500
+	templateSubpart = ###TEASERVIEWDELEGATED###
+	templateSubpartRow = ###TEASERVIEWDELEGATED_SINGLE_ROW###
 }
 
 # Default values for email notifications
