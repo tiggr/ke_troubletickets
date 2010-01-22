@@ -2953,12 +2953,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function listView()	{/*{{{*/
 
-		// which template should be used?
+			// which template should be used?
 		switch ($this->ffdata['view']) {
+				// tickets the user is responsible for
 			case 'TEASER_OWN':
 				$lConf = $this->conf['teaserViewOwn.'];
 				break;
 
+			/* teaser view */
 			case 'TEASER_NORMAL':
 				$lConf = $this->conf['teaserView.'];
 				break;
@@ -2972,58 +2974,58 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$templateSubpartRow = $lConf['templateSubpartRow'];
 		$content = $this->cObj->getSubpart($this->templateCode, $templateSubpart);
 
-		// Initialize pointer
+			// Initialize pointer
 		if (!isset($this->piVars['pointer'])) {
 			$this->piVars['pointer']=0;
 		}
 
+			/* --------------------------------
+			// Initialize the query parameters.
+			/* -------------------------------*/
 
-		// Initializing the query parameters:
-
-		// Tablename
+			// Tablename
 		$this->internal['currentTable'] = $this->tablename;
 
-		// set orderBy and descFlag
+			// set orderBy and descFlag
 		list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':',$this->piVars['sort']);
 
-		// Number of results to show in a listing.
+			// Number of results to show in a listing.
 		$this->internal['results_at_a_time']=t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,10);
 		if ($this->piVars['entries_per_page']) $this->internal['results_at_a_time'] = $this->piVars['entries_per_page'];
 
-		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
+			// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
 		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;
 
-		// fields to search in
+			// fields to search in
 		$this->internal['searchFieldList'] = 'title,description';
 
-		// fields allowed for the ORDER BY command
-		//$this->internal['orderByList']='uid,title,crdate,until_date';
+			// fields allowed for the ORDER BY command
+			//$this->internal['orderByList']='uid,title,crdate,until_date';
 		$this->internal['orderByList'] = $this->conf['listView.']['headerList'];
 
-		// center the page browser
+			// center the page browser
 		$this->internal['pagefloat']='CENTER';
 
-		//function pi_list_query($table,$count=0,$addWhere='',$mm_cat='',$groupBy='',$orderBy='',$query='',$returnQueryArray=false)
-
-		// PERMISSION CHECKS
+			// PERMISSION CHECKS
 		$addWhere = $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
 
-		// add filter
+			// add filter
 		if (is_array($this->filter)) {
 			foreach ($this->filter as $filterName => $filterValue) {
-				// HACK for the "open and working" filter
-				// TODO: Should be configurable in Typoscript in future versions
+					// HACK for the "open and working" filter
+					// TODO: Should be configurable in Typoscript in future versions
 				if ($filterName == 'status') {
 					switch ($filterValue) {
 						case 'open_and_working':
 							$addWhere .= ' AND (status="open" OR status="working")';
 						break;
 						case 'all_not_closed':
-							// fetch only tickets which are not closed
-							// closed tickets are all ticket types that have the
-							// CONST_STATUS_CLOSED (normally "closed") in their key
-							// So you can invent new "closed"-types like
-							// "closed-without-solution" or "closed-another-reason" ...
+							/* fetch only tickets which are not closed
+							* closed tickets are all ticket types that have the
+							* CONST_STATUS_CLOSED (normally "closed") in their key
+							* So you can invent new "closed"-types like
+							* "closed-without-solution" or "closed-another-reason" ...
+							*/
 							$addWhere .= ' AND status NOT LIKE "' . CONST_STATUS_CLOSED . '%"';
 						break;
 						case 'all':
@@ -3049,45 +3051,45 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// filter for categories
+			// filter for categories
 		if ($this->ffdata['listcategories']!=''){
 			$addWhere .= ' AND category IN (' . $this->ffdata['listcategories'] . ') ';
 		}
 
-		// Get number of records:
+			// Get number of records:
 		$res = $this->pi_exec_query($this->tablename, 1, $addWhere);
 		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-		// Check if submitted sort is allowed, if not, set it to default
+			// Check if submitted sort is allowed, if not, set it to default
 		if ($this->piVars['sort'] && $this->piVars['sort'] != DEFAULT_SORT && !t3lib_div::inList(t3lib_div::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
 			list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':', DEFAULT_SORT);
 		}
 
-		// compile orderBy-parameter
+			// compile orderBy-parameter
 		$orderBy = $this->internal['orderBy'].($this->internal['descFlag']?' DESC':'');
 
-		// add a second sorting (if sorting is not "priority"), second sorting is always priority
+			// add a second sorting (if sorting is not "priority"), second sorting is always priority
 		if ($this->internal['orderBy'] != 'priority') {
 			$orderBy .= ', priority DESC';
 		}
 
-		// Increase limit for the csv export
+			// Increase limit for the csv export
 		if (isset($this->piVars['export']) && $this->piVars['export'] == 'csv') {
 			$this->internal['results_at_a_time'] = 1000000;
 		}
 
-		// exec the query
+			// exec the query
 		$res = $this->pi_exec_query($this->tablename, '', $addWhere, '', '', $orderBy);
 
-		// Now that we have the query, we can do the csv-export
+			// Now that we have the query, we can do the csv-export
 		if (isset($this->piVars['export']) && $this->piVars['export']=='csv') {
 			$this->outputCSV($res);
 		}
 
-		// render the sorting links
+			// render the sorting links
 		$this->renderListSortingLinks();
 
-		// render the filters
+			// render the filters
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 			if (t3lib_div::inList(t3lib_div::uniqueList($this->conf['listView.']['filterList']),$fieldConf['name'])) {
 				// dont't pre-select user values in the filter if the filter ist empty
@@ -3095,12 +3097,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$fieldConf['prefillWithCurrentUserIfEmpty'] = 0;
 				}
 				$this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, RENDER_EMPTY_DRODOWN_ELEMENT);
-
-
 			}
 		}
 
-		// add the filter form markers
+			// add the filter form markers
 		$this->markerArray['FILTERFORM_NAME'] = $this->ticketFormName . '_filter';
 		$this->markerArray['FILTERFORM_ACTION'] = $this->cObj->typoLink_URL(
 				array(
@@ -3110,17 +3110,16 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			);
 		$this->markerArray['FILTER_SUBMIT'] = '<input type="submit" name="' . $this->prefixId . '[filter_submit]' . '" value="'.$this->pi_getLL('LABEL_FILTER_SUBMIT').'">';
 
-		// show filter reset button / status icon
+			// show filter reset button / status icon
 		$this->markerArray['FILTER_STATUSICON'] = $this->getFieldContent('filter_statusicon');
 
-
-		// make the whole list
+			// make the whole list
 		$this->markerArray['LISTCONTENT'] = $this->makelist($res, $templateSubpartRow);
 
-		// create the search box
+			// create the search box
 		$this->markerArray['SEARCHBOX'] = $this->pi_list_searchBox();
 
-		// create the result browser
+			// create the result browser
 		$wrapper['disabledLinkWrap'] = '<span class="disable">|</span>';
 		$wrapper['inactiveLinkWrap'] = '<span class="inactive">|</span>';
 		$wrapper['activeLinkWrap'] = '<span'.$this->pi_classParam('browsebox-SCell').'>|</span>';
@@ -3133,14 +3132,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$wrapper['browseBoxWrap'] = '<div '.$this->pi_classParam('browsebox').'> | </div>';
 		$this->markerArray['PAGEBROWSER'] = $this->pi_list_browseresults(1, '', $wrapper);
 
-		// get additional markers (locallang, ...)
+			// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
-		// substitute the markers
+			// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
 
-		// check every filter if there is content for every filter, otherwise substitute
-		// whole filter block subpart with empty content
+			// check every filter if there is content for every filter, otherwise substitute
+			// whole filter block subpart with empty content
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 			if (t3lib_div::inList(t3lib_div::uniqueList($this->conf['listView.']['filterList']),$fieldConf['name'])) {
 				if ($this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] == '' ) {
@@ -3149,16 +3148,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-
-		// overwrite status message subpart if no status message is set
+			// overwrite status message subpart if no status message is set
 		if (empty($this->markerArray['STATUS_MESSAGE_TEXT'])) {
 			$content = $this->cObj->substituteSubpart ($content, '###STATUS_MESSAGE###', '');
 		}
 
-
-		// Returns the content from the plugin.
+			// Returns the content from the plugin.
 		return $content;
-
 	}/*}}}*/
 
 	/**
