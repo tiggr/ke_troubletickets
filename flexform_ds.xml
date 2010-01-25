@@ -30,7 +30,7 @@
 								</numIndex>
 								<numIndex index="3" type="array">
 									<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.viewtype_teaser_delegated</numIndex>
-									<numIndex index="1">TEASER_DELEGATED</numIndex>
+									<numIndex index="1">TEASER_DEL</numIndex>
 								</numIndex>
 								</items>
 								<maxitems>1</maxitems>
