@@ -308,7 +308,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		// store chosen filter in session
 		$sessionVars[$GLOBALS['TSFE']->id]['filter'] = $this->piVars['filter'];
 
-
 		// Entries per page - get value from form or from session
 		if (!$this->piVars['entries_per_page'] && $this->sessionData[$GLOBALS['TSFE']->id]['entries_per_page']) {
 			$this->piVars['entries_per_page'] = $this->sessionData[$GLOBALS['TSFE']->id]['entries_per_page'];
@@ -1327,7 +1326,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$content = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION###');
 		$localMarkerArray = array();
 
-		// get the markers
+			// get the markers
 		foreach (explode(',', $this->conf['email_notifications.']['fieldList']) as $fieldName) {
 			if (strtolower(trim($fieldName)) == 'comments') {
 				$markerContent = '<strong>' . $this->pi_getLL('LABEL_COMMENT_HEADER') . '</strong><br />';
@@ -1338,7 +1337,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$localMarkerArray['EMAIL_FIELD_' . strtoupper(trim($fieldName))] = $markerContent;
 		}
 
-		// find out what type of change
+			// find out what type of change
 		if (stristr($changedFields, CONST_NEWTICKET)) {
 			$type = 'new';
 		} else if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
@@ -1362,17 +1361,17 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->cleanUpHtmlOutput($localMarkerArray['WHAT_HAS_HAPPENED']);
 
-		// clear the internal changes marker
+			// clear the internal changes marker
 		$localMarkerArray['INTERNAL_CHANGES'] = '';
 
-		// which fields have changed?
-		// on new tickets, nothing has changed, so we don't render the changed fields
+			// which fields have changed?
+			// on new tickets, nothing has changed, so we don't render the changed fields
 		if (!stristr($changedFields, CONST_NEWTICKET)) {
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('email_text_fields_have_changed'));
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
 
-			// standard fields
+				// standard fields
 			if (strlen($changedFields)) {
 				foreach (explode(',', $changedFields) as $fieldName) {
 					$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
@@ -1380,59 +1379,62 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 			}
 
-			// internal fields
+				// internal fields
 			if (strlen($changedInternalFields)) {
 				foreach (explode(',', $changedInternalFields) as $fieldName) {
 					$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
 					$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
 				}
 
-				// render the changes in the internal fields (if there are any)
+					// render the changes in the internal fields (if there are any)
 				$localMarkerArray['INTERNAL_CHANGES'] = $this->renderChangedInternalFields($changedInternalFields);
 			}
 		}
 
-		// for internal users (only!) we render all internal fields on a new ticket
+			// for internal users (only!) we render all internal fields on a new ticket
 		if (stristr($changedFields, CONST_NEWTICKET) && $changedInternalFields == CONST_RENDER_ALL_INTERNAL_FIELDS) {
 			$localMarkerArray['INTERNAL_CHANGES'] = $this->renderChangedInternalFields(CONST_NEWTICKET);
 		}
 
-		// generate a link to the ticket
+			// generate a link to the ticket
 
-		// get the category data
+			// get the category data
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('singleviewpage',$this->categoryTablename,'uid="' . $this->internal['currentRow']['category'].'" ' . $lcObj->enableFields($this->categoryTablename));
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			$categoryData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		}
 
-		// find out the singleview pid
-		// the singleviewpage must be set in the category
+			// find out the singleview pid
+			// the singleviewpage must be set in the category
+			// If the category of the current ticket contains a single view page,
+			// use that. Otherwise use the current page.
 		if (is_array($categoryData) && !empty($categoryData['singleviewpage'])) {
 			$singleViewPage = $categoryData['singleviewpage'];
-			$linkToTicketSubpart = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION_LINKTOTICKET###');
-			$linkToTicketURL = $this->pi_getPageLink($categoryData['singleviewpage'],'_blank', array(
-					'tx_ketroubletickets_pi1[showUid]' => $this->internal['currentRow']['uid']
-				)
-			);
+		} else {
+			$singleViewPage = $GLOBALS['TSFE']->id;
+		}
 
-			if (!empty($linkToTicketURL)) {
-				$localSubpartMarkerArray = array(
-					'URL_GO_TO_TICKET' => t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $linkToTicketURL,
-					'LINKTEXT_GO_TO_TICKET' => $this->pi_getLL('LABEL_GO_TO_TICKET')
-				);
-				$linkToTicketSubpart = $this->cObj->substituteMarkerArray($linkToTicketSubpart,$localSubpartMarkerArray,'###|###',true);
-			} else {
-				$linkToTicketSubpart = '';
-			}
+			// get the template subpart and render the link
+		$linkToTicketSubpart = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION_LINKTOTICKET###');
+		$linkToTicketURL = $this->pi_getPageLink($singleViewPage, '_blank', array(
+				'tx_ketroubletickets_pi1[showUid]' => $this->internal['currentRow']['uid']
+			)
+		);
+		if (!empty($linkToTicketURL)) {
+			$localSubpartMarkerArray = array(
+				'URL_GO_TO_TICKET' => t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $linkToTicketURL,
+				'LINKTEXT_GO_TO_TICKET' => $this->pi_getLL('LABEL_GO_TO_TICKET')
+			);
+			$linkToTicketSubpart = $this->cObj->substituteMarkerArray($linkToTicketSubpart,$localSubpartMarkerArray,'###|###',true);
 		} else {
 			$linkToTicketSubpart = '';
 		}
 		$localMarkerArray['LINK_TO_SINGLEVIEW_FROM_EMAIL'] = $linkToTicketSubpart;
 
-		// get some more markers
+			// get some more markers
 		$localMarkerArray = $this->getAdditionalMarkers($localMarkerArray, CONST_RENDER_TYPE_EMAIL);
 
-		// substitute the markers
+			// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$localMarkerArray,'###|###',true);
 
 		return $content;
@@ -3211,7 +3213,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function makelist($res, $templateSubpartRow='')	{/*{{{*/
 		$items=array();
-	
+
 			// Make list table rows
 		while($this->internal['currentRow'] = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 			$items[]=$this->makeListItem($templateSubpartRow);
