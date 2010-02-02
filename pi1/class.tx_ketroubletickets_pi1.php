@@ -3070,6 +3070,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$res = $this->pi_exec_query($this->tablename, 1, $addWhere);
 		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
+			// we exit here, if the listview has no results (if configured so)
+		if ($lConf['hideIfNoResults'] && !$this->internal['res_count']) {
+			return '';
+		}
+
 			// Check if submitted sort is allowed, if not, set it to default
 		if ($this->piVars['sort'] && $this->piVars['sort'] != DEFAULT_SORT && !t3lib_div::inList(t3lib_div::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
 			list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':', DEFAULT_SORT);

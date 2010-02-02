@@ -388,6 +388,7 @@ plugin.tx_ketroubletickets_pi1.listView {
 	templateSubpart = ###LISTVIEW###
 	templateSubpartRow = ###LISTVIEW_SINGLE_ROW###
 	entries_per_page_options = 10,20,50
+	hideIfNoResults = 0
 }
 
 # csvView defaults
