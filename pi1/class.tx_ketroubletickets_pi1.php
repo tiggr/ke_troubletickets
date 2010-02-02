@@ -274,9 +274,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		// keep existing filter
 		if ($this->piVars['filter']) {
 			$this->filter = unserialize(base64_decode($this->piVars['filter']));
+		} else {
+				// if no filter is set use stored data from session, ONLY
+				// if we are not in delegated teaser view or in own teaser view
+				// since in this views there is no possibility to clear the filter
+			if (!strstr($this->ffdata['view'], 'TEASER_')) {
+				$this->filter = unserialize(base64_decode($this->sessionData[$GLOBALS['TSFE']->id]['filter']));
+			}
 		}
-		// if no filter is set use stored data from session
-		else $this->filter = unserialize(base64_decode($this->sessionData[$GLOBALS['TSFE']->id]['filter']));
 
 		// a new filter for listview is set
 		if ($this->piVars['filter_submit']) {
