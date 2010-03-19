@@ -2583,6 +2583,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'feuserSelect':
+				//debug($this->ffdata[$fieldConf['flexformFieldForUsergroupToChoseFrom']]);
 				// if there is a single responsible user (or a user list) given in the flexform, preselect that using a hidden form field
 				if (!empty($this->ffdata[$fieldConf['flexformFieldForPreselectedUser']]) && !$filterMode) {
 					$this->hiddenFormFields[$fieldConf['name']] = '<input type="hidden" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="'. $this->ffdata[$fieldConf['flexformFieldForPreselectedUser']] .'">';

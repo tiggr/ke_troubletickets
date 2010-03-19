@@ -202,6 +202,7 @@
 			<label index="tt_content.pi_ketroubletickets.responsible_group_to_choose_from">Responsible user (group from which one user can be selected)</label>
 			<label index="tt_content.pi_ketroubletickets.observer_singleuser">Observer (will be allways assigned)</label>
 			<label index="tt_content.pi_ketroubletickets.observer_group_to_choose_from">Observer (group from which one user can be selected)</label>
+			<label index="tt_content.pi_ketroubletickets.owner_group_to_choose_from">Owner (group from which one user can be selected)</label>
 
 			<label index="tt_content.pi_ketroubletickets.ticket_administrators">Ticket administrators (see all tickets)</label>
 			<label index="tt_content.pi_ketroubletickets.internal_users">Internal users (see internal fields)</label>
@@ -403,6 +404,7 @@
 			<label index="tt_content.pi_ketroubletickets.responsible_group_to_choose_from">Verantwortlicher Benutzer (Benutzergruppe, aus der einer ausgewählt werden kann)</label>
 			<label index="tt_content.pi_ketroubletickets.observer_singleuser">Beobachter (fest hinterlegt)</label>
 			<label index="tt_content.pi_ketroubletickets.observer_group_to_choose_from">Beobachter (Benutzergruppe, aus der einer ausgewählt werden kann)</label>
+			<label index="tt_content.pi_ketroubletickets.owner_group_to_choose_from">Besitzer (Benutzergruppe, aus der einer ausgewählt werden kann, muss per Typoscript aktiviert werden)</label>
 
 			<label index="tt_content.pi_ketroubletickets.ticket_administrators">Aufgaben-Administratoren (sehen alle Tickets)</label>
 			<label index="tt_content.pi_ketroubletickets.internal_users">Interne Benutzer (sehen interne Felder)</label>

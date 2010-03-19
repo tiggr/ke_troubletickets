@@ -199,9 +199,20 @@ plugin.tx_ketroubletickets_pi1 {
 			lastNameFirst = 1
 			required = 0
 			prefillWithCurrentUserIfEmpty = 1
-			# the owner is set only by creating a new ticket
-			# and must not be changed when updating a ticket
+			# by default the owner is set automatically when
+			# creating a new ticket and must not be changed
+			# when updating a ticket
 			doNotSaveInDB = 1
+
+			# if you want to make the owner selectable in the frontend,
+			# activate these lines:
+
+			#flexformFieldForUsergroupToChoseFrom = owner_group_to_choose_from
+			#size = 1
+			#multiple = 0
+			#required = 1
+			#addCurrentUserToList = 1
+			#doNotSaveInDB = 0
 		}
 		10 {
 			name = title
