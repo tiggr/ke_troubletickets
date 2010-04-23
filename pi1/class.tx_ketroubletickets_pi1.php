@@ -45,6 +45,7 @@ define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
 define(CONST_SHOW_ALL_ALWAYS, 'all_always');
 define(DEFAULT_SORT, 'crdate:1');
 define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
+define(DONT_RENDER_EMPTY_DRODOWN_ELEMENT, false);
 define(CONST_KEEP_TAGS_YES, 'keeptags');
 define(CONST_RENDER_ALL_INTERNAL_FIELDS, 'render_all_internal_fields');
 
@@ -2258,10 +2259,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 *
 	 * @param array $fieldConf
 	 * @param integer $renderEmptyDropdownFields
+	 * @param string $addJS if filled, content is added to the generated input/select tag. Useful to add javascript, e. g. "onchange".
 	 * @access public
 	 * @return void
 	 */
-	public function renderFormField($fieldConf, $renderEmptyDropdownFields=0) {/*{{{*/
+	public function renderFormField($fieldConf, $renderEmptyDropdownFields=0, $addJS='') {/*{{{*/
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
 
@@ -2288,11 +2290,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$prefillValue = '';
 		}
 
+		if ($addJS) {
+			$addJS .= ' ';
+		}
+
 		// render the form fields according to their type
 		switch ($fieldConf['type']) {
 
 			case 'submit':
-					$content .= '<input type="submit" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . '" value="'.$this->pi_getLL('LABEL_' . strtoupper($fieldConf['name'])).'">';
+					$content .= '<input ' . $addJS . 'type="submit" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . '" value="'.$this->pi_getLL('LABEL_' . strtoupper($fieldConf['name'])).'">';
 			break;
 
 			case 'input':
@@ -2302,12 +2308,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				} else {
 					$prefillValue = $this->cleanUpHtmlOutput($prefillValue);
 				}
-				$content .= '<input type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
+				$content .= '<input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
 			break;
 
 			case 'select':
 				$class = $fieldConf['css_class'] ? ' class="' . $fieldConf['css_class'] . '"' : '';
-				$content ='<select ' . $class . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
+				$content ='<select ' . $addJS . $class . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 
 				// render empty option
 				if ($renderEmptyDropdownFields) {
@@ -2402,7 +2408,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 
 				$content .= $this->pi_getLL('LABEL_RELATED_TICKETS_ADD');
-				$content .= ' <input type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
+				$content .= ' <input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
 				break;
 
 			case 'textareaRTE':
@@ -2467,7 +2473,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$fieldContent = $this->date2cal->render($prefillValue, $field);
 				} else {
 					$prefillValue = $this->cleanUpHtmlOutput($prefillValue);
-					$fieldContent .= '<input type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '"> ' . '(' . str_replace('%', '', $this->conf['datefield_inputfieldformat']) . ')';
+					$fieldContent .= '<input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '"> ' . '(' . str_replace('%', '', $this->conf['datefield_inputfieldformat']) . ')';
 				}
 
 				$content .= $fieldContent;
@@ -2590,7 +2596,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// if there is only one category possible, preselect that using a hidden form field
 				// and don't display the dropdown
 				if ($num_rows > 1) {
-					$content .= '<select name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
+					$content .= '<select ' . $addJS . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 					// render empty option
 					if (!$prefillValue) {
 						$selected = ' selected';
@@ -2697,7 +2703,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 							// render the dropdown
 							if ($num_rows > 0) {
-								$content .= '<select name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
+								$content .= '<select ' . $addJS . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 
 								// render empty option
 								if (!$prefillValue) {
@@ -2738,7 +2744,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				} else {
 
 					// render a drodown and give the user the opportunity to select the notification behavior
-					$content .= '<select name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
+					$content .= '<select ' . $addJS . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 					foreach (explode(',',$this->conf[$fieldConf['valueList']]) as $value) {
 						if (t3lib_div::inList($prefillValue, $value)) {
 							$selected = ' selected';
@@ -2773,7 +2779,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 						// render the dropdown
 						if ($num_rows > 0) {
-							$content .= '<select name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
+							$content .= '<select ' . $addJS . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 							while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 								if (t3lib_div::inList($prefillValue, $row['uid'])) {
 									$selected = ' selected';
@@ -3165,7 +3171,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// render the viewtype selector
-		$this->markerArray['VIEWTYPE_SELECTOR'] = $this->renderFormField($this->conf['viewtype_selector.']);
+		$this->markerArray['VIEWTYPE_SELECTOR'] = $this->renderFormField($this->conf['viewtype_selector.'],
+			DONT_RENDER_EMPTY_DRODOWN_ELEMENT,
+			'onchange="this.form.submit();"');
 
 			// add the filter form markers
 		$this->markerArray['FILTERFORM_NAME'] = $this->ticketFormName . '_filter';
@@ -3193,7 +3201,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$wrapper['browseLinksWrap'] = '<div class="browseLinks">|</div>';
 		$wrapper['browseLinksWrap'] .= '<div class="kett_entries_per_page">';
 		$wrapper['browseLinksWrap'] .= '<label>'. $this->pi_getLL('LABEL_ENTRIES_PER_PAGE').'</label>';
-		$wrapper['browseLinksWrap'] .= $this->getEntriesPerPageSelection();
+		$wrapper['browseLinksWrap'] .= $this->getEntriesPerPageSelection($lConf);
 		$wrapper['browseLinksWrap'] .= '</div><div class="kett_float_clean">&nbsp;</div>';
 		$wrapper['showResultsWrap'] = '<p class="resultText">|</p>';
 		$wrapper['browseBoxWrap'] = '<div '.$this->pi_classParam('browsebox').'> | </div>';
@@ -4168,13 +4176,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
 	 *
 	 */
-	 function getEntriesPerPageSelection() {
+	 function getEntriesPerPageSelection($lConf) {
 		$formAction = $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id));
 		$fieldContent .= '<form method="post" action="'.$formAction.'"><select name="'.$this->prefixId.'[entries_per_page]" onchange="this.form.submit();">';
 		$entriesPerPageOptions = explode(',',trim($this->conf['listView.']['entries_per_page_options']));
+		$entries_per_page = $this->piVars['entries_per_page'] ? $this->piVars['entries_per_page'] : $lConf['results_at_a_time'];
 		foreach ($entriesPerPageOptions as $opt) {
 			$fieldContent .= '<option value="'.$opt.'" ';
-			if ($this->piVars['entries_per_page'] == $opt) $fieldContent .= ' selected="selected" ';
+			if ($entries_per_page == $opt) $fieldContent .= ' selected="selected" ';
 			$fieldContent .= '>'.$opt.'</option>';
 		}
 		$fieldContent .= '</select>';

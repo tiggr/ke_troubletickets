@@ -129,10 +129,6 @@ New Ticket / Edit Ticket Form / Singleview
   ###ADDITIONALJS_POST###
   ###OPTIONAL_TICKET_HISTORY###
 </div>
-
-
-
-
 <!-- ###TICKET_FORM### END-->
 
 <!--
@@ -287,7 +283,6 @@ Ticket History (in Singleview)
 Listview
 ***********************************************
 -->
-
 <!-- ###LISTVIEW### START-->
 
 <!-- +++ Listview Toolbar +++ new ticket, searchbox -->
@@ -305,12 +300,12 @@ Listview
     <div class="kett_float_clean">&nbsp;</div>
 </div>
 
+<form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
+
 <!-- +++ Listview-Toolbar +++ show options, filter -->
 <div class="kett_listview_toolbar">
   <div class="kett_float_right">
     <div class="kett_toolbar_filter">
-      <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
-		<div class="single_filter"><label>###LABEL_VIEWTYPE###:</label>###VIEWTYPE_SELECTOR###</div>
 		<!-- ###FILTER_BLOCK_STATUS### start -->
 		<div class="single_filter"><label>###LABEL_STATUS###:</label>###FILTER_STATUS###</div>
 		<!-- ###FILTER_BLOCK_STATUS### end -->
@@ -330,7 +325,6 @@ Listview
 			###FILTER_SUBMIT###
 			<span class="filter_statusicon">###FILTER_STATUSICON###</span>
 		</div>
-      </form>
     </div>
   </div>
   <div class="kett_float_clean">&nbsp;</div>
@@ -348,6 +342,8 @@ Listview
       ###HEADER_PRIORITY###
       <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
       ###HEADER_STATUS###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+	  <label>###LABEL_VIEWTYPE###:</label>###VIEWTYPE_SELECTOR###
     </div>
   </div>
 
@@ -362,6 +358,7 @@ Listview
   <div class="kett_float_clean">&nbsp;</div>
 
 </div>
+</form>
 
 
 <!-- +++ Listview +++ status message -->
@@ -461,12 +458,13 @@ Listview Short
     <div class="kett_float_clean">&nbsp;</div>
 </div>
 
+
+<form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
+
 <!-- +++ Listview-Toolbar +++ show options, filter -->
 <div class="kett_listview_toolbar">
   <div class="kett_float_right">
     <div class="kett_toolbar_filter">
-      <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
-		<div class="single_filter"><label>###LABEL_VIEWTYPE###:</label>###VIEWTYPE_SELECTOR###</div>
 		<!-- ###FILTER_BLOCK_STATUS### start -->
 		<div class="single_filter"><label>###LABEL_STATUS###:</label>###FILTER_STATUS###</div>
 		<!-- ###FILTER_BLOCK_STATUS### end -->
@@ -486,7 +484,6 @@ Listview Short
 			###FILTER_SUBMIT###
 			<span class="filter_statusicon">###FILTER_STATUSICON###</span>
 		</div>
-      </form>
     </div>
   </div>
   <div class="kett_float_clean">&nbsp;</div>
@@ -504,6 +501,8 @@ Listview Short
       ###HEADER_PRIORITY###
       <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
       ###HEADER_STATUS###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+	  <label>###LABEL_VIEWTYPE###:</label>###VIEWTYPE_SELECTOR###
     </div>
   </div>
 
@@ -518,6 +517,7 @@ Listview Short
   <div class="kett_float_clean">&nbsp;</div>
 
 </div>
+</form>
 
 <!-- +++ Listview +++ status message -->
 <!-- ###STATUS_MESSAGE### start -->
@@ -525,12 +525,11 @@ Listview Short
 <!-- ###STATUS_MESSAGE### start -->
 
 <!-- +++ Listview +++ single rows -->
-<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
+<table cellspacing="1" cellpadding="2" class="kett_listviewshort kett_teaserview_own">
   <tr>
     <td class="kett_tw_head">###LABEL_CRDATE###</td>
     <td class="kett_tw_head">###LABEL_TITLE###</td>
     <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
-    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
     <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
   </tr>
 ###LISTCONTENT###
@@ -541,14 +540,12 @@ Listview Short
 <!-- ###LISTVIEWSHORT### END-->
 
 <!-- ###LISTVIEWSHORT_SINGLE_ROW### START-->
-<tr>
+<tr class="kett_listview_row current_row_###OWN_TASK###">
   <td class="kett_tw_body">###CRDATE###</td>
   <td class="kett_tw_body">
-    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
-    ###TITLE###
+    ###STATUS_ICON_TEASER### ###UID### ###TITLE###
   </td>
   <td class="kett_tw_body">###OWNER_FEUSER###</td>
-  <td class="kett_tw_body">###FROM_DATE###</td>
   <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
 </tr>
 <!-- ###LISTVIEWSHORT_SINGLE_ROW### END-->

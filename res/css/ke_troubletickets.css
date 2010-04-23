@@ -631,7 +631,19 @@
   background: #FFFFFF url(../images/list_item_foot_bg_alien.gif) repeat scroll 0 0;
   }
 
-/* Speichern */
+/* for short view */
+.kett_listviewshort tr.kett_listview_row {
+	background: #E6EFEF;
+}
+.kett_listviewshort tr.current_row_is_not_own_task {
+	background: #F2F2F2;
+}
+
+.kett_listviewshort tr.kett_listview_row .kett_tw_body {
+  background: none;
+}
+
+/* Save */
 .kett_sv_save {
   background: #EFEFEF url(../images/css_gradient5.gif) repeat scroll 0 0;
   height: 25px;
