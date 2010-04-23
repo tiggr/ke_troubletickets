@@ -310,7 +310,7 @@ Listview
   <div class="kett_float_right">
     <div class="kett_toolbar_filter">
       <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
-
+		<div class="single_filter"><label>###LABEL_VIEWTYPE###:</label>###VIEWTYPE_SELECTOR###</div>
 		<!-- ###FILTER_BLOCK_STATUS### start -->
 		<div class="single_filter"><label>###LABEL_STATUS###:</label>###FILTER_STATUS###</div>
 		<!-- ###FILTER_BLOCK_STATUS### end -->
@@ -376,8 +376,182 @@ Listview
 
 <!-- +++ Listview +++ pagebrowser -->
 ###PAGEBROWSER###
-
 <!-- ###LISTVIEW### END-->
+
+<!-- ###LISTVIEW_SINGLE_ROW### START-->
+<div class="kett_listview_row current_row_###OWN_TASK###">
+
+  <div class="kett_listview_row_head">
+    <div class="kett_listview_row_statusicon">###STATUS_ICON###</div>
+    <div class="kett_listview_row_headline">
+      <div class="kett_lvrow_headline_top">###UID###[###CATEGORY###]</div>
+      <div class="kett_lvrow_headline_title">###TITLE###</div>
+    </div>
+  </div>
+
+  <div class="kett_listview_row_body">
+    <div class="kett_listview_row_box">
+      <div class="kett_lvrow_box_l">###LABEL_STATUS###:</div>
+      <div class="kett_lvrow_box_r">###STATUS###</div>
+      <div class="kett_lvrow_box_l">###LABEL_PRIORITY###:</div>
+      <div class="kett_lvrow_box_r">###PRIORITY_WRAPPED###</div>
+      <div class="kett_lvrow_box_l">###LABEL_EFFORT###:</div>
+      <div class="kett_lvrow_box_r">###EFFORT###</div>
+      <div class="kett_lvrow_box_l">###LABEL_BILLING###:</div>
+      <div class="kett_lvrow_box_r">###BILLING###</div>
+    </div>
+    <div class="kett_listview_row_subt">
+      ###DESCRIPTION_CLEAN###
+    </div>
+  </div>
+
+  <div class="kett_listview_row_user">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="kett_lvrow_user_head">###LABEL_RESPONSIBLE_FEUSER###</td>
+        <td class="kett_lvrow_user_head">###LABEL_OWNER_FEUSER###</td>
+        <td class="kett_lvrow_user_head_last">###LABEL_OBSERVERS_FEUSER###</td>
+      </tr>
+      <tr>
+        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###RESPONSIBLE_FEUSER###</div></td>
+        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OWNER_FEUSER###</div></td>
+        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OBSERVERS_FEUSER###</div></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="kett_listview_row_foot">
+    <div class="kett_float_left">
+      ###LABEL_CRDATE###: ###CRDATE###
+	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
+	  ###LABEL_TO###: <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span>
+	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
+	  ###CLOSE_TIME_WITH_TEXT###
+	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
+	  <!--###LABEL_NUMBER_OF_COMMENTS###-->
+	  <img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" title="###LATEST_COMMENT###" /></a> (###NUMBER_OF_COMMENTS###)
+	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
+	  <img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" title="###FILES###" /> (###NUMBER_OF_ATTACHMENTS###)
+    </div>
+    <div class="kett_float_right">###EDIT_ICON### ###DELETE_ICON###</div>
+  </div>
+
+
+  </div>
+<!-- ###LISTVIEW_SINGLE_ROW### END-->
+
+<!--
+***********************************************
+Listview Short
+***********************************************
+-->
+<!-- ###LISTVIEWSHORT### START-->
+<!-- +++ Listview Toolbar +++ new ticket, searchbox -->
+<div class="kett_listview_toolbar">
+    <div class="kett_float_left">
+      <div class="kett_toolbar_new_ticket">
+        <a href="###LINK_TO_NEW_TICKET_FORM_URL###">###ICONNEWTICKET###</a>###LINK_TO_NEW_TICKET_FORM###
+      </div>
+    </div>
+	<div class="kett_float_right">
+      <div class="kett_searchbox">
+        ###SEARCHBOX###
+      </div>
+    </div>
+    <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+<!-- +++ Listview-Toolbar +++ show options, filter -->
+<div class="kett_listview_toolbar">
+  <div class="kett_float_right">
+    <div class="kett_toolbar_filter">
+      <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
+		<div class="single_filter"><label>###LABEL_VIEWTYPE###:</label>###VIEWTYPE_SELECTOR###</div>
+		<!-- ###FILTER_BLOCK_STATUS### start -->
+		<div class="single_filter"><label>###LABEL_STATUS###:</label>###FILTER_STATUS###</div>
+		<!-- ###FILTER_BLOCK_STATUS### end -->
+		<!-- ###FILTER_BLOCK_RESPONSIBLE_FEUSER### start -->
+		<div class="single_filter"><label>###LABEL_RESPONSIBLE_FEUSER###:</label>###FILTER_RESPONSIBLE_FEUSER###</div>
+		<!-- ###FILTER_BLOCK_RESPONSIBLE_FEUSER### end -->
+		<!-- ###FILTER_BLOCK_CLOSED_IN_MONTH### start -->
+		<div class="single_filter"><label>###LABEL_CLOSED_IN_MONTH###:</label>###FILTER_CLOSED_IN_MONTH###</div>
+		<!-- ###FILTER_BLOCK_CLOSED_IN_MONTH### end -->
+		<!-- ###FILTER_BLOCK_BILLING### start -->
+		<div class="single_filter"><label>###LABEL_BILLING###:</label>###FILTER_BILLING###</div>
+		<!-- ###FILTER_BLOCK_BILLING### end -->
+		<!-- ###FILTER_BLOCK_CATEGORY### start -->
+		<div class="single_filter last_filter"><label>###LABEL_FILTER_CATEGORY###:</label>###FILTER_CATEGORY###</div>
+		<!-- ###FILTER_BLOCK_CATEGORY### end -->
+		<div class="single_filter buttons">
+			###FILTER_SUBMIT###
+			<span class="filter_statusicon">###FILTER_STATUSICON###</span>
+		</div>
+      </form>
+    </div>
+  </div>
+  <div class="kett_float_clean">&nbsp;</div>
+</div>
+
+<!-- +++ Listview-Toolbar +++ sorting, CSV export -->
+<div class="kett_listview_toolbar">
+  <div class="kett_float_left">
+    <div class="kett_toolbar_sort">
+      <label>###LABEL_SORTING###:</label>
+      ###HEADER_CRDATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_UNTIL_DATE###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_PRIORITY###
+      <span class="kett_tbs_border">&nbsp;&#124;&nbsp;</span>
+      ###HEADER_STATUS###
+    </div>
+  </div>
+
+  <div class="kett_float_right">
+	<div class="kett_toolbar_csv">
+	  <div>
+        <a href="###LINK_URL_CSV_EXPORT###">###ICONCSVEXPORT###</a><a href="###LINK_URL_CSV_EXPORT###">###LABEL_LINKTEXT_CSV_EXPORT###</a>
+      </div>
+      <div class="kett_float_clean">&nbsp;</div>
+    </div>
+  </div>
+  <div class="kett_float_clean">&nbsp;</div>
+
+</div>
+
+<!-- +++ Listview +++ status message -->
+<!-- ###STATUS_MESSAGE### start -->
+	<div class="kett_status ###STATUS_CSS_CLASS###">###STATUS_MESSAGE_TEXT###</div>
+<!-- ###STATUS_MESSAGE### start -->
+
+<!-- +++ Listview +++ single rows -->
+<table cellspacing="1" cellpadding="2" class="kett_teaserview_own">
+  <tr>
+    <td class="kett_tw_head">###LABEL_CRDATE###</td>
+    <td class="kett_tw_head">###LABEL_TITLE###</td>
+    <td class="kett_tw_head">###LABEL_OWNER_FEUSER###</td>
+    <td class="kett_tw_head">###LABEL_FROM_DATE###</td>
+    <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
+  </tr>
+###LISTCONTENT###
+</table>
+
+<!-- +++ Listview +++ pagebrowser -->
+###PAGEBROWSER###
+<!-- ###LISTVIEWSHORT### END-->
+
+<!-- ###LISTVIEWSHORT_SINGLE_ROW### START-->
+<tr>
+  <td class="kett_tw_body">###CRDATE###</td>
+  <td class="kett_tw_body">
+    ###STATUS_ICON_TEASER### ###SINGLEVIEW_PAGETITLE### ###UID###<br />
+    ###TITLE###
+  </td>
+  <td class="kett_tw_body">###OWNER_FEUSER###</td>
+  <td class="kett_tw_body">###FROM_DATE###</td>
+  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
+</tr>
+<!-- ###LISTVIEWSHORT_SINGLE_ROW### END-->
 
 <!--
 ***********************************************
@@ -513,7 +687,7 @@ Teaserview Own Tasks
     ###TITLE###
   </td>
   <td class="kett_tw_body">###OWNER_FEUSER###</td>
-  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###FROM_DATE###</span></td>
+  <td class="kett_tw_body">###FROM_DATE###</td>
   <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
 </tr>
 <!-- ###TEASERVIEWOWN_SINGLE_ROW### END-->
@@ -585,79 +759,12 @@ Teaserview delegated Tasks
     ###TITLE###
   </td>
   <td class="kett_tw_body">###RESPONSIBLE_FEUSER###</td>
-  <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###FROM_DATE###</span></td>
+  <td class="kett_tw_body">###FROM_DATE###</td>
   <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
 </tr>
 <!-- ###TEASERVIEWDELEGATED_SINGLE_ROW### END-->
 
-<!--
-***********************************************
-Listview Row
-***********************************************
--->
 
-<!-- ###LISTVIEW_SINGLE_ROW### START-->
-
-<div class="kett_listview_row current_row_###OWN_TASK###">
-
-  <div class="kett_listview_row_head">
-    <div class="kett_listview_row_statusicon">###STATUS_ICON###</div>
-    <div class="kett_listview_row_headline">
-      <div class="kett_lvrow_headline_top">###UID###[###CATEGORY###]</div>
-      <div class="kett_lvrow_headline_title">###TITLE###</div>
-    </div>
-  </div>
-
-  <div class="kett_listview_row_body">
-    <div class="kett_listview_row_box">
-      <div class="kett_lvrow_box_l">###LABEL_STATUS###:</div>
-      <div class="kett_lvrow_box_r">###STATUS###</div>
-      <div class="kett_lvrow_box_l">###LABEL_PRIORITY###:</div>
-      <div class="kett_lvrow_box_r">###PRIORITY_WRAPPED###</div>
-      <div class="kett_lvrow_box_l">###LABEL_EFFORT###:</div>
-      <div class="kett_lvrow_box_r">###EFFORT###</div>
-      <div class="kett_lvrow_box_l">###LABEL_BILLING###:</div>
-      <div class="kett_lvrow_box_r">###BILLING###</div>
-    </div>
-    <div class="kett_listview_row_subt">
-      ###DESCRIPTION_CLEAN###
-    </div>
-  </div>
-
-  <div class="kett_listview_row_user">
-    <table cellpadding="0" cellspacing="0">
-      <tr>
-        <td class="kett_lvrow_user_head">###LABEL_RESPONSIBLE_FEUSER###</td>
-        <td class="kett_lvrow_user_head">###LABEL_OWNER_FEUSER###</td>
-        <td class="kett_lvrow_user_head_last">###LABEL_OBSERVERS_FEUSER###</td>
-      </tr>
-      <tr>
-        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###RESPONSIBLE_FEUSER###</div></td>
-        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OWNER_FEUSER###</div></td>
-        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OBSERVERS_FEUSER###</div></td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="kett_listview_row_foot">
-    <div class="kett_float_left">
-      ###LABEL_CRDATE###: ###CRDATE###
-	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
-	  ###LABEL_TO###: <span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span>
-	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
-	  ###CLOSE_TIME_WITH_TEXT###
-	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
-	  <!--###LABEL_NUMBER_OF_COMMENTS###-->
-	  <img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" title="###LATEST_COMMENT###" /></a> (###NUMBER_OF_COMMENTS###)
-	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
-	  <img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" title="###FILES###" /> (###NUMBER_OF_ATTACHMENTS###)
-    </div>
-    <div class="kett_float_right">###EDIT_ICON### ###DELETE_ICON###</div>
-  </div>
-
-
-  </div>
-<!-- ###LISTVIEW_SINGLE_ROW### END-->
 
 <!--
 ***********************************************

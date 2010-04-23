@@ -165,6 +165,7 @@
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
 			<label index="LABEL_FILTER_NOT_SET">filter not set</label>
 			<label index="LABEL_FILTER_RESET">reset filter</label>
+			<label index="LABEL_VIEWTYPE">View</label>
 
 			<label index="LABEL_GO_TO_TICKET">Open this ticket</label>
 			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">Go to the comments</label>
@@ -239,6 +240,8 @@
 			<label index="pi_list_browseresults_displays">Aufgaben ###SPAN_BEGIN###%s bis %s&lt;/span&gt; (insgesamt ###SPAN_BEGIN###%s&lt;/span&gt;)</label>
 			<label index="pi_list_searchBox_search">Suche</label>
 			<label index="pi_list_searchBox_default_value">Suchbegriff / Nummer</label>
+			<label index="viewtype_detailed">ausführlich</label>
+			<label index="viewtype_short">kurz</label>
 
 			<label index="pick_a_date">Datum auswählen.</label>
 			<label index="more_files">Weitere Datei</label>
@@ -316,6 +319,9 @@
 			<label index="SELECTLABEL_NEVER">Nie</label>
 			<label index="SELECTLABEL_FRONTENDSELECTION">Auswahl im Frontend</label>
 
+			<label index="SELECTLABEL_DETAILED">ausführlich</label>
+			<label index="SELECTLABEL_SHORT">kurz</label>
+
 			<label index="LABEL_HISTORY_DATE">Datum</label>
 			<label index="LABEL_HISTORY_USER">Benutzer</label>
 			<label index="LABEL_HISTORY_FIELD">Feld</label>
@@ -367,6 +373,7 @@
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
 			<label index="LABEL_FILTER_NOT_SET">kein Filter gesetzt</label>
 			<label index="LABEL_FILTER_RESET">Filter zurücksetzen</label>
+			<label index="LABEL_VIEWTYPE">Ansicht</label>
 
 			<label index="LABEL_GO_TO_TICKET">Aufgabe aufrufen</label>
 			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">zu den Kommentaren</label>

@@ -86,7 +86,7 @@ plugin.tx_ketroubletickets_pi1 {
 	iconPlus.file = EXT:ke_troubletickets/res/images/button_plus.gif
 
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
-	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT
+	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT, VIEWTYPE
 
 	# date2cal dateformat (date input fieds) configuration
 	# german format (always use - as separator, unfortunately date2cal does not work correctly when using dots as a separator)
@@ -188,6 +188,15 @@ plugin.tx_ketroubletickets_pi1 {
 	thumbnailImage.zip = IMAGE
 	thumbnailImage.zip.file = EXT:ke_troubletickets/res/images/fileicons/zip.gif
 
+	# definition of the viewtype dropdown (same syntax as formFieldList)
+	viewtypeList = detailed,short
+	viewtype_selector {
+		name = viewtype
+		type = select
+		size = 1
+		multiple = 0
+		valueList = viewtypeList
+	}
 
 	# definition of the input form
 	# 'name' has to be the same as defined in the database
@@ -415,6 +424,15 @@ plugin.tx_ketroubletickets_pi1.filter {
 	category.sortField = sorting
 }
 
+# Short listview
+plugin.tx_ketroubletickets_pi1.listViewShort < plugin.tx_ketroubletickets_pi1.listView
+plugin.tx_ketroubletickets_pi1.listViewShort {
+	results_at_a_time = 50
+	templateSubpart = ###LISTVIEWSHORT###
+	templateSubpartRow = ###LISTVIEWSHORT_SINGLE_ROW###
+}
+
+# Teaserview
 plugin.tx_ketroubletickets_pi1.teaserView < plugin.tx_ketroubletickets_pi1.listView
 plugin.tx_ketroubletickets_pi1.teaserView {
 	results_at_a_time = 500

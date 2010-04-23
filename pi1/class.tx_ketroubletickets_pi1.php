@@ -120,37 +120,37 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 
-		// path to this extension
+			// path to this extension
 		$this->extPath = t3lib_extMgm::siteRelPath($this->extKey);
 
-		// Include default CSS?
+			// Include default CSS?
 		if ($this->conf['includeDefaultCSS']) {
 			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_css'] = '<link rel="stylesheet" type="text/css" href="' . $this->extPath . $this->defaultCSS . '" />';
 		}
 
-		// create instance of the extension library
+			// create instance of the extension library
 		$this->lib = t3lib_div::makeInstance('tx_ketroubletickets_lib');
 
-		// Configuring so caching is not expected. This value means that no
-		// cHash params are ever set. We do this, because it's a USER_INT
-		// object!
+			// Configuring so caching is not expected. This value means that no
+			// cHash params are ever set. We do this, because it's a USER_INT
+			// object!
 		$this->pi_USER_INT_obj = 1;
 
-		// get the pidList and the recursive flag from the content object
-		// if this plugin has been inserted into a content column (and has not
-		// been included via typoscript)
+			// get the pidList and the recursive flag from the content object
+			// if this plugin has been inserted into a content column (and has not
+			// been included via typoscript)
 		if (strstr($this->cObj->currentRecord,'tt_content'))	{
 			$conf['pidList'] = $this->cObj->data['pages'] ? $this->cObj->data['pages'] : $conf['pidList'];
 			$conf['recursive'] = $this->cObj->data['recursive'] ? $this->cObj->data['recursive']  : $conf['recursive'];
 		}
 
-		// make the configurationen class-wide available
+			// make the configurationen class-wide available
 		$this->conf=$conf;
 
-		// use date2cal only in TYPO3 below 4.3 (date2cal does not work with 4.3)
+			// use date2cal only in TYPO3 below 4.3 (date2cal does not work with 4.3)
 		$this->useDate2Cal = (t3lib_div::int_from_ver(TYPO3_version) < 4003000) && t3lib_extMgm::isLoaded('date2cal');
 
-		// make the date2cal instance
+			// make the date2cal instance
 		if (t3lib_extMgm::isLoaded('date2cal') && $this->useDate2Cal) {
 			$this->date2cal = frontend_JScalendar::getInstance();
 		} else {
@@ -159,20 +159,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// a local content object (with clear configuration)
+			// a local content object (with clear configuration)
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 
-		// start with empty content
+			// start with empty content
 		$content = '';
 
-		// Init and get the flexform data of the plugin
+			// Init and get the flexform data of the plugin
 		$this->pi_initPIflexForm();
 
-		// Assign the flexform data to a local variable for easier access
+			// Assign the flexform data to a local variable for easier access
 		$piFlexForm = $this->cObj->data['pi_flexform'];
 
-		// Traverse the entire flexform array based on the language
-		// and write the content to an array
+			// Traverse the entire flexform array based on the language
+			// and write the content to an array
 		if (is_array($piFlexForm['data'])) {
 			foreach ( $piFlexForm['data'] as $sheet => $data ) {
 				foreach ( $data as $lang => $value ) {
@@ -183,19 +183,19 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// get the list of internal users
+			// get the list of internal users
 		if ($this->ffdata['internal_users']) {
 			$this->internalUserList = t3lib_div::trimExplode(',',$this->ffdata['internal_users']);
 		}
 
-		// get the template
+			// get the template
 		$templateFile = $this->conf['templateFile'];
 		$this->templateCode = $lcObj->fileResource($templateFile);
 		if (!$this->templateCode) {
 			return '<p class="error">' . $this->pi_getLL('error_no_template') . '</p>';
 		}
 
-		// add the "are you sure"-function to the header.
+			// add the "are you sure"-function to the header.
 		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId.'_areyousure'] = '<script type="text/javascript">
 	function areYouSure(ziel) {
 		if ( confirm("' . $this->pi_getLL('are_you_sure_delete', 'Are you sure?') . '") ) {
@@ -204,74 +204,103 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	}
 </script>';
 
-		// General permission check: This plugin only makes sense if a user is logged in
+			// General permission check: This plugin only makes sense if a user is logged in
 		if (!$GLOBALS['TSFE']->loginUser) {
 			return $this->pi_wrapInBaseClass($this->pi_getLL('error_not_logged_in', 'Please log in.'));
 		}
 
-		// show single view if searchword is ticket UID
+		/******************************************
+		 * Actions
+		 *****************************************/
+
+			// show single view if searchword is ticket UID
 		if ($this->isValidTicketUid($this->piVars['sword'])) {
 			$this->piVars['showUid'] = intval($this->piVars['sword']);
 			$this->piVars['sword'] = '';
 		}
 
-
-		// single view / update / print view
-		// get the database entry for the single or print view / the entry that will be updated.
+			// single / update / print view
+			// get the database entry for the single or print view / the entry that will be updated.
 		if ( $this->piVars['showUid'] || $this->piVars['updateUid'] || $this->piVars['printview'] )	{
 			$uid = $this->piVars['showUid'] ? $this->piVars['showUid'] : ( $this->piVars['updateUid'] ? $this->piVars['updateUid'] : $this->piVars['printview'] );
 			$this->internal['currentTable'] = $this->tablename;
 			$this->internal['currentRow'] = $this->pi_getRecord($this->tablename, $uid);
 
-			// PERMISSION CHECKS
-			// only the owner, the responsible user and the observers may view or update ticket
+				// PERMISSION CHECKS
+				// only the owner, the responsible user and the observers may view or update ticket
 			if (!$this->checkPermissionForCurrentTicket()) {
 				return $this->pi_wrapInBaseClass($this->pi_getLL('error_no_permission', 'Sorry, you don\'t have access to this ticket.'));
 			}
 		}
 
-		// a new ticket has been submitted / a ticket should be updated
+			// a new ticket has been submitted / a ticket should be updated
 		if ($this->piVars['newticket'] || $this->piVars['updateUid']) {
 			$this->handleSubmittedForm();
 		}
 
-		// a ticket should be deleted
+			// a ticket should be deleted
 		if ($this->piVars['deleteUid']) {
 			$this->deleteTicket($this->piVars['deleteUid']);
 		}
 
-		// a ticket should be closed
+			// a ticket should be closed
 		if ($this->piVars['closeUid']) {
 			$this->closeTicket($this->piVars['closeUid']);
 		}
 
-		// a file should be deleted
+			// a file should be deleted
 		if ($this->piVars['deleteFile']) {
 			$this->removeFileFromTicket($this->piVars['deleteFile']);
 		}
 
-		// a related ticket link should be deleted
+			// a related ticket link should be deleted
 		if ($this->piVars['deleteRelatedTicket']) {
 			$this->removeRelatedTicketFromCurrentTicket($this->piVars['deleteRelatedTicket']);
 		}
+			// Render the main content
+		if (
+			($this->piVars['do'] == 'new')
+			|| $this->piVars['showUid']
+			|| ($this->piVars['updateUid'] && count($this->formErrors))
+			|| ($this->piVars['newticket'] && count($this->formErrors))
+			) {
+			$content .= $this->renderTicketForm();
+		} else if ($this->piVars['printview']) {
+			$content .= $this->printview();
+		} else {
+			$this->setListviewConfiguration();
+			$this->cleanUpPiVars();
+			$content .= $this->listView();
+		}
 
-		// Initialize sorting
-		// read session data
-		$this->sessionData = $GLOBALS['TSFE']->fe_user->getKey('ses',$this->prefixId);
-		$sessionVars = $this->sessionData;
-		// set default sort when no sorting chosen and no sorting set in session data
-		if (empty($this->piVars['sort']) && empty($this->sessionData[$GLOBALS['TSFE']->id]['sort'])) {
+		return $this->pi_wrapInBaseClass($content);
+	}/*}}}*/
+
+	/**
+	 * sets the configuration for the listview: sorting, filter, viewtype
+	 * entries per page, search
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function setListviewConfiguration() {
+
+			// read session data
+		$sessionVars = $GLOBALS['TSFE']->fe_user->getKey('ses',$this->prefixId);
+
+			// Initialize sorting
+			// set default sort when no sorting chosen and no sorting set in session data
+		if (empty($this->piVars['sort']) && empty($sessionVars[$GLOBALS['TSFE']->id]['sort'])) {
 			$this->piVars['sort'] = DEFAULT_SORT;
+		} else if (empty($this->piVars['sort']) && !empty($sessionVars[$GLOBALS['TSFE']->id]['sort'])) {
+				// use sorting from form
+			$this->piVars['sort'] = $sessionVars[$GLOBALS['TSFE']->id]['sort'];
 		}
-		// use sorting from form
-		else if(empty($this->piVars['sort']) && !empty($this->sessionData[$GLOBALS['TSFE']->id]['sort'])) {
-			$this->piVars['sort'] = $this->sessionData[$GLOBALS['TSFE']->id]['sort'];
-		}
-		// store chosen sorting in session
+
+			// store chosen sorting in session
 		$sessionVars[$GLOBALS['TSFE']->id]['sort'] = $this->piVars['sort'];
 
-
-		// keep existing filter
+			// keep existing filter
 		if ($this->piVars['filter']) {
 			$this->filter = unserialize(base64_decode($this->piVars['filter']));
 		} else {
@@ -279,11 +308,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// if we are not in delegated teaser view or in own teaser view
 				// since in this views there is no possibility to clear the filter
 			if (!strstr($this->ffdata['view'], 'TEASER_')) {
-				$this->filter = unserialize(base64_decode($this->sessionData[$GLOBALS['TSFE']->id]['filter']));
+				$this->filter = unserialize(base64_decode($sessionVars[$GLOBALS['TSFE']->id]['filter']));
 			}
 		}
 
-		// a new filter for listview is set
+			// a new filter for listview is set
 		if ($this->piVars['filter_submit']) {
 			$this->filter = array();
 			foreach (explode(',',$this->conf['listView.']['filterList']) as $filterName) {
@@ -292,13 +321,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$this->filter[$filterName] = $this->piVars[$filterName];
 				}
 			}
-			// go to page 1 if a new filter has been set
+				// go to page 1 if a new filter has been set
 			$this->piVars['pointer'] = 0;
 		}
 
-		// set some default values for the filter
-		// TODO: Should be configurable in Typoscript in future versions
-		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'all_not_closed'; // AK 18:17 27.05.2009
+			// set some default values for the filter
+			// TODO: Should be configurable in Typoscript in future versions
+			// AK 18:17 27.05.2009
+		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'all_not_closed';
 		if ($this->ffdata['view'] == 'TEASER_OWN') {
 			$this->filter['responsible_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
@@ -306,46 +336,43 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$this->filter['owner_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
 
-		// save the filter in piVars
-		// Use base64 because the serialized value contains quotes
+			// save the filter in piVars
+			// Use base64 because the serialized value contains quotes
 		$this->piVars['filter'] = base64_encode(serialize($this->filter));
 
-		// store chosen filter in session
+			// store chosen filter in session
 		$sessionVars[$GLOBALS['TSFE']->id]['filter'] = $this->piVars['filter'];
 
-		// Entries per page - get value from form or from session
-		if (!$this->piVars['entries_per_page'] && $this->sessionData[$GLOBALS['TSFE']->id]['entries_per_page']) {
-			$this->piVars['entries_per_page'] = $this->sessionData[$GLOBALS['TSFE']->id]['entries_per_page'];
+			// Entries per page - get value from form or from session
+		if (!$this->piVars['entries_per_page'] && $sessionVars[$GLOBALS['TSFE']->id]['entries_per_page']) {
+			$this->piVars['entries_per_page'] = $sessionVars[$GLOBALS['TSFE']->id]['entries_per_page'];
 		}
 
-		// store entries per page in session
+			// clean value
+		$this->piVars['entries_per_page'] = intval($this->piVars['entries_per_page']);
+
+			// store entries per page in session
 		$sessionVars[$GLOBALS['TSFE']->id]['entries_per_page'] = $this->piVars['entries_per_page'];
 
-		// store session data
+			// viewtype - get value from form or from session
+		if (!$this->piVars['viewtype'] && $sessionVars[$GLOBALS['TSFE']->id]['viewtype']) {
+			$this->piVars['viewtype'] = $sessionVars[$GLOBALS['TSFE']->id]['viewtype'];
+		}
+
+			// accept only allowed values
+		if (!in_array($this->piVars['viewtype'], t3lib_div::trimExplode(',', $this->conf['viewtypeList']))) {
+			unset($this->piVars['viewtype']);
+		}
+
+			// store chosen viewtype in session - if set
+		if ($this->piVars['viewtype']) {
+			$sessionVars[$GLOBALS['TSFE']->id]['viewtype'] = $this->piVars['viewtype'];
+		}
+
+			// store session data
 		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->prefixId, $sessionVars);
 		$GLOBALS['TSFE']->storeSessionData();
-
-		// Render the main content:
-		// Single View / New Ticket
-		// or List View
-		if (
-			($this->piVars['do'] == 'new')
-			|| $this->piVars['showUid']
-			|| ($this->piVars['updateUid'] && count($this->formErrors))
-			|| ($this->piVars['newticket'] && count($this->formErrors))
-			) {
-			$content .= $this->renderTicketForm();
-		}
-		else if ($this->piVars['printview']) {
-			$content .= $this->printview();
-		}
-		else {
-			$this->cleanUpPiVars();
-			$content .= $this->listView();
-		}
-
-		return $this->pi_wrapInBaseClass($content);
-	}/*}}}*/
+	}
 
 	/**
 	 * checkPermissionForCurrentTicket
@@ -419,7 +446,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function cleanUpPiVars() {/*{{{*/
 
-		// some vars form the ticket form
+			// some vars form the ticket form
 		unset($this->piVars['newticket']);
 		unset($this->piVars['updateUid']);
 		unset($this->piVars['filter_submit']);
@@ -430,12 +457,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// and some vars from the comment form
+			// vars from the listview
+		unset($this->piVars['filter']);
+
+			// and some vars from the comment form
 		unset($this->piVars['content']);
 		unset($this->piVars['comment_submit']);
 		unset($this->piVars['0']);
 
-		// some more piVars
+			// some more piVars
 		unset($this->piVars['deleteUid']);
 		unset($this->piVars['deleteFile']);
 		unset($this->piVars['closeUid']);
@@ -2302,6 +2332,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$valueList = 'open_and_working,all_not_closed,all,' . $valueList;
 				}
 
+				// this is a HACK for the viewtype selector dropdown
+				// since the previll value is not in the insertFields or in the
+				// filter var, we get it from piVars
+				if ($fieldConf['name'] == 'viewtype' && $this->piVars['viewtype']) {
+					$prefillValue = $this->piVars['viewtype'];
+				}
+
 				// Generate the valueList for the closed_in_month-Filter.
 				// This filter gives you the possibility to filter the tickets
 				// according to the month they were closed in. So wie first get
@@ -2965,6 +3002,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function listView()	{/*{{{*/
 
 			// which template should be used?
+			// "view" is defined in the backend (teaser / normal listview)
+			// "viewtype" is selected by the user in the frontend
 		switch ($this->ffdata['view']) {
 				// tickets the user is responsible for
 			case 'TEASER_OWN':
@@ -2982,7 +3021,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				break;
 
 			default:
-				$lConf = $this->conf['listView.'];
+				if ($this->piVars['viewtype'] == 'short') {
+					$lConf = $this->conf['listViewShort.'];
+				} else {
+					$lConf = $this->conf['listView.'];
+				}
 			break;
 		}
 
@@ -3120,6 +3163,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, RENDER_EMPTY_DRODOWN_ELEMENT);
 			}
 		}
+
+			// render the viewtype selector
+		$this->markerArray['VIEWTYPE_SELECTOR'] = $this->renderFormField($this->conf['viewtype_selector.']);
 
 			// add the filter form markers
 		$this->markerArray['FILTERFORM_NAME'] = $this->ticketFormName . '_filter';
