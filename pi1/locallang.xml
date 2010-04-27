@@ -175,6 +175,7 @@
 
 			<label index="LABEL_RELATED_TICKETS">Related tickets</label>
 			<label index="LABEL_RELATED_TICKETS_ADD">Add (enter number):</label>
+			<label index="LABEL_RELATED_TICKETS_UKB">Relations</label>
 
 			<label index="LABEL_SORTING">Sorting</label>
 			<label index="LABEL_MODE_SELECTOR">Show</label>
@@ -381,6 +382,7 @@
 
 			<label index="LABEL_RELATED_TICKETS">Verwandte Aufgaben</label>
 			<label index="LABEL_RELATED_TICKETS_ADD">Hinzufügen (Nr. eingeben):</label>
+			<label index="LABEL_RELATED_TICKETS_UKB">Verknüpfungen</label>
 
 			<label index="LABEL_SORTING">Sortierung</label>
 			<label index="LABEL_MODE_SELECTOR">Zeige</label>
@@ -559,6 +561,7 @@
 			<label index="LABEL_GO_TO_COMMENTS_FROM_EMAIL">Idź do komentarzy</label>
 			<label index="LABEL_RELATED_TICKETS">Powiązane zgłoszenia</label>
 			<label index="LABEL_RELATED_TICKETS_ADD">Dodaj (wpisz numer):</label>
+			<label index="LABEL_RELATED_TICKETS_UKB">Relations</label>
 			<label index="LABEL_SORTING">Sortowanie</label>
 			<label index="LABEL_MODE_SELECTOR">Pokaż</label>
 			<label index="LABEL_INTERNAL">WEWNĘTRZNE</label>

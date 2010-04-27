@@ -1946,7 +1946,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$content = $this->cObj->substituteMarker($content, '###OPTIONAL_' . strtoupper($fieldConf['name']) . '###', $optionalFieldContent);
 			}
 		}
-
+		
 		// add the crdate
 		$this->markerArray['CRDATE'] = $this->getFieldContent('crdate');
 
@@ -1974,7 +1974,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if (empty($this->piVars['showUid']) && empty($this->piVars['updateUid'])) {
 			$content = $this->cObj->substituteSubpart ($content, '###TOOLBAR_EDITONLY###', '');
 		}
-
+		
 		return $content;
 	}/*}}}*/
 
@@ -2399,16 +2399,27 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'input_related_tickets':
-				$content = $this->renderRelatedTicketListForCurrentTicket();
-
-				if ($this->piVars['newticket']) {
-					$prefillValue = $this->piVars['related_tickets'];
+				
+				// AK 08.04.2010
+				// universal keworks browser
+				if (t3lib_extMgm::isLoaded('ke_ukb')) {
+					require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
+					$ukb = t3lib_div::makeInstance('ke_ukb');
+					$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid']);
+					$this->markerArray['UKB_FORM'] =$ukb->renderForm();
+					$this->markerArray['LABEL_RELATED_TICKETS'] = $this->pi_getLL('LABEL_RELATED_TICKETS_UKB');
 				} else {
-					$prefillValue = '';
+					// usual "related tickets" handling if ke_ukb is not loaded
+					$content = $this->renderRelatedTicketListForCurrentTicket();
+					
+					if ($this->piVars['newticket']) {
+						$prefillValue = $this->piVars['related_tickets'];
+					} else {
+						$prefillValue = '';
+					}
+					$content .= $this->pi_getLL('LABEL_RELATED_TICKETS_ADD');
+					$content .= ' <input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
 				}
-
-				$content .= $this->pi_getLL('LABEL_RELATED_TICKETS_ADD');
-				$content .= ' <input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
 				break;
 
 			case 'textareaRTE':
