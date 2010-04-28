@@ -1946,7 +1946,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$content = $this->cObj->substituteMarker($content, '###OPTIONAL_' . strtoupper($fieldConf['name']) . '###', $optionalFieldContent);
 			}
 		}
-		
+
 		// add the crdate
 		$this->markerArray['CRDATE'] = $this->getFieldContent('crdate');
 
@@ -1974,7 +1974,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if (empty($this->piVars['showUid']) && empty($this->piVars['updateUid'])) {
 			$content = $this->cObj->substituteSubpart ($content, '###TOOLBAR_EDITONLY###', '');
 		}
-		
+
 		return $content;
 	}/*}}}*/
 
@@ -2315,7 +2315,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$class = $fieldConf['css_class'] ? ' class="' . $fieldConf['css_class'] . '"' : '';
 				$content ='<select ' . $addJS . $class . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 
-				// render empty option
+					// render empty option
 				if ($renderEmptyDropdownFields) {
 					if (!$prefillValue) {
 						$selected = ' selected';
@@ -2329,37 +2329,39 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 				$valueList = $this->conf[$fieldConf['valueList']];
 
-				// this is a HACK for the filter option "status". We want to
-				// have a filter for "open" and "working" in one option.
-				// TODO: Should be configurable in Typoscript in future versions
-				// $renderEmptyDropdownFields is only set when rendering the filter dropdown,
-				// so we use this as a condition.
+					// this is a HACK for the filter option "status". We want to
+					// have a filter for "open" and "working" in one option.
+					// TODO: Should be configurable in Typoscript in future versions
+					// $renderEmptyDropdownFields is only set when rendering the filter dropdown,
+					// so we use this as a condition.
 				if ($fieldConf['name'] == 'status' && $renderEmptyDropdownFields) {
 					$valueList = 'open_and_working,all_not_closed,all,' . $valueList;
 				}
 
-				// this is a HACK for the viewtype selector dropdown
-				// since the previll value is not in the insertFields or in the
-				// filter var, we get it from piVars
+					// this is a HACK for the viewtype selector dropdown
+					// since the previll value is not in the insertFields or in the
+					// filter var, we get it from piVars
 				if ($fieldConf['name'] == 'viewtype' && $this->piVars['viewtype']) {
 					$prefillValue = $this->piVars['viewtype'];
 				}
 
-				// Generate the valueList for the closed_in_month-Filter.
-				// This filter gives you the possibility to filter the tickets
-				// according to the month they were closed in. So wie first get
-				// the month in which a ticket has been closed for the first
-				// time and add all months until today.
+					// Generate the valueList for the closed_in_month-Filter.
+					// This filter gives you the possibility to filter the tickets
+					// according to the month they were closed in. So wie first get
+					// the month in which a ticket has been closed for the first
+					// time and add all months until today.
 				if ($fieldConf['name'] == 'closed_in_month') {
 
-					// Get the first closed ticket the user has access to.
-					// IMPORTENT: Tickets may be re-opened, but the closing time remains in the ticket!
+						// Get the first closed ticket the user has access to.
+						// IMPORTANT: Tickets may be re-opened, but the closing time remains in the ticket!
 					$where_clause = 'close_time != 0';
 					$where_clause .= $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
 					$where_clause .= ' AND pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
 					$where_clause .= $lcObj->enableFields($this->tablename);
-					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time DESC', 1);
+					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time ASC', 1);
 					$valueList = '';
+
+					debug($where_clause);
 
 					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res_month)) {
 						$row_month = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_month);
@@ -2367,8 +2369,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$month = date('m', $row_month['close_time']);
 						$now = time();
 
-						// render a list from the starting month until now, the
-						// timestamp is the beginning of each month
+						debug( $row_month, 'row_month');
+						debug( $year, 'year');
+						debug( $month, 'month');
+
+							// render a list from the starting month until now, the
+							// timestamp is the beginning of each month
 						while ($year < date('Y', $now) || ($year == date('Y', $now) && $month <= date('m', $now))) {
 							if ($valueList) {
 								$valueList .= ',';
@@ -2381,9 +2387,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							}
 						}
 					}
+
+						// render newest on top
+					$valueListArray = explode(',', $valueList);
+					arsort($valueListArray);
+					$valueList = implode(',', $valueListArray);
+					unset($valueListArray);
 				}
 
-				// render the list
+					// render the list
 				foreach (explode(',', $valueList) as $value) {
 					if (strlen($value)) {
 						$selected = $prefillValue == $value ? ' selected' : '';
@@ -2399,7 +2411,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'input_related_tickets':
-				
+
 				// AK 08.04.2010
 				// universal keworks browser
 				if (t3lib_extMgm::isLoaded('ke_ukb')) {
@@ -2411,7 +2423,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				} else {
 					// usual "related tickets" handling if ke_ukb is not loaded
 					$content = $this->renderRelatedTicketListForCurrentTicket();
-					
+
 					if ($this->piVars['newticket']) {
 						$prefillValue = $this->piVars['related_tickets'];
 					} else {
