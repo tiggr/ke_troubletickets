@@ -2361,17 +2361,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$res_month = $GLOBALS['TYPO3_DB']->exec_SELECTquery('close_time', $this->tablename, $where_clause, '', 'close_time ASC', 1);
 					$valueList = '';
 
-					debug($where_clause);
-
 					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res_month)) {
 						$row_month = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_month);
 						$year = date('Y', $row_month['close_time']);
 						$month = date('m', $row_month['close_time']);
 						$now = time();
-
-						debug( $row_month, 'row_month');
-						debug( $year, 'year');
-						debug( $month, 'month');
 
 							// render a list from the starting month until now, the
 							// timestamp is the beginning of each month
