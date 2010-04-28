@@ -2425,6 +2425,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					}
 					$content .= $this->pi_getLL('LABEL_RELATED_TICKETS_ADD');
 					$content .= ' <input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
+					$this->markerArray['UKB_FORM'] = '';
 				}
 				break;
 
