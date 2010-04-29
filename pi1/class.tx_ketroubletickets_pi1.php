@@ -2409,11 +2409,22 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// AK 08.04.2010
 				// universal keworks browser
 				if (t3lib_extMgm::isLoaded('ke_ukb')) {
-					require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
-					$ukb = t3lib_div::makeInstance('ke_ukb');
-					$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid']);
-					$this->markerArray['UKB_FORM'] =$ukb->renderForm();
+					// show ukb only in edit view, not when creating a ticket
+					if ($this->piVars['showUid']) {
+						// make instance
+						require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
+						$ukb = t3lib_div::makeInstance('ke_ukb');
+						// get content
+						$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid']);
+						// fill markers
+						$this->markerArray['UKB_FORM'] =$ukb->renderForm();
+					}
+					else {
+						$this->markerArray['UKB_FORM'] = '';
+						$content = $this->pi_getLL('ukb_after_saving');
+					}
 					$this->markerArray['LABEL_RELATED_TICKETS'] = $this->pi_getLL('LABEL_RELATED_TICKETS_UKB');
+					
 				} else {
 					// usual "related tickets" handling if ke_ukb is not loaded
 					$content = $this->renderRelatedTicketListForCurrentTicket();
