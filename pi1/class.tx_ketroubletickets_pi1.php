@@ -1361,12 +1361,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 		$content = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION###');
 		$localMarkerArray = array();
+		$lConf = $this->conf['email_notifications.'];
+		$fieldsArray = t3lib_div::trimExplode(',', $lConf['fieldList']);
+		$changedFieldsArray = t3lib_div::trimExplode(',', $changedFields);
 
 			// get the markers
-		foreach (explode(',', $this->conf['email_notifications.']['fieldList']) as $fieldName) {
+		foreach ($fieldsArray as $fieldName) {
 			if (strtolower(trim($fieldName)) == 'comments') {
 				$markerContent = '<strong>' . $this->pi_getLL('LABEL_COMMENT_HEADER') . '</strong><br />';
-				$markerContent .= $this->renderCommentList($this->internal['currentRow']['uid']);
+				$markerContent .= $this->renderCommentList($this->internal['currentRow']['uid'], '', 0, 1);
 			} else {
 				$markerContent = $this->getFieldContent(strtolower(trim($fieldName)), CONST_RENDER_TYPE_EMAIL);
 			}
@@ -1382,7 +1385,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$type = 'changed';
 		}
 
-		// what has happened?
+			// what has happened?
 		if ($GLOBALS['TSFE']->loginUser) {
 				// this is too much
 			//$localMarkerArray['WHAT_HAS_HAPPENED'] = $this->pi_getLL('email_text_user', 'user:');
@@ -1402,28 +1405,62 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// which fields have changed?
 			// on new tickets, nothing has changed, so we don't render the changed fields
+		$firstField = true;
 		if (!stristr($changedFields, CONST_NEWTICKET)) {
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
-			$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('email_text_fields_have_changed'));
-			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+			$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('email_text_fields_have_changed')) . ' ';
 
 				// standard fields
 			if (strlen($changedFields)) {
-				foreach (explode(',', $changedFields) as $fieldName) {
+				foreach ($changedFieldsArray as $fieldName) {
+					if (!$firstField) {
+						if ($fieldName == CONST_REOPENANDCOMMENT || $fieldName == CONST_NEWCOMMENT) {
+							$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+						} else {
+							$localMarkerArray['WHAT_HAS_HAPPENED'] .= ', ';
+						}
+					}
 					$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
-					$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+					$firstField = false;
 				}
 			}
 
 				// internal fields
 			if (strlen($changedInternalFields)) {
 				foreach (explode(',', $changedInternalFields) as $fieldName) {
+					if (!$firstField) {
+						if ($fieldName == CONST_REOPENANDCOMMENT || $fieldName == CONST_NEWCOMMENT) {
+							$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+						} else {
+							$localMarkerArray['WHAT_HAS_HAPPENED'] .= ', ';
+						}
+					}
 					$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
-					$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+					$firstField = false;
 				}
 
 					// render the changes in the internal fields (if there are any)
 				$localMarkerArray['INTERNAL_CHANGES'] = $this->renderChangedInternalFields($changedInternalFields);
+			}
+		}
+
+			// render styles for cells. Styles depend on wether the
+			// field changed or not.
+		foreach ($fieldsArray as $fieldName) {
+			if (in_array($fieldName, $changedFieldsArray)) {
+					// if a configuration for this field exists, use it. Otherwise,
+					// use the default
+				if ($lConf['cellStyleFieldHasChanged_' . strtolower($fieldName)]) {
+					$localMarkerArray['CELLSTYLE_' . strtoupper($fieldName)] = $lConf['cellStyleFieldHasChanged_' . strtolower($fieldName)];
+				} else {
+					$localMarkerArray['CELLSTYLE_' . strtoupper($fieldName)] = $lConf['cellStyleFieldHasChanged'];
+				}
+			} else {
+				if ($lConf['cellStyleDefault_' . strtolower($fieldName)]) {
+					$localMarkerArray['CELLSTYLE_' . strtoupper($fieldName)] = $lConf['cellStyleDefault_' . strtolower($fieldName)];
+				} else {
+					$localMarkerArray['CELLSTYLE_' . strtoupper($fieldName)] = $lConf['cellStyleDefault'];
+				}
 			}
 		}
 
@@ -1616,19 +1653,33 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 *
 	 * renders a html list of all comments for a ticket
 	 *
-	 * @param mixed $ticket_uid
+	 * @param integer $ticket_uid
+	 * @param string $renderType defines if the commentlist should be rendered in text or html
+	 * @param integer $latest if set to 1, give only the latest comment back
+	 * @param integer $markNewestComment if set to 1, mark the newest comment with a background color set in typoscript (for email notifications).
 	 * @access public
 	 * @return string
 	 */
-	public function renderCommentList($ticket_uid, $renderType='', $latest=0) {/*{{{*/
+	public function renderCommentList($ticket_uid, $renderType='', $latest=0, $markNewestComment=0) {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
 
-		// build query
+			// if the newest comment should be marked, find out which one it is
+		if ($markNewestComment) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', $this->commentsTablename, $where, '', 'uid desc', 1);
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				$latestCommentUid = $row['uid'];
+			} else {
+				$latestCommentUid = 0;
+			}
+		}
+
+			// build query
 		$where = 'ticket_uid=' . $ticket_uid . $lcObj->enableFields($this->commentsTablename);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where, '', $this->conf['commentListOrderBy']);
 
-		// overwrite if latest only
+			// overwrite if latest only
 		if ($latest) $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where,$groupBy='',$orderBy='uid desc',$limit=1);
 
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
@@ -1642,15 +1693,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$localMarkerArray = array();
 					$localMarkerArray['COMMENT_DATE'] = date($this->conf['comment_dateformat'], $row['crdate']);
 
-					// Split up content into author and content
+						// Split up content into author and content
 					$contentParts = explode(':', $row['content'], 2);
 					$localMarkerArray['COMMENT_AUTHOR'] = $this->cleanUpHtmlOutput($contentParts[0]);
 					$localMarkerArray['COMMENT_CONTENT'] = nl2br($this->cleanUpHtmlOutput($contentParts[1]));
 					$localMarkerArray['COMMENTROW_ODD_EVEN'] = $commentrow_odd_even;
 					$commentrow_odd_even = 1 - $commentrow_odd_even;
 
+						// mark the newest comment in email notifications
+					$localMarkerArray['COMMENTSTYLE'] = '';
+					if ($markNewestComment && $row['uid'] == $latestCommentUid) {
+						$localMarkerArray['COMMENTSTYLE'] = $this->conf['email_notifications.']['newCommentStyle'];
+					}
 
-					// substitute the markers
+						// substitute the markers
 					$commentline = $this->cObj->substituteMarkerArray($commentline,$localMarkerArray,'###|###',true);
 					unset($localMarkerArray);
 					$content .= $commentline;
@@ -2424,7 +2480,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$content = $this->pi_getLL('ukb_after_saving');
 					}
 					$this->markerArray['LABEL_RELATED_TICKETS'] = $this->pi_getLL('LABEL_RELATED_TICKETS_UKB');
-					
+
 				} else {
 					// usual "related tickets" handling if ke_ukb is not loaded
 					$content = $this->renderRelatedTicketListForCurrentTicket();
@@ -3461,7 +3517,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$retval = str_replace("\r", '', $retval);
 				} else if ($renderType == CONST_RENDER_TYPE_EMAIL) {
 					$retval = $this->internal['currentRow']['description'];
-					$retval = $this->cleanUpHtmlOutput($retval, CONST_KEEP_TAGS_YES);
 				} else {
 					$retval = $this->pi_RTEcssText($this->internal['currentRow']['description']);
 				}

@@ -129,7 +129,7 @@ New Ticket / Edit Ticket Form / Singleview
   ###ADDITIONALJS_POST###
   ###OPTIONAL_TICKET_HISTORY###
   </div>
-  
+
   ###UKB_FORM###
 <!-- ###TICKET_FORM### END-->
 
@@ -144,7 +144,7 @@ Optional Labels and Fields
 <!-- ###OPTIONAL_CATEGORY_SUBPART### END-->
 
 <!-- ###OPTIONAL_COMMENT_ROW_SUBPART### START-->
-  <div class="commentrow_###COMMENTROW_ODD_EVEN###">
+  <div class="commentrow_###COMMENTROW_ODD_EVEN###" style="###COMMENTSTYLE###">
   <div style="font-weight:bold; border-top:1px dotted black; border-bottom:1px dotted black; margin:20px 0 10px 0; font-size:10px;">
   ###COMMENT_DATE###, <em>###COMMENT_AUTHOR###</em>
   </div>
@@ -806,57 +806,56 @@ E-Mail Notification
 			<table style="width:100%; background:#ffffff; padding:0px; ">
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_CRDATE###:</b></td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_CRDATE###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_CRDATE###">###EMAIL_FIELD_CRDATE###&nbsp;</td>
 			</tr>
 			<tr>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"><b>###LABEL_OWNER_FEUSER###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"> ###EMAIL_FIELD_OWNER_FEUSER###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_OWNER_FEUSER###:</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_OWNER_FEUSER###"> ###EMAIL_FIELD_OWNER_FEUSER###&nbsp;</td>
 			</tr>
 			<tr>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"><b>###LABEL_RESPONSIBLE_FEUSER###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;">###EMAIL_FIELD_RESPONSIBLE_FEUSER###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_RESPONSIBLE_FEUSER###:</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_RESPONSIBLE_FEUSER###">###EMAIL_FIELD_RESPONSIBLE_FEUSER###&nbsp;</td>
 			</tr>
 			<tr>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align: top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;"><b>###LABEL_OBSERVERS_FEUSER###: </td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align: top; padding: 0 10px 5px 0; font-size:10pt; font-family:Verdana;">###EMAIL_FIELD_OBSERVERS_FEUSER###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_OBSERVERS_FEUSER###: </td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_OBSERVERS_FEUSER###">###EMAIL_FIELD_OBSERVERS_FEUSER###&nbsp;</td>
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_STATUS###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_STATUS###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_STATUS###">###EMAIL_FIELD_STATUS###&nbsp;</td>
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_BILLING###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_BILLING###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_BILLING###">###EMAIL_FIELD_BILLING###&nbsp;</td>
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_PRIORITY###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_PRIORITY_WRAPPED###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_PRIORITY###">###EMAIL_FIELD_PRIORITY_WRAPPED###&nbsp;</td>
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_UNTIL_DATE###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_UNTIL_DATE###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_UNTIL_DATE###">###EMAIL_FIELD_UNTIL_DATE###&nbsp;</td>
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_EFFORT###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_EFFORT###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_EFFORT###">###EMAIL_FIELD_EFFORT###&nbsp;</td>
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_CATEGORY###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_CATEGORY###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_CATEGORY###">###EMAIL_FIELD_CATEGORY###&nbsp;</td>
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_FILES###:</td>
-				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_FILES###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_FILES###">###EMAIL_FIELD_FILES###&nbsp;</td>
 			</tr>
 			<tr>
 				<td style="vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_RELATED_TICKETS###:</td>
-				<td style="vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;">###EMAIL_FIELD_RELATED_TICKETS###&nbsp;</td>
+				<td style="###CELLSTYLE_RELATED_TICKETS###">###EMAIL_FIELD_RELATED_TICKETS###&nbsp;</td>
 			</tr>
 			</table>
 		</td>
 
-		<td style="width:60%; vertical-align: top; background: #E6EFEF; font-family: Verdana; padding: 5px;">
-			<!--<div style="font-size:10pt;"><p><b>###LABEL_DESCRIPTION###:</b></p></div>-->
+		<td style="###CELLSTYLE_DESCRIPTION###">
 			<div style="font-size:10pt;">###EMAIL_FIELD_DESCRIPTION###</div>
 		</td>
 
@@ -880,9 +879,7 @@ E-Mail Notification
 <!-- ###EMAIL_NOTIFICATION### END-->
 
 <!-- ###EMAIL_NOTIFICATION_LINKTOTICKET### BEGIN-->
-
 <a href="###URL_GO_TO_TICKET###" style="display: block; float: right; padding:3px 10px; border:1px solid #cd6913; color:#000000; font-weight:normal; ">###LINKTEXT_GO_TO_TICKET###</a>
-
 <!-- ###EMAIL_NOTIFICATION_LINKTOTICKET### END-->
 
 <!-- ###INTERNAL_CHANGES_SUBPART### START-->

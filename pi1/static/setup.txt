@@ -466,4 +466,10 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	internalFieldsWithoutNotification = time_used
 	# Add ticket UID to notification subject?
 	add_uid_to_subject = 1
+	# style for non-modified fields in the email
+	cellStyleDefault = vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;
+	cellStyleFieldHasChanged = background: #cdf6cf; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;
+	cellStyleDefault_description = width:60%; vertical-align: top; background: #E6EFEF; font-family: Verdana; padding: 5px;
+	cellStyleFieldHasChanged_description = background: #cdf6cf; width:60%; vertical-align: top; font-family: Verdana; padding: 5px;
+	newCommentStyle = background: #cdf6cf;
 }
