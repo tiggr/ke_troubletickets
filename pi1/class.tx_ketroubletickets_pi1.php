@@ -1410,21 +1410,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
 			$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('email_text_fields_have_changed')) . ' ';
 
-				// standard fields
-			if (strlen($changedFields)) {
-				foreach ($changedFieldsArray as $fieldName) {
-					if (!$firstField) {
-						if ($fieldName == CONST_REOPENANDCOMMENT || $fieldName == CONST_NEWCOMMENT) {
-							$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
-						} else {
-							$localMarkerArray['WHAT_HAS_HAPPENED'] .= ', ';
-						}
-					}
-					$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
-					$firstField = false;
-				}
-			}
-
 				// internal fields
 			if (strlen($changedInternalFields)) {
 				foreach (explode(',', $changedInternalFields) as $fieldName) {
@@ -1442,6 +1427,22 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// render the changes in the internal fields (if there are any)
 				$localMarkerArray['INTERNAL_CHANGES'] = $this->renderChangedInternalFields($changedInternalFields);
 			}
+
+				// standard fields
+			if (strlen($changedFields)) {
+				foreach ($changedFieldsArray as $fieldName) {
+					if (!$firstField) {
+						if ($fieldName == CONST_REOPENANDCOMMENT || $fieldName == CONST_NEWCOMMENT) {
+							$localMarkerArray['WHAT_HAS_HAPPENED'] .= '<br />';
+						} else {
+							$localMarkerArray['WHAT_HAS_HAPPENED'] .= ', ';
+						}
+					}
+					$localMarkerArray['WHAT_HAS_HAPPENED'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
+					$firstField = false;
+				}
+			}
+
 		}
 
 			// render styles for cells. Styles depend on wether the
