@@ -1369,7 +1369,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		foreach ($fieldsArray as $fieldName) {
 			if (strtolower(trim($fieldName)) == 'comments') {
 				$markerContent = '<strong>' . $this->pi_getLL('LABEL_COMMENT_HEADER') . '</strong><br />';
-				$markerContent .= $this->renderCommentList($this->internal['currentRow']['uid'], '', 0, 1);
+
+					// check if a comment has been submitted.
+				if (strstr($changedFields, CONST_NEWCOMMENT) || strstr($changedFields, CONST_REOPENANDCOMMENT)) {
+					$markLatestComment = 1;
+				} else {
+					$markLatestComment = 0;
+				}
+				$markerContent .= $this->renderCommentList($this->internal['currentRow']['uid'], '', 0, $markLatestComment);
 			} else {
 				$markerContent = $this->getFieldContent(strtolower(trim($fieldName)), CONST_RENDER_TYPE_EMAIL);
 			}
