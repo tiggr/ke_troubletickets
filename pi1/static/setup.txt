@@ -461,7 +461,7 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	subject_prefix = [TROUBLE TICKET]
 	from_email = me@domain.com
 	from_name = TYPO3 Trouble Ticket System
-	fieldList = crdate, title, status, billing, priority_wrapped, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets
+	fieldList = crdate, title, status, billing, priority, priority_wrapped, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets
 	# Don't send notification when only the following internal fields are changed (comma seperated list)
 	internalFieldsWithoutNotification = time_used
 	# Add ticket UID to notification subject?
