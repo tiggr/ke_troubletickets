@@ -86,7 +86,7 @@
 			<label index="email_subject_type_closed">Closed</label>
 			<label index="email_subject_type_newcomment">Comment</label>
 			<label index="email_subject_type_newcomment_reopen">Comment/opened</label>
-			<label index="error_no_permission">You do not have access rights to this ticket.</label>
+			<label index="error_no_permission">Permission denied. You do not have access rights to this ticket or the ticket is in a different folder.</label>
 			<label index="error_not_logged_in">Please log in.</label>
 
 			<label index="SELECTLABEL_1">low</label>
@@ -295,7 +295,7 @@
 			<label index="email_subject_type_closed">Erledigt</label>
 			<label index="email_subject_type_newcomment">Kommentar</label>
 			<label index="email_subject_type_newcomment_reopen">Kommentar/geöffnet</label>
-			<label index="error_no_permission">Sie haben leider kein Zugriffsrecht auf diese Aufgabe.</label>
+			<label index="error_no_permission">Kein Zugriff. Sie haben entweder kein Zugriffsrecht auf diese Aufgabe, oder die Aufgabe liegt in einem anderen Ordner.</label>
 			<label index="error_not_logged_in">Bitte loggen Sie sich ein.</label>
 
 			<label index="SELECTLABEL_1">niedrig</label>

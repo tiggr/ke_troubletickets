@@ -231,7 +231,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// PERMISSION CHECKS
 				// only the owner, the responsible user and the observers may view or update ticket
 			if (!$this->checkPermissionForCurrentTicket()) {
-				return $this->pi_wrapInBaseClass($this->pi_getLL('error_no_permission', 'Sorry, you don\'t have access to this ticket.'));
+				return $this->pi_wrapInBaseClass('<div class="error">' . $this->pi_getLL('error_no_permission', 'Permission denied.') . '</div>');
 			}
 		}
 
