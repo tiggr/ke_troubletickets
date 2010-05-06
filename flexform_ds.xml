@@ -141,6 +141,10 @@
 										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_FRONTENDSELECTION</numIndex>
 										<numIndex index="1">frontendselection</numIndex>
 									</numIndex>
+									<numIndex index="typoscript" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_TYPOSCRIPT</numIndex>
+										<numIndex index="1">typoscript</numIndex>
+									</numIndex>
 								</items>
 								<minitems>1</minitems>
 								<maxitems>1</maxitems>
@@ -171,6 +175,10 @@
 										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_FRONTENDSELECTION</numIndex>
 										<numIndex index="1">frontendselection</numIndex>
 									</numIndex>
+									<numIndex index="typoscript" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_TYPOSCRIPT</numIndex>
+										<numIndex index="1">typoscript</numIndex>
+									</numIndex>
 								</items>
 								<minitems>1</minitems>
 								<maxitems>1</maxitems>
@@ -200,6 +208,10 @@
 									<numIndex index="frontendselection" type="array">
 										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_FRONTENDSELECTION</numIndex>
 										<numIndex index="1">frontendselection</numIndex>
+									</numIndex>
+									<numIndex index="typoscript" type="array">
+										<numIndex index="0">LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_TYPOSCRIPT</numIndex>
+										<numIndex index="1">typoscript</numIndex>
 									</numIndex>
 								</items>
 								<minitems>1</minitems>

@@ -37,6 +37,7 @@ define(CONST_REOPENANDCOMMENT, 'REOPENANDNEWCOMMENT');
 define(CONST_ONEVERYCHANGE, 'oneverychange');
 define(CONST_NEVER, 'never');
 define(CONST_ONSTATUSCHANGE, 'onstatuschange');
+define(CONST_TYPOSCRIPT, 'typoscript');
 define(CONST_STATUS_OPEN, 'open');
 define(CONST_STATUS_CLOSED, 'closed');
 define(CONST_RENDER_TYPE_EMAIL, 'email');
@@ -400,6 +401,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * is set to "all_always", allow the current user to see and edit all
 	 * tickets
 	 *
+	 * CB 06.05.2010: checks also for the right sysfolder
+	 *
 	 * returns false if he has no rights
 	 * returns 1 if he has full rights (owner or responsible user)
 	 * returns 2 if he has limited rights (observer)
@@ -412,7 +415,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$permission = false;
 		if ($GLOBALS['TSFE']->loginUser) {
 			$lcObj = t3lib_div::makeInstance('tslib_cObj');
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->tablename, 'uid=' . $ticketUid . $lcObj->enableFields($this->tablename));
+			$where = 'uid=' . $ticketUid . $lcObj->enableFields($this->tablename);
+			$where .= ' pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->tablename, $where);
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 				$ticketRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				if ($ticketRow['owner_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
@@ -1238,7 +1243,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$sendNotification = true;
 			} else {
 					// check if only fields have been changed where
-					// no notification is wanted
+					// no notification is wanted. this applies only to
+					// internal fields
 				$internalFieldsWithoutNotification = t3lib_div::trimExplode(',', $this->conf['email_notifications.']['internalFieldsWithoutNotification']);
 				$changedInternalFieldsArray = explode(',',$changedInternalFields);
 				foreach ($changedInternalFieldsArray as $internalField) {
@@ -1253,11 +1259,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// user normally should know that he just changed the ticket.)
 			if ($this->internal['currentRow']['owner_feuser']
 					&& ($this->internal['currentRow']['owner_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
-					&& (
-						$this->internal['currentRow']['notifications_owner'] == CONST_ONEVERYCHANGE
+					&& ($this->internal['currentRow']['notifications_owner'] == CONST_ONEVERYCHANGE
 						|| (
 							$this->internal['currentRow']['notifications_owner'] == CONST_ONSTATUSCHANGE
-							&& stristr($changedFields, 'status')
+							&& t3lib_div::inList($changedFields, 'status')
+						)
+						|| (
+							$this->internal['currentRow']['notifications_owner'] == CONST_TYPOSCRIPT
+							&& $this->checkCustomNotificationCondition($changedFields, $this->conf['email_notifications.']['ownerNotificationOnChangedFields'])
 						)
 					)
 					&& $sendNotification) {
@@ -1284,10 +1293,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			if ($this->internal['currentRow']['responsible_feuser']
 					&& ($this->internal['currentRow']['responsible_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
 					&& ($this->internal['currentRow']['owner_feuser'] != $this->internal['currentRow']['responsible_feuser'])
-					&& ( $this->internal['currentRow']['notifications_responsible'] == CONST_ONEVERYCHANGE
+					&& ($this->internal['currentRow']['notifications_responsible'] == CONST_ONEVERYCHANGE
 						|| (
 							$this->internal['currentRow']['notifications_responsible'] == CONST_ONSTATUSCHANGE
-							&& stristr($changedFields, 'status')
+							&& t3lib_div::inList($changedFields, 'status')
+						)
+						|| (
+							$this->internal['currentRow']['notifications_responsible'] == CONST_TYPOSCRIPT
+							&& $this->checkCustomNotificationCondition($changedFields, $this->conf['email_notifications.']['responsibleNotificationOnChangedFields'])
 						)
 					)
 					&& $sendNotification) {
@@ -1309,13 +1322,17 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// send notifications to observers
 			if (strlen($this->internal['currentRow']['observers_feuser'])) {
 				foreach (explode(',', $this->internal['currentRow']['observers_feuser']) as $observer_uid) {
-					if ( ($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
-							|| (
-								$this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE
-								&& stristr($changedFields, 'status')
-							)
+					if (($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
+						|| (
+							$this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE
+							&& t3lib_div::inList($changedFields, 'status')
 						)
-						&& $sendNotification) {
+						|| (
+							$this->internal['currentRow']['notifications_observer'] == CONST_TYPOSCRIPT
+							&& $this->checkCustomNotificationCondition($changedFields, $this->conf['email_notifications.']['observersNotificationOnChangedFields'])
+						)
+					)
+					&& $sendNotification) {
 
 							// get the user data of the observer
 						$fe_user_data = $this->getFeUserData($observer_uid);
@@ -1334,6 +1351,42 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 	}/*}}}*/
+
+	/**
+ 	* checks the changed fields of a ticket against the options set in
+ 	* typoscript and decides, if a notification should be sent.
+ 	*
+ 	* @param   string $changedFields comma separated list of changed fields or keywords (e.g. on a new ticket)
+ 	* @param   string $options comma list of field names or keywors, see setup.txt for explanation
+ 	* @return  boolean
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	* @since   Thu May 06 2010 14:50:46 GMT+0200
+ 	*/
+	function checkCustomNotificationCondition($changedFields, $options) {
+		$sendNotification = false;
+
+			// new ticket?
+		if (stristr($changedFields, CONST_NEWTICKET) && t3lib_div::inList($options, 'newticket')) {
+			$sendNotification = true;
+		}
+
+			// closed ticket?
+		if (t3lib_div::inList($changedFields, 'status')
+			&& $this->internal['currentRow']['status'] == CONST_STATUS_CLOSED
+			&& t3lib_div::inList($options, 'closed')) {
+			$sendNotification = true;
+		}
+
+			// is one of the changedFields in the options-List?
+		$changedFieldsArray = t3lib_div::trimExplode(',', $changedFields);
+		foreach ($changedFieldsArray as $changedField) {
+			if (t3lib_div::inList($options, $changedField)) {
+				$sendNotification = true;
+			}
+		}
+
+		return $sendNotification;
+	}
 
 	/**
 	 * getFeUserData
@@ -4265,13 +4318,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return bool
 	 */
 	function isValidTicketUid($uid) {
-		// uid cannot be zero or negative
+			// uid cannot be zero or negative
 		if ($uid<=0) return false;
 
-		// check if ticket uid can be found in db
-		$where = 'uid="'.intval($uid).'" ';
+			// check if ticket uid can be found in db
+			// CB 06.05.2010: check for correct sysfolder
+		$where = 'uid=' . intval($uid);
+		$where .= ' pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
 		$where .= $this->cObj->enableFields($this->tablename);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->tablename,$where,$groupBy='',$orderBy='',$limit='');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', $this->tablename, $where);
 		$num = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 		return $num ? true : false;
 	}

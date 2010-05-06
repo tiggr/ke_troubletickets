@@ -27,7 +27,7 @@ plugin.tx_ketroubletickets_pi1 {
 	statusList = open,working,closed,onhold,wait
 	priorityList = 2,1,3
 	billingList = open,service,invoice,offer,service_invoice
-	notificationBehaviorList = oneverychange,onstatuschange,never
+	notificationBehaviorList = oneverychange,onstatuschange,never,typoscript
 	priorityWrap.1 =
 	priorityWrap.2 = <span style="color:#ffcc00;">|</span>
 	priorityWrap.3 = <span style="color:red;">|</span>
@@ -466,10 +466,21 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	internalFieldsWithoutNotification = time_used
 	# Add ticket UID to notification subject?
 	add_uid_to_subject = 1
-	# style for non-modified fields in the email
+	# styles for non-modified and modified fields in the email
 	cellStyleDefault = vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;
 	cellStyleFieldHasChanged = background: #cdf6cf; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;
 	cellStyleDefault_description = width:60%; vertical-align: top; background: #E6EFEF; font-family: Verdana; padding: 5px;
 	cellStyleFieldHasChanged_description = background: #cdf6cf; width:60%; vertical-align: top; font-family: Verdana; padding: 5px;
 	newCommentStyle = background: #cdf6cf;
+	# Define on which changes a notification email should be sent to owners,
+	# observers and responsible users. Comma separated list. Possible values are:
+	# comment --> new comment has been submitted
+	# newticket --> a new ticket has been opened
+	# closed --> the ticket has been closed
+	# the fieldnames (see fieldList) --> the field with the given name has been changed
+	# (to use this option you will have to set notifications behavior to "defined in
+	# typoscript" in the plugin flexform configuration)
+	ownerNotificationOnChangedFields = comment,files,newticket,closed
+	responsibleNotificationOnChangedFields = comment,files,newticket,closed
+	observersNotificationOnChangedFields = comment,files,newticket,closed
 }

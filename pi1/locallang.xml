@@ -113,6 +113,7 @@
 			<label index="SELECTLABEL_ONSTATUSCHANGE">On every status change</label>
 			<label index="SELECTLABEL_NEVER">Never</label>
 			<label index="SELECTLABEL_FRONTENDSELECTION">Select in frontend</label>
+			<label index="SELECTLABEL_TYPOSCRIPT">Defined in typoscript</label>
 
 			<label index="SELECTLABEL_DETAILED">detailed</label>
 			<label index="SELECTLABEL_SHORT">overview</label>
@@ -321,6 +322,7 @@
 			<label index="SELECTLABEL_ONSTATUSCHANGE">Bei Änderung des Status</label>
 			<label index="SELECTLABEL_NEVER">Nie</label>
 			<label index="SELECTLABEL_FRONTENDSELECTION">Auswahl im Frontend</label>
+			<label index="SELECTLABEL_TYPOSCRIPT">Per Typoscript definiert</label>
 
 			<label index="SELECTLABEL_DETAILED">ausführlich</label>
 			<label index="SELECTLABEL_SHORT">übersichtlich</label>
