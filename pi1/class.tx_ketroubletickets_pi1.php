@@ -1159,63 +1159,63 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	/**
 	 * checkChangesAndSendNotificationEmails
 	 *
-	 * TODO: Make it work also standalone, that means, without calling the main-function
-	 * first (you will still have to instantiate the class). Needed for the
-	 * notifications sent by a cronjob.
+	 * TODO: Add "send overdue tickets" functionality and make this function
+	 * work standalone in order to use it with a cronjob.
 	 *
 	 * $changedFields and $changedInternalFields are comma-separated lists of the fields that have changed.
 	 *
 	 * @param integer $ticket_uid
 	 * @param string $changedFields
 	 * @param string $changedInternalFields
-	 * @param int $sendOverdueTickets
 	 * @access public
 	 * @return void
 	 */
-	public function checkChangesAndSendNotificationEmails($ticket_uid, $changedFields, $changedInternalFields='', $sendOverdueTickets=0) {/*{{{*/
+	public function checkChangesAndSendNotificationEmails($ticket_uid, $changedFields, $changedInternalFields='') {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
 
-		// a notification will be sent if
-		// 1. notification setting is "always"
-		// 2. notification setting is "onstatuschange" and the "status" field changed
-		// 3. $sendOverdueTickets is set and a ticket until_date is greater than the current date
+			// a notification will be sent if a ticket has been updated and
+			// 1. notification setting is "always"
+			// 2. notification setting is "onstatuschange" and the "status" field changed
+			// 3. notification setting is "defined in typoscript" and the typoscript
+			// options match the list of changed fields
+			// The notification setting is done in the plugin via flexform.
 
-		// does this ticket exist?
+			// does this ticket exist?
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->tablename, 'uid=' . $ticket_uid . $lcObj->enableFields($this->tablename));
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 
-			// get the ticket data
+				// get the ticket data
 			$this->internal['currentTable'] = $this->tablename;
 			$this->internal['currentRow'] = $this->pi_getRecord($this->tablename, $ticket_uid);
 
-			// render the mailbody for standard mails to non-internal users
-			// the second parameter has to be empty, because we don't want any
-			// changes of internal fields sent to non-internal users!
+				// render the mailbody for standard mails to non-internal users
+				// the second parameter has to be empty, because we don't want any
+				// changes of internal fields sent to non-internal users!
 			$emailbody = $this->renderNotificationMail($changedFields,'');
 
-			// render the mailbody for internal mails
-			// on new tickets, render all internal fields, on updated tickets, render
-			// only fields which have changed
+				// render the mailbody for internal mails
+				// on new tickets, render all internal fields, on updated tickets, render
+				// only fields which have changed
 			if (stristr($changedFields, CONST_NEWTICKET)) {
 				$emailbody_internal = $this->renderNotificationMail($changedFields, CONST_RENDER_ALL_INTERNAL_FIELDS);
 			} else {
 				$emailbody_internal = $this->renderNotificationMail($changedFields, $changedInternalFields);
 			}
 
-			// render the subject
+				// render the subject
 			if ($this->conf['email_notifications.']['subject_prefix']) {
 				$subject = $this->conf['email_notifications.']['subject_prefix'] . ' ';
 			} else {
 				$subject = '';
 			}
 
-			// add ticket uid to subject if set in conf
+				// add ticket uid to subject if set in TS
 			if ($this->conf['email_notifications.']['add_uid_to_subject']) {
-				$subject .= sprintf($this->conf['ticket_uid_formatstring'],$ticket_uid).' ';
+				$subject .= sprintf($this->conf['ticket_uid_formatstring'], $ticket_uid) . ' ';
 			}
 
-			// add the status to the subject if it has changed
-			// otherwise just add the word "changed"
+				// add the status to the subject if it has changed
+				// otherwise just add the word "changed"
 			if (stristr($changedFields, CONST_NEWTICKET)) {
 				$subject .= $this->pi_getLL('email_subject_type_new', 'new') . ': ';
 			} else if (stristr($changedFields, CONST_REOPENANDCOMMENT)) {
@@ -1228,13 +1228,17 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$subject .= $this->internal['currentRow']['title'];
 
 
-			// Andreas Kiefer, kiefer@kennziffer.com, 15:15 15.05.2009
-			// don't send if only internal fields are changed, that are configured as "don't send notification" in TS
+				// Andreas Kiefer, kiefer@kennziffer.com, 15:15 15.05.2009
+				// don't send if only internal fields are changed,
+				// that are configured as "don't send notification" in TS
 			$sendNotification = false;
-			// always send notification if "normal" fields are changed
-			if ($changedFields != "" ) $sendNotification = true;
-			// check if only fields are changed where no notification is wanted
-			else {
+
+				// always send notification if "normal" fields have been changed
+			if ($changedFields != "" ) {
+				$sendNotification = true;
+			} else {
+					// check if only fields have been changed where
+					// no notification is wanted
 				$internalFieldsWithoutNotification = t3lib_div::trimExplode(',', $this->conf['email_notifications.']['internalFieldsWithoutNotification']);
 				$changedInternalFieldsArray = explode(',',$changedInternalFields);
 				foreach ($changedInternalFieldsArray as $internalField) {
@@ -1244,74 +1248,84 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 			}
 
-			// send notifications to owner
-			// (don't send it if the current user is the owner, because the user normally should know that he just changed the ticket.)
+				// send notifications to owner
+				// (don't send it if the current user is the owner, because the
+				// user normally should know that he just changed the ticket.)
 			if ($this->internal['currentRow']['owner_feuser']
 					&& ($this->internal['currentRow']['owner_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
-					&& ( $this->internal['currentRow']['notifications_owner'] == CONST_ONEVERYCHANGE
-						|| ($this->internal['currentRow']['notifications_owner'] == CONST_ONSTATUSCHANGE
-						|| stristr($changedFields, CONST_ONSTATUSCHANGE))
+					&& (
+						$this->internal['currentRow']['notifications_owner'] == CONST_ONEVERYCHANGE
+						|| (
+							$this->internal['currentRow']['notifications_owner'] == CONST_ONSTATUSCHANGE
+							&& stristr($changedFields, 'status')
 						)
-					&& $sendNotification==true ) {
+					)
+					&& $sendNotification) {
 
-				// get the user data of the owner
+					// get the user data of the owner
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['owner_feuser']);
 
-				// send standard mail
+					// send standard mail
 				if (is_array($fe_user_data) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 				}
 
-				// send internal mail
+					// send internal mail
 				if (is_array($fe_user_data) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 				}
 			}
 
-			// send notifications to responsible user
-			// (don't send it if the current user is the responsible user, because the user normally should know that he just changed the ticket.)
-			// (don't send it if the owner is the the same as the responsible user, because than he would receive two mails)
+				// send notifications to responsible user
+				// (don't send it if the current user is the responsible user,
+				// because the user normally should know that he just changed the ticket.)
+				// (don't send it if the owner is the the same as the responsible user,
+				// because than he would receive two mails)
 			if ($this->internal['currentRow']['responsible_feuser']
 					&& ($this->internal['currentRow']['responsible_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
 					&& ($this->internal['currentRow']['owner_feuser'] != $this->internal['currentRow']['responsible_feuser'])
 					&& ( $this->internal['currentRow']['notifications_responsible'] == CONST_ONEVERYCHANGE
-						|| ($this->internal['currentRow']['notifications_responsible'] == CONST_ONSTATUSCHANGE
-						|| stristr($changedFields, CONST_ONSTATUSCHANGE))
-					   )
-					&& $sendNotification==true) {
+						|| (
+							$this->internal['currentRow']['notifications_responsible'] == CONST_ONSTATUSCHANGE
+							&& stristr($changedFields, 'status')
+						)
+					)
+					&& $sendNotification) {
 
-				// get the user data of the responsible user
+					// get the user data of the responsible user
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['responsible_feuser']);
 
-				// send standard mail
+					// send standard mail
 				if (is_array($fe_user_data) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 				}
 
-				// send internal mail
+					// send internal mail
 				if (is_array($fe_user_data) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 				}
 			}
 
-			// send notifications to observers
+				// send notifications to observers
 			if (strlen($this->internal['currentRow']['observers_feuser'])) {
 				foreach (explode(',', $this->internal['currentRow']['observers_feuser']) as $observer_uid) {
 					if ( ($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
-							|| ($this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE
-							|| stristr($changedFields, CONST_ONSTATUSCHANGE)
-							))
-							&& $sendNotification==true) {
+							|| (
+								$this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE
+								&& stristr($changedFields, 'status')
+							)
+						)
+						&& $sendNotification) {
 
-						// get the user data of the observer
+							// get the user data of the observer
 						$fe_user_data = $this->getFeUserData($observer_uid);
 
-						// send standard mail
+							// send standard mail
 						if (is_array($fe_user_data) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 							$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 						}
 
-						// send internal mail
+							// send internal mail
 						if (is_array($fe_user_data) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 							$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 						}
