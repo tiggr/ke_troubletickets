@@ -88,28 +88,30 @@ plugin.tx_ketroubletickets_pi1 {
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
 	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT, VIEWTYPE
 
+	# Format for outputting the date when not in an input field
+	# german format
+	datefield_dateformat = d.m.Y
+	# english format:
+	# datefield_dateformat = m/d/Y
+
+	# javascript datepicker
+	# extension date2cal will be used until 4.2 and if date2cal is installed
+	# datepicker will be used from TYPO3 4.3 upwards
+	datepicker {
+		dateformat = ddmmyyyy
+		separator = .
+	}
+	# english format:
+	#datepicker {
+	#	dateformat = mmddyyyy
+	#	separator = /
+	#}
+
 	# date2cal dateformat (date input fieds) configuration
 	# german format (always use - as separator, unfortunately date2cal does not work correctly when using dots as a separator)
 	datefield_inputfieldformat = %d-%m-%Y
 	# english format
 	# datefield_inputfieldformat = %m-%d-%Y
-
-	# Format for outputting the date when not in an input field
-	# german format
-	datefield_dateformat = d.m.Y
-	# english format
-	# datefield_dateformat = m/d/Y
-
-	# DEPRECATED
-	# dateformat used by the datepicker in the form
-	# possible values:
-	# ddmmyyyy
-	# mmddyyyy
-	# if you change the format to mmddyyy, you have to change the
-	# separator to "/" in js/datetimepicker.js
-	# Should be configurable in future versions
-	# datepicker_dateformat = ddmmyyyy
-	# datefield_dateformat = d.m.Y
 
 	# dateformat used by the history
 	history_dateformat = d.m.Y H:i

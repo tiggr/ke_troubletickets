@@ -71,7 +71,7 @@
 								<type>group</type>
 								<internal_type>db</internal_type>
 								<allowed>tx_ketroubletickets_categories</allowed>
-								<size>5</size>
+								<size>3</size>
 								<maxitems>50</maxitems>
 								<minitems>0</minitems>
 								<show_thumbs>0</show_thumbs>
@@ -85,7 +85,7 @@
 								<type>group</type>
 								<internal_type>db</internal_type>
 								<allowed>tx_ketroubletickets_categories</allowed>
-								<size>5</size>
+								<size>3</size>
 								<maxitems>50</maxitems>
 								<minitems>0</minitems>
 								<show_thumbs>0</show_thumbs>
@@ -239,7 +239,7 @@
 								<type>group</type>
 								<internal_type>db</internal_type>
 								<allowed>fe_groups</allowed>
-								<size>5</size>
+								<size>3</size>
 								<maxitems>50</maxitems>
 								<minitems>0</minitems>
 								<show_thumbs>0</show_thumbs>
@@ -269,13 +269,28 @@
 								<type>group</type>
 								<internal_type>db</internal_type>
 								<allowed>fe_groups</allowed>
-								<size>5</size>
+								<size>3</size>
 								<maxitems>50</maxitems>
 								<minitems>0</minitems>
 								<show_thumbs>0</show_thumbs>
 							</config>
 						</TCEforms>
 					</responsible_group_to_choose_from>
+
+					<responsible_singleuser_preselected>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.responsible_singleuser_preselected</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>fe_users</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</responsible_singleuser_preselected>
 
 					<observer_singleuser>
 						<TCEforms>
@@ -284,7 +299,7 @@
 								<type>group</type>
 								<internal_type>db</internal_type>
 								<allowed>fe_users</allowed>
-								<size>5</size>
+								<size>3</size>
 								<maxitems>50</maxitems>
 								<minitems>0</minitems>
 								<show_thumbs>0</show_thumbs>
@@ -299,7 +314,7 @@
 								<type>group</type>
 								<internal_type>db</internal_type>
 								<allowed>fe_groups</allowed>
-								<size>5</size>
+								<size>3</size>
 								<maxitems>50</maxitems>
 								<minitems>0</minitems>
 								<show_thumbs>0</show_thumbs>
@@ -314,7 +329,7 @@
 								<type>group</type>
 								<internal_type>db</internal_type>
 								<allowed>fe_users</allowed>
-								<size>5</size>
+								<size>6</size>
 								<maxitems>50</maxitems>
 								<minitems>0</minitems>
 								<show_thumbs>0</show_thumbs>
@@ -329,7 +344,7 @@
 								<type>group</type>
 								<internal_type>db</internal_type>
 								<allowed>fe_users</allowed>
-								<size>5</size>
+								<size>6</size>
 								<maxitems>50</maxitems>
 								<minitems>0</minitems>
 								<show_thumbs>0</show_thumbs>

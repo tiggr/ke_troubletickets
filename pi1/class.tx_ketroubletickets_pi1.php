@@ -198,7 +198,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// add the "are you sure"-function to the header.
-		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId.'_areyousure'] = '<script type="text/javascript">
+		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_areyousure'] = '<script type="text/javascript">
 	function areYouSure(ziel) {
 		if ( confirm("' . $this->pi_getLL('are_you_sure_delete', 'Are you sure?') . '") ) {
 			window.location.href = ziel;
@@ -1984,21 +1984,21 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function renderTicketForm() {/*{{{*/
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 
-		// get additional markers (locallang, ...)
+			// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
-		// remember some of the piVars when we go back the list view
+			// remember some of the piVars when we go back the list view
 		foreach (explode(',',$this->conf['keepPiVars']) as $piVarName) {
 			$this->hiddenFormFields['piVar_'.$piVarName] = '<input type="hidden" name="' . $this->prefixId . '[' . $piVarName . ']" value="' . $this->piVars[$piVarName] . '">';
 		}
 
-		// if no UID is set, we create a new ticket
-		// otherwise, we update a ticket
+			// if no UID is set, we create a new ticket
+			// otherwise, we update a ticket
 		if (empty($this->piVars['showUid']) && empty($this->piVars['updateUid'])) {
 			$this->hiddenFormFields['newticket'] = '<input type="hidden" name="' . $this->prefixId . '[newticket]" value="1">';
 			$this->markerArray['LABEL_EDIT_TICKET'] = '';
 
-			// if we are creating a new ticket, we have to have at least one category
+				// if we are creating a new ticket, we have to have at least one category
 			$where_clause = 'pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
 			if (!$this->ffdata['all_categories'] && $this->ffdata['categories']) {
 				$where_clause .= ' AND uid IN (' . $this->ffdata['categories'] . ')';
@@ -2012,19 +2012,27 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$this->markerArray['UID'] = $this->pi_getLL('LABEL_NOT_AVAILABLE','n/a');
 		} else {
 			$this->hiddenFormFields['updateUid'] = '<input type="hidden" name="' . $this->prefixId . '[updateUid]" value="' . $this->internal['currentRow']['uid'] . '">';
-			// remember the related tickets
+
+				// remember the related tickets
 			$this->hiddenFormFields['related_tickets_old'] = '<input type="hidden" name="' . $this->prefixId . '[related_tickets_old]" value="' . $this->internal['currentRow']['related_tickets'] . '">';
 			$this->markerArray['LABEL_OPEN_NEW_TICKET'] = '';
 		}
 
-		// add date picker javascript to the header
-		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId.'_datetimepicker'] = '<script type="text/javascript" src="'.$this->extPath.'js/datetimepicker.js"></script>';
+			// add date picker javascript to the header
+			// and configure it
+		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker'] = '<script type="text/javascript" src="'.$this->extPath.'js/datetimepicker.js"></script>';
 
-		// get the template subpart
+		// include Javascript for printview
+		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker_config'] .= '
+<script type="text/javascript">
+	var DateSeparator="' . $this->conf['datepicker.']['separator'] . '";
+</script>';
+
+			// get the template subpart
 		$content = $this->cObj->getSubpart($this->templateCode,'###TICKET_FORM###');
 
-		// if the form already has been submitted and errors occured, render
-		// the error messages into the template
+			// if the form already has been submitted and errors occured, render
+			// the error messages into the template
 		$this->markerArray['ERRORS'] = '';
 		if ( ($this->piVars['newticket'] || $this->piVars['updateUid']) && count($this->formErrors) > 0) {
 			foreach ($this->formErrors as $error) {
@@ -2032,16 +2040,19 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// get the field markers (render the form fields)
+			// get the field markers (render the form fields)
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 			$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf);
 
-			// make the values of the ticket available without the need to put them into a form field
-			// (only if we are editing an existing ticket)
+				// make the values of the ticket available without the need to
+				// put them into a form field (static markers)
+				// (only if we are editing an existing ticket)
 			if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
 				$this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
+
 			} else {
-				// clear the markers if we open a new ticket (no ticket-uid is given)
+
+					// clear the markers if we open a new ticket (no ticket-uid is given)
 				$this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = '';
 
 					// fill in the current user for "owner" (the user who opens a ticket is always the owner)
@@ -2051,11 +2062,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 			}
 
-			// If this is an internal field:
-			// If the current user may view internal fields, get the
-			// corresponding subpart and copy it into the template in order to
-			// replace the correct markers.
-			// Otherwise clear the marker for the internal field.
+				// If this is an internal field:
+				// If the current user may view internal fields, get the
+				// corresponding subpart and copy it into the template in order to
+				// replace the correct markers.
+				// Otherwise clear the marker for the internal field.
 			if ($fieldConf['internal']) {
 				if ($this->isCurrentUserInternalUser()) {
 					$internalFieldContent = $this->cObj->getSubpart($this->templateCode,'###INTERNAL_' . strtoupper($fieldConf['name']) . '_SUBPART###');
@@ -2065,9 +2076,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$content = $this->cObj->substituteMarker($content, '###INTERNAL_' . strtoupper($fieldConf['name']) . '###', $internalFieldContent);
 			}
 
-			// If this is an optional field:
-			// If there is content, get the corresponding subpart and copy it into the template in order to replace the correct markers.
-			// Otherwise clear the marker for the optional field.
+				// If this is an optional field:
+				// If there is content, get the corresponding subpart and copy it into the template in order to replace the correct markers.
+				// Otherwise clear the marker for the optional field.
 			if ($fieldConf['optional']) {
 				if (!empty($this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))])) {
 					$optionalFieldContent = $this->cObj->getSubpart($this->templateCode,'###OPTIONAL_' . strtoupper($fieldConf['name']) . '_SUBPART###');
@@ -2078,30 +2089,30 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// add the crdate
+			// add the crdate
 		$this->markerArray['CRDATE'] = $this->getFieldContent('crdate');
 
-		// add the hidden fields
+			// add the hidden fields
 		$this->markerArray['hidden_fields'] = implode("\n",$this->hiddenFormFields);
 
-		// add the form markers
+			// add the form markers
 		$this->markerArray['TICKETFORM_NAME'] = $this->ticketFormName;
 		$this->markerArray['TICKETFORM_ACTION'] = $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id));
 
-		// add the ticket history
+			// add the ticket history
 		$this->markerArray['OPTIONAL_TICKET_HISTORY'] = $this->renderTicketHistory($this->internal['currentRow']['uid']);
 
-		// add the comment form and the list of comments (only if we are editing an existing ticket)
+			// add the comment form and the list of comments (only if we are editing an existing ticket)
 		if ($this->piVars['showUid'] || $this->piVars['updateUid']) {
 			$this->markerArray['OPTIONAL_TICKET_COMMENT'] = $this->renderCommentForm($this->internal['currentRow']['uid']);
 		} else {
 			$this->markerArray['OPTIONAL_TICKET_COMMENT'] = '';
 		}
 
-		// substitute the markers
+			// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
 
-		// overwrite subpart in toolbar with empty ocntent if we create a new ticket
+			// overwrite subpart in toolbar with empty ocntent if we create a new ticket
 		if (empty($this->piVars['showUid']) && empty($this->piVars['updateUid'])) {
 			$content = $this->cObj->substituteSubpart ($content, '###TOOLBAR_EDITONLY###', '');
 		}
@@ -2398,20 +2409,27 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
 
-		// Get the prefillValue:
-		// 1. If the form just has been submitted (new ticket),
-		// prefill the form fields with the already parsed submitted values
-		// ($this->insertFields).
-		// 2. If we are updating an existing ticket, get the values from the database
-		// ($this->internal['currentRow']).
-		// 3. If we are rendering fields for the listview filter, we find the values
-		// in $this->filter.
-		// 4. TODO: If we wanted to update a ticket, but errors occured, we
-		// find the data in the piVars. But these data have to be processed
-		// first (see function getFieldContent), so we cannot use the raw data
-		// as prefillValue. So for now we use $this->internal['currentRow']
-		// (which resets the fields). But comments will be kept when erros occur!
-		if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
+			// Get the prefillValue:
+			// 1. New ticket, has not been submitted yet: check if there are
+			// prefill options set in flexform.
+			// 2. If the form just has been submitted (new ticket),
+			// prefill the form fields with the already parsed submitted values
+			// ($this->insertFields).
+			// 3. If we are updating an existing ticket, get the values from the database
+			// ($this->internal['currentRow']).
+			// 4. If we are rendering fields for the listview filter, we find the values
+			// in $this->filter.
+			// 5. TODO: If we wanted to update a ticket, but errors occured, we
+			// find the data in the piVars. But these data have to be processed
+			// first (see function getFieldContent), so we cannot use the raw data
+			// as prefillValue.
+			// So for now we use $this->internal['currentRow'] which resets the
+			// fields. Although comments will be kept when erros occur!
+		if (!$this->piVars['newticket'] && !$this->piVars['showUid'] && !$this->piVars['updateUid']) {
+			if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
+				$prefillValue = $this->ffdata['responsible_singleuser_preselected'];
+			}
+		} else if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
 			$prefillValue = $this->insertFields[$fieldConf['name']];
 		} else if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
 			$prefillValue = $this->internal['currentRow'][$fieldConf['name']];
@@ -2425,7 +2443,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$addJS .= ' ';
 		}
 
-		// render the form fields according to their type
+			// render the form fields according to their type
 		switch ($fieldConf['type']) {
 
 			case 'submit':
@@ -2604,18 +2622,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'date':
-				if (!empty($prefillValue)) {
-					$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
-
-					// replace the dots and slashes in the datestring
-					$prefillValue = str_replace('.', '-', $prefillValue);
-					$prefillValue = str_replace('/', '-', $prefillValue);
-				} else {
-					$prefillValue = '';
-				}
 
 				// render the datefield using the date2cal extension
 				if ($this->useDate2Cal) {
+
+					if (!empty($prefillValue)) {
+						$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
+
+						// replace the dots and slashes in the datestring
+						$prefillValue = str_replace('.', '-', $prefillValue);
+						$prefillValue = str_replace('/', '-', $prefillValue);
+					} else {
+						$prefillValue = '';
+					}
+
 					$field = $this->prefixId . '[' . $fieldConf['name'] . ']';
 
 					$this->date2cal->config['inputField'] = $field;
@@ -2632,9 +2652,26 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// render the datepicker field
 					$fieldContent = $this->date2cal->render($prefillValue, $field);
 				} else {
+
+					if (!empty($prefillValue)) {
+						$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
+					} else {
+						$prefillValue = '';
+					}
+
 					$prefillValue = $this->cleanUpHtmlOutput($prefillValue);
-					$fieldContent .= '<input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '"> ' . '(' . str_replace('%', '', $this->conf['datefield_inputfieldformat']) . ')';
+					$fieldName = $this->prefixId . '[' . $fieldConf['name'] . ']';
+					$fieldContent .= '<input '
+						. $addJS
+						. 'type="text" name="' . $fieldName
+						. '" id="' . $fieldName
+						. '" value="' . $prefillValue
+						. '" size="' . $fieldConf['size']
+						. '" maxlength="' . $fieldConf['maxlength'] . '"> ';
+					$fieldContent .= '<a href="javascript:NewCal(\'' . $fieldName . '\',\'' . $this->conf['datepicker.']['dateformat'] . '\')">';
+					$fieldContent .= '<img src="' . $this->extPath . 'res/images/cal.gif" width="16" height="16" border="0"></a>';
 				}
+
 
 				$content .= $fieldContent;
 			break;
