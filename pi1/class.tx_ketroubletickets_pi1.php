@@ -416,7 +416,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if ($GLOBALS['TSFE']->loginUser) {
 			$lcObj = t3lib_div::makeInstance('tslib_cObj');
 			$where = 'uid=' . $ticketUid . $lcObj->enableFields($this->tablename);
-			$where .= ' pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
+			$where .= ' AND pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->tablename, $where);
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 				$ticketRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
@@ -4324,7 +4324,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// check if ticket uid can be found in db
 			// CB 06.05.2010: check for correct sysfolder
 		$where = 'uid=' . intval($uid);
-		$where .= ' pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
+		$where .= ' AND pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
 		$where .= $this->cObj->enableFields($this->tablename);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', $this->tablename, $where);
 		$num = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
