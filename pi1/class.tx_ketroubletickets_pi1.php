@@ -2425,7 +2425,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// as prefillValue.
 			// So for now we use $this->internal['currentRow'] which resets the
 			// fields. Although comments will be kept when erros occur!
-		if (!$this->piVars['newticket'] && !$this->piVars['showUid'] && !$this->piVars['updateUid']) {
+		if ($this->piVars['do'] == 'new' && !$this->piVars['newticket'] && !$this->piVars['showUid'] && !$this->piVars['updateUid']) {
 			if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
 				$prefillValue = $this->ffdata['responsible_singleuser_preselected'];
 			}
@@ -3249,14 +3249,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->internal['currentTable'] = $this->tablename;
 
 			// set orderBy and descFlag
-		list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':',$this->piVars['sort']);
+		list($this->internal['orderBy'], $this->internal['descFlag']) = explode(':', $this->piVars['sort']);
 
 			// Number of results to show in a listing.
 		$this->internal['results_at_a_time']=t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,10);
 		if ($this->piVars['entries_per_page']) $this->internal['results_at_a_time'] = $this->piVars['entries_per_page'];
 
 			// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
-		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;
+		$this->internal['maxPages'] = t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;
 
 			// fields to search in
 		$this->internal['searchFieldList'] = 'title,description';
@@ -3266,7 +3266,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->internal['orderByList'] = $this->conf['listView.']['headerList'];
 
 			// center the page browser
-		$this->internal['pagefloat']='CENTER';
+		$this->internal['pagefloat'] = 'CENTER';
 
 			// PERMISSION CHECKS
 		$addWhere = $this->getUserAccessibleTicketsWhereClause($GLOBALS['TSFE']->fe_user->user['uid']);
