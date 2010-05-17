@@ -328,6 +328,15 @@ plugin.tx_ketroubletickets_pi1 {
 			type = categorySelect
 			size = 1
 			multiple = 0
+
+			# If you want to force the frontend user to select
+			# a category, uncomment the following two lines
+			# (otherwise the first category in the list is selected
+			# automatically). You will have to create at least two
+			# categories. Is there's only one category, this will
+			# be selected quietly (no dropdown appears).
+			#renderEmptyDropdownField = 1
+			#required = 1
 		}
 		90 {
 			optional = 1

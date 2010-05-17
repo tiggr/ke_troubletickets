@@ -2046,7 +2046,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// get the field markers (render the form fields)
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-			$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf);
+			$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
 
 				// make the values of the ticket available without the need to
 				// put them into a form field (static markers)
@@ -2790,15 +2790,18 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 				// if special sorting is set in TYPOScript: use this instead of default value "sorting"
 				$sorting = !empty($this->conf['filter.']['category.']['sortField']) ? $this->conf['filter.']['category.']['sortField'] : 'sorting';
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->categoryTablename,$where_clause,'',$sorting);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->categoryTablename, $where_clause, '', $sorting);
 				$num_rows = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
-				// render the dropdown
-				// if there is only one category possible, preselect that using a hidden form field
-				// and don't display the dropdown
+					// render the dropdown
+					// if there is only one category possible, preselect that using a hidden form field
+					// and don't display the dropdown
 				if ($num_rows > 1) {
+						// start select tag
 					$content .= '<select ' . $addJS . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '')  . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
-					// render empty option
+
+						// render empty option
+						// preselect it, if no prefillValue is given
 					if (!$prefillValue) {
 						$selected = ' selected';
 					} else {
@@ -2811,6 +2814,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$content .= '</option>';
 					}
 
+						// render the options
 					while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 						if (t3lib_div::inList($prefillValue, $row['uid'])) {
 							$selected = ' selected';
@@ -2819,6 +2823,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						}
 						$content .= '<option value="' . $row['uid'] . '"' . $selected . '>' . $row['title'] . '</option>';
 					}
+
+						// close select tag
 					$content .= '</select>';
 				} else if ($num_rows == 1) {
 					$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
