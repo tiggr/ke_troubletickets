@@ -44,7 +44,7 @@ define(CONST_RENDER_TYPE_EMAIL, 'email');
 define(CONST_RENDER_TYPE_CSV, 'csv');
 define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
 define(CONST_SHOW_ALL_ALWAYS, 'all_always');
-define(DEFAULT_SORT, 'crdate:1');
+define(DEFAULT_SORT, 'crdate|1');
 define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
 define(DONT_RENDER_EMPTY_DRODOWN_ELEMENT, false);
 define(CONST_KEEP_TAGS_YES, 'keeptags');
@@ -295,9 +295,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if (empty($this->piVars['sort']) && empty($sessionVars[$GLOBALS['TSFE']->id]['sort'])) {
 			$this->piVars['sort'] = DEFAULT_SORT;
 		} else if (empty($this->piVars['sort']) && !empty($sessionVars[$GLOBALS['TSFE']->id]['sort'])) {
-				// use sorting from form
+				// use sorting from session data
 			$this->piVars['sort'] = $sessionVars[$GLOBALS['TSFE']->id]['sort'];
 		}
+
+			// KENNZIFFER CB 17.05.2010
+			// sorting desc flag is now separated by a pipe instead of colon
+		$this->piVars['sort'] = str_replace(':', '|', $this->piVars['sort']);
 
 			// store chosen sorting in session
 		$sessionVars[$GLOBALS['TSFE']->id]['sort'] = $this->piVars['sort'];
@@ -2698,7 +2702,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 										'additionalParams' => $additionalParams
 										);
 								$deleteLink_URL = $this->cObj->typoLink_URL($deleteLinkConf);
-								$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
+								$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
 
 								// generate the alt text
 								$imageConf['altText'] = $this->pi_getLL('altText_deletefile', 'Delete file.');
@@ -2823,7 +2827,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'feuserSelect':
-				//debug($this->ffdata[$fieldConf['flexformFieldForUsergroupToChoseFrom']]);
 				// if there is a single responsible user (or a user list) given in the flexform, preselect that using a hidden form field
 				if (!empty($this->ffdata[$fieldConf['flexformFieldForPreselectedUser']]) && !$filterMode) {
 					$this->hiddenFormFields[$fieldConf['name']] = '<input type="hidden" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="'. $this->ffdata[$fieldConf['flexformFieldForPreselectedUser']] .'">';
@@ -3249,7 +3252,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->internal['currentTable'] = $this->tablename;
 
 			// set orderBy and descFlag
-		list($this->internal['orderBy'], $this->internal['descFlag']) = explode(':', $this->piVars['sort']);
+		list($this->internal['orderBy'], $this->internal['descFlag']) = explode('|', $this->piVars['sort']);
 
 			// Number of results to show in a listing.
 		$this->internal['results_at_a_time']=t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,10);
@@ -3329,11 +3332,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// Check if submitted sort is allowed, if not, set it to default
 		if ($this->piVars['sort'] && $this->piVars['sort'] != DEFAULT_SORT && !t3lib_div::inList(t3lib_div::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
-			list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':', DEFAULT_SORT);
+			list($this->internal['orderBy'], $this->internal['descFlag']) = explode('|', DEFAULT_SORT);
 		}
 
 			// compile orderBy-parameter
-		$orderBy = $this->internal['orderBy'].($this->internal['descFlag']?' DESC':'');
+		$orderBy = $this->internal['orderBy'] . ($this->internal['descFlag']?' DESC' : '');
 
 			// add a second sorting (if sorting is not "priority"), second sorting is always priority
 		if ($this->internal['orderBy'] != 'priority') {
@@ -4278,11 +4281,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		foreach (t3lib_div::trimExplode(',', $this->conf['listView.']['headerList']) as $headerName) {
 
 			// add the sort parameter to the link
-			$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . ':' . ($this->internal['descFlag'] ? 0 : 1);
+			$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|' . ($this->internal['descFlag'] ? 0 : 1);
 
 			// Mark this Link, if it is the currently active sorting
 			$wrap = $this->internal['descFlag'] ? '<span class="sort_active_desc">|</span>' : '<span class="sort_active_asc">|</span>';
-			$wrap = (substr($this->piVars['sort'],0,strlen($headerName)) == $headerName) ? $wrap : '';
+			$wrap = (substr($this->piVars['sort'], 0, strlen($headerName)) == $headerName) ? $wrap : '';
 
 			// make the link
 			$this->markerArray['HEADER_' . strtoupper(trim($headerName))] .= $this->cObj->typoLink(
@@ -4386,7 +4389,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 		$fieldContent .= '</select>';
 		$fieldContent .= '<input type="hidden" name="'.$this->prefixId.'[filter]" value="'.$this->piVars['filter'].'">';
-		$fieldContent .= '<input type="hidden" name="'.$this->prefixId.'[sorting]" value="'.$this->piVars['sorting'].'">';
+		$fieldContent .= '<input type="hidden" name="'.$this->prefixId.'[sort]" value="'.$this->piVars['sort'].'">';
 		$fieldContent .= '<input type="hidden" name="'.$this->prefixId.'[pointer]" value="0">';
 		$fieldContent .= '</form>';
 		return $fieldContent;
