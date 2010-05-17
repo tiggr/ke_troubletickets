@@ -492,14 +492,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function handleSubmittedForm() {/*{{{*/
 
-		// set some values for NEW tickets
-		// and UPDATED tickets
+			// set some values for NEW tickets
+			// and UPDATED tickets
 		if ($this->piVars['newticket']) {
 
-			// set the crdate
+				// set the crdate
 			$this->insertFields['crdate'] = time();
 
-			// use the first pid of the pid list or, if not set, the current page
+				// use the first pid of the pid list or, if not set, the current page
 			if ($this->conf['pidList']) {
 				$pidListArray = explode(',', $this->conf['pidList']);
 				$this->insertFields['pid'] = $pidListArray[0];
@@ -507,9 +507,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$this->insertFields['pid'] = $GLOBALS['TSFE']->id;
 			}
 
-			// set the owner to the current user
-			// if no user is logged in, set it to an empty value
-
+				// set the owner to the current user
+				// if no user is logged in, set it to an empty value
 			if ($GLOBALS['TSFE']->loginUser) {
 				$this->insertFields['owner_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 			} else {
@@ -518,8 +517,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		} else {
 
-			// We need to initalize the "file" type fields, because they get combined from
-			// the different upload fields in the form
+				// We need to initalize the "file" type fields, because they get combined from
+				// the different upload fields in the form
 			foreach ($this->conf['formFieldList.'] as $fieldConf) {
 				if ($fieldConf['type'] == 'files' && strlen($this->internal['currentRow'][$fieldConf['name']])) {
 					$this->insertFields[$fieldConf['name']] = $this->internal['currentRow'][$fieldConf['name']];
@@ -528,29 +527,47 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		}
 
-		// handle each of the submitted fields as defined in the typoscript setup
+			// handle each of the submitted fields as defined in the typoscript setup
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 
-			// ignore the submit-field and
-			// ignore internal fields if not permitted for current user
-			// and ignore fields that are configured as "doNotSaveInDB = 1"
+				// ignore the submit-field and
+				// ignore internal fields if not permitted for current user
+				// and ignore fields that are configured as "doNotSaveInDB = 1"
 			if (
 				$fieldConf['type'] != 'submit'
 				&& (!$fieldConf['internal'] || $this->isUserInternalUser($GLOBALS['TSFE']->fe_user->user['uid']))
 				&& !$fieldConf['doNotSaveInDB']
 			) {
 
-				// required-check
+					// required-check
 				if ($fieldConf['required'] && empty($this->piVars[$fieldConf['name']])) {
-					$this->formErrors[] = $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end');
+					$this->formErrors[] = $this->pi_getLL('formerror_required_start')
+						. '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name'])))
+						. '"' . $this->pi_getLL('formerror_required_end');
 				}
 
-				// check the "requiredForInternalUsersOnClose" property
-				// This means: If the current user is an "internal" user and
-				// the current field has the
-				// requiredForInternalUsersOnClose-Flag set, he has to fill the
-				// field in case he want's to close the ticket
-				// This is useful for the "time used"-field.
+					// validate
+				if ($fieldConf['validate'] && !empty($this->piVars[$fieldConf['name']])) {
+					switch ($fieldConf['validate']) {
+						case 'float' :
+								// replace dot with comma in order to check
+								// for a correct float value
+							$value = str_replace(',', '.', $this->piVars[$fieldConf['name']]);
+							if (filter_var($value, FILTER_VALIDATE_FLOAT) === FALSE) {
+								$this->formErrors[] = $this->pi_getLL('formerror_float_begin')
+									. '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name'])))
+									. '"' . $this->pi_getLL('formerror_float_end');
+							}
+						break;
+					}
+				}
+
+					// check the "requiredForInternalUsersOnClose" property
+					// This means: If the current user is an "internal" user and
+					// the current field has the
+					// requiredForInternalUsersOnClose-Flag set, he has to fill the
+					// field in case he want's to close the ticket
+					// This is useful for the "time used"-field.
 				if ($fieldConf['requiredForInternalUsersOnClose']
 					&& $this->piVars['status'] == CONST_STATUS_CLOSED
 					&& empty($this->piVars[$fieldConf['name']])
@@ -559,12 +576,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$this->formErrors[] = $this->pi_getLL('formerror_required_start') . '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name']))) . '"' . $this->pi_getLL('formerror_required_end');
 				}
 
-				// generate the db-insert values
+					// generate the db-insert values
 
-				// combine the "file" type fields
-				// use the already set value as default value, since files must be
-				// deletedy by clicking on the "delete"-icon, not by submitting
-				// an empty "files"-field
+					// combine the "file" type fields
+					// use the already set value as default value, since files must be
+					// deletedy by clicking on the "delete"-icon, not by submitting
+					// an empty "files"-field
 				if ($fieldConf['type'] == 'files') {
 					if (strlen($this->insertFields[$fieldConf['name']])) {
 						$defaultValue = $this->insertFields[$fieldConf['name']];
@@ -575,13 +592,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$defaultValue = '';
 				}
 
-				// parse and clean up the submitted value
+					// parse and clean up the submitted value
 				$this->insertFields[$fieldConf['name']] = $this->generateDBInsertValue($fieldConf, $defaultValue);
 			}
 		}
 
-		// if there are errors, delete the uploaded files
-		// don't delete when UPDATING a ticket
+			// if there are errors, delete the uploaded files
+			// don't delete when UPDATING a ticket
 		if (!$this->piVars['updateUid']) {
 			if (count($this->formErrors) && strlen($this->insertFields['files'])) {
 				$this->deleteFiles($this->insertFields['files']);
@@ -590,7 +607,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// if everything is OK, insert the ticket into the database or update it
+			// if everything is OK, insert the ticket into the database or update it
 		if (!count($this->formErrors)) {
 			if (!$this->piVars['updateUid']) { // new ticket
 				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $this->insertFields) ? true : false;
@@ -601,17 +618,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					'value_old' => '',
 					'value_new' => $this->pi_getLL('history_new_ticket', 'new')
 					));
-				// send the notification emails
+
+					// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($new_uid, CONST_NEWTICKET);
-				// status message after saving new ticket
+
+					// status message after saving new ticket
 				if ($saveFieldsStatus) {
 					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
 					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_new_ticket');
 				}
+
 			} else { // update ticket
 
-				// go through the form fields and check what has changend
-				// add a history entry for every change
+					// go through the form fields and check what has changend
+					// add a history entry for every change
 				$changedFields = '';
 				$changedInternalFields = '';
 
@@ -627,13 +647,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 									'value_new' => $value_new
 									));
 
-						// update the "close_time" field, if the ticket is now closed and was not closed before
+							// update the "close_time" field, if the ticket is now closed and was not closed before
 						if ($fieldConf['name'] == 'status' && $value_new == CONST_STATUS_CLOSED) {
 							$this->insertFields['close_time'] = time();
 						}
 
-						// Remember the fields that have changed for the notification mail.
-						// Do this only for fields that are not internal!
+							// Remember the fields that have changed for the notification mail.
+							// Do this only for fields that are not internal!
 						if (empty($fieldConf['internal'])) {
 							if (strlen($changedFields)) {
 								$changedFields .= ',';
@@ -641,7 +661,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							$changedFields .= $fieldConf['name'];
 						}
 
-						// Remember the internal fields that have changed
+							// Remember the internal fields that have changed
 						if (!empty($fieldConf['internal'])) {
 							if (strlen($changedInternalFields)) {
 								$changedInternalFields .= ',';
@@ -651,25 +671,26 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					}
 				}
 
-				// If a comment has been submitted, process it now.
-				// Comments are not normal fields but have an own table, so we
-				// cannot process them like the ticket fields.
-				// Remember the fields that have changed for the notification mail.
+					// If a comment has been submitted, process it now.
+					// Comments are not normal fields but have an own table, so we
+					// cannot process them like the ticket fields.
+					// Remember the fields that have changed for the notification mail.
 				if (isset($this->piVars['content']) && !empty($this->piVars['content'])) {
 					$saveCommentStatus = $this->handleSubmittedCommentForm();
 
-					// if the ticket is currently is closed, re-open it.
+						// if the ticket is currently is closed, re-open it.
 					if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
-						// change the status
+
+							// change the status
 						$this->insertFields['status'] = CONST_STATUS_OPEN;
 
-						// add the 'status'-field to the list of changed fields
+							// add the 'status'-field to the list of changed fields
 						if (strlen($changedFields)) {
 							$changedFields .= ',';
 						}
 						$changedFields .= CONST_REOPENANDCOMMENT;
 
-						// add a history entry
+							// add a history entry
 						$this->addHistoryEntry( array(
 									'ticket_uid' => $this->internal['currentRow']['uid'],
 									'databasefield' => 'status',
@@ -686,12 +707,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], $this->insertFields) ? true : false;
 
-				// send the notification emails
+					// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($this->internal['currentRow']['uid'], $changedFields, $changedInternalFields);
 
-				// check if saving of fields and comments went fine
-				// and set status texts
-				// fields changed and new comment
+					// check if saving of fields and comments went fine
+					// and set status texts
+					// fields changed and new comment
 				if (( !empty($changedFields) && strstr($changedFields,CONST_NEWCOMMENT) && trim($changedFields) != CONST_NEWCOMMENT )
 					|| ( !empty($changedInternalFields) && (strstr($changedFields,CONST_NEWCOMMENT)))) {
 					if ($saveFieldsStatus && $saveCommentStatus) {
@@ -699,23 +720,21 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_and_comment');
 					}
 				}
-				// new comment only
+					// new comment only
 				else if (empty($changedInternalFields) && trim($changedFields) == CONST_NEWCOMMENT) {
 					if ($saveCommentStatus) {
 						$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
 						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_comment_only');
 					}
 				}
-				// fields changed
+					// fields changed
 				else if ((!empty($changedFields) && !strstr($changedFields,CONST_NEWCOMMENT)) || !empty($changedInternalFields)) {
 					if ($saveFieldsStatus) {
 						$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
 						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_only');
 					}
 				}
-
 			}
-
 		}
 	}/*}}}*/
 
@@ -1832,9 +1851,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			case 'inputHoursToMinutes':
 				if (empty($this->piVars[$fieldConf['name']])) return '';
-				// convert the hours to minutes
-				$hours = floatval(str_replace(',','.',$this->piVars[$fieldConf['name']]));
+
+					// convert the hours to minutes
+				$hours = floatval(str_replace(',', '.', $this->piVars[$fieldConf['name']]));
 				$returnValue = round( $hours * 60 );
+
+					// validate value
 				if (!intval($returnValue)) {
 					$this->formErrors[] = $this->pi_getLL('formerror_hours');
 				}

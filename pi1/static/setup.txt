@@ -284,6 +284,7 @@ plugin.tx_ketroubletickets_pi1 {
 			size = 5
 			maxlength = 10
 			requiredForInternalUsersOnClose = 1
+			validate = float
 		}
 		65 {
 			internal = 1
@@ -291,6 +292,7 @@ plugin.tx_ketroubletickets_pi1 {
 			type = inputHoursToMinutes
 			size = 5
 			maxlength = 10
+			validate = float
 		}
 		68 {
 			internal = 1
@@ -321,6 +323,10 @@ plugin.tx_ketroubletickets_pi1 {
 			required = 0
 			size = 10
 			maxlength = 250
+			# effort is saved as text. But you may still validate it to be
+			# a float value (e.g. hours). If you do so, dots and commas
+			# are accepted as decimal char. Just uncomment the next line.
+			#validate = float
 		}
 		80 {
 			optional = 1
