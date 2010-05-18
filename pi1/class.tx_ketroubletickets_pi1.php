@@ -551,7 +551,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 					// validate
 				if ($fieldConf['validate'] && !empty($this->piVars[$fieldConf['name']])) {
-					$validationParams = t3lib_div::trimExplode(',', $fieldConf['validate']);
+					$validationParams = t3lib_div::trimExplode(':', $fieldConf['validate']);
 					switch ($validationParams[0]) {
 						case 'float':
 								// replace dot with comma in order to check
@@ -565,7 +565,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						break;
 
 						case 'notAllowedWhenClosing':
+							if ($this->piVars[$fieldConf['name']] == $validationParams[1]) {
+								$this->formErrors[] = $this->pi_getLL('formerror_not_allowed_on_close_begin')
+									. '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name'])))
+									. '"' . $this->pi_getLL('formerror_not_allowed_on_close_end');
 
+							}
 						break;
 					}
 				}

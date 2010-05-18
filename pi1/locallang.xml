@@ -50,6 +50,8 @@
 			<label index="formerror_could_not_create_related_ticket">Relation to ticket could not be created.</label>
 			<label index="formerror_float_begin">Error: Please enter a numerical value into the field </label>
 			<label index="formerror_float_end">.</label>
+			<label index="formerror_not_allowed_on_close_begin">Error: Please select a valeue for the field </label>
+			<label index="formerror_not_allowed_on_close_end">.</label>
 
 			<label index="error_date2cal_not_loaded">Error: The extension date2cal has to be installed.</label>
 			<label index="error_no_tickets_found">No tickets have been found.</label>
@@ -261,7 +263,9 @@
 			<label index="formerror_hours">Bitte geben Sie die Stundenzahl korrekt ein (z. B. 1,5).</label>
 			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Ticket konnte nicht erstellt werden.</label>
 			<label index="formerror_float_begin">Fehler: Bitte geben Sie in das Feld </label>
-			<label index="formerror_float_end">einen Zahlenwert ein.</label>
+			<label index="formerror_float_end"> einen Zahlenwert ein.</label>
+			<label index="formerror_not_allowed_on_close_begin">Fehler: Bitte füllen Sie das Feld </label>
+			<label index="formerror_not_allowed_on_close_end"> aus.</label>
 
 			<label index="error_date2cal_not_loaded">Fehler: Die Erweiterung date2cal muss installiert sein.</label>
 			<label index="error_no_tickets_found">Es wurden keine Aufgaben gefunden.</label>

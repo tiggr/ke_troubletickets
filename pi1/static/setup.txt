@@ -257,7 +257,8 @@ plugin.tx_ketroubletickets_pi1 {
 			# if you want to force users to select a value from the dropdown
 			# which differs from the default value, you may use the validation
 			# method "notAllowedWhenClosing". Write down the value which is
-			# not allowed. When the ticket gets closed, the validation applies.
+			# not allowed after the colon. When the ticket gets closed, the
+			# validation applies.
 			#validate = notAllowedWhenClosing:open
 		}
 		30 {
