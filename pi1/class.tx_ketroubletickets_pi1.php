@@ -40,6 +40,7 @@ define(CONST_ONSTATUSCHANGE, 'onstatuschange');
 define(CONST_TYPOSCRIPT, 'typoscript');
 define(CONST_STATUS_OPEN, 'open');
 define(CONST_STATUS_CLOSED, 'closed');
+define(CONST_STATUS_WAIT, 'wait');
 define(CONST_RENDER_TYPE_EMAIL, 'email');
 define(CONST_RENDER_TYPE_CSV, 'csv');
 define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
@@ -565,7 +566,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						break;
 
 						case 'notAllowedWhenClosing':
-							if ($this->piVars[$fieldConf['name']] == $validationParams[1]) {
+							if ($this->piVars['status'] == CONST_STATUS_CLOSED
+								&& $this->piVars[$fieldConf['name']] == $validationParams[1]) {
 								$this->formErrors[] = $this->pi_getLL('formerror_not_allowed_on_close_begin')
 									. '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name'])))
 									. '"' . $this->pi_getLL('formerror_not_allowed_on_close_end');
@@ -697,17 +699,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				if (isset($this->piVars['content']) && !empty($this->piVars['content'])) {
 					$saveCommentStatus = $this->handleSubmittedCommentForm();
 
-						// if the ticket is currently is closed, re-open it.
+						// if the ticket currently is closed, re-open it.
 					if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
 
 							// change the status
 						$this->insertFields['status'] = CONST_STATUS_OPEN;
 
-							// add the 'status'-field to the list of changed fields
-						if (strlen($changedFields)) {
-							$changedFields .= ',';
-						}
-						$changedFields .= CONST_REOPENANDCOMMENT;
+							// add the information to changedFields list
+						$changedFields = $this->addToCommaList($changedFields, CONST_REOPENANDCOMMENT);
 
 							// add a history entry
 						$this->addHistoryEntry( array(
@@ -717,10 +716,29 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 									'value_new' => CONST_STATUS_OPEN
 									));
 					} else {
-						if (strlen($changedFields)) {
-							$changedFields .= ',';
+
+							// if the status is currentyl "wait", set the status to the value
+							// defined in typoscript
+						if ($this->conf['changeWaitStatusOnNewComment']
+							&& $this->internal['currentRow']['status'] == CONST_STATUS_WAIT
+							&& t3lib_div::inList($this->conf['statusList'], $this->conf['changeWaitStatusOnNewComment'])) {
+
+								// change the status
+							$this->insertFields['status'] = $this->conf['changeWaitStatusOnNewComment'];
+
+								// add the information to changedFields list
+							$changedFields = $this->addToCommaList($changedFields, 'status');
+
+								// add a history entry
+							$this->addHistoryEntry( array(
+										'ticket_uid' => $this->internal['currentRow']['uid'],
+										'databasefield' => 'status',
+										'value_old' => $this->internal['currentRow']['status'],
+										'value_new' => $this->conf['changeWaitStatusOnNewComment']
+										));
 						}
-						$changedFields .= CONST_NEWCOMMENT;
+
+						$changedFields = $this->addToCommaList($changedFields, CONST_NEWCOMMENT);
 					}
 
 				}
@@ -755,6 +773,27 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 			}
 		}
+	}/*}}}*/
+
+
+	 /*
+	 * addToCommaList
+	 *
+	 * adds an element to an comma separated list
+	 *
+	 * @param string $list List to add the element to
+	 * @param string $element elemenet to add
+	 * @access public
+	 * @return string
+	 */
+	public function addToCommaList($list, $element) {/*{{{*/
+		if ($element) {
+			if (strlen($list)) {
+				$list .= ',';
+			}
+			$list .= strval($element);
+		}
+		return $list;
 	}/*}}}*/
 
 	/**
