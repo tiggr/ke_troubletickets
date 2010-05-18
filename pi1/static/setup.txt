@@ -210,6 +210,8 @@ plugin.tx_ketroubletickets_pi1 {
 			lastNameFirst = 1
 			required = 0
 			prefillWithCurrentUserIfEmpty = 1
+			writeAccessOnlyForUserGroup =
+
 			# by default the owner is set automatically when
 			# creating a new ticket and must not be changed
 			# when updating a ticket
@@ -231,6 +233,7 @@ plugin.tx_ketroubletickets_pi1 {
 			required = 1
 			size = 50
 			maxlength = 250
+			writeAccessOnlyForUserGroup =
 		}
 		20 {
 			name = status
@@ -240,6 +243,7 @@ plugin.tx_ketroubletickets_pi1 {
 			# list of values defined in this typoscript configuration
 			# labels are defined in locallang ('SELECTLABEL_...')
 			valueList = statusList
+			writeAccessOnlyForUserGroup =
 		}
 		25 {
 			name = billing
@@ -249,6 +253,7 @@ plugin.tx_ketroubletickets_pi1 {
 			# list of values defined in this typoscript configuration
 			# labels are defined in locallang ('SELECTLABEL_...')
 			valueList = billingList
+			writeAccessOnlyForUserGroup =
 		}
 		30 {
 			name = priority
@@ -256,13 +261,16 @@ plugin.tx_ketroubletickets_pi1 {
 			size = 1
 			multiple = 0
 			valueList = priorityList
+			writeAccessOnlyForUserGroup =
 		}
 		40 {
 			name = description
 			type = textareaRTE
+			largeRTE = 1
 			cols = 50
 			rows = 10
 			maxlength = 5000
+			writeAccessOnlyForUserGroup =
 		}
 		50 {
 			internal = 1
@@ -270,12 +278,14 @@ plugin.tx_ketroubletickets_pi1 {
 			type = date
 			size = 10
 			maxlength = 10
+			writeAccessOnlyForUserGroup =
 		}
 		55 {
 			name = until_date
 			type = date
 			size = 10
 			maxlength = 10
+			writeAccessOnlyForUserGroup =
 		}
 		60 {
 			internal = 1
@@ -285,6 +295,7 @@ plugin.tx_ketroubletickets_pi1 {
 			maxlength = 10
 			requiredForInternalUsersOnClose = 1
 			validate = float
+			writeAccessOnlyForUserGroup =
 		}
 		65 {
 			internal = 1
@@ -293,6 +304,7 @@ plugin.tx_ketroubletickets_pi1 {
 			size = 5
 			maxlength = 10
 			validate = float
+			writeAccessOnlyForUserGroup =
 		}
 		68 {
 			internal = 1
@@ -301,6 +313,7 @@ plugin.tx_ketroubletickets_pi1 {
 			cols = 85
 			rows = 5
 			maxlength = 5000
+			writeAccessOnlyForUserGroup =
 		}
 		70 {
 			name = files
@@ -310,12 +323,14 @@ plugin.tx_ketroubletickets_pi1 {
 			maxlength = 10000000
 			thumbnails = jpg,jpeg,gif,png,tif,tiff,bmp
 			showThumbsForNonImages = 1
+			writeAccessOnlyForUserGroup =
 		}
 		73 {
 			name = related_tickets
 			type = input_related_tickets
 			size = 5
 			maxlength = 8
+			writeAccessOnlyForUserGroup =
 		}
 		75 {
 			name = effort
@@ -327,6 +342,7 @@ plugin.tx_ketroubletickets_pi1 {
 			# a float value (e.g. hours). If you do so, dots and commas
 			# are accepted as decimal char. Just uncomment the next line.
 			#validate = float
+			writeAccessOnlyForUserGroup =
 		}
 		80 {
 			optional = 1
@@ -334,6 +350,7 @@ plugin.tx_ketroubletickets_pi1 {
 			type = categorySelect
 			size = 1
 			multiple = 0
+			writeAccessOnlyForUserGroup =
 
 			# If you want to force the frontend user to select
 			# a category, uncomment the following two lines
@@ -355,6 +372,7 @@ plugin.tx_ketroubletickets_pi1 {
 			size = 1
 			multiple = 0
 			prefillWithCurrentUserIfEmpty = 1
+			writeAccessOnlyForUserGroup =
 		}
 		100 {
 			optional = 1
@@ -366,6 +384,7 @@ plugin.tx_ketroubletickets_pi1 {
 			flexformFieldForUsergroupToChoseFrom = observer_group_to_choose_from
 			size = 12
 			multiple = 1
+			writeAccessOnlyForUserGroup =
 		}
 		110 {
 			optional = 1

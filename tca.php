@@ -204,13 +204,6 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
-					/*
-					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_OPEN", "open"),
-					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ACKNOWLEDGED", "acknowledged"),
-					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_WORKING", "working"),
-					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_CLOSED", "closed"),
-					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ONHOLD", "onhold"),
-					*/
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_OPEN", "open"),
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_ACKNOWLEDGED", "acknowledged"),
 					Array("LLL:EXT:ke_troubletickets/pi1/locallang.xml:SELECTLABEL_WORKING", "working"),
@@ -261,6 +254,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_owner.I.0", "never"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_owner.I.1", "oneverychange"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_owner.I.2", "onstatuschange"),
+					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_owner.I.3", "typoscript"),
 				),
 				"size" => 1,
 				"maxitems" => 1,
@@ -275,6 +269,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_responsible.I.0", "never"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_responsible.I.1", "oneverychange"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_responsible.I.2", "onstatuschange"),
+					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_responsible.I.3", "typoscript"),
 				),
 				"size" => 1,
 				"maxitems" => 1,
@@ -289,6 +284,7 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_observer.I.0", "never"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_observer.I.1", "oneverychange"),
 					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_observer.I.2", "onstatuschange"),
+					Array("LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.notifications_observer.I.3", "typoscript"),
 				),
 				"size" => 1,
 				"maxitems" => 1,

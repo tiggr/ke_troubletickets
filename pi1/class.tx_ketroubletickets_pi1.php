@@ -530,13 +530,16 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// handle each of the submitted fields as defined in the typoscript setup
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 
-				// ignore the submit-field and
-				// ignore internal fields if not permitted for current user
-				// and ignore fields that are configured as "doNotSaveInDB = 1"
+				// ignore fields:
+				// - the submit-field
+				// - internal fields if the current user is not an internal user
+				// - fields that are configured as "doNotSaveInDB = 1"
+				// - fields the current user has no write access to
 			if (
 				$fieldConf['type'] != 'submit'
-				&& (!$fieldConf['internal'] || $this->isUserInternalUser($GLOBALS['TSFE']->fe_user->user['uid']))
+				&& (!$fieldConf['internal'] || $this->isCurrentUserInternalUser())
 				&& !$fieldConf['doNotSaveInDB']
+				&& $this->fieldIsWritableForCurrentUser($fieldConf)
 			) {
 
 					// required-check
@@ -1388,6 +1391,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	function checkCustomNotificationCondition($changedFields, $options) {
 		$sendNotification = false;
 
+			// comment?
+		if (stristr($changedFields, CONST_NEWCOMMENT) && t3lib_div::inList($options, 'comment')) {
+			$sendNotification = true;
+		}
+
 			// new ticket?
 		if (stristr($changedFields, CONST_NEWTICKET) && t3lib_div::inList($options, 'newticket')) {
 			$sendNotification = true;
@@ -2010,6 +2018,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function renderTicketForm() {/*{{{*/
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 
+			// clear markers which won't be filled if the corresponding files
+			// are marked as "not writable", e.g. RTE Javascript
+		$this->markerArray['ADDITIONALJS_PRE'] = '';
+		$this->markerArray['ADDITIONALJS_POST'] = '';
+		$this->markerArray['UKB_FORM'] = '';
+
 			// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
@@ -2048,7 +2062,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// and configure it
 		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker'] = '<script type="text/javascript" src="'.$this->extPath.'js/datetimepicker.js"></script>';
 
-		// include Javascript for printview
+			// include Javascript for printview
 		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker_config'] .= '
 <script type="text/javascript">
 	var DateSeparator="' . $this->conf['datepicker.']['separator'] . '";
@@ -2068,7 +2082,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// get the field markers (render the form fields)
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-			$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
+
+				// check if this field may be edited by every user or only by
+				// members of a certain usergroup.
+			if ($this->fieldIsWritableForCurrentUser($fieldConf)) {
+				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
+			} else {
+				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
+			}
 
 				// make the values of the ticket available without the need to
 				// put them into a form field (static markers)
@@ -2147,6 +2168,25 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	}/*}}}*/
 
 	/**
+ 	* checks, if the given field of the current ticket ist writeable for
+ 	* the current user. That means that the field has either no write
+ 	* restriction or the user has the correct usergroup.
+ 	*
+ 	* @param   array $fieldConf Configuration Array (defined in typoscript) of the field to check.
+ 	* @return  boolean
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	* @since   Tue May 18 2010 10:00:47 GMT+0200
+ 	*/
+	public function fieldIsWritableForCurrentUser($fieldConf) {
+		if (empty($fieldConf['writeAccessOnlyForUserGroup']) || t3lib_div::inList($GLOBALS['TSFE']->fe_user->user['usergroup'], $fieldConf['writeAccessOnlyForUserGroup'])) {
+			$returnValue = true;
+		} else {
+			$returnValue = false;
+		}
+		return $returnValue;
+	}
+
+	/**
 	 * printview
 	 *
 	 * Render print optimized view of single ticket
@@ -2196,29 +2236,23 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		return $content;
 	}
 
-
-
 	/**
 	 * isCurrentUserInternalUser
 	 *
-	 * Checks, if the current fe_user is an "internal" user (as defined in the flexform field)
+	 * Checks, if the current fe_user is an "internal" user.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function isCurrentUserInternalUser() {/*{{{*/
-		if (is_array($this->internalUserList) && in_array($GLOBALS['TSFE']->fe_user->user['uid'], $this->internalUserList)) {
-			$result = true;
-		} else {
-			$result = false;
-		}
-		return $result;
+		return $this->isUserInternalUser($GLOBALS['TSFE']->fe_user->user['uid']);
 	}/*}}}*/
 
 	/**
 	 * isUserInternalUser
 	 *
-	 * Checks, if a given uid belongs to an internal user.
+	 * Checks, if a given user uid belongs to an internal user.
+	 * Internal users are defined in the flexform configuration of the plugin.
 	 *
 	 * @param integer $user_uid
 	 * @access public
@@ -2626,8 +2660,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$this->PA['itemFormElName'] = $this->prefixId . '[' . $fieldConf['name'] . ']';
 				$this->PA['itemFormElValue'] = $prefillValue;
 				$this->thePidValue = $GLOBALS['TSFE']->id;
-				// add 150px to the RTE width:
-				$this->docLarge = false;
+
+					// add 150px to the RTE width if configured in typoscript
+				if ($fieldConf['largeRTE']) {
+					$this->docLarge = true;
+				}
+
 				$content = $this->RTEObj->drawRTE($this,'',$this->strEntryField,$row=array(), $this->PA, $this->specConf, $this->thisConfig, $this->RTEtypeVal, '', $this->thePidValue);
 
 				// RTE Markers
