@@ -254,6 +254,11 @@ plugin.tx_ketroubletickets_pi1 {
 			# labels are defined in locallang ('SELECTLABEL_...')
 			valueList = billingList
 			writeAccessOnlyForUserGroup =
+			# if you want to force users to select a value from the dropdown
+			# which differs from the default value, you may use the validation
+			# method "notAllowedWhenClosing". Write down the value which is
+			# not allowed. When the ticket gets closed, the validation applies.
+			#validate = notAllowedWhenClosing:open
 		}
 		30 {
 			name = priority

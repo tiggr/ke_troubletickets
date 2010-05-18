@@ -551,8 +551,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 					// validate
 				if ($fieldConf['validate'] && !empty($this->piVars[$fieldConf['name']])) {
-					switch ($fieldConf['validate']) {
-						case 'float' :
+					$validationParams = t3lib_div::trimExplode(',', $fieldConf['validate']);
+					switch ($validationParams[0]) {
+						case 'float':
 								// replace dot with comma in order to check
 								// for a correct float value
 							$value = str_replace(',', '.', $this->piVars[$fieldConf['name']]);
@@ -561,6 +562,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 									. '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name'])))
 									. '"' . $this->pi_getLL('formerror_float_end');
 							}
+						break;
+
+						case 'notAllowedWhenClosing':
+
 						break;
 					}
 				}
@@ -650,8 +655,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 									'value_new' => $value_new
 									));
 
-							// update the "close_time" field, if the ticket is now closed and was not closed before
-						if ($fieldConf['name'] == 'status' && $value_new == CONST_STATUS_CLOSED) {
+							// update the "close_time" field, if the ticket is
+							// now closed and was NEVER closed before
+							// That means, the close_time is always the time
+							// the ticket has been closed for the first time.
+						if ($fieldConf['name'] == 'status'
+								&& $value_new == CONST_STATUS_CLOSED
+								&& !$this->internal['currentRow']['close_time'])
+						{
 							$this->insertFields['close_time'] = time();
 						}
 
@@ -1082,12 +1093,22 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 
 		if ($closeAllowed) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $ticket_uid, array('status' => CONST_STATUS_CLOSED, 'close_time' => time()));
+			$updateFields = array('status' => CONST_STATUS_CLOSED);
 
-			// send the notification emails
+				// update the "close_time" field, if the ticket
+				// was NEVER closed before.
+				// That means, the close_time is always the time
+				// the ticket has been closed for the first time.
+			if (!$row['close_time']) {
+				$updateFields['close_time'] = time();
+			}
+
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $ticket_uid, $updateFields);
+
+				// send the notification emails
 			$this->checkChangesAndSendNotificationEmails($ticket_uid, CONST_STATUS_CLOSED);
 
-			// add history entry
+				// add history entry
 			$this->addHistoryEntry( array(
 						'ticket_uid' => $ticket_uid,
 						'databasefield' => 'status',
