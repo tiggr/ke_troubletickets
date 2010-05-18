@@ -2864,12 +2864,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 
 							// generate the link to the file
-							$content .= ' ' . $lcObj->typoLink(
-									$filename,
-									array(
-										'parameter' => $this->fileUploadDir . $filename,
-										'target' => '_blank'
-										)
+							$content .= ' ' .
+									$lcObj->typoLink(
+										$filename,
+										array('parameter' => $this->fileUploadDir . $filename . ' _blank')
 									);
 
 							// render the file size
