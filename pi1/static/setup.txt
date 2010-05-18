@@ -141,8 +141,8 @@ plugin.tx_ketroubletickets_pi1 {
 	commentListOrderBy = uid ASC
 
 	# thumbnails for attached files
-	thumbnailImage = IMAGE
-	thumbnailImage.file.maxW = 50
+	thumbnailImage.preview = IMAGE
+	thumbnailImage.preview.file.maxW = 50
 
 	# different imges for different mime types (in case a thumbnail cannot be generated)
 	thumbnailImage.default = IMAGE
@@ -331,9 +331,17 @@ plugin.tx_ketroubletickets_pi1 {
 			maxFiles = 20
 			size = 50
 			maxlength = 10000000
+			writeAccessOnlyForUserGroup =
+		}
+		71 {
+			# filelist isn't a for field but only a pseudo field.
+			# using the marker ###VALUE_FILELIST### you get a nicely
+			# rendered list of files in your template.
+			name = filelist
+			type = filelist
 			thumbnails = jpg,jpeg,gif,png,tif,tiff,bmp
 			showThumbsForNonImages = 1
-			writeAccessOnlyForUserGroup =
+			doNotSaveInDB = 1
 		}
 		73 {
 			name = related_tickets

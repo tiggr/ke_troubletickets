@@ -611,7 +611,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$this->insertFields[$fieldConf['name']] = $this->generateDBInsertValue($fieldConf, $defaultValue);
 			}
 		}
-
 			// if there are errors, delete the uploaded files
 			// don't delete when UPDATING a ticket
 		if (!$this->piVars['updateUid']) {
@@ -742,6 +741,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					}
 
 				}
+
+					// exec update database query
 				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], $this->insertFields) ? true : false;
 
 					// send the notification emails
@@ -2153,14 +2154,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			if ($this->fieldIsWritableForCurrentUser($fieldConf)) {
 				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
 			} else {
-				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
+				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name'], 'default', $fieldConf);
 			}
 
 				// make the values of the ticket available without the need to
 				// put them into a form field (static markers)
 				// (only if we are editing an existing ticket)
-			if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
-				$this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
+			if ( ($this->piVars['showUid'] || $this->piVars['updateUid'])) {
+
+				$this->markerArray['VALUE_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name'], 'default', $fieldConf);
 
 			} else {
 
@@ -2806,79 +2808,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'files':
-				// show the files, which already have been uploaded
-				// including a delete link
-				if (strlen($prefillValue)) {
-					foreach (explode(',', $prefillValue) as $filename) {
-						if (file_exists($this->fileUploadDir . $filename)) {
-							$content .= '<div class="filename">';
-
-							// show the delete link only to the owner
-							if ($this->internal['currentRow']['owner_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
-								// get the delete image configuration from typoscript
-								$imageConf = $this->conf['icons.']['deleteFile.'];
-
-								// generate the delete link
-								$additionalParams = '&' . $this->prefixId . '[showUid]=' . $this->internal['currentRow']['uid'];
-								$additionalParams .= '&' . $this->prefixId . '[deleteFile]=' . $filename;
-								$additionalParams .= $this->getAdditionalParamsFromKeepPiVars();
-								$deleteLinkConf = array(
-										'parameter' => $GLOBALS['TSFE']->id,
-										'additionalParams' => $additionalParams
-										);
-								$deleteLink_URL = $this->cObj->typoLink_URL($deleteLinkConf);
-								$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
-
-								// generate the alt text
-								$imageConf['altText'] = $this->pi_getLL('altText_deletefile', 'Delete file.');
-
-								// finally generate the delete icon
-								$imageConf['file'] = $this->getFilePath($imageConf['file']);
-								$content .= $lcObj->IMAGE($imageConf);
-							}
-
-							// show thumbnails
-							$filetype = substr(strrchr($filename, '.'), 1);
-							$filetype = strtolower($filetype);
-							unset($imageConf);
-							if (t3lib_div::inList($fieldConf['thumbnails'], $filetype)) {
-								if (file_exists($this->fileUploadDir . $filename)) {
-									$imageConf = $this->conf['thumbnailImage.'];
-									$imageConf['file'] = $this->fileUploadDir . $filename;
-									$content .= $lcObj->IMAGE($imageConf);
-								}
-							} else {
-								if ($fieldConf['showThumbsForNonImages']) {
-									if (is_array($this->conf['thumbnailImage.'][$filetype . '.'])) {
-										$imageConf = $this->conf['thumbnailImage.'][$filetype . '.'];
-									} else {
-										if (is_array($this->conf['thumbnailImage.']['default.'])) {
-											$imageConf = $this->conf['thumbnailImage.']['default.'];
-										}
-									}
-									if (is_array($imageConf)) {
-										$content .= $lcObj->IMAGE($imageConf);
-									}
-								}
-							}
-
-
-							// generate the link to the file
-							$content .= ' ' .
-									$lcObj->typoLink(
-										$filename,
-										array('parameter' => $this->fileUploadDir . $filename . ' _blank')
-									);
-
-							// render the file size
-							$content .= ' (' . $this->lib->filesize_format(filesize($this->fileUploadDir . $filename)) . ')';
-
-							$content .= '</div>';
-						}
-					}
-				}
-
-				// show the form elements for the new files
+					// show the form elements for the new files
 				$content .= '<table border="0" cellpadding="0" cellspacing="0">';
 				for ($i = 1; $i<=$fieldConf['maxFiles']; $i++) {
 					$content .= '<tr id="' . $fieldConf['name'] . '_' . $i . '_row' . '"';
@@ -2889,7 +2819,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$content .= '<input type="file" id="' . $fieldConf['name'] . '_' . $i .'" name="' . $this->prefixId . '_' . $fieldConf['name'] . '_' . $i . '" value="" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
 					$j = $i + 1;
 					if ($i < $fieldConf['maxFiles']) {
-						//$content .= ' <a href="' . t3lib_div::linkThisScript() . '#uploadfieldsmark" onClick="document.getElementById(\'' . $fieldConf['name'] . '_' . $j . '_row' . '\').style.display = \'inline\'; this.style.visibility = \'hidden\';">' . $this->pi_getLL('more_files') . '</a>';
 						$content .= ' <a href="javascript:document.getElementById(\'' . $fieldConf['name'] . '_' . $j . '_row' . '\').style.display = \'inline\'; this.style.visibility = \'hidden\';">' . $this->pi_getLL('more_files') . '</a>';
 					}
 					$content .= '</td></tr>';
@@ -3661,10 +3590,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 *
 	 * @param	string		$fieldName: name of table field
 	 * @param	string		$renderType: may be set to "email" in order to change the rendering for the output in the notification email
+	 * @param   array       $fieldConf: configuration of the field as set in typoscript. not necessary for most of the fields, but e.g. for filelist.
 	 *
 	 * @return	Value of the field
 	 */
-	public function getFieldContent($fieldName, $renderType='default')	{/*{{{*/
+	public function getFieldContent($fieldName, $renderType='default', $fieldConf=array())	{/*{{{*/
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 		switch($fieldName) {
 			/*
@@ -3924,7 +3854,88 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				break;
 
 			case 'files':
-				return str_replace(',', ', ',$this->internal['currentRow'][$fieldName]);
+				return str_replace(',', ', ', $this->internal['currentRow'][$fieldName]);
+				break;
+
+			case 'filelist':
+					// show the files, which already have been uploaded
+					// including a delete link
+				$retval = '';
+				$prefillValue = $this->internal['currentRow']['files'];
+				if (strlen($prefillValue)) {
+					foreach (explode(',', $prefillValue) as $filename) {
+						if (file_exists($this->fileUploadDir . $filename)) {
+
+								// get the subpart
+							$fileLinkSubpart = $this->cObj->getSubpart($this->templateCode,'###FILELINK###');
+							$fileLinkMarkers = array();
+
+								// show the delete link only to the owner
+							if ($this->internal['currentRow']['owner_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
+								// get the delete image configuration from typoscript
+								$imageConf = $this->conf['icons.']['deleteFile.'];
+
+									// generate the delete link
+								$additionalParams = '&' . $this->prefixId . '[showUid]=' . $this->internal['currentRow']['uid'];
+								$additionalParams .= '&' . $this->prefixId . '[deleteFile]=' . $filename;
+								$additionalParams .= $this->getAdditionalParamsFromKeepPiVars();
+								$deleteLinkConf = array(
+										'parameter' => $GLOBALS['TSFE']->id,
+										'additionalParams' => $additionalParams
+										);
+								$deleteLink_URL = $this->cObj->typoLink_URL($deleteLinkConf);
+								$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
+
+									// generate the alt text
+								$imageConf['altText'] = $this->pi_getLL('altText_deletefile', 'Delete file.');
+
+									// finally generate the delete icon
+								$imageConf['file'] = $this->getFilePath($imageConf['file']);
+								$fileLinkMarkers['DELETELINK'] = $lcObj->IMAGE($imageConf);
+							} else {
+								$fileLinkMarkers['DELETELINK'] = '';
+							}
+
+								// show thumbnails
+							$filetype = substr(strrchr($filename, '.'), 1);
+							$filetype = strtolower($filetype);
+							unset($imageConf);
+							if (t3lib_div::inList($fieldConf['thumbnails'], $filetype)) {
+								if (file_exists($this->fileUploadDir . $filename)) {
+									$imageConf = $this->conf['thumbnailImage.']['preview.'];
+									$imageConf['file'] = $this->fileUploadDir . $filename;
+									$fileLinkMarkers['THUMBNAIL'] = $lcObj->IMAGE($imageConf);
+								}
+							} else {
+								if ($fieldConf['showThumbsForNonImages']) {
+									if (is_array($this->conf['thumbnailImage.'][$filetype . '.'])) {
+										$imageConf = $this->conf['thumbnailImage.'][$filetype . '.'];
+									} else {
+										if (is_array($this->conf['thumbnailImage.']['default.'])) {
+											$imageConf = $this->conf['thumbnailImage.']['default.'];
+										}
+									}
+									if (is_array($imageConf)) {
+										$fileLinkMarkers['THUMBNAIL'] = $lcObj->IMAGE($imageConf);
+									}
+								}
+							}
+
+								// generate the link to the file
+							$fileLinkMarkers['LINKTOFILE'] = $lcObj->typoLink(
+								$filename,
+								array('parameter' => $this->fileUploadDir . $filename . ' _blank')
+							);
+
+								// render the file size
+							$fileLinkMarkers['FILESIZE'] = $this->lib->filesize_format(filesize($this->fileUploadDir . $filename));
+
+								// fill in the markers
+							$retval .= $this->cObj->substituteMarkerArray($fileLinkSubpart,$fileLinkMarkers,'###|###',true);
+						}
+					}
+				}
+				return $retval;
 				break;
 
 			case 'category':
