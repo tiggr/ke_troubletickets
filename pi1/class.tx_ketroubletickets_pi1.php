@@ -229,6 +229,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$this->internal['currentTable'] = $this->tablename;
 			$this->internal['currentRow'] = $this->pi_getRecord($this->tablename, $uid);
 
+				// save the ticket before the data changes for later use
+			$this->oldTicket = $this->internal['currentRow'];
+
 				// PERMISSION CHECKS
 				// only the owner, the responsible user and the observers may view or update ticket
 			if (!$this->checkPermissionForCurrentTicket()) {
@@ -1411,9 +1414,35 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				}
 			}
 
+				// list of observers
+			if ($this->internal['currentRow']['observers_feuser']) {
+				$observers = t3lib_div::trimExplode(',', $this->internal['currentRow']['observers_feuser']);
+			} else {
+				$observers = array();
+			}
+
+				// if the owner, the responsible user or the observers have changed,
+				// treat the former owner, former responsible user and former observers
+				// temporarily as observers (for this change only). For example, This notifies former responsible
+				// users that they are not responsible anymore.
+			if ($this->internal['currentRow']['owner_feuser'] != $this->oldTicket['owner_feuser']) {
+				$observers[] = $this->oldTicket['owner_feuser'];
+			}
+			if ($this->internal['currentRow']['responsible_feuser'] != $this->oldTicket['responsible_feuser']) {
+				$observers[] = $this->oldTicket['responsible_feuser'];
+			}
+			if ($this->oldTicket['observers_feuser']) {
+				$observers_old = t3lib_div::trimExplode(',', $this->oldTicket['observers_feuser']);
+				foreach ($observers_old as $observer_old) {
+					if (!in_array($observer_old, $observers)) {
+						$observers[] = $observer_old;
+					}
+				}
+			}
+
 				// send notifications to observers
-			if (strlen($this->internal['currentRow']['observers_feuser'])) {
-				foreach (explode(',', $this->internal['currentRow']['observers_feuser']) as $observer_uid) {
+			if (count($observers)) {
+				foreach ($observers as $observer_uid) {
 					if (($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
 						|| (
 							$this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE
