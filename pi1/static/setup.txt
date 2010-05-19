@@ -24,13 +24,13 @@ plugin.tx_ketroubletickets_pi1 {
 	# Status and Priority Names are stored in locallang
 	# remember to adjust the TCA (tca.php), too, if you change these values
 	# statusList = open,acknowledged,working,closed,onhold,wait,offer
-	statusList = open,working,closed,onhold,wait
+	statusList = open,working,closed,onhold,wait,closed_locked
 	priorityList = 2,1,3
 	billingList = open,service,invoice,offer,service_invoice
 	notificationBehaviorList = oneverychange,onstatuschange,never,typoscript
-	priorityWrap.1 =
-	priorityWrap.2 = <span style="color:#ffcc00;">|</span>
-	priorityWrap.3 = <span style="color:red;">|</span>
+	priorityWrap.1 = <span class="priority_1">|</span>
+	priorityWrap.2 = <span class="priority_2">|</span>
+	priorityWrap.3 = <span class="priority_3">|</span>
 
 	# status icons
 	statusImage.open = IMAGE
@@ -47,6 +47,8 @@ plugin.tx_ketroubletickets_pi1 {
 	statusImage.wait.file = EXT:ke_troubletickets/res/images/status_wait.gif
 	statusImage.offer = IMAGE
 	statusImage.offer.file = EXT:ke_troubletickets/res/images/status_offer.gif
+	statusImage.closed_locked = IMAGE
+	statusImage.closed_locked.file = EXT:ke_troubletickets/res/images/status_locked.gif
 
 	statusImageTeaser.open = IMAGE
 	statusImageTeaser.open.file = EXT:ke_troubletickets/res/images/green.png
@@ -62,6 +64,8 @@ plugin.tx_ketroubletickets_pi1 {
 	statusImageTeaser.wait.file = EXT:ke_troubletickets/res/images/orange.png
 	statusImageTeaser.offer = IMAGE
 	statusImageTeaser.offer.file = EXT:ke_troubletickets/res/images/orange.png
+	statusImageTeaser.closed_locked = IMAGE
+	statusImageTeaser.closed_locked.file = EXT:ke_troubletickets/res/images/gray.png
 
 	# edit and delete icons
 	icons.edit = IMAGE
@@ -203,6 +207,18 @@ plugin.tx_ketroubletickets_pi1 {
 	# If you want tickets that have the "wait" status to change their status
 	# whenever a new comment is submitted, enter the desired status here
 	#changeWaitStatusOnNewComment = open
+
+	# In locked tickets, only these fields may be edited by normal users.
+	# Allow the notifications_*-fields by default because if you don't allow them
+	# to be edited, they will show up in locked tickets even if they are normaly
+	# not visible in the frontend (which is default setting).
+	# Otherwise, if you let your frontend users decide when to get notifications (in the
+	# flexform configuration), you may disallow these fields in locked tickets by
+	# deleting them from this list.
+	allowFieldsInLockedTickets = notifications_owner,notifications_responsible,notifications_observer
+
+	# Internal users may edit the following fields in locked tickets.
+	allowFieldsInLockedTicketsForInternalUsers = notifications_owner,notifications_responsible,notifications_observer,status,submit
 
 	# definition of the input form
 	# 'name' has to be the same as defined in the database

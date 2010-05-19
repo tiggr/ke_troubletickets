@@ -103,6 +103,7 @@
 			<label index="SELECTLABEL_OPEN">open</label>
 			<label index="SELECTLABEL_WORKING">working</label>
 			<label index="SELECTLABEL_CLOSED">closed</label>
+			<label index="SELECTLABEL_CLOSED_LOCKED">locked</label>
 			<label index="SELECTLABEL_ACKNOWLEDGED">acknowledged</label>
 			<label index="SELECTLABEL_ONHOLD">on hold</label>
 			<label index="SELECTLABEL_WAIT">wait</label>
@@ -317,6 +318,7 @@
 			<label index="SELECTLABEL_OPEN">offen</label>
 			<label index="SELECTLABEL_WORKING">in Bearbeitung</label>
 			<label index="SELECTLABEL_CLOSED">erledigt</label>
+			<label index="SELECTLABEL_CLOSED_LOCKED">geschlossen</label>
 			<label index="SELECTLABEL_ACKNOWLEDGED">zur Kenntnis genommen</label>
 			<label index="SELECTLABEL_ONHOLD">geparkt</label>
 			<label index="SELECTLABEL_WAIT">warten</label>

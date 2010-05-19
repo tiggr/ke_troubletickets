@@ -50,9 +50,28 @@
 	width:20px;
 }
 
+.tx-ketroubletickets-pi1 .priority_1 {
+	font-size: 9px;
+}
+
+.tx-ketroubletickets-pi1 .priority_2 {
+	font-size: 9px;
+	color:#ffcc00;
+}
+
+.tx-ketroubletickets-pi1 .priority_3 {
+	font-size: 9px;
+	color:red;
+}
+
 /*------------------------------------------------------------------------------------------------------*/
 /*** SINGLEVIEW */
 /*------------------------------------------------------------------------------------------------------*/
+
+.tx-ketroubletickets-pi1 .comment_author {
+	font-size:10px;
+	font-style:italic;
+}
 
 .kett_singleview_toolbar {
   width: auto;

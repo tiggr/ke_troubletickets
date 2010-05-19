@@ -40,6 +40,7 @@ define(CONST_ONSTATUSCHANGE, 'onstatuschange');
 define(CONST_TYPOSCRIPT, 'typoscript');
 define(CONST_STATUS_OPEN, 'open');
 define(CONST_STATUS_CLOSED, 'closed');
+define(CONST_STATUS_CLOSED_LOCKED, 'closed_locked');
 define(CONST_STATUS_WAIT, 'wait');
 define(CONST_RENDER_TYPE_EMAIL, 'email');
 define(CONST_RENDER_TYPE_CSV, 'csv');
@@ -569,7 +570,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						break;
 
 						case 'notAllowedWhenClosing':
-							if ($this->piVars['status'] == CONST_STATUS_CLOSED
+							if (stristr($this->piVars['status'], CONST_STATUS_CLOSED)
 								&& $this->piVars[$fieldConf['name']] == $validationParams[1]) {
 								$this->formErrors[] = $this->pi_getLL('formerror_not_allowed_on_close_begin')
 									. '"' . $this->pi_getLL('LABEL_' . strtoupper(trim($fieldConf['name'])))
@@ -587,7 +588,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// field in case he want's to close the ticket
 					// This is useful for the "time used"-field.
 				if ($fieldConf['requiredForInternalUsersOnClose']
-					&& $this->piVars['status'] == CONST_STATUS_CLOSED
+					&& stristr($this->piVars['status'], CONST_STATUS_CLOSED)
 					&& empty($this->piVars[$fieldConf['name']])
 					&& $this->isCurrentUserInternalUser()
 					) {
@@ -669,7 +670,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							// That means, the close_time is always the time
 							// the ticket has been closed for the first time.
 						if ($fieldConf['name'] == 'status'
-								&& $value_new == CONST_STATUS_CLOSED
+								&& stristr($value_new, CONST_STATUS_CLOSED)
 								&& !$this->internal['currentRow']['close_time'])
 						{
 							$this->insertFields['close_time'] = time();
@@ -702,7 +703,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$saveCommentStatus = $this->handleSubmittedCommentForm();
 
 						// if the ticket currently is closed, re-open it.
-					if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
+					if (stristr($this->internal['currentRow']['status'], CONST_STATUS_CLOSED)) {
 
 							// change the status
 						$this->insertFields['status'] = CONST_STATUS_OPEN;
@@ -1498,7 +1499,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// closed ticket?
 		if (t3lib_div::inList($changedFields, 'status')
-			&& $this->internal['currentRow']['status'] == CONST_STATUS_CLOSED
+			&& stristr($this->internal['currentRow']['status'], CONST_STATUS_CLOSED)
 			&& t3lib_div::inList($options, 'closed')) {
 			$sendNotification = true;
 		}
@@ -1579,7 +1580,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// find out what type of change
 		if (stristr($changedFields, CONST_NEWTICKET)) {
 			$type = 'new';
-		} else if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
+		} else if (stristr($this->internal['currentRow']['status'], CONST_STATUS_CLOSED)) {
 			$type = 'closed';
 		} else {
 			$type = 'changed';
@@ -1823,27 +1824,38 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function renderCommentForm($ticket_uid) {/*{{{*/
 		$content = $this->cObj->getSubpart($this->templateCode,'###TICKET_COMMENT###');
 
-		// get the prefillValue
-		// For example: If we wanted to update a ticket, but errors occurred.
-		// Then the comment has not been written, but we don't want to loose
-		// it, so we prefill the form with it.
-		if (($this->piVars['newticket'] || $this->piVars['updateUid']) && $this->piVars['content']) {
-			$prefillValue = $this->sanitizeData($this->piVars['content']);
+			// render the form only if allowed for the current user
+		if ($this->fieldIsWritableForCurrentUser(array('name' => 'comment'))) {
+
+				// get the prefillValue
+				// For example: If we wanted to update a ticket, but errors occurred.
+				// Then the comment has not been written, but we don't want to loose
+				// it, so we prefill the form with it.
+			if (($this->piVars['newticket'] || $this->piVars['updateUid']) && $this->piVars['content']) {
+				$prefillValue = $this->sanitizeData($this->piVars['content']);
+			} else {
+				$prefillValue = '';
+			}
+
+				// the form fields
+			$localMarkerArray['FIELD_CONTENT'] = '<textarea name="' . $this->prefixId . '[content]" cols="' . $this->conf['comment_cols'] . '" rows="' . $this->conf['comment_rows'] . '">' . $prefillValue . '</textarea>';
+			$localMarkerArray['FIELD_SUBMIT'] = '<input type="submit" name="' . $this->prefixId . '[comment_submit]' . '" value="'.$this->pi_getLL('LABEL_COMMENT_SUBMIT').'">';
+
 		} else {
-			$prefillValue = '';
+
+				// empty the form markers
+			$localMarkerArray['FIELD_CONTENT'] = '';
+			$localMarkerArray['FIELD_SUBMIT'] = '';
+
 		}
 
-		// the form fields
-		$localMarkerArray['FIELD_CONTENT'] =  '<textarea name="' . $this->prefixId . '[content]" cols="' . $this->conf['comment_cols'] . '" rows="' . $this->conf['comment_rows'] . '">' . $prefillValue . '</textarea>';
-		$localMarkerArray['FIELD_SUBMIT'] = '<input type="submit" name="' . $this->prefixId . '[comment_submit]' . '" value="'.$this->pi_getLL('LABEL_COMMENT_SUBMIT').'">';
-
-		// show the existing comments
+			// show the existing comments
 		$localMarkerArray['COMMENTLIST'] = $this->renderCommentList($this->internal['currentRow']['uid']);
 
-		// get some more markers
+			// get some more markers
 		$localMarkerArray = $this->getAdditionalMarkers($localMarkerArray);
 
-		// substitute the markers
+			// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content, $localMarkerArray, '###|###',true);
 
 		return $content;
@@ -2178,8 +2190,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// get the field markers (render the form fields)
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
 
-				// check if this field may be edited by every user or only by
-				// members of a certain usergroup.
+				// decide wether the field is editable and output either the
+				// form field or just the content of that field.
 			if ($this->fieldIsWritableForCurrentUser($fieldConf)) {
 				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
 			} else {
@@ -2265,8 +2277,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 	/**
  	* checks, if the given field of the current ticket ist writeable for
- 	* the current user. That means that the field has either no write
- 	* restriction or the user has the correct usergroup.
+ 	* the current user.
+ 	*
+	* fields may be edited if
+	*- if no restriction is set via typoscript
+	* - a restriction is set but the user has the right usergroup
+	* - the ticket is not locked (does not apply to field "status") or the
+	* field is in the list of fields which may be edited in locked tickets also
  	*
  	* @param   array $fieldConf Configuration Array (defined in typoscript) of the field to check.
  	* @return  boolean
@@ -2279,6 +2296,21 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		} else {
 			$returnValue = false;
 		}
+
+			// Is the current ticket locked, allow only the fields defined
+			// in typoscript to be edited. The fields differ for internal and
+			// normal users.
+		if ($this->internal['currentRow']['status'] == CONST_STATUS_CLOSED_LOCKED) {
+			if ($this->isCurrentUserInternalUser()) {
+				$allowedFields = $this->conf['allowFieldsInLockedTicketsForInternalUsers'];
+			} else {
+				$allowedFields = $this->conf['allowFieldsInLockedTickets'];
+			}
+			if (!t3lib_div::inList($allowedFields, $fieldConf['name'])) {
+				$returnValue = false;
+			}
+		}
+
 		return $returnValue;
 	}
 
@@ -3372,11 +3404,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							$addWhere .= ' AND (status="open" OR status="working")';
 						break;
 						case 'all_not_closed':
-							/* fetch only tickets which are not closed
+							/* Fetch only tickets which are not closed.
 							* closed tickets are all ticket types that have the
-							* CONST_STATUS_CLOSED (normally "closed") in their key
-							* So you can invent new "closed"-types like
-							* "closed-without-solution" or "closed-another-reason" ...
+							* CONST_STATUS_CLOSED (normally "closed") in their key.
+							* That rule also applies to locked ticket which have the
+							* key "closed_locked".
+							* You can invent new "closed"-types like
+							* "closed_without_solution" or "closed_another_reason" ...
 							*/
 							$addWhere .= ' AND status NOT LIKE "' . CONST_STATUS_CLOSED . '%"';
 						break;
@@ -3816,7 +3850,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 				// don't show the close icon, if the ticket is already closed
 				if ($do == 'close'
-					&& $this->internal['currentRow']['status'] == CONST_STATUS_CLOSED) {
+					&& stristr($this->internal['currentRow']['status'], CONST_STATUS_CLOSED) ) {
 					return '';
 				}
 
@@ -3825,7 +3859,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				if (($do == 'close'
 					&& !($this->internal['currentRow']['owner_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']
 					|| $this->internal['currentRow']['responsible_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) )
-					|| $this->internal['currentRow']['responsible_feuser'] == CONST_STATUS_CLOSED) {
+					|| stristr($this->internal['currentRow']['responsible_feuser'], CONST_STATUS_CLOSED)) {
 					return '';
 				}
 
