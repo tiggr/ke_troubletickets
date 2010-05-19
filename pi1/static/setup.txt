@@ -210,11 +210,14 @@ plugin.tx_ketroubletickets_pi1 {
 
 	# In locked tickets, only these fields may be edited by normal users.
 	# Allow the notifications_*-fields by default because if you don't allow them
-	# to be edited, they will show up in locked tickets even if they are normaly
+	# to be edited, they will show up in locked tickets even if they are normally
 	# not visible in the frontend (which is default setting).
 	# Otherwise, if you let your frontend users decide when to get notifications (in the
 	# flexform configuration), you may disallow these fields in locked tickets by
 	# deleting them from this list.
+	# The same applies for the optional field "category". If you only have one
+	# category, does not appear in the frontend but set as a hidden field.
+	# In a locked ticket, the category would then appear.
 	allowFieldsInLockedTickets = notifications_owner,notifications_responsible,notifications_observer
 
 	# Internal users may edit the following fields in locked tickets.

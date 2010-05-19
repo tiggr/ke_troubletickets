@@ -240,6 +240,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
+			// check, if this is a follow-up ticket
+			// if yes, get the data and save it for later use
+		$followUpTicketUid = intval($this->piVars['followup']);
+		if ($this->isValidTicketUid($followUpTicketUid) && $this->checkPermissionForTicket($followUpTicketUid)) {
+			$this->parentTicket = $this->pi_getRecord($this->tablename, $followUpTicketUid);
+		} else {
+			$this->parentTicket = array();
+		}
+
 			// a new ticket has been submitted / a ticket should be updated
 		if ($this->piVars['newticket'] || $this->piVars['updateUid']) {
 			$this->handleSubmittedForm();
@@ -2264,6 +2273,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$this->markerArray['OPTIONAL_TICKET_COMMENT'] = '';
 		}
 
+			// add a link to open a follow-up ticket (makes only sense for
+			// existing tickets)
+		if ( ($this->piVars['showUid'] || $this->piVars['updateUid'])) {
+			$linkConf = array(
+						'parameter' => $GLOBALS['TSFE']->id,
+						'additionalParams' => $this->getAdditionalParamsFromKeepPiVars()
+							. '&' . $this->prefixId . '[do]=new'
+							. '&' . $this->prefixId . '[followup]=' . $this->internal['currentRow']['uid']
+						);
+			$this->markerArray['FOLLOWUPLINK'] = '<span class="followuplink">' . $this->cObj->typoLink($this->pi_getLL('link_followup', 'Follow-up ticket.'), $linkConf) . '</span>';
+		} else {
+			$this->markerArray['FOLLOWUPLINK'] = '';
+		}
+
 			// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
 
@@ -2468,7 +2491,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$markerArray['UID'] = '';
 		}
 
-
 		// "CLEAN" UID WITHOUT FORMATTING -- AK 17:18 25.05.2009
 		if (is_array($this->internal['currentRow']) && !empty($this->internal['currentRow']['uid'])) {
 			$markerArray['CLEANUID'] = $this->internal['currentRow']['uid'];
@@ -2598,7 +2620,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$content = '';
 
 			// Get the prefillValue:
-			// 1. New ticket, has not been submitted yet: check if there are
+			// 1. New ticket, has not been submitted yet:
+			// - if it is a follow-up ticket use some of the values from the related
+			// ticket as prefill values
+			// - if it is not a follow-up ticket, check if there are
 			// prefill options set in flexform.
 			// 2. If the form just has been submitted (new ticket),
 			// prefill the form fields with the already parsed submitted values
@@ -2614,8 +2639,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// So for now we use $this->internal['currentRow'] which resets the
 			// fields. Although comments will be kept when erros occur!
 		if ($this->piVars['do'] == 'new' && !$this->piVars['newticket'] && !$this->piVars['showUid'] && !$this->piVars['updateUid']) {
-			if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
-				$prefillValue = $this->ffdata['responsible_singleuser_preselected'];
+			if (count($this->parentTicket)) {
+				$prefillValue = $this->getPrefillValueFromParentTicket($fieldConf);
+			} else {
+				if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
+					$prefillValue = $this->ffdata['responsible_singleuser_preselected'];
+				}
 			}
 		} else if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
 			$prefillValue = $this->insertFields[$fieldConf['name']];
@@ -2768,7 +2797,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 					if ($this->piVars['newticket']) {
 						$prefillValue = $this->piVars['related_tickets'];
-					} else {
+					} else if (!$this->piVars['followup']) {
 						$prefillValue = '';
 					}
 					$content .= $this->pi_getLL('LABEL_RELATED_TICKETS_ADD');
@@ -3133,6 +3162,37 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 		return $content;
 	}/*}}}*/
+
+	/**
+ 	* Returns a prefill value for the given field.
+ 	* Uses the parent ticket as source, but modifies the data where it makes
+ 	* sense.
+ 	*
+ 	* @param   array $fieldConf Field configuration (set in typoscript).
+ 	* @return  mixed
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	* @since   Wed May 19 2010 16:51:30 GMT+0200
+ 	*/
+	public function getPrefillValueFromParentTicket($fieldConf) {
+		$value = '';
+		switch ($fieldConf['name']) {
+			case 'title':
+				$value = $this->pi_getLL('followuptitleprefix') . $this->parentTicket['title'];
+			break;
+			case 'category':
+			case 'billing':
+			case 'priority':
+			case 'owner_feuser':
+			case 'responsible_feuser':
+			case 'observers_feuser':
+				$value = $this->parentTicket[$fieldConf['name']];
+			break;
+			case 'related_tickets':
+				$value = $this->parentTicket['uid'];
+			break;
+		}
+		return $value;
+	}
 
 	/**
 	 * renderNameFromFeUserUid

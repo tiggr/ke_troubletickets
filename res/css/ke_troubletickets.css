@@ -68,6 +68,16 @@
 /*** SINGLEVIEW */
 /*------------------------------------------------------------------------------------------------------*/
 
+.tx-ketroubletickets-pi1 .followuplink a {
+	display:block;
+	width:200px;
+	border:1px solid black;
+	background: #cccccc;
+	float:right;
+	padding:2px;
+	text-align:center;
+}
+
 .tx-ketroubletickets-pi1 .comment_author {
 	font-size:10px;
 	font-style:italic;
