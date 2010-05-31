@@ -269,18 +269,17 @@
 
 /* TEASERVIEW */
 .kett_teaserview_own {
+  background:#989898;
   border-collapse:separate;
   width: 100%;
   margin-bottom: 20px;
 }
-
-.kett_teaserview_own td { padding: 3px; }
-
+.kett_teaserview_own td { padding: 4px; }
 .kett_teaserview_own .kett_tw_head {
- background:#D6D6D6;
+ background:url("../images/css_gradient1.gif") repeat-x scroll left top #DADADA;
+ font-size:11px;
  font-weight: bold;
 }
-
 .kett_teaserview_own .kett_tw_body {
   background: #F2F2F2;
 }
