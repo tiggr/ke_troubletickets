@@ -68,19 +68,10 @@
 /*** SINGLEVIEW */
 /*------------------------------------------------------------------------------------------------------*/
 
-.tx-ketroubletickets-pi1 .followuplink a {
-	display:block;
-	width:200px;
-	border:1px solid black;
-	background: #cccccc;
-	float:right;
-	padding:2px;
-	text-align:center;
-}
 
 .tx-ketroubletickets-pi1 .comment_author {
-	font-size:10px;
-	font-style:italic;
+  font-size:10px;
+  font-style:italic;
 }
 
 .kett_singleview_toolbar {
@@ -96,6 +87,7 @@
 .kett_svt_headline {
   font-size: 12px;
   font-weight: bold;
+  float:left;
   padding: 10px 10px 6px 10px;
   }
 
@@ -114,6 +106,9 @@
 .kett_svt_navigation a,
 .kett_svt_navigation img {
   float: left;
+  }
+.kett_svt_navigation a{
+  margin:0 2px;
   }
 .kett_svt_navigation img {
   margin: 0 4px 0 0 ;
@@ -157,6 +152,17 @@
 .kett_sv_head_info label {
   font-weight: bold;
   }
+
+.tx-ketroubletickets-pi1 .followuplink a {
+  display:block;
+  float:right;
+  font-size:12px;
+  margin:6px 11px 0 0;
+  padding:2px 2px 2px 20px;
+  text-align:right;
+  background:transparent url("../images/icon_new_ticket.png") left 1px no-repeat;
+}
+
 
 .kett_sv_boxes { overflow:hidden; }
 .kett_sv_single_box {
