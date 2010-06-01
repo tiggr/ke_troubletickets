@@ -13,30 +13,68 @@ if (TYPO3_MODE == 'BE')	{
 
 t3lib_extMgm::addToInsertRecords('tx_ketroubletickets_tickets');
 
-// Show FlexForm field in plugin configuration
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1']='pi_flexform';
+	// Show FlexForm field in plugin configuration
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_pi1'] = 'pi_flexform';
 
-// Configure FlexForm field
-t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi1','FILE:EXT:'.$_EXTKEY.'/flexform_ds.xml');
+	// Configure FlexForm field
+t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:' . $_EXTKEY . '/flexform_ds.xml');
+
+	// add flexform field to support ke_ukb
+if (t3lib_extMgm::isLoaded('ke_ukb')) {
+	$flexformConfig = file_get_contents(t3lib_extMgm::extPath($_EXTKEY) . '/flexform_ds.xml');
+	$additionalFlexformFields = '
+		<sheetAdditional>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.sheet_title_additional</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<drwikisingleview>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.drwikisingleview</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</drwikisingleview>
+				</el>
+			</ROOT>
+		</sheetAdditional>
+	';
+
+	$TCA['tt_content']['columns']['pi_flexform']['config']['ds'][$_EXTKEY . '_pi1' . ',list'] =
+		str_replace(
+			'</sheets>',
+			$additionalFlexformFields . "\n" . '</sheets>',
+			$flexformConfig
+		);
+}
 
 $TCA["tx_ketroubletickets_tickets"] = array (
 	"ctrl" => array (
-		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets',		
-		'label'     => 'title',	
+		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets',
+		'label'     => 'title',
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'versioningWS' => TRUE, 
+		'versioningWS' => TRUE,
 		'origUid' => 't3_origuid',
-		'languageField'            => 'sys_language_uid',	
-		'transOrigPointerField'    => 'l18n_parent',	
-		'transOrigDiffSourceField' => 'l18n_diffsource',	
-		'sortby' => 'sorting',	
-		'delete' => 'deleted',	
-		'enablecolumns' => array (		
-			'disabled' => 'hidden',	
-			'starttime' => 'starttime',	
-			'endtime' => 'endtime',	
+		'languageField'            => 'sys_language_uid',
+		'transOrigPointerField'    => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'sortby' => 'sorting',
+		'delete' => 'deleted',
+		'enablecolumns' => array (
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
 			'fe_group' => 'fe_group',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
@@ -52,22 +90,22 @@ t3lib_extMgm::addToInsertRecords('tx_ketroubletickets_comments');
 
 $TCA["tx_ketroubletickets_comments"] = array (
 	"ctrl" => array (
-		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_comments',		
-		'label'     => 'content',	
+		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_comments',
+		'label'     => 'content',
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'versioningWS' => TRUE, 
+		'versioningWS' => TRUE,
 		'origUid' => 't3_origuid',
-		'languageField'            => 'sys_language_uid',	
-		'transOrigPointerField'    => 'l18n_parent',	
-		'transOrigDiffSourceField' => 'l18n_diffsource',	
-		'sortby' => 'sorting',	
-		'delete' => 'deleted',	
-		'enablecolumns' => array (		
-			'disabled' => 'hidden',	
-			'starttime' => 'starttime',	
-			'endtime' => 'endtime',	
+		'languageField'            => 'sys_language_uid',
+		'transOrigPointerField'    => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'sortby' => 'sorting',
+		'delete' => 'deleted',
+		'enablecolumns' => array (
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
 			'fe_group' => 'fe_group',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
@@ -83,22 +121,22 @@ t3lib_extMgm::addToInsertRecords('tx_ketroubletickets_categories');
 
 $TCA["tx_ketroubletickets_categories"] = array (
 	"ctrl" => array (
-		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_categories',		
-		'label'     => 'title',	
+		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_categories',
+		'label'     => 'title',
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'versioningWS' => TRUE, 
+		'versioningWS' => TRUE,
 		'origUid' => 't3_origuid',
-		'languageField'            => 'sys_language_uid',	
-		'transOrigPointerField'    => 'l18n_parent',	
-		'transOrigDiffSourceField' => 'l18n_diffsource',	
-		'sortby' => 'sorting',	
-		'delete' => 'deleted',	
-		'enablecolumns' => array (		
-			'disabled' => 'hidden',	
-			'starttime' => 'starttime',	
-			'endtime' => 'endtime',	
+		'languageField'            => 'sys_language_uid',
+		'transOrigPointerField'    => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'sortby' => 'sorting',
+		'delete' => 'deleted',
+		'enablecolumns' => array (
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
 			'fe_group' => 'fe_group',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
@@ -111,12 +149,12 @@ $TCA["tx_ketroubletickets_categories"] = array (
 
 $TCA["tx_ketroubletickets_history"] = array (
 	"ctrl" => array (
-		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history',		
-		'label'     => 'uid',	
+		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_history',
+		'label'     => 'uid',
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'default_sortby' => "ORDER BY crdate",	
+		'default_sortby' => "ORDER BY crdate",
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_ketroubletickets_history.gif',
 	),

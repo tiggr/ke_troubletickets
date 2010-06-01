@@ -43,7 +43,7 @@
 					</view>
 					<page_of_main_plugin>
 						<TCEforms>
-							<label>Edit-/Singleview-Seite</label>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.singleviewpage</label>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>
@@ -351,6 +351,7 @@
 							</config>
 						</TCEforms>
 					</internal_users>
+
 
 				</el>
 			</ROOT>
