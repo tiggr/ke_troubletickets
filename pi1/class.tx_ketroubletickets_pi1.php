@@ -2780,8 +2780,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						// make instance
 						require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
 						$ukb = t3lib_div::makeInstance('ke_ukb');
+						// pid list
+						$storagePids = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
 						// get content
-						$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid']);
+						$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid'], $storagePids);
 						// fill markers
 						$this->markerArray['UKB_FORM'] =$ukb->renderForm();
 					}
