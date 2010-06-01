@@ -639,6 +639,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			if (!$this->piVars['updateUid']) { // new ticket
 				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $this->insertFields) ? true : false;
 				$new_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
+
+					// hook: after inserting a new ticket
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterNewTicketInsert'])) {
+					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterNewTicketInsert'] as $_classRef) {
+						$_procObj = & t3lib_div::getUserObj($_classRef);
+						$_procObj->afterNewTicketInsert($new_uid, $this);
+					}
+				}
+
 				$this->addHistoryEntry( array(
 					'ticket_uid' => $new_uid,
 					'databasefield' => '',
