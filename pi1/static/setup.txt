@@ -402,6 +402,7 @@ plugin.tx_ketroubletickets_pi1 {
 			optional = 1
 			name = responsible_feuser
 			type = feuserSelect
+			required = 1
 			orderBy = username
 			lastNameFirst = 1
 			flexformFieldForPreselectedUser = responsible_singleuser

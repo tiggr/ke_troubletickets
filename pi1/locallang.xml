@@ -57,6 +57,8 @@
 			<label index="error_no_tickets_found">No tickets have been found.</label>
 			<label index="error_no_template">Error: No static template has been found. Did you include the static template?</label>
 			<label index="error_no_category">Error: At least one category has to be created.</label>
+			<label index="error_no_values">Error: No values found for </label>
+			<label index="error_no_responsible_user">Error: No responsible user found.</label>
 			<label index="error_no_upload_directory">Error: The directory does not exist. Please contact your administrator.</label>
 			<label index="error_file_too_big">Error: The file is too big.</label>
 			<label index="error_filetype_not_allowed">Error: This filetype is not allowed.</label>
@@ -278,6 +280,8 @@
 			<label index="error_no_tickets_found">Es wurden keine Aufgaben gefunden.</label>
 			<label index="error_no_template">Fehler: Es wurde kein Template gefunden. Wurde das statische Template eingebunden?</label>
 			<label index="error_no_category">Fehler: Es muss mindestens einen Kategorie angelegt sein.</label>
+			<label index="error_no_responsible_user">Fehler: Es wurde kein verantwortlicher Benutzer gefunden.</label>
+			<label index="error_no_values">Fehler: Keine Werte gefunden für </label>
 			<label index="error_no_upload_directory">Fehler: Das Verzeichnis existiert nicht. Bitte kontaktieren Sie den Administrator.</label>
 			<label index="error_file_too_big">Fehler: Die Datei ist zu groß.</label>
 			<label index="error_filetype_not_allowed">Fehler: Dieser Dateityp ist nicht erlaubt.</label>

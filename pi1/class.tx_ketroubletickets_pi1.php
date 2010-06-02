@@ -549,12 +549,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// - the submit-field
 				// - internal fields if the current user is not an internal user
 				// - fields that are configured as "doNotSaveInDB = 1"
-				// - fields the current user has no write access to
 			if (
 				$fieldConf['type'] != 'submit'
 				&& (!$fieldConf['internal'] || $this->isCurrentUserInternalUser())
 				&& !$fieldConf['doNotSaveInDB']
-				&& $this->fieldIsWritableForCurrentUser($fieldConf)
 			) {
 
 					// required-check
@@ -2175,6 +2173,19 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			if (!$num_rows) {
 				return '<p class="error">' . $this->pi_getLL('error_no_category') . '</p>';
 			}
+
+				// if we create a new ticket we have to have responsible users to
+				// select from or a prefilled responsible user
+			foreach ($this->conf['formFieldList.'] as $fieldConf) {
+				if ($fieldConf['name'] == 'responsible_feuser') {
+					$prefillValue = $this->getPrefillValue($fieldConf);
+					if (!$this->fieldIsWritableForCurrentUser($fieldConf) && empty($prefillValue)) {
+						return '<p class="error">' . $this->pi_getLL('error_no_responsible_user') . '</p>';
+					}
+				}
+			}
+
+				// set marker for uid
 			$this->markerArray['UID'] = $this->pi_getLL('LABEL_NOT_AVAILABLE','n/a');
 		} else {
 			$this->hiddenFormFields['updateUid'] = '<input type="hidden" name="' . $this->prefixId . '[updateUid]" value="' . $this->internal['currentRow']['uid'] . '">';
@@ -2212,8 +2223,21 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// decide wether the field is editable and output either the
 				// form field or just the content of that field.
 			if ($this->fieldIsWritableForCurrentUser($fieldConf)) {
+					// current user has write access
 				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
 			} else {
+					// current user has no write access
+					// special case: A new ticket is opened, the current user has
+					// NO write access to the current field, but a value has to
+					// be preselected. In this case, wie add a hidden field with
+					// the desired value to the form.
+				$prefillValue = $this->getPrefillValue($fieldConf);
+				if (!empty($prefillValue)) {
+					$this->hiddenFormFields[$fieldConf['name']] = '<input type="hidden" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="'. $prefillValue .'">';
+					$this->internal['currentRow'][$fieldConf['name']] = $prefillValue;
+				}
+
+					// render the field
 				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name'], 'default', $fieldConf);
 			}
 
@@ -2613,6 +2637,33 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		return $additionalParams;
 	}/*}}}*/
 
+
+	/**
+ 	* getPrefillValue
+ 	*
+ 	* Finds the prefill-value for
+ 	* 1. follow-up ticketes
+ 	* 2. fields which have predefined values in the plugin flexform
+ 	*
+ 	* @param   array $fieldConf Field configuration as set in typoscript
+ 	* @return  string
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	* @since   Wed Jun 02 2010 16:28:09 GMT+0200
+ 	*/
+	public function getPrefillValue($fieldConf) {
+		$prefillValue = '';
+
+		if (count($this->parentTicket)) {
+			$prefillValue = $this->getPrefillValueFromParentTicket($fieldConf);
+		} else {
+			if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
+				$prefillValue = $this->ffdata['responsible_singleuser_preselected'];
+			}
+		}
+
+		return $prefillValue;
+	}
+
 	/**
 	 * renderFormField
 	 *
@@ -2649,13 +2700,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// So for now we use $this->internal['currentRow'] which resets the
 			// fields. Although comments will be kept when erros occur!
 		if ($this->piVars['do'] == 'new' && !$this->piVars['newticket'] && !$this->piVars['showUid'] && !$this->piVars['updateUid']) {
-			if (count($this->parentTicket)) {
-				$prefillValue = $this->getPrefillValueFromParentTicket($fieldConf);
-			} else {
-				if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
-					$prefillValue = $this->ffdata['responsible_singleuser_preselected'];
-				}
-			}
+			$prefillValue = $this->getPrefillValue($fieldConf);
 		} else if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
 			$prefillValue = $this->insertFields[$fieldConf['name']];
 		} else if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
@@ -2991,7 +3036,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'feuserSelect':
-				// if there is a single responsible user (or a user list) given in the flexform, preselect that using a hidden form field
+					// if there is a single responsible user (or a user list) given in the flexform,
+					// preselect that using a hidden form field
 				if (!empty($this->ffdata[$fieldConf['flexformFieldForPreselectedUser']]) && !$filterMode) {
 					$this->hiddenFormFields[$fieldConf['name']] = '<input type="hidden" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="'. $this->ffdata[$fieldConf['flexformFieldForPreselectedUser']] .'">';
 				} else {
@@ -3002,7 +3048,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$groupBy = '';
 						$limit = '';
 
-						// special query for "responsible"-filter
+							// special query for "responsible"-filter
 						if ($filterMode && $fieldConf['name'] == 'responsible_feuser') {
 							$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 									'*',
@@ -3030,7 +3076,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							}
 						} else {
 							if ($this->ffdata[$fieldConf['flexformFieldForUsergroupToChoseFrom']]) {
-								// get all feusers from the given group(s)
+
+									// get all feusers from the given group(s)
 								foreach (explode(',',$this->ffdata[$fieldConf['flexformFieldForUsergroupToChoseFrom']]) as $group) {
 									if (!empty($where_clause)) {
 										$where_clause .= ' OR ';
@@ -3041,7 +3088,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							}
 						}
 
-						// add the current fe-user if configured so
+							// add the current fe-user if configured so
 						if ($fieldConf['prefillWithCurrentUserIfEmpty'] && $GLOBALS['TSFE']->fe_user->user['uid']) {
 							if (!empty($where_clause)) {
 								$where_clause .= ' OR ';
@@ -3049,27 +3096,28 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							$where_clause .= 'fe_users.uid=' . $GLOBALS['TSFE']->fe_user->user['uid'];
 						}
 
-						// if there is no $where_clause, we don't render the filter
+							// if there is no $where_clause, we don't render the filter
 						if (strlen($where_clause)) {
-							// add brackets (maybye there is more than one group or a group and the current user)
+
+								// add brackets (maybye there is more than one group or a group and the current user)
 							$where_clause = '(' . $where_clause . ')';
 
-							// add enableFields
+								// add enableFields
 							$where_clause .= $lcObj->enableFields('fe_users');
 
 							$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', $where_clause, $groupBy, $orderBy, $limit);
 							$num_rows = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
-							// if there is no prefill value, we choose the current user to be pre-selected
+								// if there is no prefill value, we choose the current user to be pre-selected
 							if ($fieldConf['prefillWithCurrentUserIfEmpty'] && !$prefillValue && $GLOBALS['TSFE']->fe_user->user['uid']) {
 								$prefillValue = $GLOBALS['TSFE']->fe_user->user['uid'];
 							}
 
-							// render the dropdown
+								// render the dropdown
 							if ($num_rows > 0) {
 								$content .= '<select ' . $addJS . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 
-								// render empty option
+									// render empty option
 								if (!$prefillValue) {
 									$selected = ' selected';
 								} else {
@@ -3094,7 +3142,19 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 									$content .= '</option>';
 								}
 								$content .= '</select>';
+							} else {
+									// render an error message if this is a required
+									// field but we don't have any values to select
+									// from
+								if ($fieldConf['required']) {
+									$content .= '<p class="error">' . $this->pi_getLL('error_no_values') . $this->pi_getLL('LABEL_' . strtoupper($fieldConf['name'])) . '</p>';
+								}
 							}
+						}
+					} else {
+							// render an error message if no group is selected
+						if ($fieldConf['required']) {
+							$content .= '<p class="error">' . $this->pi_getLL('error_no_values') . $this->pi_getLL('LABEL_' . strtoupper($fieldConf['name'])) . '</p>';
 						}
 					}
 				}
