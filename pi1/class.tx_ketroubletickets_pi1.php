@@ -2792,8 +2792,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$ukb = t3lib_div::makeInstance('ke_ukb');
 						// pid list
 						$storagePids = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
+						// set wiki data
+						$wikiSingleView = $this->ffdata['drwikisingleview'];
+						$wikiStorage = $this->ffdata['drwikistorage'];
 						// get content
-						$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid'], $storagePids, $this->ffdata['drwikisingleview']);
+						$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid'], $storagePids, $wikiSingleView, $wikiStorage);
 						// fill markers
 						$this->markerArray['UKB_FORM'] =$ukb->renderForm();
 					}
