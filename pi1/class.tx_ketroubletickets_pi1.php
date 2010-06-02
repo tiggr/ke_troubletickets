@@ -2799,6 +2799,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					else {
 						$this->markerArray['UKB_FORM'] = '';
 						$content = $this->pi_getLL('ukb_after_saving');
+						$content .= '<input type="hidden" name="'.$this->prefixId.'[ukb_followup]" value="'.$this->piVars['followup'].'" >';
 					}
 					$this->markerArray['LABEL_RELATED_TICKETS'] = $this->pi_getLL('LABEL_RELATED_TICKETS_UKB');
 
