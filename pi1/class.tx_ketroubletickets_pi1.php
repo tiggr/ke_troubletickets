@@ -46,7 +46,7 @@ define(CONST_RENDER_TYPE_EMAIL, 'email');
 define(CONST_RENDER_TYPE_CSV, 'csv');
 define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
 define(CONST_SHOW_ALL_ALWAYS, 'all_always');
-define(DEFAULT_SORT, 'crdate|1');
+define(DEFAULT_SORT, 'crdate,1');
 define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
 define(DONT_RENDER_EMPTY_DRODOWN_ELEMENT, false);
 define(CONST_KEEP_TAGS_YES, 'keeptags');
@@ -314,8 +314,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// KENNZIFFER CB 17.05.2010
-			// sorting desc flag is now separated by a pipe instead of colon
-		$this->piVars['sort'] = str_replace(':', '|', $this->piVars['sort']);
+			// sorting desc flag is now separated by a comma instead of colon
+		$this->piVars['sort'] = str_replace(':', ',', $this->piVars['sort']);
+		$this->piVars['sort'] = str_replace('|', ',', $this->piVars['sort']);
 
 			// store chosen sorting in session
 		$sessionVars[$GLOBALS['TSFE']->id]['sort'] = $this->piVars['sort'];
@@ -3443,7 +3444,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->internal['currentTable'] = $this->tablename;
 
 			// set orderBy and descFlag
-		list($this->internal['orderBy'], $this->internal['descFlag']) = explode('|', $this->piVars['sort']);
+		list($this->internal['orderBy'], $this->internal['descFlag']) = explode(',', $this->piVars['sort']);
 
 			// Number of results to show in a listing.
 		$this->internal['results_at_a_time']=t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,10);
@@ -3525,7 +3526,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// Check if submitted sort is allowed, if not, set it to default
 		if ($this->piVars['sort'] && $this->piVars['sort'] != DEFAULT_SORT && !t3lib_div::inList(t3lib_div::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
-			list($this->internal['orderBy'], $this->internal['descFlag']) = explode('|', DEFAULT_SORT);
+			list($this->internal['orderBy'], $this->internal['descFlag']) = explode(',', DEFAULT_SORT);
 		}
 
 			// compile orderBy-parameter
@@ -4650,7 +4651,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	/**
 	 * Description:
 	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
-	 *
 	 */
 	 function getEntriesPerPageSelection($lConf) {
 		$formAction = $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id));
