@@ -44,6 +44,20 @@ if (t3lib_extMgm::isLoaded('ke_ukb')) {
 							</config>
 						</TCEforms>
 					</drwikisingleview>
+					<drwikistorage>
+						<TCEforms>
+							<label>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.drwikistorage</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</drwikistorage>
 				</el>
 			</ROOT>
 		</sheetAdditional>

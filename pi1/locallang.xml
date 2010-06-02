@@ -206,6 +206,7 @@
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_delegated">Compact list of tickets delegated</label>
 			<label index="tt_content.pi_ketroubletickets.singleviewpage">Singleview page</label>
 			<label index="tt_content.pi_ketroubletickets.drwikisingleview">ke_ukb: Wiki singleview page</label>
+			<label index="tt_content.pi_ketroubletickets.drwikistorage">ke_ukb: Wiki storage page</label>
 
 			<label index="tt_content.pi_ketroubletickets.show_tickets">Show tickets</label>
 			<label index="tt_content.pi_ketroubletickets.show_tickets.only_own">only own/responsible/observed</label>
@@ -427,6 +428,7 @@
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_delegated">Kompakte Liste delegierter Aufgaben</label>
 			<label index="tt_content.pi_ketroubletickets.singleviewpage">Einzelansichtsseite</label>
 			<label index="tt_content.pi_ketroubletickets.drwikisingleview">ke_ukb: Wiki Einzelansichtsseite</label>
+			<label index="tt_content.pi_ketroubletickets.drwikistorage">ke_ukb: Wiki Ausgangspunkt (Seite mit Wiki-Einträgen)</label>
 
 			<label index="tt_content.pi_ketroubletickets.show_tickets">Zeige Aufgaben</label>
 			<label index="tt_content.pi_ketroubletickets.show_tickets.only_own">nur eigene/zu verantwortende/beobachtete</label>
