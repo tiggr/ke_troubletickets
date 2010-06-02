@@ -197,7 +197,7 @@
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">General settings</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">User settings</label>
-			<label index="tt_content.pi_ketroubletickets.sheet_title_additional">Extra</label>
+			<label index="tt_content.pi_ketroubletickets.sheet_title_ukb">keworks relations</label>
 
 			<label index="tt_content.pi_ketroubletickets.viewtype">Display</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normal list</label>
@@ -419,7 +419,7 @@
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">Allgemeine Einstellungen</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">Benutzereinstellungen</label>
-			<label index="tt_content.pi_ketroubletickets.sheet_title_additional">Extra</label>
+			<label index="tt_content.pi_ketroubletickets.sheet_title_ukb">keworks Veknüpfungen</label>
 
 			<label index="tt_content.pi_ketroubletickets.viewtype">Darstellung</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normale Liste</label>

@@ -26,7 +26,7 @@ if (t3lib_extMgm::isLoaded('ke_ukb')) {
 		<sheetAdditional>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.sheet_title_additional</sheetTitle>
+					<sheetTitle>LLL:EXT:ke_troubletickets/pi1/locallang.xml:tt_content.pi_ketroubletickets.sheet_title_ukb</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
