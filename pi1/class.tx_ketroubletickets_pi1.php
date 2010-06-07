@@ -3379,81 +3379,97 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$content = '';
 
 		if (is_array($this->internal['currentRow']) && count($this->internal['currentRow'])) {
-			// relations from this ticket to other tickets
-			if ($this->internal['currentRow']['related_tickets']) {
-				$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $this->tablename, 'uid IN (' . $this->internal['currentRow']['related_tickets'] . ')' . $lcObj->enableFields($this->tablename));
-			}
 
-			// relations from other tickets to this ticket
-			$rows2 = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $this->tablename,
-				$GLOBALS['TYPO3_DB']->listQuery('related_tickets', $this->internal['currentRow']['uid'], $this->tablename)
-				. $lcObj->enableFields($this->tablename)
-			);
 
-			// merge the arrays
-			if (is_array($rows)) {
-				$rows = array_merge($rows, $rows2);
+				// render ke_ukb relations instead of related tickets
+				// if the extension ke_ukb is installed
+			if (t3lib_extMgm::isLoaded('ke_ukb')) {
+
+					// make instance, set pids and render the content
+				require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
+				$ukb = t3lib_div::makeInstance('ke_ukb');
+				$storagePids = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
+				$wikiSingleView = $this->ffdata['drwikisingleview'];
+				$wikiStorage = $this->ffdata['drwikistorage'];
+				$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->internal['currentRow']['uid'], $storagePids, $wikiSingleView, $wikiStorage);
+
 			} else {
-				$rows = $rows2;
-			}
+				// relations from this ticket to other tickets
+				if ($this->internal['currentRow']['related_tickets']) {
+					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $this->tablename, 'uid IN (' . $this->internal['currentRow']['related_tickets'] . ')' . $lcObj->enableFields($this->tablename));
+				}
 
-			// render related tickets
-			$ticketListTemp = array();
-			$content = '';
-			if (is_array($rows) && count($rows)) {
-				foreach ($rows as $row) {
-					if ($this->checkPermissionForTicket($row['uid']) && !in_array($row['uid'], $ticketListTemp)) {
-						$ticketListTemp[] = $row['uid'];
-						if ($renderLinks) {
-							if ($content) $content .= $separator;
-							// render the "delete"-link
-							if ($renderDeleteButton) {
-								// get the delete image configuration from typoscript
-								$imageConf = $this->conf['icons.']['deleteFile.'];
-								$imageConf['file'] = $this->getFilePath($imageConf['file']);
+				// relations from other tickets to this ticket
+				$rows2 = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $this->tablename,
+					$GLOBALS['TYPO3_DB']->listQuery('related_tickets', $this->internal['currentRow']['uid'], $this->tablename)
+					. $lcObj->enableFields($this->tablename)
+				);
 
-								// generate the delete link
-								$additionalParams = '&' . $this->prefixId . '[showUid]=' . $this->internal['currentRow']['uid'];
-								$additionalParams .= '&' . $this->prefixId . '[deleteRelatedTicket]=' . $row['uid'];
-								$additionalParams .= $this->getAdditionalParamsFromKeepPiVars();
-								$deleteLinkConf = array(
+				// merge the arrays
+				if (is_array($rows)) {
+					$rows = array_merge($rows, $rows2);
+				} else {
+					$rows = $rows2;
+				}
+
+				// render related tickets
+				$ticketListTemp = array();
+				$content = '';
+				if (is_array($rows) && count($rows)) {
+					foreach ($rows as $row) {
+						if ($this->checkPermissionForTicket($row['uid']) && !in_array($row['uid'], $ticketListTemp)) {
+							$ticketListTemp[] = $row['uid'];
+							if ($renderLinks) {
+								if ($content) $content .= $separator;
+								// render the "delete"-link
+								if ($renderDeleteButton) {
+									// get the delete image configuration from typoscript
+									$imageConf = $this->conf['icons.']['deleteFile.'];
+									$imageConf['file'] = $this->getFilePath($imageConf['file']);
+
+									// generate the delete link
+									$additionalParams = '&' . $this->prefixId . '[showUid]=' . $this->internal['currentRow']['uid'];
+									$additionalParams .= '&' . $this->prefixId . '[deleteRelatedTicket]=' . $row['uid'];
+									$additionalParams .= $this->getAdditionalParamsFromKeepPiVars();
+									$deleteLinkConf = array(
+											'parameter' => $GLOBALS['TSFE']->id,
+											'additionalParams' => $additionalParams
+											);
+									$deleteLink_URL = $this->cObj->typoLink_URL( $deleteLinkConf );
+									//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
+									$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
+
+									// generate the alt text
+									$imageConf['altText'] = $this->pi_getLL('altText_delete_related_ticket', 'Delete related ticket.');
+
+									// finally generate the delete icon
+									$imageConf['file'] = $this->getFilePath($imageConf['file']);
+									$content .= $lcObj->IMAGE($imageConf);
+									$content .= ' ';
+								}
+
+								$linktext = sprintf($this->conf['ticket_uid_formatstring'],$row['uid']);
+								$linktext .= ' ' . $row['title'];
+								$linkConf = array(
 										'parameter' => $GLOBALS['TSFE']->id,
-										'additionalParams' => $additionalParams
+										'additionalParams' => $this->getAdditionalParamsFromKeepPiVars() . '&' . $this->prefixId . '[showUid]=' . $row['uid']
 										);
-								$deleteLink_URL = $this->cObj->typoLink_URL( $deleteLinkConf );
-								//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
-								$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
+								$content .= $this->cObj->typoLink($linktext, $linkConf);
 
-								// generate the alt text
-								$imageConf['altText'] = $this->pi_getLL('altText_delete_related_ticket', 'Delete related ticket.');
-
-								// finally generate the delete icon
-								$imageConf['file'] = $this->getFilePath($imageConf['file']);
-								$content .= $lcObj->IMAGE($imageConf);
-								$content .= ' ';
+								// show status of the ticket
+								$content .= ' (' . $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($row['status']))) . ')';
+							} else {
+								if ($content) $content .= $separator;
+								$content .= sprintf($this->conf['ticket_uid_formatstring'],$row['uid']) . ' ' . $row['title'] ;
 							}
-
-							$linktext = sprintf($this->conf['ticket_uid_formatstring'],$row['uid']);
-							$linktext .= ' ' . $row['title'];
-							$linkConf = array(
-									'parameter' => $GLOBALS['TSFE']->id,
-									'additionalParams' => $this->getAdditionalParamsFromKeepPiVars() . '&' . $this->prefixId . '[showUid]=' . $row['uid']
-									);
-							$content .= $this->cObj->typoLink($linktext, $linkConf);
-
-							// show status of the ticket
-							$content .= ' (' . $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($row['status']))) . ')';
-						} else {
-							if ($content) $content .= $separator;
-							$content .= sprintf($this->conf['ticket_uid_formatstring'],$row['uid']) . ' ' . $row['title'] ;
 						}
 					}
 				}
-			}
-			unset($ticketListTemp);
+				unset($ticketListTemp);
 
-			if ($content && $renderWrapDiv) {
-				$content = '<div class="related_tickets">' . $content . '</div>';
+				if ($content && $renderWrapDiv) {
+					$content = '<div class="related_tickets">' . $content . '</div>';
+				}
 			}
 		}
 
@@ -3953,8 +3969,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				break;
 
 			case 'related_tickets':
-				// public function renderRelatedTicketListForCurrentTicket($renderLinks = true, $renderDeleteButton = true, $renderWrapDiv = true, $separator = '<br />')
 				if ($renderType == CONST_RENDER_TYPE_CSV) {
+					// public function renderRelatedTicketListForCurrentTicket($renderLinks = true, $renderDeleteButton = true, $renderWrapDiv = true, $separator = '<br />')
 					return $this->renderRelatedTicketListForCurrentTicket(false, false, false, ',');
 				} else if ($renderType == CONST_RENDER_TYPE_EMAIL) {
 					return $this->renderRelatedTicketListForCurrentTicket(false, false, true, ',');
