@@ -135,6 +135,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// create instance of the extension library
 		$this->lib = t3lib_div::makeInstance('tx_ketroubletickets_lib');
 
+			// include ke_ukb if installed
+		if (t3lib_extMgm::isLoaded('ke_ukb')) {
+			require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
+			$this->ukb = t3lib_div::makeInstance('ke_ukb');
+		}
+
 			// Configuring so caching is not expected. This value means that no
 			// cHash params are ever set. We do this, because it's a USER_INT
 			// object!
@@ -2612,6 +2618,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$linkconf['JSwindow_params'] = 'status=0,menubar=0,scrollbars=1,resizable=1,location=0,directories=0,toolbar=0';
 		$markerArray['PRINTLINK'] = $this->cObj->typoLink($this->pi_getLL('LABEL_PRINTLINK'),$linkconf);
 
+		// ke_ukb label markers
+		if (t3lib_extMgm::isLoaded('ke_ukb')) {
+			$markerArray['LABEL_RELATED_TICKETS'] = $this->pi_getLL('LABEL_RELATED_TICKETS_UKB');
+		}
+
 		return $markerArray;
 
 	}/*}}}*/
@@ -2837,25 +2848,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				if (t3lib_extMgm::isLoaded('ke_ukb')) {
 					// show ukb only in edit view, not when creating a ticket
 					if ($this->piVars['showUid']) {
-						// make instance
-						require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
-						$ukb = t3lib_div::makeInstance('ke_ukb');
 						// pid list
 						$storagePids = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
 						// set wiki data
 						$wikiSingleView = $this->ffdata['drwikisingleview'];
 						$wikiStorage = $this->ffdata['drwikistorage'];
 						// get content
-						$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid'], $storagePids, $wikiSingleView, $wikiStorage);
+						$content = $this->ukb->renderContent('tx_ketroubletickets_tickets', $this->piVars['showUid'], $storagePids, $wikiSingleView, $wikiStorage);
 						// fill markers
-						$this->markerArray['UKB_FORM'] =$ukb->renderForm();
-					}
-					else {
-						$this->markerArray['UKB_FORM'] = '';
+						$this->markerArray['UKB_FORM'] = $this->ukb->renderForm();
+					} else {
 						$content = $this->pi_getLL('ukb_after_saving');
 						$content .= '<input type="hidden" name="'.$this->prefixId.'[ukb_followup]" value="'.$this->piVars['followup'].'" >';
+						$this->markerArray['UKB_FORM'] = '';
 					}
-					$this->markerArray['LABEL_RELATED_TICKETS'] = $this->pi_getLL('LABEL_RELATED_TICKETS_UKB');
 
 				} else {
 					// usual "related tickets" handling if ke_ukb is not loaded
@@ -3386,14 +3392,19 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			if (t3lib_extMgm::isLoaded('ke_ukb')) {
 
 					// make instance, set pids and render the content
-				require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
-				$ukb = t3lib_div::makeInstance('ke_ukb');
+					// render only the names of the related elements
+					// ($renderFullVersion = 0)
 				$storagePids = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
 				$wikiSingleView = $this->ffdata['drwikisingleview'];
 				$wikiStorage = $this->ffdata['drwikistorage'];
-				$renderFullVersion = $renderLinks;
-				$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->internal['currentRow']['uid'], $storagePids, $wikiSingleView, $wikiStorage, $renderFullVersion);
-
+				$renderFullVersion = 0;
+				$content = $this->ukb->renderContent(
+							'tx_ketroubletickets_tickets',
+							$this->internal['currentRow']['uid'],
+							$storagePids,
+							$wikiSingleView,
+							$wikiStorage,
+							$renderFullVersion);
 			} else {
 				// relations from this ticket to other tickets
 				if ($this->internal['currentRow']['related_tickets']) {
