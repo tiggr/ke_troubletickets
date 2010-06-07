@@ -3391,7 +3391,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$storagePids = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
 				$wikiSingleView = $this->ffdata['drwikisingleview'];
 				$wikiStorage = $this->ffdata['drwikistorage'];
-				$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->internal['currentRow']['uid'], $storagePids, $wikiSingleView, $wikiStorage);
+				$renderFullVersion = $renderLinks;
+				$content = $ukb->renderContent('tx_ketroubletickets_tickets', $this->internal['currentRow']['uid'], $storagePids, $wikiSingleView, $wikiStorage, $renderFullVersion);
 
 			} else {
 				// relations from this ticket to other tickets
