@@ -2227,9 +2227,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
 			} else {
 					// current user has no write access
-					// special case: A new ticket is opened, the current user has
+					// special case: The current user has
 					// NO write access to the current field, but a value has to
-					// be preselected. In this case, wie add a hidden field with
+					// be selected, because it's a required field.
+					// For this case, we add a hidden field with
 					// the desired value to the form.
 				$prefillValue = $this->getPrefillValue($fieldConf);
 				if (!empty($prefillValue)) {
@@ -2643,7 +2644,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
  	*
  	* Finds the prefill-value for
  	* 1. follow-up ticketes
- 	* 2. fields which have predefined values in the plugin flexform
+ 	* 2. existing tickets which the user is about to edit
+ 	* 3. fields which have predefined values in the plugin flexform
  	*
  	* @param   array $fieldConf Field configuration as set in typoscript
  	* @return  string
@@ -2656,7 +2658,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if (count($this->parentTicket)) {
 			$prefillValue = $this->getPrefillValueFromParentTicket($fieldConf);
 		} else {
-			if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
+			if (!empty($this->internal['currentRow'][$fieldConf['name']])) {
+				$prefillValue = $this->internal['currentRow'][$fieldConf['name']];
+			} else if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
 				$prefillValue = $this->ffdata['responsible_singleuser_preselected'];
 			}
 		}
@@ -2704,7 +2708,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		} else if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
 			$prefillValue = $this->insertFields[$fieldConf['name']];
 		} else if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
-			$prefillValue = $this->internal['currentRow'][$fieldConf['name']];
+			// $prefillValue = $this->internal['currentRow'][$fieldConf['name']];
+			$prefillValue = $this->getPrefillValue($fieldConf);
 		} else if (is_array($this->filter)) {
 			$prefillValue = $this->filter[$fieldConf['name']];
 		} else {
