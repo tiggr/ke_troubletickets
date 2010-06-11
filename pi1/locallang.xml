@@ -173,6 +173,7 @@
 			<label index="LABEL_NOTIFICATIONS_OBSERVER">Notifications to the observers</label>
 
 			<label index="LABEL_COMMENT_HEADER">Comments</label>
+			<label index="LABEL_COMMENT_NEW">New comment:</label>
 			<label index="LABEL_COMMENT_SUBMIT">Save</label>
 
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
@@ -397,6 +398,7 @@
 			<label index="LABEL_NOTIFICATIONS_OBSERVER">Benachrichtigungen an den/die Beobachter</label>
 
 			<label index="LABEL_COMMENT_HEADER">Kommentare</label>
+			<label index="LABEL_COMMENT_NEW">Neuer Kommentar:</label>
 			<label index="LABEL_COMMENT_SUBMIT">Speichern</label>
 
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
