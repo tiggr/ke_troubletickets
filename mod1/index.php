@@ -74,8 +74,8 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 
                     parent::init();
 
-					$this->enableFields_tickets     = t3lib_BEfunc::deleteClause($this->tickets_table).t3lib_BEfunc::BEenableFields($this->tickets_table);		
-					$this->enableFields_fe_users    = t3lib_BEfunc::deleteClause($this->users_table).t3lib_BEfunc::BEenableFields($this->users_table);	
+					$this->enableFields_tickets     = t3lib_BEfunc::deleteClause($this->tickets_table).t3lib_BEfunc::BEenableFields($this->tickets_table);
+					$this->enableFields_fe_users    = t3lib_BEfunc::deleteClause($this->users_table).t3lib_BEfunc::BEenableFields($this->users_table);
 					$this->enableFields_category    = t3lib_BEfunc::deleteClause($this->category_table).t3lib_BEfunc::BEenableFields($this->category_table);
 					$this->enableFields_address     = t3lib_BEfunc::deleteClause($this->address_table).t3lib_BEfunc::BEenableFields($this->address_table);
 					$this->enableFields_pages       = t3lib_BEfunc::deleteClause($this->pages_table).t3lib_BEfunc::BEenableFields($this->pages_table);
@@ -110,11 +110,11 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                 }/*}}}*/
 
 				/**
-				 * pidWhereClause 
-				 * 
+				 * pidWhereClause
+				 *
 				 * generate a whereClause for the field pid, include the current page and all first level subpages (no recursion)
-				 * 
-				 * @param string $field 
+				 *
+				 * @param string $field
 				 * @access public
 				 * @return string
 				 */
@@ -190,14 +190,13 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                         $this->content.=$this->doc->divider(5);
 
 						// date2cal is needed for the time selector fields
-						if (!t3lib_extMgm::isLoaded('date2cal')) {
-							$this->content .= $GLOBALS['LANG']->getLL('error_date2cal');
-						} else {
+						if (t3lib_extMgm::isLoaded('date2cal')) {
+							$this->tabmenu->useDate2Cal = true;
 							include_once(t3lib_div::resolveBackPath($BACK_PATH . '../' . t3lib_extMgm::siteRelPath('date2cal') . 'src/class.jscalendar.php'));
-
-							// Render content:
-							$this->moduleContent();
 						}
+
+						// Render content:
+						$this->moduleContent();
 
                         // ShortCut
                         if ($BE_USER->mayMakeShortcut())    {
@@ -230,8 +229,8 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                 }/*}}}*/
 
 				/**
-				 * initTheMenus 
-				 * 
+				 * initTheMenus
+				 *
 				 * @access public
 				 * @return void
 				 */
@@ -256,8 +255,8 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 				}/*}}}*/
 
 				/**
-				 * renderThePagebrowser 
-				 * 
+				 * renderThePagebrowser
+				 *
 				 * @access public
 				 * @return void
 				 */
@@ -280,10 +279,10 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 				}/*}}}*/
 
 				/**
-				 * renderTheMenus 
+				 * renderTheMenus
 				 *
 				 * Generate the filter Dropdowns and Time-Selector-Fields
-				 * 
+				 *
 				 * @access public
 				 * @return void
 				 */
@@ -294,7 +293,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					 * Status
 					 ***********************************************/
 					// make valueArray
-					$valueArray = array( 
+					$valueArray = array(
 						STATUS_ALL => $GLOBALS['LANG']->getLL('status_all'),
 						STATUS_CURRENT => $GLOBALS['LANG']->getLL('status_current'),
 						STATUS_CLOSED => $GLOBALS['LANG']->getLL('status_closed'),
@@ -322,7 +321,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					 * Billing
 					 ***********************************************/
 					// make valueArray
-					$valueArray = array( 
+					$valueArray = array(
 						BILLING_ALL => $GLOBALS['LANG']->getLL('billing_all'),
 						BILLING_SERVICE => $GLOBALS['LANG']->getLL('billing_service'),
 						BILLING_INVOICE => $GLOBALS['LANG']->getLL('billing_invoice'),
@@ -342,9 +341,9 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					/***********************************************
 					 * Categories
 					 ***********************************************/
-					//$whereClause = 'pid = '.$this->id ; 
-					$whereClause = $this->pidWhereClause('pid'); 
-					$rows =  $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $this->category_table, $whereClause . $this->enableFields_category);				
+					//$whereClause = 'pid = '.$this->id ;
+					$whereClause = $this->pidWhereClause('pid');
+					$rows =  $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $this->category_table, $whereClause . $this->enableFields_category);
 
 					// make valueArray
 					$valueArray = array();
@@ -365,11 +364,11 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					 * Owners
 					 ***********************************************/
 					// find the fe_users which have tickets on this page
-					$selectFields = $this->users_table.'.uid, ' . $this->users_table . '.username, ' . $this->users_table.'.name'; 
+					$selectFields = $this->users_table.'.uid, ' . $this->users_table . '.username, ' . $this->users_table.'.name';
 					//$whereClause = $this->tickets_table.'.pid = ' . $this->id . ' AND ' . $this->users_table.'.uid = ' . $this->tickets_table.'.owner_feuser';
 					$whereClause = $this->pidWhereClause($this->tickets_table.'.pid') . ' AND ' . $this->users_table.'.uid = ' . $this->tickets_table.'.owner_feuser';
-					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($selectFields, 
-						$this->tickets_table.','.$this->users_table , 
+					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($selectFields,
+						$this->tickets_table.','.$this->users_table ,
 						$whereClause . $this->enableFields_tickets . $this->enableFields_fe_users
 					);
 
@@ -390,11 +389,11 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					 * Responsible
 					 ***********************************************/
 					// find the responsible fe_users which have tickets on this page
-					$selectFields = $this->users_table.'.uid, ' . $this->users_table . '.username, ' . $this->users_table.'.name'; 
+					$selectFields = $this->users_table.'.uid, ' . $this->users_table . '.username, ' . $this->users_table.'.name';
 					//$whereClause = $this->tickets_table.'.pid = ' . $this->id . ' AND ' . $this->users_table.'.uid = ' . $this->tickets_table.'.owner_feuser';
 					$whereClause = $this->pidWhereClause($this->tickets_table.'.pid') . ' AND ' . $this->users_table.'.uid = ' . $this->tickets_table.'.responsible_feuser';
-					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($selectFields, 
-						$this->tickets_table.','.$this->users_table , 
+					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($selectFields,
+						$this->tickets_table.','.$this->users_table ,
 						$whereClause . $this->enableFields_tickets . $this->enableFields_fe_users
 					);
 
@@ -428,8 +427,8 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 				}/*}}}*/
 
 				/**
-				 * renderTheTicketList 
-				 * 
+				 * renderTheTicketList
+				 *
 				 * @access public
 				 * @return string
 				 */
@@ -489,7 +488,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					if ($this->tabmenu->getSelectedValue('billing') == BILLING_INVOICE) {
 						$whereClause .= ' AND ' . $this->tickets_table . '.billing LIKE "invoice%"';
 					}
-					
+
 					// More billing filters, configured in Page-TS
 					if (is_array($this->pageTSConfig['ke_troubletickets.']['mod1.']['filter.']['billing.'])) {
 						$additionalFilters = $this->pageTSConfig['ke_troubletickets.']['mod1.']['filter.']['billing.'];
@@ -562,20 +561,20 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 						}
 					}
 
-					$fieldList_DB = 
-						$this->tickets_table.'.uid,' . 
-						$this->tickets_table.'.title,' . 
-						$this->tickets_table.'.crdate,' . 
-						$this->tickets_table.'.close_time,' . 
-						$this->tickets_table.'.until_date,' . 
-						$this->tickets_table.'.billing,' . 
-						$this->tickets_table.'.priority,' . 
-						$this->tickets_table.'.time_used,' . 
-						$this->tickets_table.'.time_planned,' . 
-						$this->tickets_table.'.effort,' . 
-						$this->tickets_table.'.status,' . 
-						$this->tickets_table.'.responsible_feuser,' . 
-						$this->users_table.'.username AS owner_feuser,' . 
+					$fieldList_DB =
+						$this->tickets_table.'.uid,' .
+						$this->tickets_table.'.title,' .
+						$this->tickets_table.'.crdate,' .
+						$this->tickets_table.'.close_time,' .
+						$this->tickets_table.'.until_date,' .
+						$this->tickets_table.'.billing,' .
+						$this->tickets_table.'.priority,' .
+						$this->tickets_table.'.time_used,' .
+						$this->tickets_table.'.time_planned,' .
+						$this->tickets_table.'.effort,' .
+						$this->tickets_table.'.status,' .
+						$this->tickets_table.'.responsible_feuser,' .
+						$this->users_table.'.username AS owner_feuser,' .
 						$this->category_table.'.title AS cat_title';
 
 					$fieldList_TABLE = array(
@@ -600,10 +599,10 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 
 					//$GLOBALS['TYPO3_DB']->debugOutput = true;
 					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-						$fieldList_DB, 
-						$tableList, 
-						$whereClause, 
-						$groupBy, 
+						$fieldList_DB,
+						$tableList,
+						$whereClause,
+						$groupBy,
 						$orderBy,
 						$limit
 					);
@@ -611,7 +610,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					// Gesamtzahl der Tickets (ohne Limit) ermitteln
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->tickets_table . '.uid',$tableList,$whereClause);
 					$this->numberOfTickets = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-					
+
 					//debug($GLOBALS['TYPO3_DB']->SELECTquery($fieldList_DB, $tableList, $whereClause, $groupBy, $orderBy, $limit) );
 
 					//if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
@@ -653,7 +652,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->tickets_table , $where_clause.$this->enableFields_tickets );
 					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
 						$content = '<b> ' . $GLOBALS['LANG']->getLL('select_tickets_page'). '</b>';
-					} else {	
+					} else {
 						$this->initTheMenus();
 
 						// Filter menus
@@ -700,7 +699,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 				 * returns a html table, rendered from the array $dataRows.
 				 * $dataRows must contains one row for each row in the table.
 				 * Each row is an array associative containing the data for the row.
-				 * 
+				 *
 				 * @param string $caption: Table-caption
 				 * @param string $columns: array containing fields (the key) and the corresponding field types (the value) to display
 				 * @param array $dataRows: data array
@@ -719,7 +718,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 							foreach ($columns as $key => $fieldType) {
 								if (!isset($sumRow[$key])) {
 									$sumRow[$key] = 0;
-								} 
+								}
 								//$sumRow[$key] += intval($dataRow[$key]);
 							}
 						}
@@ -822,8 +821,8 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 											// get the last change the responsible user made for this ticket
 											// rows where fields where "databasefield" is empty are "opening tickets" changes
 											$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-												'*', 
-												$this->tickethistory_table, 
+												'*',
+												$this->tickethistory_table,
 												'ticket_uid=' . $dataRow['uid'] . ' AND databasefield!=""',
 												'',
 												'crdate',
@@ -852,16 +851,16 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 											// History-Fields
 											/*
 											   uid   	int(11)
-											   pid  	int(11) 	  	  	
-											   tstamp  	int(11) 	  	  	
-											   crdate  	int(11) 	  	  
-											   cruser_id  	int(11) 	 
-											   ticket_uid  	blob 	  	
-											   feuser_uid  	blob 	  
-											   databasefield  	tinytext 	
-											   feuser_username  	tinytext 
-											   value_old  	text 	
-											   value_new  	text 
+											   pid  	int(11)
+											   tstamp  	int(11)
+											   crdate  	int(11)
+											   cruser_id  	int(11)
+											   ticket_uid  	blob
+											   feuser_uid  	blob
+											   databasefield  	tinytext
+											   feuser_username  	tinytext
+											   value_old  	text
+											   value_new  	text
 											 */
 										}
 									break;
@@ -992,15 +991,15 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					}
 					$content .= '</tfoot>';
 					$content .= '</table>';
-					return $content;	
+					return $content;
 				}/*}}}*/
 
 				/**
-				 * daysAndHoursFromSeconds 
+				 * daysAndHoursFromSeconds
 				 *
 				 * generates a string containing days, hours and minutes from given seconds
-				 * 
-				 * @param integer $seconds 
+				 *
+				 * @param integer $seconds
 				 * @access public
 				 * @return string
 				 */
@@ -1027,22 +1026,18 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 
 				/*
 				 * returns the css for the result tables
-				 * 
+				 *
 				 * @return string
 				 */
 				function getTableCSS() {/*{{{*/
 						return '
 
-				#to_date_hr,
-				#from_date_hr {
-					width:100px;
-				}
 				.datebox {
 					margin-right:5px;
-					width:210px; 
-					height:40px; 
-					padding:4px; 
-					border:1px solid black; 
+					width:210px;
+					height:40px;
+					padding:4px;
+					border:1px solid black;
 					float:left;
 				}
 
@@ -1050,7 +1045,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					float:left;
 					margin: .5em 3px 0 0;
 					font-size: 10px;
-					font-weight: bold; 
+					font-weight: bold;
 					border: 1px solid gray;
 					display:block;
 					padding:2px;

@@ -35,14 +35,15 @@ define (NULL_VALUE, 'EMPTYVALUE');
 
 class backendMenu {
 	var $menuNames = array();
+	var $useDate2Cal = false;
 
 	/**
 	 * Generates a TYPO3 backend module tab menu
 	 * allowedValues: see getSelectedValue
-	 * 
-	 * @param mixed $menuArray 
-	 * @param string $selectedValue 
-	 * @param string $menuName 
+	 *
+	 * @param mixed $menuArray
+	 * @param string $selectedValue
+	 * @param string $menuName
 	 * @param string $additionalParams
 	 * @param array $allowedValues
 	 * @return string
@@ -71,10 +72,10 @@ class backendMenu {
 
 	/**
 	 * Generates a TYPO3 backend module dropdown menu
-	 * 
-	 * @param mixed $menuArray 
-	 * @param string $selectedValue 
-	 * @param string $menuName 
+	 *
+	 * @param mixed $menuArray
+	 * @param string $selectedValue
+	 * @param string $menuName
 	 * @param string $additionalParams
 	 * @param integer $multiple, if greater > 0: Field is a multiple field, $multiple specifies the size
 	 * @return string
@@ -99,7 +100,7 @@ class backendMenu {
 		// get the selected value for this menu
 		$selectedValue = $this->getSelectedValue($menuName,$allowedValues);
 
-		// make the $selectedValue an array so it is compatible with "multiple"-values 
+		// make the $selectedValue an array so it is compatible with "multiple"-values
 		$selectedValue = explode(',',$selectedValue);
 
 		// render the form
@@ -134,17 +135,17 @@ class backendMenu {
 
 		if ($multiple) {
 			$menuHTML .= '<input type="submit" value="OK" />';
-		} 
+		}
 
 		$menuHTML .= '</form>';
 		return $menuHTML;
 	}/*}}}*/
 
 	/**
-	 * generateTimeInputField 
-	 * 
-	 * @param string $menuName 
-	 * @param string $additionalParams 
+	 * generateTimeInputField
+	 *
+	 * @param string $menuName
+	 * @param string $additionalParams
 	 * @access public
 	 * @return string
 	 */
@@ -154,7 +155,7 @@ class backendMenu {
 				$additionalParams .= $this->getSelectedValueAsMenuParam($name);
 			}
 		}
-		
+
 		// get the selected value for this menu
 		$selectedValue = $this->getSelectedValue($menuName,$allowedValues);
 
@@ -163,14 +164,27 @@ class backendMenu {
 		$formName = 'form_'.$menuName;
 		$menuHTML = '';
 
-		$JSCalendar = JSCalendar::getInstance();
-		$JSCalendar->setInputField($menuName);
-		if (($jsCode = $JSCalendar->getMainJS()) != '') $menuHTML .= $jsCode;
+			// use extension date2cal (if installed)
+		if ($this->useDate2Cal) {
+			$JSCalendar = JSCalendar::getInstance();
+			$JSCalendar->setInputField($menuName);
+			if (($jsCode = $JSCalendar->getMainJS()) != '') $menuHTML .= $jsCode;
+		}
+
 		$menuHTML .= '<div class="datebox">';
 		$menuHTML .= '<form name="'.$formName.'" id="'.$formName.'" method="post" action="'.$formURL.'">';
 		$menuHTML .= '<input type="submit" value="' . $GLOBALS['LANG']->getLL('button_OK') . '" style="float:right;" />';
 		$menuHTML .= $GLOBALS['LANG']->getLL($menuName) . '<br />';
-		$menuHTML .= $JSCalendar->render($selectedValue);
+
+		if ($this->useDate2Cal) {
+			$menuHTML .= $JSCalendar->render($selectedValue);
+		} else {
+				// render plain input field without datepicker
+			$menuHTML .= '<input type="text" value="' . $selectedValue
+				. '" jscalendar" id="'
+				. $menuName . '_hr" name="'
+				. $menuName . '" maxlength="16" size="12" /> dd-mm-yyyy';
+		}
 		$menuHTML .= '</form>';
 		$menuHTML .= '</div>';
 		return $menuHTML;
@@ -180,10 +194,10 @@ class backendMenu {
 	 * Returns the selected value from a given menu
 	 * if the allowedValues array is given, the selected value will be checked against its values
 	 * if the value does not exist in the array, the first value in the array will be selected
-	 * 
-	 * @param string $menuName 
-	 * @param array $menuArray 
-	 * @param bool $transformNullValue 
+	 *
+	 * @param string $menuName
+	 * @param array $menuArray
+	 * @param bool $transformNullValue
 	 * @return void
 	 */
 	function getSelectedValue($menuName='default',$allowedValues=array(), $transformNullValue=1) {/*{{{*/
@@ -217,8 +231,8 @@ class backendMenu {
 
 	/**
 	 * Returns the select value of a menu
-	 * 
-	 * @param string $menuName 
+	 *
+	 * @param string $menuName
 	 * @param array $allowedValues
 	 * @return string
 	 */
@@ -236,9 +250,9 @@ class backendMenu {
 
 	/**
 	 * presets values for a given tab menu
-	 * 
-	 * @param mixed $value 
-	 * @param string $menuName 
+	 *
+	 * @param mixed $value
+	 * @param string $menuName
 	 * @access public
 	 * @return void
 	 */
@@ -249,7 +263,7 @@ class backendMenu {
 
 	/**
 	 * sets some additional style sheets
-	 * 
+	 *
 	 * @return string
 	 */
 	function getStyleSheet() {/*{{{*/
@@ -263,15 +277,15 @@ class backendMenu {
 	float:left;
 	margin: .5em 3px 0 0;
 	font-size: 10px;
-	font-weight: bold; 
+	font-weight: bold;
 	border-bottom: 1px solid gray;
 }
 
 .multipleselectform {
 	margin-right:5px;
-	height:70px; 
-	padding:4px; 
-	border:1px solid black; 
+	height:70px;
+	padding:4px;
+	border:1px solid black;
 	float:left;
 }
 
@@ -280,10 +294,10 @@ class backendMenu {
 	padding: 3px 0;
 	margin: .5em 0 0 0;
 	font-size: 10px;
-	font-weight: bold; 
+	font-weight: bold;
 	border-bottom: 1px solid gray;
 	list-style-type: none;
-	text-align: left; 
+	text-align: left;
 }
 
 .basictab li {
@@ -314,7 +328,7 @@ class backendMenu {
 	color: black;
 }
 
-.basictab li.selected a { 
+.basictab li.selected a {
 	position: relative;
 	top: 1px;
 	padding-top: 4px;
