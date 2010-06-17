@@ -38,14 +38,14 @@ class tx_ketroubletickets_lib {
 	var $extKey 			= 'ke_troubletickets';	// The extension key.
 
 	/**
-	 * getNameListFromUidList 
+	 * getNameListFromUidList
 	 *
 	 * generates a list of real names / titles from a list of uids
 	 * $titleField may be a commalist of fields in the table
-	 * 
-	 * @param string $uid_list 
-	 * @param string $table 
-	 * @param string $titleField 
+	 *
+	 * @param string $uid_list
+	 * @param string $table
+	 * @param string $titleField
 	 * @access public
 	 * @return void
 	 */
@@ -74,17 +74,17 @@ class tx_ketroubletickets_lib {
 				// keep the uid in the output list
 				//$content .= '-' . $uid;
 			}
-		} 
+		}
 
 		return $content;
 	}/*}}}*/
 
 	/**
-	 * m2h 
+	 * m2h
 	 *
 	 * Minutes to Hours
-	 * 
-	 * @param mixed $mins 
+	 *
+	 * @param mixed $mins
 	 * @access public
 	 * @return void
 	 */
@@ -139,24 +139,195 @@ class tx_ketroubletickets_lib {
         $defaultFormat = '%01d %s';
         if (strlen($format) == 0)
             $format = $defaultFormat;
- 
+
         $bytes = max(0, (int) $bytes);
- 
+
         $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
- 
+
         $power = array_search($force, $units);
- 
+
         if ($power === false)
             $power = $bytes > 0 ? floor(log($bytes, 1024)) : 0;
- 
+
         return sprintf($format, $bytes / pow(1024, $power), $units[$power]);
     }/*}}}*/
+
+	/**
+ 	* API-function: generate link to a ticket. Takes Troubletickets permissions
+ 	* into account.
+ 	*
+ 	* @param   integer $ticketUid ticket to link to.
+ 	* @param   integer $overWriteSingleViewPid normaly the single view comes from the category. you may overwrite it here.
+ 	* @param   object $troubleticketsObj if the call comes from ke_troubletickets, the troubletickets object is given here.
+ 	* @return  string
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	* @since   Thu Jun 17 2010 13:19:40 GMT+0200
+ 	*/
+	public function getLinkToTicket_URL($ticketData, $overWriteSingleViewPid=0, $troubleticketsObj=false) {
+		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$url = '';
+		if (is_array($ticketData) && count($ticketData)) {
+				// find out the singleview pid
+				// the singleviewpage must be set in the category
+				// If the category of the current ticket contains a single view page,
+				// use that. Otherwise no link generation is possible (if no
+				// $overWriteSingleViewPid is set).
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'singleviewpage',
+				'tx_ketroubletickets_categories',
+				'uid=' . $ticketData['category']
+				. $lcObj->enableFields('tx_ketroubletickets_categories')
+			);
+
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+				$categoryData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			}
+
+			if (is_array($categoryData) && !empty($categoryData['singleviewpage'])) {
+				$singleViewPage = $categoryData['singleviewpage'];
+			}
+
+			if ($overWriteSingleViewPid) {
+				$singleViewPage = $overWriteSingleViewPid;
+			}
+
+				// generate the link
+			if ($singleViewPage) {
+				$url = $lcObj->typoLink_URL(array(
+					'parameter' => $singleViewPage,
+					'additionalParams' => '&tx_ketroubletickets_pi1[showUid]=' . $ticketData['uid']
+					)
+				);
+			}
+
+		}
+		return $url;
+	}
+
+	/**
+	 * checkPermissionForTicket
+	 *
+	 * checks if the current user has access to a given ticket
+	 *
+	 * Permissions:
+	 * 1. show only tickets the current logged in user is owner of,
+	 * responsible user or observer
+	 *
+	 * 2. If the flexform option "show_tickets" is set to "all_for_admins" and
+	 * the current user is one of the "ticket_administrators", or if the option
+	 * is set to "all_always", allow the current user to see and edit all
+	 * tickets
+	 *
+	 * Checks also for the right sysfolder, that means: is the
+	 * ticket in the page/sysfolder defined in the troubletickets plugin.
+	 *
+	 * returns false if he has no rights
+	 * returns 1 if he has full rights (owner or responsible user)
+	 * returns 2 if he has limited rights (observer)
+	 *
+	 * If the call comes from ke_troubletickets, $troubleticketsObj is set and
+	 * the check is also done for the right storage pid and if the current user
+	 * is a ticket administrator. If the call comes from another extension, these
+	 * checks are not possible, therefore we go the safe way and assume the
+	 * following:
+	 * 1. The user isn't a ticket administrator therefore does not have access
+	 * if he is not owner, responsible or observer
+	 * 2. The ticket is in a sysfolder the plugin has access to. If this is
+	 * not true, the permission is granted, but then will be denied in the single
+	 * view of the troubleticket plugin.
+	 *
+	 * @param int $ticketUid Ticket to check permissions for.
+	 * @param int $troubleticketsObj troubletickets object
+	 * @access public
+	 * @return integer
+	 */
+	public function checkPermissionForTicket($ticketUid=0, $troubleticketsObj=false) {/*{{{*/
+		$permission = false;
+		if ($GLOBALS['TSFE']->loginUser) {
+
+				// Fetch the ticket from the database. This is the first
+				// permission check (enableFields).
+			$lcObj = t3lib_div::makeInstance('tslib_cObj');
+			$where = 'uid=' . $ticketUid . $lcObj->enableFields('tx_ketroubletickets_tickets');
+
+				// if the call is coming from ke_troubletickets, the configuration
+				// is available, therefore we can check if the ticket is on the page
+				// configured as storage page for the current troubletickets plugin.
+				// If the call is coming from another extension, we don't check this.
+				// That means a link may be generated, but after the user clicks on it,
+				// the user will get the "access denied" message.
+			if (is_object($troubleticketsObj)) {
+				$where .= ' AND pid IN (' . $troubleticketsObj->pi_getPidList($troubleticketsObj->conf['pidList'], $troubleticketsObj->conf['recursive']) . ')';
+			}
+
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_ketroubletickets_tickets', $where);
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+				$ticketRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				if ($ticketRow['owner_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
+					$permission = true;
+				}
+				if ($ticketRow['responsible_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
+					$permission = true;
+				}
+				if (t3lib_div::inList($ticketRow['observers_feuser'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
+					$permission = true;
+				}
+
+					// if the call is coming from ke_troubletickets, the flexform configuration
+					// is available, therefore we can check if the user is a ticket
+					// administrator. If not, we don't check and don't set the permission.
+				if (is_object($troubleticketsObj)) {
+					if ($troubleticketsObj->ffdata['show_tickets'] == CONST_SHOW_ALL_FOR_ADMINS && $troubleticketsObj->ffdata['ticket_administrators'] && t3lib_div::inList($troubleticketsObj->ffdata['ticket_administrators'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
+						$permission = true;
+					}
+					if ($troubleticketsObj->ffdata['show_tickets'] == CONST_SHOW_ALL_ALWAYS) {
+						$permission = true;
+					}
+				}
+			}
+		}
+		return $permission;
+	}/*}}}*/
+
+	/**
+	* fe_getRecord
+	*
+	* Returns one record from a certain table.
+	*
+	* @param string $fields
+	* @param string $from_table
+	* @param string $where_clause
+	* @param string $groupBy
+	* @param string $orderBy
+	* @param string $limit
+	* @access public
+	* @return array / false
+	*/
+   function fe_getRecord($fields, $from_table, $where_clause, $groupBy='',$orderBy='',$limit='1') {
+	   $lcObj=t3lib_div::makeInstance('tslib_cObj');
+	   $where_clause .= $lcObj->enableFields($from_table);
+	   $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$from_table,$where_clause,$groupBy,$orderBy,$limit);
+	   if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+		   $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+	   }
+	   return is_array($row) ? $row : false;
+   }
+
+   /**
+ 	* returns the full row of a ticket
+ 	*
+ 	* @param   integer $ticketUid
+ 	* @return  array
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	* @since   Thu Jun 17 2010 13:41:49 GMT+0200
+ 	*/
+   public function getTicketData($ticketUid) {
+		return $this->fe_getRecord('*', 'tx_ketroubletickets_tickets', 'uid=' . $ticketUid);
+   }
+
 }
-
-
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ke_troubletickets/pi1/class.tx_ketroubletickets_pi1.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ke_troubletickets/pi1/class.tx_ketroubletickets_pi1.php']);
 }
-
 ?>

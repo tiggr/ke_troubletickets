@@ -418,51 +418,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * checkPermissionForTicket
 	 *
 	 * checks if the current user has access to a given ticket
-	 *
-	 * Permissions:
-	 * 1. show only tickets the current logged in user is owner of, responsible user or observer
-	 * 2. If the flexform option "show_tickets" is set to "all_for_admins" and
-	 * the current user is one of the "ticket_administrators", or if the option
-	 * is set to "all_always", allow the current user to see and edit all
-	 * tickets
-	 *
-	 * CB 06.05.2010: checks also for the right sysfolder
-	 *
-	 * returns false if he has no rights
-	 * returns 1 if he has full rights (owner or responsible user)
-	 * returns 2 if he has limited rights (observer)
+	 * see lib/class.tx_ketroubletickets_lib for documentation
 	 *
 	 * @param int $ticketUid
 	 * @access public
 	 * @return integer
 	 */
 	public function checkPermissionForTicket($ticketUid=0) {/*{{{*/
-		$permission = false;
-		if ($GLOBALS['TSFE']->loginUser) {
-			$lcObj = t3lib_div::makeInstance('tslib_cObj');
-			$where = 'uid=' . $ticketUid . $lcObj->enableFields($this->tablename);
-			$where .= ' AND pid IN (' . $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']) . ')';
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->tablename, $where);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-				$ticketRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-				if ($ticketRow['owner_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
-					$permission = 1;
-				}
-				if ($ticketRow['responsible_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
-					$permission = 1;
-				}
-				if (t3lib_div::inList($ticketRow['observers_feuser'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
-					$permission = 2;
-				}
-				if ($this->ffdata['show_tickets'] == CONST_SHOW_ALL_FOR_ADMINS && $this->ffdata['ticket_administrators'] && t3lib_div::inList($this->ffdata['ticket_administrators'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
-					$permission = 1;
-				}
-				if ($this->ffdata['show_tickets'] == CONST_SHOW_ALL_ALWAYS) {
-					$permission = 1;
-				}
-			}
-		}
-		return $permission;
+		return  $this->lib->checkPermissionForTicket($ticketUid, $this);
 	}/*}}}*/
 
 	/**
