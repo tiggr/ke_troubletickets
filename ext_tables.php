@@ -176,4 +176,10 @@ $TCA["tx_ketroubletickets_history"] = array (
 		"fe_admin_fieldList" => "ticket_uid, feuser_uid, databasefield, feuser_username, value_old, value_new",
 	)
 );
+
+	// allow the data to be stored on normal pages
+t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_tickets');
+t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_categories');
+t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_comments');
+t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_history');
 ?>
