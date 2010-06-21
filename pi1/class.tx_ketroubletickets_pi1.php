@@ -3210,6 +3210,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			break;
 		}
+
+			// hook for changing the rendered form field
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterRenderFormField'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterRenderFormField'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$content = $_procObj->afterRenderFormField($content, $fieldConf, $this);
+			}
+		}
+
 		return $content;
 	}/*}}}*/
 
