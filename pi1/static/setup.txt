@@ -557,4 +557,8 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	ownerNotificationOnChangedFields = comment,files,newticket,closed
 	responsibleNotificationOnChangedFields = comment,files,newticket,closed
 	observersNotificationOnChangedFields = comment,files,newticket,closed
+	# add plain text part to the notifications email?
+	# problems have been reported for very long tickets (description and comments),
+	# so plain text part ist turned off by default.
+	addPlainTextPart = 0
 }

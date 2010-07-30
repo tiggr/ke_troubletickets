@@ -734,7 +734,16 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 					// exec update database query
 				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], $this->insertFields) ? true : false;
-
+				
+				
+					// hook: after updating a ticket
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterTicketUpdate'])) {
+					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterTicketUpdate'] as $_classRef) {
+						$_procObj = & t3lib_div::getUserObj($_classRef);
+						$_procObj->afterTicketUpdate($this->internal['currentRow']['uid'], $this);
+					}
+				}
+				
 					// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($this->internal['currentRow']['uid'], $changedFields, $changedInternalFields);
 
@@ -1787,7 +1796,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$Typo3_htmlmail->substMediaNamesInHTML(0);	// 0 = relative
 			$Typo3_htmlmail->substHREFsInHTML();
 			$Typo3_htmlmail->setHTML($Typo3_htmlmail->encodeMsg($Typo3_htmlmail->theParts['html']['content']));
-			if ($message)	{
+			if ($message && $this->conf['email_notifications.']['addPlainTextPart'])	{
 				$Typo3_htmlmail->addPlain($message);
 			}
 		} else {
@@ -2290,6 +2299,17 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		} else {
 			$this->markerArray['FOLLOWUPLINK'] = '';
 		}
+		
+		
+		
+		// hook for additional ticketForm Markers
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalTicketFormMarker'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalTicketFormMarker'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj->additionalTicketFormMarker($this->markerArray, $this);
+			}
+		}
+		
 
 			// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
@@ -2655,6 +2675,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function renderFormField($fieldConf, $renderEmptyDropdownFields=0, $addJS='') {/*{{{*/
+		
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
 
@@ -2878,7 +2899,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'date':
-
+				
 				// render the datefield using the date2cal extension
 				if ($this->useDate2Cal) {
 
