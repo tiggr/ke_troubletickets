@@ -1700,7 +1700,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$linkToTicketSubpart = '';
 		}
 		$localMarkerArray['LINK_TO_SINGLEVIEW_FROM_EMAIL'] = $linkToTicketSubpart;
-
+		
+		// hook for additional notification marker
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalNotificationMarker'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalNotificationMarker'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj->additionalNotificationMarker($localMarkerArray, $this);
+			}
+		}
+		
 			// get some more markers
 		$localMarkerArray = $this->getAdditionalMarkers($localMarkerArray, CONST_RENDER_TYPE_EMAIL);
 
@@ -2404,7 +2412,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		// get comments
 		$this->markerArray['FIELD_TICKET_COMMENT'] = $this->renderCommentList($this->internal['currentRow']['uid'], $renderType);
-
+		
+		// hook for additional printview markers
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalPrintviewMarker'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalPrintviewMarker'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj->additionalPrintviewMarker($this->markerArray, $this);
+			}
+		}
+		
 		// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
 
