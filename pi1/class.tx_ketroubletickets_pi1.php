@@ -2406,6 +2406,23 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			else if ($fieldConf['internal'] && !$this->isCurrentUserInternalUser()) {
 				$content = $this->cObj->substituteSubpart ($content, '###INTERNAL_' . strtoupper(trim($fieldConf['name'])), '');
 			}
+			// imporved rendering of field "description"
+			else if ($fieldConf['name'] == 'description') {
+				$fieldContent = $this->internal['currentRow'][$fieldConf['name']];
+				// strip some tags
+				$fieldContent = strip_tags($fieldContent, '<p>,<br>,<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<div>,<a>,<img>,<table><th>,<tr>,<td>,<li>,<ul>,<ol>');
+				$fieldContent = $this->pi_RTEcssText($fieldContent);
+				// strip ms office tags
+				$fieldContent = str_replace('&lt;o:p&gt;&nbsp;&lt;/o:p&gt;','',$fieldContent);
+				$fieldContent = str_replace('<p class="MsoNormal"></p>','',$fieldContent);
+				// clear empty paragraphs
+				$fieldContent = str_replace('<p class="bodytext">&nbsp;</p>','',$fieldContent);
+				$fieldContent = str_replace('<p class="bodytext">&nbsp;</p>
+','',$fieldContent);
+				$fieldContent = str_replace('<p class="bodytext">&nbsp;
+</p>','',$fieldContent);
+				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $fieldContent;
+			}
 			// get content for other fields
 			else $this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name']);
 		}
