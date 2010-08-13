@@ -12,7 +12,7 @@ plugin.tx_ketroubletickets_pi1 {
 	defaultMode = not_closed
 
 	# remember some of the piVars when going from the listview to the singleview and back
-	keepPiVars = pointer,sword,mode,sort,filter
+	keepPiVars = pointer,sword,mode,sort,filter,backPid
 
 	# Main HTML-Template
 	templateFile = EXT:ke_troubletickets/res/template/ke_troubletickets.tmpl.htm
@@ -486,6 +486,13 @@ plugin.tx_ketroubletickets_pi1.listView {
 	templateSubpartRow = ###LISTVIEW_SINGLE_ROW###
 	entries_per_page_options = 10,20,50
 	hideIfNoResults = 0
+	
+	# if backPid is set and is different than listview pid, redirect to
+	# refering page after processing actions
+	backPidRedirect.activated = 0
+	# seconds until redirect is processed
+	backPidRedirect.wait = 2
+	
 }
 
 # csvView defaults

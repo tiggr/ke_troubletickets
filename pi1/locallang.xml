@@ -68,6 +68,8 @@
 			<label index="status_comment_only">Your comment has been saved.</label>
 			<label index="status_fields_and_comment">Your changes and your comment have been saved.</label>
 			<label index="status_new_ticket">Your ticket has been created.</label>
+			<label index="status_additional_redirect">You will be redirected in %s seconds.</label>
+			
 
 			<label index="link_to_new_ticket">Create new ticket</label>
 			<label index="link_followup">Create follow-up ticket</label>
@@ -292,6 +294,7 @@
 			<label index="status_comment_only">Ihr Kommentar wurde gespeichert.</label>
 			<label index="status_fields_and_comment">Ihre Änderungen und Ihr Kommentar wurden gespeichert.</label>
 			<label index="status_new_ticket">Ihre Aufgabe wurde gespeichert.</label>
+			<label index="status_additional_redirect">Sie werden in %s Sekunden weitergeleitet.</label>
 
 			<label index="link_to_new_ticket">Neue Aufgabe eröffnen</label>
 			<label index="link_followup">Folgeaufgabe eröffnen</label>

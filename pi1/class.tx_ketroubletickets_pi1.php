@@ -235,7 +235,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$uid = $this->piVars['showUid'] ? $this->piVars['showUid'] : ( $this->piVars['updateUid'] ? $this->piVars['updateUid'] : $this->piVars['printview'] );
 			$this->internal['currentTable'] = $this->tablename;
 			$this->internal['currentRow'] = $this->pi_getRecord($this->tablename, $uid);
-
+			
 				// save the ticket before the data changes for later use
 			$this->oldTicket = $this->internal['currentRow'];
 
@@ -475,7 +475,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function handleSubmittedForm() {/*{{{*/
-
+		
 			// set some values for NEW tickets
 			// and UPDATED tickets
 		if ($this->piVars['newticket']) {
@@ -774,7 +774,31 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_only');
 					}
 				}
+				
 			}
+			
+			
+			// process redirect if activated and back pid set
+			// AK, 13.08.2010
+			if ($this->conf['listView.']['backPidRedirect.']['activated'] && $this->piVars['backPid']) {
+				
+				// extend the status message with redirection notice
+				$this->markerArray['STATUS_MESSAGE_TEXT'] .= ' '.sprintf($this->pi_getLL('status_additional_redirect'),$this->conf['listView.']['backPidRedirect.']['wait']);
+				
+				// generate redirect link
+				unset($linkconf);
+				$linkconf['parameter'] = $this->piVars['backPid'];
+				$linkconf['useCacheHash'] = false;
+				$redirectLink = $this->cObj->typoLink_URL($linkconf);
+				
+				// generate location header url
+				$redirectUrl = t3lib_div::locationHeaderUrl($redirectLink);
+				
+				// process redirect
+				header("Refresh: ".$this->conf['listView.']['backPidRedirect.']['wait']."; ".$redirectUrl);
+				
+			}
+			
 		}
 	}/*}}}*/
 
@@ -3909,8 +3933,18 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				} else if ($renderType == CONST_RENDER_TYPE_CSV) {
 					$retval = $this->internal['currentRow']['title'];
 				} else {
+					
+					// AK 13.08.2010
+					// add backPid to singleview link if activated in TS
+					// and singleview pid is different than current pid
+					$mergeArray = array();
+					if ($this->conf['listView.']['backPidRedirect.']['activated'] && $mainPage != $GLOBALS['TSFE']->id) {
+						$mergeArray = array('backPid' => $GLOBALS['TSFE']->id);
+					} 
+					
 					// function pi_list_linkSingle($str,$uid,$cache=FALSE,$mergeArr=array(),$urlOnly=FALSE,$altPageId=0)
-					$retval = $this->pi_list_linkSingle($this->internal['currentRow']['title'],$this->internal['currentRow']['uid'],0,0,0,$mainPage);
+					$retval = $this->pi_list_linkSingle($this->internal['currentRow']['title'],$this->internal['currentRow']['uid'],0,$mergeArray,0,$mainPage);
+					
 				}
 				return $retval;
 				break;
