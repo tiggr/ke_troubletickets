@@ -4682,8 +4682,16 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		foreach (t3lib_div::trimExplode(',', $this->conf['listView.']['headerList']) as $headerName) {
 
 			// add the sort parameter to the link
-			$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|' . ($this->internal['descFlag'] ? 0 : 1);
-
+			// AK 13.08.2010
+			// for priority: always show highest first
+			if ($headerName == 'priority' && $this->piVars['sort'] != 'priority,1') {
+				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|1';
+			} else if ($headerName == 'priority' && $this->piVars['sort'] == 'priority,1'){
+				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|0';
+			} else {
+				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|' . ($this->internal['descFlag'] ? 0 : 1);
+			}
+			
 			// Mark this Link, if it is the currently active sorting
 			$wrap = $this->internal['descFlag'] ? '<span class="sort_active_desc">|</span>' : '<span class="sort_active_asc">|</span>';
 			$wrap = (substr($this->piVars['sort'], 0, strlen($headerName)) == $headerName) ? $wrap : '';
