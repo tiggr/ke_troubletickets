@@ -147,7 +147,10 @@ plugin.tx_ketroubletickets_pi1 {
 	# thumbnails for attached files
 	thumbnailImage.preview = IMAGE
 	thumbnailImage.preview.file.maxW = 50
-
+	
+	# show comment form in "new ticket form" when creating new ticket?
+	allowCommentsInNewTicketForm = 0
+	
 	# different imges for different mime types (in case a thumbnail cannot be generated)
 	thumbnailImage.default = IMAGE
 	thumbnailImage.default.file = EXT:ke_troubletickets/res/images/fileicons/default.gif

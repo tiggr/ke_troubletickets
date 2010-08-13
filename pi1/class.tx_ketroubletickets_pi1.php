@@ -631,6 +631,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
 					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_new_ticket');
 				}
+				
+				// process comment form if allowed for new tickets and data available
+				if ($this->conf['allowCommentsInNewTicketForm'] && !empty($this->piVars['content'])) $this->handleSubmittedCommentForm();
 
 			} else { // update ticket
 
@@ -2287,8 +2290,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// add the ticket history
 		$this->markerArray['OPTIONAL_TICKET_HISTORY'] = $this->renderTicketHistory($this->internal['currentRow']['uid']);
 
-			// add the comment form and the list of comments (only if we are editing an existing ticket)
-		if ($this->piVars['showUid'] || $this->piVars['updateUid']) {
+			// add the comment form and the list of comments
+			// (only if we are editing an existing ticket or comments are allowed for new ticket form)
+		if (($this->piVars['showUid'] || $this->piVars['updateUid']) || ($this->piVars['do'] == 'new' && $this->conf['allowCommentsInNewTicketForm'])) {
 			$this->markerArray['OPTIONAL_TICKET_COMMENT'] = $this->renderCommentForm($this->internal['currentRow']['uid']);
 		} else {
 			$this->markerArray['OPTIONAL_TICKET_COMMENT'] = '';
