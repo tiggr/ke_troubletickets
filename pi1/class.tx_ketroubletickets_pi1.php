@@ -123,7 +123,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-
+		
 			// path to this extension
 		$this->extPath = t3lib_extMgm::siteRelPath($this->extKey);
 
@@ -1973,12 +1973,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	/**
 	 * generateDBInsertValue
 	 *
-	 * Parses and cleans up the submitted form values in order
-	 * to insert them into the database
+	 * Parses and cleans up the submitted form values found in piVars in order
+	 * to insert them into the database.
 	 *
-	 * @param mixed $fieldConf
+	 * @param array $fieldConf
 	 * @access public
-	 * @return void
+	 * @return mixed
 	 */
 	public function generateDBInsertValue($fieldConf, $returnValue = '') {/*{{{*/
 		$lcObj = t3lib_div::makeInstance('tslib_cObj');
@@ -2701,6 +2701,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
  	* 1. follow-up ticketes
  	* 2. existing tickets which the user is about to edit
  	* 3. fields which have predefined values in the plugin flexform
+ 	* 4. on updating a ticket: If an error occured, get prefill the form fields
+ 	* with the submitted values. IMPORTANT: The value in piVars is the raw value from the
+ 	* form, not the value that would have been written into the database. So we
+ 	* have to use generateDBInsertValue().
  	*
  	* @param   array $fieldConf Field configuration as set in typoscript
  	* @return  string
@@ -2713,7 +2717,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if (count($this->parentTicket)) {
 			$prefillValue = $this->getPrefillValueFromParentTicket($fieldConf);
 		} else {
-			if (!empty($this->internal['currentRow'][$fieldConf['name']])) {
+			if ($this->piVars['updateUid'] && count($this->formErrors)) {
+				$prefillValue = $this->generateDBInsertValue($fieldConf);
+			} else if (!empty($this->internal['currentRow'][$fieldConf['name']])) {
 				$prefillValue = $this->internal['currentRow'][$fieldConf['name']];
 			} else if ($fieldConf['name'] == 'responsible_feuser' && $this->ffdata['responsible_singleuser_preselected']) {
 				$prefillValue = $this->ffdata['responsible_singleuser_preselected'];
@@ -2751,14 +2757,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// ($this->insertFields).
 			// 3. If we are updating an existing ticket, get the values from the database
 			// ($this->internal['currentRow']).
+			// If we are updating an existing ticket and there are errors, remember the values
+			// the user entered before. That means get through generateDBInsertValue which
+			// fetches them from piVars and parses them. The function
+			// getPrefillValue will take care of that.
 			// 4. If we are rendering fields for the listview filter, we find the values
 			// in $this->filter.
-			// 5. TODO: If we wanted to update a ticket, but errors occured, we
-			// find the data in the piVars. But these data have to be processed
-			// first (see function getFieldContent), so we cannot use the raw data
-			// as prefillValue.
-			// So for now we use $this->internal['currentRow'] which resets the
-			// fields. Although comments will be kept when erros occur!
 		if ($this->piVars['do'] == 'new' && !$this->piVars['newticket'] && !$this->piVars['showUid'] && !$this->piVars['updateUid']) {
 			$prefillValue = $this->getPrefillValue($fieldConf);
 		} else if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
