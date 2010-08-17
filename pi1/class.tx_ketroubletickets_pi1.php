@@ -2226,19 +2226,17 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
 			} else {
 					// current user has no write access
-					// special case: The current user has
-					// NO write access to the current field, but a value has to
-					// be selected, because it's a required field.
-					// For this case, we add a hidden field with
-					// the desired value to the form.
+					// render the field
+				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name'], 'default', $fieldConf);
+
+					// In order not to loose the value, we add a hidden field
+					// to the form.
 				$prefillValue = $this->getPrefillValue($fieldConf);
+				$prefillValue = $this->parsePrefillValue($fieldConf, $prefillValue);
 				if (!empty($prefillValue)) {
 					$this->hiddenFormFields[$fieldConf['name']] = '<input type="hidden" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="'. $prefillValue .'">';
 					$this->internal['currentRow'][$fieldConf['name']] = $prefillValue;
 				}
-
-					// render the field
-				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name'], 'default', $fieldConf);
 			}
 
 				// make the values of the ticket available without the need to
@@ -2716,6 +2714,38 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	}
 
 	/**
+ 	* Parses a value coming from the Database for the use in either a form
+ 	* field or in a hidden field.
+ 	*
+ 	* @param   array $fieldConf configuration for the field
+ 	* @param   mixed $value value of the field
+ 	* @return  mixed
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	*/
+	public function parsePrefillValue($fieldConf, $prefillValue) {
+		if (prefillValue) {
+			switch ($fieldConf['type']) {
+				case 'inputHoursToMinutes':
+					$prefillValue = $this->lib->m2h($prefillValue);
+				break;
+
+				case 'input':
+					$prefillValue = $this->cleanUpHtmlOutput($prefillValue);
+				break;
+
+				case 'date':
+					$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
+				break;
+
+				case 'filelist':
+					$prefillValue = $this->internal['currentRow']['files'];
+				break;
+			}
+		}
+		return $prefillValue;
+	}
+
+	/**
 	 * renderFormField
 	 *
 	 * renders a form field depending on the given configuration $fieldConf
@@ -2762,11 +2792,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			case 'input':
 			case 'inputHoursToMinutes':
-				if (strlen($prefillValue) && $fieldConf['type'] == 'inputHoursToMinutes') {
-					$prefillValue = $this->lib->m2h($prefillValue);
-				} else {
-					$prefillValue = $this->cleanUpHtmlOutput($prefillValue);
-				}
+				$prefillValue = $this->parsePrefillValue($fieldConf, $prefillValue);
 				$content .= '<input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
 			break;
 
@@ -2938,12 +2964,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			case 'date':
 				$fieldName = $this->prefixId . '[' . $fieldConf['name'] . ']';
-
-				if (!empty($prefillValue)) {
-					$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
-				} else {
-					$prefillValue = '';
-				}
+				$prefillValue = $this->parsePrefillValue($fieldConf, $prefillValue);
 
 				if ($this->useDate2Cal) {
 					// render the datefield using the date2cal extension
@@ -4107,7 +4128,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// show the files, which already have been uploaded
 					// including a delete link
 				$retval = '';
-				$prefillValue = $this->internal['currentRow']['files'];
+				$prefillValue = $this->parsePrefillValue($fieldConf, $prefillValue);
 				if (strlen($prefillValue)) {
 					foreach (explode(',', $prefillValue) as $filename) {
 						if (file_exists($this->fileUploadDir . $filename)) {
