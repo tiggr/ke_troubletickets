@@ -592,6 +592,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// if everything is OK, insert the ticket into the database or update it
 		if (!count($this->formErrors)) {
 			if (!$this->piVars['updateUid']) { // new ticket
+					// set the "close_time" field, if the ticket is directy
+					// set to "closed" the moment it's created.
+				if (stristr($this->insertFields['status'], CONST_STATUS_CLOSED)) {
+					$this->insertFields['close_time'] = time();
+				}
+
 				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $this->insertFields) ? true : false;
 				$new_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 
@@ -619,7 +625,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_new_ticket');
 				}
 
-				// process comment form if allowed for new tickets and data available
+					// process comment form if allowed for new tickets and data available
 				if ($this->conf['allowCommentsInNewTicketForm'] && !empty($this->piVars['content'])) $this->handleSubmittedCommentForm();
 
 			} else { // update ticket
