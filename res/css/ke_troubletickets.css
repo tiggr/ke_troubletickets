@@ -779,3 +779,9 @@
 	font-weight: bold;
 	display:block;
 }
+
+/* date2cal */
+.tx-ketroubletickets-pi1 .date2cal_img_help,
+.tx-ketroubletickets-pi1 .success {
+	display:none;
+}

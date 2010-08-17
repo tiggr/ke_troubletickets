@@ -113,7 +113,7 @@ plugin.tx_ketroubletickets_pi1 {
 
 	# date2cal dateformat (date input fieds) configuration
 	# german format (always use - as separator, unfortunately date2cal does not work correctly when using dots as a separator)
-	datefield_inputfieldformat = %d-%m-%Y
+	datefield_inputfieldformat = %d.%m.%Y
 	# english format
 	# datefield_inputfieldformat = %m-%d-%Y
 
@@ -147,10 +147,10 @@ plugin.tx_ketroubletickets_pi1 {
 	# thumbnails for attached files
 	thumbnailImage.preview = IMAGE
 	thumbnailImage.preview.file.maxW = 50
-	
+
 	# show comment form in "new ticket form" when creating new ticket?
 	allowCommentsInNewTicketForm = 0
-	
+
 	# different imges for different mime types (in case a thumbnail cannot be generated)
 	thumbnailImage.default = IMAGE
 	thumbnailImage.default.file = EXT:ke_troubletickets/res/images/fileicons/default.gif
@@ -486,13 +486,13 @@ plugin.tx_ketroubletickets_pi1.listView {
 	templateSubpartRow = ###LISTVIEW_SINGLE_ROW###
 	entries_per_page_options = 10,20,50
 	hideIfNoResults = 0
-	
+
 	# if backPid is set and is different than listview pid, redirect to
 	# refering page after processing actions
 	backPidRedirect.activated = 0
 	# seconds until redirect is processed
 	backPidRedirect.wait = 2
-	
+
 }
 
 # csvView defaults

@@ -30,7 +30,7 @@
 require_once(PATH_tslib.'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('ke_troubletickets').'lib/class.tx_ketroubletickets_lib.php');
 
-// Constants
+	// Constants
 define(CONST_NEWTICKET, 'NEWTICKET');
 define(CONST_NEWCOMMENT, 'NEWCOMMENT');
 define(CONST_REOPENANDCOMMENT, 'REOPENANDNEWCOMMENT');
@@ -52,19 +52,13 @@ define(DONT_RENDER_EMPTY_DRODOWN_ELEMENT, false);
 define(CONST_KEEP_TAGS_YES, 'keeptags');
 define(CONST_RENDER_ALL_INTERNAL_FIELDS, 'render_all_internal_fields');
 
-// RTE
+	// RTE
 require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
 
-// date2cal, modififed to work in the frontend
-// date2cal works only in versions below 4.3
-if (t3lib_div::int_from_ver(TYPO3_version) < 4003000 && t3lib_extMgm::isLoaded('date2cal')) {
-	require_once(t3lib_extMgm::extPath('ke_troubletickets').'pi1/class.frontend_JScalendar.php');
-}
-
-// Basic file func, needed for checking filenames when uploading files
+	// Basic file func, needed for checking filenames when uploading files
 require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php');
 
-// Mail functions
+	// Mail functions
 require_once (PATH_t3lib.'class.t3lib_htmlmail.php');
 
 /**
@@ -123,7 +117,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		
+
 			// path to this extension
 		$this->extPath = t3lib_extMgm::siteRelPath($this->extKey);
 
@@ -155,18 +149,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// make the configurationen class-wide available
-		$this->conf=$conf;
+		$this->conf = $conf;
 
-			// use date2cal only in TYPO3 below 4.3 (date2cal does not work with 4.3)
-		$this->useDate2Cal = (t3lib_div::int_from_ver(TYPO3_version) < 4003000) && t3lib_extMgm::isLoaded('date2cal');
-
-			// make the date2cal instance
-		if (t3lib_extMgm::isLoaded('date2cal') && $this->useDate2Cal) {
-			$this->date2cal = frontend_JScalendar::getInstance();
-		} else {
-			if ($this->useDate2Cal) {
-				return '<p class="error">' . $this->pi_getLL('error_date2cal_not_loaded') . '</p>';
-			}
+			// use date2cal if the extension is installed
+		if (t3lib_extMgm::isLoaded('date2cal')) {
+			$this->initDate2Cal();
 		}
 
 			// a local content object (with clear configuration)
@@ -235,7 +222,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$uid = $this->piVars['showUid'] ? $this->piVars['showUid'] : ( $this->piVars['updateUid'] ? $this->piVars['updateUid'] : $this->piVars['printview'] );
 			$this->internal['currentTable'] = $this->tablename;
 			$this->internal['currentRow'] = $this->pi_getRecord($this->tablename, $uid);
-			
+
 				// save the ticket before the data changes for later use
 			$this->oldTicket = $this->internal['currentRow'];
 
@@ -475,7 +462,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function handleSubmittedForm() {/*{{{*/
-		
+
 			// set some values for NEW tickets
 			// and UPDATED tickets
 		if ($this->piVars['newticket']) {
@@ -631,7 +618,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$this->markerArray['STATUS_CSS_CLASS'] = 'status_ok';
 					$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_new_ticket');
 				}
-				
+
 				// process comment form if allowed for new tickets and data available
 				if ($this->conf['allowCommentsInNewTicketForm'] && !empty($this->piVars['content'])) $this->handleSubmittedCommentForm();
 
@@ -737,8 +724,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 					// exec update database query
 				$saveFieldsStatus = $GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], $this->insertFields) ? true : false;
-				
-				
+
+
 					// hook: after updating a ticket
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterTicketUpdate'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterTicketUpdate'] as $_classRef) {
@@ -746,7 +733,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$_procObj->afterTicketUpdate($this->internal['currentRow']['uid'], $this);
 					}
 				}
-				
+
 					// send the notification emails
 				$this->checkChangesAndSendNotificationEmails($this->internal['currentRow']['uid'], $changedFields, $changedInternalFields);
 
@@ -774,31 +761,31 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$this->markerArray['STATUS_MESSAGE_TEXT'] = $this->pi_getLL('status_fields_only');
 					}
 				}
-				
+
 			}
-			
-			
+
+
 			// process redirect if activated and back pid set
 			// AK, 13.08.2010
 			if ($this->conf['listView.']['backPidRedirect.']['activated'] && $this->piVars['backPid']) {
-				
+
 				// extend the status message with redirection notice
 				$this->markerArray['STATUS_MESSAGE_TEXT'] .= ' '.sprintf($this->pi_getLL('status_additional_redirect'),$this->conf['listView.']['backPidRedirect.']['wait']);
-				
+
 				// generate redirect link
 				unset($linkconf);
 				$linkconf['parameter'] = $this->piVars['backPid'];
 				$linkconf['useCacheHash'] = false;
 				$redirectLink = $this->cObj->typoLink_URL($linkconf);
-				
+
 				// generate location header url
 				$redirectUrl = t3lib_div::locationHeaderUrl($redirectLink);
-				
+
 				// process redirect
 				header("Refresh: ".$this->conf['listView.']['backPidRedirect.']['wait']."; ".$redirectUrl);
-				
+
 			}
-			
+
 		}
 	}/*}}}*/
 
@@ -1727,7 +1714,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$linkToTicketSubpart = '';
 		}
 		$localMarkerArray['LINK_TO_SINGLEVIEW_FROM_EMAIL'] = $linkToTicketSubpart;
-		
+
 		// hook for additional notification marker
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalNotificationMarker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalNotificationMarker'] as $_classRef) {
@@ -1735,7 +1722,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$_procObj->additionalNotificationMarker($localMarkerArray, $this);
 			}
 		}
-		
+
 			// get some more markers
 		$localMarkerArray = $this->getAdditionalMarkers($localMarkerArray, CONST_RENDER_TYPE_EMAIL);
 
@@ -2210,14 +2197,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// add date picker javascript to the header
 			// and configure it
-		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker'] = '<script type="text/javascript" src="'.$this->extPath.'js/datetimepicker.js"></script>';
-
-			// include Javascript for printview
-		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker_config'] .= '
+		if (!$this->useDate2Cal) {
+			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker'] = '<script type="text/javascript" src="'.$this->extPath.'js/datetimepicker.js"></script>';
+			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker_config'] .= '
 <script type="text/javascript">
 	var DateSeparator="' . $this->conf['datepicker.']['separator'] . '";
 </script>';
-
+		}
 			// get the template subpart
 		$content = $this->cObj->getSubpart($this->templateCode,'###TICKET_FORM###');
 
@@ -2335,9 +2321,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		} else {
 			$this->markerArray['FOLLOWUPLINK'] = '';
 		}
-		
-		
-		
+
+
+
 		// hook for additional ticketForm Markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalTicketFormMarker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalTicketFormMarker'] as $_classRef) {
@@ -2345,7 +2331,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$_procObj->additionalTicketFormMarker($this->markerArray, $this);
 			}
 		}
-		
+
 
 			// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
@@ -2457,7 +2443,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		// get comments
 		$this->markerArray['FIELD_TICKET_COMMENT'] = $this->renderCommentList($this->internal['currentRow']['uid'], $renderType);
-		
+
 		// hook for additional printview markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalPrintviewMarker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalPrintviewMarker'] as $_classRef) {
@@ -2465,7 +2451,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$_procObj->additionalPrintviewMarker($this->markerArray, $this);
 			}
 		}
-		
+
 		// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
 
@@ -2569,21 +2555,21 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function getAdditionalMarkers($markerArray=array(), $renderType='') {/*{{{*/
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 
-		// UID
+			// UID
 		if (is_array($this->internal['currentRow']) && !empty($this->internal['currentRow']['uid'])) {
 			$markerArray['UID'] = sprintf($this->conf['ticket_uid_formatstring'],$this->internal['currentRow']['uid']);
 		} else {
 			$markerArray['UID'] = '';
 		}
 
-		// "CLEAN" UID WITHOUT FORMATTING -- AK 17:18 25.05.2009
+			// "CLEAN" UID WITHOUT FORMATTING -- AK 17:18 25.05.2009
 		if (is_array($this->internal['currentRow']) && !empty($this->internal['currentRow']['uid'])) {
 			$markerArray['CLEANUID'] = $this->internal['currentRow']['uid'];
 		} else {
 			$markerArray['CLEANUID'] = '';
 		}
 
-		// get the label markers from locallang
+			// get the label markers from locallang
 		foreach (explode(',', $this->conf['locallangLabelList']) as $labelName) {
 			$markerArray['LABEL_' . trim($labelName)] = $this->pi_getLL('LABEL_' . trim($labelName));
 			if ($renderType == CONST_RENDER_TYPE_EMAIL) {
@@ -2591,7 +2577,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// generate the "back" link marker
+			// generate the "back" link marker
 		$markerArray['BACK_TO_LISTVIEW'] = $this->cObj->typoLink(
 				$this->pi_getLL('back_to_listview', 'Back to listview.'),
 				array(
@@ -2600,7 +2586,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					)
 				);
 
-		// generate the "back" link marker - only url
+			// generate the "back" link marker - only url
 		$markerArray['BACK_TO_LISTVIEW_URL'] = $this->cObj->typoLink_URL(
 				array(
 					'parameter' => $GLOBALS['TSFE']->id,
@@ -2608,15 +2594,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					)
 				);
 
-		// current url
+			// current url
 		$markerArray['CURRENT_URL'] = htmlspecialchars(t3lib_div::getIndpEnv('REQUEST_URI'));
 
-		// TODO: link to the current ticket singleview
-		// The single-view of this ticket is defined in the category this ticket belongs to.
+			// TODO: link to the current ticket singleview
+			// The single-view of this ticket is defined in the category this ticket belongs to.
 		// $mainPage = ...
 		// $markerArray['LINK_TO_SINGLEVIEW'] $this->pi_list_linkSingle($this->pi_getLL('open_this_ticket','Open this ticket'),$this->internal['currentRow']['uid'],0,0,0,$mainPage);
 
-		// generate the "open new ticket" link marker
+			// generate the "open new ticket" link marker
 		$linkConf = array(
 					'parameter' => $GLOBALS['TSFE']->id,
 					'additionalParams' => $this->getAdditionalParamsFromKeepPiVars() . '&' . $this->prefixId . '[do]=new'
@@ -2624,7 +2610,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$markerArray['LINK_TO_NEW_TICKET_FORM'] = $this->cObj->typoLink($this->pi_getLL('link_to_new_ticket', 'New ticket.'), $linkConf);
 		$markerArray['LINK_TO_NEW_TICKET_FORM_URL'] = $this->cObj->typoLink_URL($linkConf);
 
-		// generate the link to csv export
+			// generate the link to csv export
 		$markerArray['LINK_URL_CSV_EXPORT'] = $this->cObj->typoLink_URL(
 				array(
 					'parameter' => $GLOBALS['TSFE']->id,
@@ -2632,7 +2618,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					)
 				);
 
-		// Addtional Icons
+			// Addtional Icons
 		if ($this->conf['additionalIconList']) {
 			foreach (t3lib_div::trimExplode(',', $this->conf['additionalIconList']) as $iconName) {
 				$imageConf = $this->conf[$iconName . '.'];
@@ -2641,20 +2627,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
-		// date2cal js for singleview
-		if ($this->useDate2Cal) {
-			$markerArray['DATE2CAL_JS'] = $this->date2cal->getMainJS();
-		} else {
-			$markerArray['DATE2CAL_JS'] = '';
-		}
+			// Marker for date2cal
+			// obsolete with date2cal version 7.3.1
+			// just keep to empty the marker in order to make it compatible
+			// with older templates which still containt ther marker DATE2CAL_JS
+		// $markerArray['DATE2CAL_JS'] = $this->date2cal->getMainJS();
+		$markerArray['DATE2CAL_JS'] = '';
 
-		// Permalink URL
+			// Permalink URL
 		unset($linkconf);
 		$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 		$linkconf['additionalParams'] = '&tx_ketroubletickets_pi1[showUid]='.$this->piVars['showUid'];
 		$markerArray['PERMALINK_URL'] = $this->cObj->typoLink_URL($linkconf);
 
-		// printview URL
+			// printview URL
 		unset($linkconf);
 		$linkconf['parameter'] = $GLOBALS['TSFE']->id.' 800x600';
 		$linkconf['additionalParams'] = '&tx_ketroubletickets_pi1[printview]='.$this->piVars['showUid'];
@@ -2662,7 +2648,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$linkconf['JSwindow_params'] = 'status=0,menubar=0,scrollbars=1,resizable=1,location=0,directories=0,toolbar=0';
 		$markerArray['PRINTLINK'] = $this->cObj->typoLink($this->pi_getLL('LABEL_PRINTLINK'),$linkconf);
 
-		// ke_ukb label markers
+			// ke_ukb label markers
 		if (t3lib_extMgm::isLoaded('ke_ukb')) {
 			$markerArray['LABEL_RELATED_TICKETS'] = $this->pi_getLL('LABEL_RELATED_TICKETS_UKB');
 		}
@@ -2742,7 +2728,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function renderFormField($fieldConf, $renderEmptyDropdownFields=0, $addJS='') {/*{{{*/
-		
+
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
 		$content = '';
 
@@ -2951,45 +2937,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 
 			case 'date':
-				
-				// render the datefield using the date2cal extension
-				if ($this->useDate2Cal) {
+				$fieldName = $this->prefixId . '[' . $fieldConf['name'] . ']';
 
-					if (!empty($prefillValue)) {
-						$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
-
-						// replace the dots and slashes in the datestring
-						$prefillValue = str_replace('.', '-', $prefillValue);
-						$prefillValue = str_replace('/', '-', $prefillValue);
-					} else {
-						$prefillValue = '';
-					}
-
-					$field = $this->prefixId . '[' . $fieldConf['name'] . ']';
-
-					$this->date2cal->config['inputField'] = $field;
-					$this->date2cal->config['calConfig']['ifFormat'] = $this->conf['datefield_inputfieldformat'];
-					$this->date2cal->setConfigOption('ifFormat', $this->conf['datefield_inputfieldformat']);
-
-					$this->date2cal->setConfigOption('showsTime', 0, true);
-					$this->date2cal->setConfigOption('time24', 1, true);
-
-					// additional config options, see http://forge.typo3.org/issues/show/2674
-					$this->date2cal->setConfigOption('inputField', $field.'_hr');
-					$this->date2cal->setConfigOption('button', $field.'_trigger');
-
-					// render the datepicker field
-					$fieldContent = $this->date2cal->render($prefillValue, $field);
+				if (!empty($prefillValue)) {
+					$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
 				} else {
+					$prefillValue = '';
+				}
 
-					if (!empty($prefillValue)) {
-						$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
-					} else {
-						$prefillValue = '';
-					}
-
-					$prefillValue = $this->cleanUpHtmlOutput($prefillValue);
-					$fieldName = $this->prefixId . '[' . $fieldConf['name'] . ']';
+				if ($this->useDate2Cal) {
+					// render the datefield using the date2cal extension
+					$this->JSCalendar->setInputField($fieldName);
+					$fieldContent = $this->JSCalendar->render($prefillValue);
+				} else {
+					// render the datefield using the datepicker javascript
 					$fieldContent .= '<input '
 						. $addJS
 						. 'type="text" name="' . $fieldName
@@ -3000,7 +2961,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$fieldContent .= '<a href="javascript:NewCal(\'' . $fieldName . '\',\'' . $this->conf['datepicker.']['dateformat'] . '\')">';
 					$fieldContent .= '<img src="' . $this->extPath . 'res/images/cal.gif" width="16" height="16" border="0"></a>';
 				}
-
 
 				$content .= $fieldContent;
 			break;
@@ -3924,18 +3884,18 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				} else if ($renderType == CONST_RENDER_TYPE_CSV) {
 					$retval = $this->internal['currentRow']['title'];
 				} else {
-					
+
 					// AK 13.08.2010
 					// add backPid to singleview link if activated in TS
 					// and singleview pid is different than current pid
 					$mergeArray = array();
 					if ($this->conf['listView.']['backPidRedirect.']['activated'] && $mainPage != $GLOBALS['TSFE']->id) {
 						$mergeArray = array('backPid' => $GLOBALS['TSFE']->id);
-					} 
-					
+					}
+
 					// function pi_list_linkSingle($str,$uid,$cache=FALSE,$mergeArr=array(),$urlOnly=FALSE,$altPageId=0)
 					$retval = $this->pi_list_linkSingle($this->internal['currentRow']['title'],$this->internal['currentRow']['uid'],0,$mergeArray,0,$mainPage);
-					
+
 				}
 				return $retval;
 				break;
@@ -4716,7 +4676,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			} else {
 				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|' . ($this->internal['descFlag'] ? 0 : 1);
 			}
-			
+
 			// Mark this Link, if it is the currently active sorting
 			$wrap = $this->internal['descFlag'] ? '<span class="sort_active_desc">|</span>' : '<span class="sort_active_asc">|</span>';
 			$wrap = (substr($this->piVars['sort'], 0, strlen($headerName)) == $headerName) ? $wrap : '';
@@ -4791,7 +4751,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @param int $uid
 	 * @return bool
 	 */
-	function isValidTicketUid($uid) {
+	public function isValidTicketUid($uid) {
 			// uid cannot be zero or negative
 		if ($uid<=0) return false;
 
@@ -4810,7 +4770,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * Description:
 	 * Author: Andreas Kiefer (kiefer@kennziffer.com)
 	 */
-	 function getEntriesPerPageSelection($lConf) {
+	 public function getEntriesPerPageSelection($lConf) {
 		$formAction = $this->cObj->typoLink_URL(array('parameter' => $GLOBALS['TSFE']->id));
 		$fieldContent .= '<form method="post" action="'.$formAction.'"><select name="'.$this->prefixId.'[entries_per_page]" onchange="this.form.submit();">';
 		$entriesPerPageOptions = explode(',',trim($this->conf['listView.']['entries_per_page_options']));
@@ -4828,7 +4788,34 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		return $fieldContent;
 	}
 
+	/**
+ 	* Inits date2cal extension for use in the frontend
+ 	*
+ 	* @return  void
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	* @since   Tue Aug 17 2010 10:13:47 GMT+0200
+ 	*/
+	public function initDate2Cal() {
+			// include jscalendar api
+		include_once(t3lib_extMgm::siteRelPath('date2cal') . '/src/class.jscalendar.php');
 
+			// init jscalendar class
+		$this->JSCalendar = JSCalendar::getInstance();
+
+			// set options
+			// don't show Natural Langage Parser
+		$this->JSCalendar->setNLP(false);
+
+			// Don't show time, use format from typoscript config
+		$this->JSCalendar->setDateFormat(false, $this->conf['datefield_inputfieldformat']);
+
+		// get initialisation code of the calendar
+		if (($jsCode = $this->JSCalendar->getMainJS()) != '') {
+			$GLOBALS['TSFE']->additionalHeaderData['date2cal'] = $jsCode;
+		}
+
+		$this->useDate2Cal = true;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ke_troubletickets/pi1/class.tx_ketroubletickets_pi1.php'])	{
