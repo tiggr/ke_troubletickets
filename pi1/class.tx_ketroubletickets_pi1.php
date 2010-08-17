@@ -2747,29 +2747,16 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$content = '';
 
 			// Get the prefillValue:
-			// 1. New ticket, has not been submitted yet:
-			// - if it is a follow-up ticket use some of the values from the related
-			// ticket as prefill values
-			// - if it is not a follow-up ticket, check if there are
-			// prefill options set in flexform.
+			// 1. New ticket with form errors, Existing ticket the user want's to edit.
 			// 2. If the form just has been submitted (new ticket),
 			// prefill the form fields with the already parsed submitted values
 			// ($this->insertFields).
-			// 3. If we are updating an existing ticket, get the values from the database
-			// ($this->internal['currentRow']).
-			// If we are updating an existing ticket and there are errors, remember the values
-			// the user entered before. That means get through generateDBInsertValue which
-			// fetches them from piVars and parses them. The function
-			// getPrefillValue will take care of that.
-			// 4. If we are rendering fields for the listview filter, we find the values
+			// 3. If we are rendering fields for the listview filter, we find the values
 			// in $this->filter.
-		if ($this->piVars['do'] == 'new' && !$this->piVars['newticket'] && !$this->piVars['showUid'] && !$this->piVars['updateUid']) {
+		if (($this->piVars['do'] == 'new' && !$this->piVars['newticket']) || $this->piVars['showUid'] || $this->piVars['updateUid']) {
 			$prefillValue = $this->getPrefillValue($fieldConf);
 		} else if ($this->piVars['newticket'] && strlen($this->insertFields[$fieldConf['name']])) {
 			$prefillValue = $this->insertFields[$fieldConf['name']];
-		} else if ( ($this->piVars['showUid'] || $this->piVars['updateUid']) && strlen($this->internal['currentRow'][$fieldConf['name']])) {
-			// $prefillValue = $this->internal['currentRow'][$fieldConf['name']];
-			$prefillValue = $this->getPrefillValue($fieldConf);
 		} else if (is_array($this->filter)) {
 			$prefillValue = $this->filter[$fieldConf['name']];
 		} else {
