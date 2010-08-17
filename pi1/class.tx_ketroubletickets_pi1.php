@@ -3303,13 +3303,27 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			case 'priority':
 			case 'owner_feuser':
 			case 'responsible_feuser':
+				$value = $this->parentTicket[$fieldConf['name']];
+			break;
 			case 'observers_feuser':
 				$value = $this->parentTicket[$fieldConf['name']];
+
+					// The current user will be the owner of the ticket (normally,
+					// because by default the owner can't be changed in the
+					// frontend), so add the former owner as observer of the
+					// follow-up ticket (only if he isn't already an observer).
+				if (!t3lib_div::inList($value, $this->parentTicket['owner_feuser'])) {
+					if ($value) {
+						$value .= ',';
+					}
+					$value .= $this->parentTicket['owner_feuser'];
+				}
 			break;
 			case 'related_tickets':
 				$value = $this->parentTicket['uid'];
 			break;
 		}
+
 		return $value;
 	}
 
