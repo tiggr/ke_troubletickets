@@ -87,6 +87,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	var $csv_filename 		= 'troubletickets_###DATE###.csv';
 	var $defaultCSS 		= 'res/css/ke_troubletickets.css';
 
+		// remember to which users a notification has been sent so
+		// that no double notifications are sent
+	var $alreadySentTo = array();
+
+
     /* RTE vars */
 	var $RTEObj;
     var $strEntryField;
@@ -1799,6 +1804,18 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function sendNotificationEmail($toEMail, $subject, $html_body, $sendAsHTML = 1) {/*{{{*/
+			// don't send a mail twice to the same user (for example if he is
+			// responsible AND observer)
+		if (in_array($toEMail, $this->alreadySentTo)) {
+			return ;
+		}
+		$this->alreadySentTo[] = $toEMail;
+
+			// only send a mail to the current user (who actually made the changes)
+			// if configured so
+		if ($GLOBALS['TSFE']->fe_user->user['email'] == $toEMail && !$this->conf['sendNotificationsToSelf']) {
+			return ;
+		}
 
 		// Only ASCII is allowed in the header
 		$subject = html_entity_decode(t3lib_div::deHSCentities($subject), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);

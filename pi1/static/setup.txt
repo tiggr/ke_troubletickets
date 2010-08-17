@@ -157,6 +157,11 @@ plugin.tx_ketroubletickets_pi1 {
 	# if the responsible user himself changes the responsibility.
 	addResponsibleUserAsObserverAfterDelegation = 0
 
+	# Send notifications to the user who changed the ticket. Normally that's
+	# not necessary since you know yourself that you changed the ticket and
+	# you don't want to have too much mails in your inbox.
+	sendNotificationsToSelf = 0
+
 	# different imges for different mime types (in case a thumbnail cannot be generated)
 	thumbnailImage.default = IMAGE
 	thumbnailImage.default.file = EXT:ke_troubletickets/res/images/fileicons/default.gif
