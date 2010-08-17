@@ -2418,7 +2418,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			else if ($fieldConf['internal'] && !$this->isCurrentUserInternalUser()) {
 				$content = $this->cObj->substituteSubpart ($content, '###INTERNAL_' . strtoupper(trim($fieldConf['name'])), '');
 			}
-			// imporved rendering of field "description"
+			// improved rendering of field "description"
 			else if ($fieldConf['name'] == 'description') {
 				$fieldContent = $this->internal['currentRow'][$fieldConf['name']];
 				// strip some tags
@@ -2648,7 +2648,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// ke_ukb label markers
 		if (t3lib_extMgm::isLoaded('ke_ukb')) {
-			$markerArray['LABEL_RELATED_TICKETS'] = $this->pi_getLL('LABEL_RELATED_TICKETS_UKB');
+			$markerArray['LABEL_RELATED_TICKETS'] = $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_RELATED_TICKETS_UKB'));
 		}
 
 		return $markerArray;
@@ -3957,7 +3957,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$retval = str_replace("\n", '', $retval);
 					$retval = str_replace("\r", '', $retval);
 				} else if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = $this->internal['currentRow']['description'];
+					$retval = $this->cleanUpHtmlOutput($this->internal['currentRow']['description'], CONST_KEEP_TAGS_YES);
 				} else {
 					$retval = $this->pi_RTEcssText($this->internal['currentRow']['description']);
 				}
