@@ -55,10 +55,10 @@
 			<label index="header_close_time">Closed on</label>
 			<label index="header_billing">Billing</label>
 		</languageKey>
-		
+
 		<languageKey index="de" type="array">
 			<label index="title">Aufgabenauswertung</label>
-			<label index="select_tickets_page">Auf dieser Seite befinden sich keine Tickets. Bitte wählen Sie im Seitenbaum eine Seite aus, auf der sich Tickets befinden.</label>
+			<label index="select_tickets_page">Auf dieser Seite befinden sich keine Aufgaben. Bitte wählen Sie im Seitenbaum eine Seite aus, auf der sich Aufgaben befinden.</label>
 			<label index="all_owners">Alle Besitzer</label>
 			<label index="all_responsible_users">Alle Verantwortlichen</label>
 			<label index="all_categories">Alle Kategorien</label>

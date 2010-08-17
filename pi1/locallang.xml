@@ -69,7 +69,7 @@
 			<label index="status_fields_and_comment">Your changes and your comment have been saved.</label>
 			<label index="status_new_ticket">Your ticket has been created.</label>
 			<label index="status_additional_redirect">You will be redirected in %s seconds.</label>
-			
+
 
 			<label index="link_to_new_ticket">Create new ticket</label>
 			<label index="link_followup">Create follow-up ticket</label>
@@ -273,7 +273,7 @@
 			<label index="formerror_could_not_be_deleted"> konnte nicht gelöscht werden.</label>
 			<label index="formerror_has_been_deleted"> wurde gelöscht.</label>
 			<label index="formerror_hours">Bitte geben Sie die Stundenzahl korrekt ein (z. B. 1,5).</label>
-			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Ticket konnte nicht erstellt werden.</label>
+			<label index="formerror_could_not_create_related_ticket">Verknüpfung mit Aufgabe konnte nicht erstellt werden.</label>
 			<label index="formerror_float_begin">Fehler: Bitte geben Sie in das Feld </label>
 			<label index="formerror_float_end"> einen Zahlenwert ein.</label>
 			<label index="formerror_not_allowed_on_close_begin">Fehler: Bitte füllen Sie das Feld </label>
@@ -454,7 +454,7 @@
 			<label index="tt_content.pi_ketroubletickets.observer_group_to_choose_from">Beobachter (Benutzergruppe, aus der einer ausgewählt werden kann)</label>
 			<label index="tt_content.pi_ketroubletickets.owner_group_to_choose_from">Besitzer (Benutzergruppe, aus der einer ausgewählt werden kann, muss per Typoscript aktiviert werden)</label>
 
-			<label index="tt_content.pi_ketroubletickets.ticket_administrators">Aufgaben-Administratoren (sehen alle Tickets)</label>
+			<label index="tt_content.pi_ketroubletickets.ticket_administrators">Aufgaben-Administratoren (sehen alle Aufgaben)</label>
 			<label index="tt_content.pi_ketroubletickets.internal_users">Interne Benutzer (sehen interne Felder)</label>
 		</languageKey>
 		<languageKey index="pl" type="array">
