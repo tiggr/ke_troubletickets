@@ -720,8 +720,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 							// if the status is currentyl "wait", set the status to the value
 							// defined in typoscript
+							// only do so if the status has not been changed by the user.
 						if ($this->conf['changeWaitStatusOnNewComment']
 							&& $this->internal['currentRow']['status'] == CONST_STATUS_WAIT
+							&& $this->insertFields['status'] == $this->internal['currentRow']['status']
 							&& t3lib_div::inList($this->conf['statusList'], $this->conf['changeWaitStatusOnNewComment'])) {
 
 								// change the status
