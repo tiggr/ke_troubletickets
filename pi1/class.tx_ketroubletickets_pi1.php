@@ -495,7 +495,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$this->insertFields[$fieldConf['name']] = $this->internal['currentRow'][$fieldConf['name']];
 				}
 			}
-
 		}
 
 			// handle each of the submitted fields as defined in the typoscript setup
@@ -589,6 +588,19 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
+			// the "project leader function": If a user is the responsible user of
+			// a ticket and delegates that ticket to another user, automatically add
+			// the former responsible user to the list of observers. That only happens
+			// if the responsible user himself changes the responsibility.
+		if ($this->piVars['updateUid']
+			&& $this->conf['addResponsibleUserAsObserverAfterDelegation']
+			&& $this->internal['currentRow']['responsible_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']
+			&& $this->insertFields['responsible_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid']
+			&& !t3lib_div::inList($GLOBALS['TSFE']->fe_user->user['uid'], $this->insertFields['observers_feuser'])
+			) {
+			$this->insertFields['observers_feuser'] = $this->addToCommaList($this->insertFields['observers_feuser'], $GLOBALS['TSFE']->fe_user->user['uid']);
+		}
+
 			// if everything is OK, insert the ticket into the database or update it
 		if (!count($this->formErrors)) {
 			if (!$this->piVars['updateUid']) { // new ticket
@@ -638,7 +650,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				foreach ($this->conf['formFieldList.'] as $fieldConf) {
 					$value_old = $this->internal['currentRow'][$fieldConf['name']];
 					$value_new = $this->insertFields[$fieldConf['name']];
-					#if ( (!empty($value_new) && !empty($value_new)) && ($value_old != $value_new)) {
 					if ( !empty($value_new) && ($value_old != $value_new)) {
 						$this->addHistoryEntry( array(
 									'ticket_uid' => $this->internal['currentRow']['uid'],
@@ -3313,10 +3324,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// frontend), so add the former owner as observer of the
 					// follow-up ticket (only if he isn't already an observer).
 				if (!t3lib_div::inList($value, $this->parentTicket['owner_feuser'])) {
-					if ($value) {
-						$value .= ',';
-					}
-					$value .= $this->parentTicket['owner_feuser'];
+					$value = $this->addToCommaList($value, $this->parentTicket['owner_feuser']);
 				}
 			break;
 			case 'related_tickets':

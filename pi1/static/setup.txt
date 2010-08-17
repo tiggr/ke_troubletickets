@@ -151,6 +151,12 @@ plugin.tx_ketroubletickets_pi1 {
 	# show comment form in "new ticket form" when creating new ticket?
 	allowCommentsInNewTicketForm = 0
 
+	# the "project leader function": If a user is the responsible user of
+	# a ticket and delegates that ticket to another user, automatically add
+	# the former responsible user to the list of observers. That only happens
+	# if the responsible user himself changes the responsibility.
+	addResponsibleUserAsObserverAfterDelegation = 0
+
 	# different imges for different mime types (in case a thumbnail cannot be generated)
 	thumbnailImage.default = IMAGE
 	thumbnailImage.default.file = EXT:ke_troubletickets/res/images/fileicons/default.gif
