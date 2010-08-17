@@ -1382,10 +1382,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 
 				// send notifications to owner
-				// (don't send it if the current user is the owner, because the
-				// user normally should know that he just changed the ticket.)
 			if ($this->internal['currentRow']['owner_feuser']
-					&& ($this->internal['currentRow']['owner_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
 					&& ($this->internal['currentRow']['notifications_owner'] == CONST_ONEVERYCHANGE
 						|| (
 							$this->internal['currentRow']['notifications_owner'] == CONST_ONSTATUSCHANGE
@@ -1413,13 +1410,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 
 				// send notifications to responsible user
-				// (don't send it if the current user is the responsible user,
-				// because the user normally should know that he just changed the ticket.)
-				// (don't send it if the owner is the the same as the responsible user,
-				// because than he would receive two mails)
 			if ($this->internal['currentRow']['responsible_feuser']
-					&& ($this->internal['currentRow']['responsible_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid'])
-					&& ($this->internal['currentRow']['owner_feuser'] != $this->internal['currentRow']['responsible_feuser'])
 					&& ($this->internal['currentRow']['notifications_responsible'] == CONST_ONEVERYCHANGE
 						|| (
 							$this->internal['currentRow']['notifications_responsible'] == CONST_ONSTATUSCHANGE
