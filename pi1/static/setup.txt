@@ -548,10 +548,10 @@ plugin.tx_ketroubletickets_pi1.teaserViewOwn {
 # Short Teaserview of own tickets
 plugin.tx_ketroubletickets_pi1.teaserViewOwnShort < plugin.tx_ketroubletickets_pi1.listView
 plugin.tx_ketroubletickets_pi1.teaserViewOwnShort {
-	fieldList = until_date, title, singleview_pagetitle
+	fieldList = until_date, title, singleview_pagetitle, priority_raw_value
 	results_at_a_time = 500
 	sort = until_date,1
-	cropTitle = 40
+	cropTitle = 50
 	templateSubpart = ###TEASERVIEWOWNSHORT###
 	templateSubpartRow = ###TEASERVIEWOWNSHORT_SINGLE_ROW###
 }

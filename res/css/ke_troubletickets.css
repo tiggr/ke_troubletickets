@@ -50,6 +50,10 @@
 	width:20px;
 }
 
+.tx-ketroubletickets-pi1 .priority_0 {
+	font-size: 9px;
+}
+
 .tx-ketroubletickets-pi1 .priority_1 {
 	font-size: 9px;
 }
@@ -62,6 +66,26 @@
 .tx-ketroubletickets-pi1 .priority_3 {
 	font-size: 9px;
 	color:red;
+}
+
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_0 a,
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_1 a,
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_2 a,
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_3 a,
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_0,
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_1,
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_2,
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_3 {
+	color:black;
+	font-size: 10px;
+}
+
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_3 a {
+	color:red;
+}
+
+.tx-ketroubletickets-pi1 .kett_teaserview_own_short .priority_1 a {
+	color:#888888;
 }
 
 /*------------------------------------------------------------------------------------------------------*/
