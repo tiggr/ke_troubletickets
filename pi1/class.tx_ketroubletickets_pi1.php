@@ -3958,8 +3958,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$title = $this->internal['currentRow']['title'];
 				$length = intval($this->listViewConf['cropTitle']);
 				if ( $length && strlen($title) > $length) {
-					$title = substr($title, 0, $length);
-					$title .= '...';
+					$title = $this->cObj->crop($title, $length . '| ...|1');
 				}
 
 				// don't link the title in the email and csv view
