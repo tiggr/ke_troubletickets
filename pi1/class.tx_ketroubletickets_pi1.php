@@ -86,6 +86,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	var $ticketHistory		= array();
 	var $csv_filename 		= 'troubletickets_###DATE###.csv';
 	var $defaultCSS 		= 'res/css/ke_troubletickets.css';
+	var $timetracking		= array();
+	var $listViewConf		= '';
 
 		// remember to which users a notification has been sent so
 		// that no double notifications are sent
@@ -118,6 +120,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return	The content that should be displayed on the website
 	 */
 	public function main($content,$conf) {/*{{{*/
+		$this->trackTime('start');
 
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
@@ -302,6 +305,58 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// read session data
 		$sessionVars = $GLOBALS['TSFE']->fe_user->getKey('ses',$this->prefixId);
 
+			// viewtype - get value from form or from session
+		if (!$this->piVars['viewtype'] && $sessionVars[$GLOBALS['TSFE']->id]['viewtype']) {
+			$this->piVars['viewtype'] = $sessionVars[$GLOBALS['TSFE']->id]['viewtype'];
+		}
+
+			// accept only allowed values
+		if (!in_array($this->piVars['viewtype'], t3lib_div::trimExplode(',', $this->conf['viewtypeList']))) {
+			unset($this->piVars['viewtype']);
+		}
+
+			// store chosen viewtype in session - if set
+		if ($this->piVars['viewtype']) {
+			$sessionVars[$GLOBALS['TSFE']->id]['viewtype'] = $this->piVars['viewtype'];
+		}
+
+			// set listview typoscript configuration
+			// "view" is defined in the backend (teaser / normal listview)
+			// "viewtype" is selected by the user in the frontend
+		switch ($this->ffdata['view']) {
+				// tickets the user is responsible for
+			case 'TEASER_OWN':
+				$this->listViewConf = $this->conf['teaserViewOwn.'];
+				break;
+
+			case 'TEASER_OWNSHORT':
+				$this->listViewConf = $this->conf['teaserViewOwnShort.'];
+				break;
+
+				// tickets the user delegated to other users
+			case 'TEASER_DEL':
+				$this->listViewConf = $this->conf['teaserViewDelegated.'];
+				break;
+
+			// teaser view
+			case 'TEASER_NORMAL':
+				$this->listViewConf = $this->conf['teaserView.'];
+				break;
+
+			default:
+				if ($this->piVars['viewtype'] == 'short') {
+					$this->listViewConf = $this->conf['listViewShort.'];
+				} else {
+					$this->listViewConf = $this->conf['listView.'];
+				}
+			break;
+		}
+
+			// get sorting from typoscript configuration if not set by piVars
+		if (!$this->piVars['sort'] && $this->listViewConf['sort']) {
+			$this->piVars['sort'] = $this->listViewConf['sort'];
+		}
+
 			// Initialize sorting
 			// set default sort when no sorting chosen and no sorting set in session data
 		if (empty($this->piVars['sort']) && empty($sessionVars[$GLOBALS['TSFE']->id]['sort'])) {
@@ -346,12 +401,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// set some default values for the filter
 			// TODO: Should be configurable in Typoscript in future versions
-			// AK 18:17 27.05.2009
 		$this->filter['status'] = $this->filter['status'] ? $this->filter['status'] : 'all_not_closed';
-		if ($this->ffdata['view'] == 'TEASER_OWN') {
+		if (strstr($this->ffdata['view'], 'TEASER_OWN')) {
 			$this->filter['responsible_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
-		if ($this->ffdata['view'] == 'TEASER_DEL') {
+		if (strstr($this->ffdata['view'], 'TEASER_OWNSHORT')) {
+			$this->filter['status'] = 'open_and_working';
+		}
+		if (strstr($this->ffdata['view'], 'TEASER_DEL')) {
 			$this->filter['owner_feuser'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
 
@@ -372,21 +429,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// store entries per page in session
 		$sessionVars[$GLOBALS['TSFE']->id]['entries_per_page'] = $this->piVars['entries_per_page'];
-
-			// viewtype - get value from form or from session
-		if (!$this->piVars['viewtype'] && $sessionVars[$GLOBALS['TSFE']->id]['viewtype']) {
-			$this->piVars['viewtype'] = $sessionVars[$GLOBALS['TSFE']->id]['viewtype'];
-		}
-
-			// accept only allowed values
-		if (!in_array($this->piVars['viewtype'], t3lib_div::trimExplode(',', $this->conf['viewtypeList']))) {
-			unset($this->piVars['viewtype']);
-		}
-
-			// store chosen viewtype in session - if set
-		if ($this->piVars['viewtype']) {
-			$sessionVars[$GLOBALS['TSFE']->id]['viewtype'] = $this->piVars['viewtype'];
-		}
 
 			// store session data
 		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->prefixId, $sessionVars);
@@ -1934,10 +1976,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// build query
 		$where = 'ticket_uid=' . $ticket_uid . $lcObj->enableFields($this->commentsTablename);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where, '', $this->conf['commentListOrderBy']);
-
-			// overwrite if latest only
-		if ($latest) $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where,$groupBy='',$orderBy='uid desc',$limit=1);
+		if (!$latest) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where, '', $this->conf['commentListOrderBy']);
+		} else {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, $where, '', 'uid desc', 1);
+		}
 
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			if ($renderType != CONST_RENDER_TYPE_CSV) {
@@ -3556,37 +3599,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return	HTML list of table entries
 	 */
 	public function listView()	{/*{{{*/
-
 			// which template should be used?
-			// "view" is defined in the backend (teaser / normal listview)
-			// "viewtype" is selected by the user in the frontend
-		switch ($this->ffdata['view']) {
-				// tickets the user is responsible for
-			case 'TEASER_OWN':
-				$lConf = $this->conf['teaserViewOwn.'];
-				break;
-
-				// tickets the user delegated to other users
-			case 'TEASER_DEL':
-				$lConf = $this->conf['teaserViewDelegated.'];
-				break;
-
-			// teaser view
-			case 'TEASER_NORMAL':
-				$lConf = $this->conf['teaserView.'];
-				break;
-
-			default:
-				if ($this->piVars['viewtype'] == 'short') {
-					$lConf = $this->conf['listViewShort.'];
-				} else {
-					$lConf = $this->conf['listView.'];
-				}
-			break;
-		}
-
-		$templateSubpart = $lConf['templateSubpart'];
-		$templateSubpartRow = $lConf['templateSubpartRow'];
+		$templateSubpart = $this->listViewConf['templateSubpart'];
+		$templateSubpartRow = $this->listViewConf['templateSubpartRow'];
 		$content = $this->cObj->getSubpart($this->templateCode, $templateSubpart);
 
 			// Initialize pointer
@@ -3605,11 +3620,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		list($this->internal['orderBy'], $this->internal['descFlag']) = explode(',', $this->piVars['sort']);
 
 			// Number of results to show in a listing.
-		$this->internal['results_at_a_time']=t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,10);
+		$this->internal['results_at_a_time']=t3lib_div::intInRange($this->listViewConf['results_at_a_time'],0,1000,10);
 		if ($this->piVars['entries_per_page']) $this->internal['results_at_a_time'] = $this->piVars['entries_per_page'];
 
 			// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
-		$this->internal['maxPages'] = t3lib_div::intInRange($lConf['maxPages'],0,1000,5);;
+		$this->internal['maxPages'] = t3lib_div::intInRange($this->listViewConf['maxPages'],0,1000,5);;
 
 			// fields to search in
 		$this->internal['searchFieldList'] = 'title,description';
@@ -3678,7 +3693,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 			// we exit here, if the listview has no results (if configured so)
-		if ($lConf['hideIfNoResults'] && !$this->internal['res_count']) {
+		if ($this->listViewConf['hideIfNoResults'] && !$this->internal['res_count']) {
 			return '';
 		}
 
@@ -3690,9 +3705,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// compile orderBy-parameter
 		$orderBy = $this->internal['orderBy'] . ($this->internal['descFlag']?' DESC' : '');
 
-			// add a second sorting (if sorting is not "priority"), second sorting is always priority
+			// add a second sorting (if sorting is not "priority"),
+			// second sorting is always priority,
+			// third is crdate
 		if ($this->internal['orderBy'] != 'priority') {
-			$orderBy .= ', priority DESC';
+			$orderBy .= ', priority DESC, crdate ASC';
 		}
 
 			// Increase limit for the csv export
@@ -3713,7 +3730,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// render the filters
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-			if (t3lib_div::inList(t3lib_div::uniqueList($this->conf['listView.']['filterList']),$fieldConf['name'])) {
+			if (t3lib_div::inList(t3lib_div::uniqueList($this->listViewConf['filterList']),$fieldConf['name'])) {
 				// dont't pre-select user values in the filter if the filter ist empty
 				if ($fieldConf['prefillWithCurrentUserIfEmpty']) {
 					$fieldConf['prefillWithCurrentUserIfEmpty'] = 0;
@@ -3753,7 +3770,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$wrapper['browseLinksWrap'] = '<div class="browseLinks">|</div>';
 		$wrapper['browseLinksWrap'] .= '<div class="kett_entries_per_page">';
 		$wrapper['browseLinksWrap'] .= '<label>'. $this->pi_getLL('LABEL_ENTRIES_PER_PAGE').'</label>';
-		$wrapper['browseLinksWrap'] .= $this->getEntriesPerPageSelection($lConf);
+		$wrapper['browseLinksWrap'] .= $this->getEntriesPerPageSelection($this->listViewConf);
 		$wrapper['browseLinksWrap'] .= '</div><div class="kett_float_clean">&nbsp;</div>';
 		$wrapper['showResultsWrap'] = '<p class="resultText">|</p>';
 		$wrapper['browseBoxWrap'] = '<div '.$this->pi_classParam('browsebox').'> | </div>';
@@ -3768,7 +3785,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// check every filter if there is content for every filter, otherwise substitute
 			// whole filter block subpart with empty content
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-			if (t3lib_div::inList(t3lib_div::uniqueList($this->conf['listView.']['filterList']),$fieldConf['name'])) {
+			if (t3lib_div::inList(t3lib_div::uniqueList($this->listViewConf['filterList']),$fieldConf['name'])) {
 				if ($this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] == '' ) {
 					$content = $this->cObj->substituteSubpart ($content, '###FILTER_BLOCK_' . strtoupper(trim($fieldConf['name'])), '');
 				}
@@ -3849,29 +3866,30 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function makeListItem($templateSubpartRow='')	{/*{{{*/
 		$content = $this->cObj->getSubpart($this->templateCode, $templateSubpartRow);
 
-		// define specific markers
-		if (strlen($this->conf['listView.']['fieldList'])) {
-			foreach (explode(',', $this->conf['listView.']['fieldList']) as $fieldName) {
+			// get the content of each field of a single ticket
+			// take into account which listview should be rendered
+		if (strlen($this->listViewConf['fieldList'])) {
+			foreach (explode(',', $this->listViewConf['fieldList']) as $fieldName) {
 				$this->markerArray[strtoupper(trim($fieldName))] = $this->getFieldContent(strtolower(trim($fieldName)));
 			}
 		}
 
-		// render special marker: own task
-		// set it to 'is_own_task' if the current task belongs to the current user, otherwise set it to 0
+			// render special marker: own task
+			// set it to 'is_own_task' if the current task belongs to the current user, otherwise set it to 0
 		$this->markerArray['OWN_TASK'] = $this->getFieldContent('own_task');
 
-		// render special marker: is_overdue
-		// set it to 1 if the "until_date" of the current Ticket is in the past
+			// render special marker: is_overdue
+			// set it to 1 if the "until_date" of the current Ticket is in the past
 		$this->markerArray['IS_OVERDUE'] = $this->getFieldContent('is_overdue');
 
-		// render special marker: has_attachment
-		// set it to 1 if the "until_date" of the current Ticket is in the past
+			// render special marker: has_attachment
+			// set it to 1 if the "until_date" of the current Ticket is in the past
 		$this->markerArray['IS_OVERDUE'] = $this->getFieldContent('is_overdue');
 
-		// get additional markers (locallang, ...)
+			// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
-		// substitute the markers
+			// substitute the markers
 		$content = $this->cObj->substituteMarkerArray($content,$this->markerArray,'###|###',true);
 
 		return $content;
@@ -3936,11 +3954,19 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			case 'title':
 				$mainPage = $this->getSingleViewPageIdForCurrentTicket();
 
+				// crop title
+				$title = $this->internal['currentRow']['title'];
+				$length = intval($this->listViewConf['cropTitle']);
+				if ( $length && strlen($title) > $length) {
+					$title = substr($title, 0, $length);
+					$title .= '...';
+				}
+
 				// don't link the title in the email and csv view
 				if ($renderType == CONST_RENDER_TYPE_EMAIL) {
-					$retval = $this->cleanUpHtmlOutput($this->internal['currentRow']['title']);
+					$retval = $this->cleanUpHtmlOutput($title);
 				} else if ($renderType == CONST_RENDER_TYPE_CSV) {
-					$retval = $this->internal['currentRow']['title'];
+					$retval = $title;
 				} else {
 
 					// AK 13.08.2010
@@ -3952,7 +3978,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					}
 
 					// function pi_list_linkSingle($str,$uid,$cache=FALSE,$mergeArr=array(),$urlOnly=FALSE,$altPageId=0)
-					$retval = $this->pi_list_linkSingle($this->internal['currentRow']['title'],$this->internal['currentRow']['uid'],0,$mergeArray,0,$mainPage);
+					$retval = $this->pi_list_linkSingle($title, $this->internal['currentRow']['uid'], 0, $mergeArray, 0, $mainPage);
 
 				}
 				return $retval;
@@ -4027,7 +4053,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				break;
 
 			case 'number_of_comments':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->commentsTablename, 'ticket_uid =' . $this->internal['currentRow']['uid'] . $lcObj->enableFields($this->commentsTablename));
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'*',
+						$this->commentsTablename,
+						'ticket_uid ='
+							. $this->internal['currentRow']['uid']
+							. $lcObj->enableFields($this->commentsTablename)
+						);
 				$number_of_comments =  $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 				return $number_of_comments;
 				break;
@@ -4873,6 +4905,22 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 		$this->useDate2Cal = true;
+	}
+
+	/**
+ 	* Tracks the time, saves it to an array.
+ 	*
+ 	* @param   string $title
+ 	* @return  void
+ 	* @author  Christian Buelter <buelter@kennziffer.com>
+ 	* @since   Thu Aug 19 2010 13:35:30 GMT+0200
+ 	*/
+	public function trackTime($title='') {
+		if ($title == 'start') {
+			$this->timetracking[$title] = microtime(true) * 1000;
+		} else {
+			$this->timetracking[$title] = round((microtime(true) * 1000 - $this->timetracking['start']));
+		}
 	}
 }
 

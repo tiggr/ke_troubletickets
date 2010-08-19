@@ -195,10 +195,9 @@
 			<label index="LABEL_MODE_SELECTOR">Show</label>
 			<label index="LABEL_INTERNAL">INTERNAL</label>
 			<label index="LABEL_CLOSED_IN_MONTH">Closed in</label>
-
 			<label index="LABEL_NOT_AVAILABLE">n/a</label>
-
 			<label index="LABEL_ENTRIES_PER_PAGE">Entries per page</label>
+			<label index="LABEL_MYACTIVETICKETS">My active tickets</label>
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">General settings</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">User settings</label>
@@ -208,6 +207,7 @@
 			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normal list</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_normal">Compact list</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own">Compact list of own tickets</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own_short">Short compact list of own tickets</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_delegated">Compact list of tickets delegated</label>
 			<label index="tt_content.pi_ketroubletickets.singleviewpage">Singleview page</label>
 			<label index="tt_content.pi_ketroubletickets.drwikisingleview">ke_ukb: Wiki singleview page</label>
@@ -324,7 +324,6 @@
 			<label index="error_not_logged_in">Bitte loggen Sie sich ein.</label>
 			<label index="followuptitleprefix">Folgeaufgabe: </label>
 
-
 			<label index="SELECTLABEL_1">niedrig</label>
 			<label index="SELECTLABEL_2">normal</label>
 			<label index="SELECTLABEL_3">hoch</label>
@@ -421,10 +420,9 @@
 			<label index="LABEL_MODE_SELECTOR">Zeige</label>
 			<label index="LABEL_INTERNAL">INTERN</label>
 			<label index="LABEL_CLOSED_IN_MONTH">Erledigt in</label>
-
 			<label index="LABEL_NOT_AVAILABLE">n/a</label>
-
 			<label index="LABEL_ENTRIES_PER_PAGE">Einträge pro Seite</label>
+			<label index="LABEL_MYACTIVETICKETS">Meine aktiven Aufgaben</label>
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">Allgemeine Einstellungen</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">Benutzereinstellungen</label>
@@ -434,6 +432,7 @@
 			<label index="tt_content.pi_ketroubletickets.viewtype_default">Normale Liste</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_normal">Kompakte Liste</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own">Kompakte Liste eigener Aufgaben</label>
+			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_own_short">Kurze kompakte Liste eigener Aufgaben</label>
 			<label index="tt_content.pi_ketroubletickets.viewtype_teaser_delegated">Kompakte Liste delegierter Aufgaben</label>
 			<label index="tt_content.pi_ketroubletickets.singleviewpage">Einzelansichtsseite</label>
 			<label index="tt_content.pi_ketroubletickets.drwikisingleview">ke_ukb: Wiki Einzelansichtsseite</label>

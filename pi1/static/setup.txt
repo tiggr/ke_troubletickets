@@ -90,7 +90,7 @@ plugin.tx_ketroubletickets_pi1 {
 	iconPlus.file = EXT:ke_troubletickets/res/images/button_plus.gif
 
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
-	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_NEW, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT, VIEWTYPE
+	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_NEW, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT, VIEWTYPE, MYACTIVETICKETS
 
 	# Format for outputting the date when not in an input field
 	# german format
@@ -522,6 +522,7 @@ plugin.tx_ketroubletickets_pi1.filter {
 # Short listview
 plugin.tx_ketroubletickets_pi1.listViewShort < plugin.tx_ketroubletickets_pi1.listView
 plugin.tx_ketroubletickets_pi1.listViewShort {
+	fieldList = crdate, until_date, title, status_icon_teaser, responsible_feuser, singleview_pagetitle
 	results_at_a_time = 50
 	templateSubpart = ###LISTVIEWSHORT###
 	templateSubpartRow = ###LISTVIEWSHORT_SINGLE_ROW###
@@ -538,14 +539,27 @@ plugin.tx_ketroubletickets_pi1.teaserView {
 # Teaserview of own tickets
 plugin.tx_ketroubletickets_pi1.teaserViewOwn < plugin.tx_ketroubletickets_pi1.listView
 plugin.tx_ketroubletickets_pi1.teaserViewOwn {
+	fieldList = crdate, until_date, title, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value
 	results_at_a_time = 500
 	templateSubpart = ###TEASERVIEWOWN###
 	templateSubpartRow = ###TEASERVIEWOWN_SINGLE_ROW###
 }
 
+# Short Teaserview of own tickets
+plugin.tx_ketroubletickets_pi1.teaserViewOwnShort < plugin.tx_ketroubletickets_pi1.listView
+plugin.tx_ketroubletickets_pi1.teaserViewOwnShort {
+	fieldList = until_date, title, singleview_pagetitle
+	results_at_a_time = 500
+	sort = until_date,1
+	cropTitle = 40
+	templateSubpart = ###TEASERVIEWOWNSHORT###
+	templateSubpartRow = ###TEASERVIEWOWNSHORT_SINGLE_ROW###
+}
+
 # Teaserview of tickets delegated to others
 plugin.tx_ketroubletickets_pi1.teaserViewDelegated < plugin.tx_ketroubletickets_pi1.listView
 plugin.tx_ketroubletickets_pi1.teaserViewDelegated {
+	fieldList = crdate, until_date, title, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value
 	results_at_a_time = 500
 	templateSubpart = ###TEASERVIEWDELEGATED###
 	templateSubpartRow = ###TEASERVIEWDELEGATED_SINGLE_ROW###
