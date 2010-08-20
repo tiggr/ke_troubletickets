@@ -27,30 +27,32 @@
  * @author	Christian Bülter <buelter@kennziffer.com>
  */
 
+error_reporting(E_ALL ^ E_NOTICE);
+
 require_once(PATH_tslib.'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('ke_troubletickets').'lib/class.tx_ketroubletickets_lib.php');
 
 	// Constants
-define(CONST_NEWTICKET, 'NEWTICKET');
-define(CONST_NEWCOMMENT, 'NEWCOMMENT');
-define(CONST_REOPENANDCOMMENT, 'REOPENANDNEWCOMMENT');
-define(CONST_ONEVERYCHANGE, 'oneverychange');
-define(CONST_NEVER, 'never');
-define(CONST_ONSTATUSCHANGE, 'onstatuschange');
-define(CONST_TYPOSCRIPT, 'typoscript');
-define(CONST_STATUS_OPEN, 'open');
-define(CONST_STATUS_CLOSED, 'closed');
-define(CONST_STATUS_CLOSED_LOCKED, 'closed_locked');
-define(CONST_STATUS_WAIT, 'wait');
-define(CONST_RENDER_TYPE_EMAIL, 'email');
-define(CONST_RENDER_TYPE_CSV, 'csv');
-define(CONST_SHOW_ALL_FOR_ADMINS, 'all_for_admins');
-define(CONST_SHOW_ALL_ALWAYS, 'all_always');
-define(DEFAULT_SORT, 'crdate,1');
-define(RENDER_EMPTY_DRODOWN_ELEMENT, true);
-define(DONT_RENDER_EMPTY_DRODOWN_ELEMENT, false);
-define(CONST_KEEP_TAGS_YES, 'keeptags');
-define(CONST_RENDER_ALL_INTERNAL_FIELDS, 'render_all_internal_fields');
+define('CONST_NEWTICKET', 'NEWTICKET');
+define('CONST_NEWCOMMENT', 'NEWCOMMENT');
+define('CONST_REOPENANDCOMMENT', 'REOPENANDNEWCOMMENT');
+define('CONST_ONEVERYCHANGE', 'oneverychange');
+define('CONST_NEVER', 'never');
+define('CONST_ONSTATUSCHANGE', 'onstatuschange');
+define('CONST_TYPOSCRIPT', 'typoscript');
+define('CONST_STATUS_OPEN', 'open');
+define('CONST_STATUS_CLOSED', 'closed');
+define('CONST_STATUS_CLOSED_LOCKED', 'closed_locked');
+define('CONST_STATUS_WAIT', 'wait');
+define('CONST_RENDER_TYPE_EMAIL', 'email');
+define('CONST_RENDER_TYPE_CSV', 'csv');
+define('CONST_SHOW_ALL_FOR_ADMINS', 'all_for_admins');
+define('CONST_SHOW_ALL_ALWAYS', 'all_always');
+define('DEFAULT_SORT', 'crdate,1');
+define('RENDER_EMPTY_DRODOWN_ELEMENT', true);
+define('DONT_RENDER_EMPTY_DRODOWN_ELEMENT', false);
+define('CONST_KEEP_TAGS_YES', 'keeptags');
+define('CONST_RENDER_ALL_INTERNAL_FIELDS', 'render_all_internal_fields');
 
 	// RTE
 require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
@@ -243,9 +245,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// check, if this is a follow-up ticket
 			// if yes, get the data and save it for later use
-		$followUpTicketUid = intval($this->piVars['followup']);
-		if ($this->isValidTicketUid($followUpTicketUid) && $this->checkPermissionForTicket($followUpTicketUid)) {
-			$this->parentTicket = $this->pi_getRecord($this->tablename, $followUpTicketUid);
+		if ($this->piVars['followup']) {
+			$followUpTicketUid = intval($this->piVars['followup']);
+			if ($this->isValidTicketUid($followUpTicketUid) && $this->checkPermissionForTicket($followUpTicketUid)) {
+				$this->parentTicket = $this->pi_getRecord($this->tablename, $followUpTicketUid);
+			} else {
+				$this->parentTicket = array();
+			}
 		} else {
 			$this->parentTicket = array();
 		}
@@ -2793,7 +2799,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
  	* @author  Christian Buelter <buelter@kennziffer.com>
  	*/
 	public function parsePrefillValue($fieldConf, $prefillValue) {
-		if (prefillValue) {
+		if ($prefillValue) {
 			switch ($fieldConf['type']) {
 				case 'inputHoursToMinutes':
 					$prefillValue = $this->lib->m2h($prefillValue);
@@ -2804,6 +2810,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				break;
 
 				case 'date':
+					$prefillValue = intval($prefillValue);
 					$prefillValue = date($this->conf['datefield_dateformat'], $prefillValue);
 				break;
 
