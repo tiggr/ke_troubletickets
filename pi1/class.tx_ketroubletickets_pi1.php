@@ -4197,9 +4197,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// show the files, which already have been uploaded
 					// including a delete link
 				$retval = '';
-				$prefillValue = $this->parsePrefillValue($fieldConf, $prefillValue);
-				if (strlen($prefillValue)) {
-					foreach (explode(',', $prefillValue) as $filename) {
+				$filelist = $this->internal['currentRow']['files'];
+				if (strlen($filelist)) {
+					foreach (explode(',', $filelist) as $filename) {
 						if (file_exists($this->fileUploadDir . $filename)) {
 
 								// get the subpart
