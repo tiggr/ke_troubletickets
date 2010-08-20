@@ -27,8 +27,6 @@
  * @author	Christian Bülter <buelter@kennziffer.com>
  */
 
-error_reporting(E_ALL ^ E_NOTICE);
-
 require_once(PATH_tslib.'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('ke_troubletickets').'lib/class.tx_ketroubletickets_lib.php');
 
@@ -245,13 +243,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// check, if this is a follow-up ticket
 			// if yes, get the data and save it for later use
-		if ($this->piVars['followup']) {
-			$followUpTicketUid = intval($this->piVars['followup']);
-			if ($this->isValidTicketUid($followUpTicketUid) && $this->checkPermissionForTicket($followUpTicketUid)) {
-				$this->parentTicket = $this->pi_getRecord($this->tablename, $followUpTicketUid);
-			} else {
-				$this->parentTicket = array();
-			}
+		$followUpTicketUid = intval($this->piVars['followup']);
+		if ($followUpTicketUid && $this->isValidTicketUid($followUpTicketUid) && $this->checkPermissionForTicket($followUpTicketUid)) {
+			$this->parentTicket = $this->pi_getRecord($this->tablename, $followUpTicketUid);
 		} else {
 			$this->parentTicket = array();
 		}
