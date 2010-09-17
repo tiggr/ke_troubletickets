@@ -46,7 +46,7 @@ define('CONST_RENDER_TYPE_EMAIL', 'email');
 define('CONST_RENDER_TYPE_CSV', 'csv');
 define('CONST_SHOW_ALL_FOR_ADMINS', 'all_for_admins');
 define('CONST_SHOW_ALL_ALWAYS', 'all_always');
-define('DEFAULT_SORT', 'crdate,1');
+define('DEFAULT_SORT', 'until_date,crdate-1');
 define('RENDER_EMPTY_DRODOWN_ELEMENT', true);
 define('DONT_RENDER_EMPTY_DRODOWN_ELEMENT', false);
 define('CONST_KEEP_TAGS_YES', 'keeptags');
@@ -352,8 +352,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			break;
 		}
 
-			// get sorting from typoscript configuration if not set by piVars
-		if (!$this->piVars['sort'] && $this->listViewConf['sort']) {
+			// get sorting from typoscript configuration if not set by piVars or in Session
+		if (!$this->piVars['sort'] && $this->listViewConf['sort'] && empty($sessionVars[$GLOBALS['TSFE']->id]['sort'])) {
 			$this->piVars['sort'] = $this->listViewConf['sort'];
 		}
 
@@ -365,11 +365,6 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// use sorting from session data
 			$this->piVars['sort'] = $sessionVars[$GLOBALS['TSFE']->id]['sort'];
 		}
-
-			// KENNZIFFER CB 17.05.2010
-			// sorting desc flag is now separated by a comma instead of colon
-		$this->piVars['sort'] = str_replace(':', ',', $this->piVars['sort']);
-		$this->piVars['sort'] = str_replace('|', ',', $this->piVars['sort']);
 
 			// store chosen sorting in session
 		$sessionVars[$GLOBALS['TSFE']->id]['sort'] = $this->piVars['sort'];
@@ -3618,7 +3613,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->internal['currentTable'] = $this->tablename;
 
 			// set orderBy and descFlag
-		list($this->internal['orderBy'], $this->internal['descFlag']) = explode(',', $this->piVars['sort']);
+		list($this->internal['orderBy'], $this->internal['descFlag']) = explode('-', $this->piVars['sort']);
 
 			// Number of results to show in a listing.
 		$this->internal['results_at_a_time']=t3lib_div::intInRange($this->listViewConf['results_at_a_time'],0,1000,10);
@@ -3704,13 +3699,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// compile orderBy-parameter
-		$orderBy = $this->internal['orderBy'] . ($this->internal['descFlag']?' DESC' : '');
+		$orderBy = $this->internal['orderBy'] . ($this->internal['descFlag'] ? ' DESC' : '');
 
-			// add a second sorting (if sorting is not "priority"),
-			// second sorting is always priority,
-			// third is crdate
-		if ($this->internal['orderBy'] != 'priority') {
-			$orderBy .= ', priority DESC, crdate ASC';
+			// add a second sorting
+		if ($this->listViewConf['sort2']) {
+			$orderBy .= $this->listViewConf['sort2'];
 		}
 
 			// Increase limit for the csv export
@@ -4394,7 +4387,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return	The fieldlabel wrapped in link that contains sorting vars
 	 */
 	public function getFieldHeader_sortLink($fN)	{/*{{{*/
-		return $this->pi_linkTP_keepPIvars($this->getFieldHeader($fN),array('sort'=>trim($fN).':'.($this->internal['descFlag']?0:1)));
+		return $this->pi_linkTP_keepPIvars(
+			$this->getFieldHeader($fN),
+			array('sort'=>trim($fN) . '-' . ($this->internal['descFlag'] ? 0 : 1))
+		);
 	}/*}}}*/
 
 	/**
@@ -4759,12 +4755,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// add the sort parameter to the link
 			// AK 13.08.2010
 			// for priority: always show highest first
-			if ($headerName == 'priority' && $this->piVars['sort'] != 'priority,1') {
-				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|1';
-			} else if ($headerName == 'priority' && $this->piVars['sort'] == 'priority,1'){
-				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|0';
+			if ($headerName == 'priority' && $this->piVars['sort'] != 'priority') {
+				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '-1';
+			} else if ($headerName == 'priority' && $this->piVars['sort'] == 'priority'){
+				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '-0';
 			} else {
-				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '|' . ($this->internal['descFlag'] ? 0 : 1);
+				$additionalParams = '&' . $this->prefixId . '[sort]=' . trim($headerName) . '-' . ($this->internal['descFlag'] ? 0 : 1);
 			}
 
 			// Mark this Link, if it is the currently active sorting

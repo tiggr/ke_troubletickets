@@ -497,6 +497,8 @@ plugin.tx_ketroubletickets_pi1.listView {
 	templateSubpartRow = ###LISTVIEW_SINGLE_ROW###
 	entries_per_page_options = 10,20,50
 	hideIfNoResults = 0
+	sort = crdate-1
+	sort2 = , priority DESC, crdate ASC
 
 	# if backPid is set and is different than listview pid, redirect to
 	# refering page after processing actions
@@ -550,10 +552,11 @@ plugin.tx_ketroubletickets_pi1.teaserViewOwnShort < plugin.tx_ketroubletickets_p
 plugin.tx_ketroubletickets_pi1.teaserViewOwnShort {
 	fieldList = until_date, title, singleview_pagetitle, priority_raw_value
 	results_at_a_time = 500
-	sort = until_date,1
 	cropTitle = 50
 	templateSubpart = ###TEASERVIEWOWNSHORT###
 	templateSubpartRow = ###TEASERVIEWOWNSHORT_SINGLE_ROW###
+	sort = until_date DESC
+	sort2 = , crdate DESC, priority DESC
 }
 
 # Teaserview of tickets delegated to others
