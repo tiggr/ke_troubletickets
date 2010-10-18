@@ -584,6 +584,7 @@
   font-size: 10px;
   margin-right: 180px;
   padding: 5px 0 0 6px;
+  overflow:hidden;
   }
 .kett_listview_row_box {
   float:right;
