@@ -534,7 +534,7 @@
   }
 .tx-ketroubletickets-pi1-browsebox .resultText {
   float: left;
-  width: 200px;
+  /* width: 200px; */
   display: block;
   line-height: 18px;
   }
