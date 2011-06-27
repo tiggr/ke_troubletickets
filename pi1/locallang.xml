@@ -26,6 +26,7 @@
 			<label index="listFieldHeader_crdate">Creation date</label>
 			<label index="listFieldHeader_comments">Comments</label>
 			<label index="listFieldHeader_billing">Billing</label>
+			<label index="listFieldHeader_charged">Charged</label>
 			<label index="listFieldHeader_effort">Effort</label>
 
 			<label index="list_mode_all">All</label>
@@ -88,7 +89,7 @@
 			<label index="email_text_type_new_with_user">created a new ticket.</label>
 			<label index="email_text_type_changed_with_user">changed this ticket.</label>
 			<label index="email_text_type_closed_with_user">closed this ticket.</label>
-			<label index="email_text_fields_have_changed">This fields have been changed:</label>
+			<label index="email_text_fields_have_changed">These fields have been changed:</label>
 			<label index="email_text_user">User</label>
 			<label index="email_subject_type_changed">Changed</label>
 			<label index="email_subject_type_new">New</label>
@@ -129,6 +130,21 @@
 			<label index="SELECTLABEL_DETAILED">detailed</label>
 			<label index="SELECTLABEL_SHORT">overview</label>
 
+			<label index="SELECTLABEL_NOT_CHARGED">not charged</label>
+			<label index="SELECTLABEL_0">0 %</label>
+			<label index="SELECTLABEL_10">10 %</label>
+			<label index="SELECTLABEL_20">20 %</label>
+			<label index="SELECTLABEL_30">30 %</label>
+			<label index="SELECTLABEL_40">40 %</label>
+			<label index="SELECTLABEL_50">50 %</label>
+			<label index="SELECTLABEL_60">60 %</label>
+			<label index="SELECTLABEL_70">70 %</label>
+			<label index="SELECTLABEL_80">80 %</label>
+			<label index="SELECTLABEL_90">90 %</label>
+			<label index="SELECTLABEL_100">100 %</label>
+			<label index="SELECTLABEL_FULLY_CHARGED">fully charged</label>
+			<label index="SELECTLABEL_NOT_FULLY_CHARGED">not fully charged</label>
+
 			<label index="LABEL_HISTORY_DATE">Date</label>
 			<label index="LABEL_HISTORY_USER">User</label>
 			<label index="LABEL_HISTORY_FIELD">Field</label>
@@ -142,15 +158,19 @@
 			<label index="LABEL_TITLE">Title</label>
 			<label index="LABEL_STATUS">Status</label>
 			<label index="LABEL_BILLING">Billing</label>
+			<label index="LABEL_CHARGED">Charged</label>
+			<label index="LABEL_FILTER_CHARGED">Charged</label>
 			<label index="LABEL_PRIORITY">Priority</label>
 			<label index="LABEL_DESCRIPTION">Description</label>
-			<label index="LABEL_UNTIL_DATE">to do until</label>
-			<label index="LABEL_FROM_DATE">planned from</label>
+			<label index="LABEL_UNTIL_DATE">To do until</label>
 			<label index="LABEL_CRDATE">created</label>
 			<label index="LABEL_CLOSE_TIME">closed</label>
 			<label index="LABEL_TO">to do until</label>
-			<label index="LABEL_TIME_USED">actual time effort (hours)</label>
-			<label index="LABEL_TIME_PLANNED">planned time effort (hours)</label>
+
+			<label index="LABEL_FROM_DATE">planned from</label>
+			<label index="LABEL_TIME_USED">actual time effort (hrs)</label>
+			<label index="LABEL_TIME_PLANNED">planned time effort (hrs)</label>
+
 			<label index="LABEL_ADDITIONAL_INFO">Additional information</label>
 			<label index="LABEL_EFFORT">Effort</label>
 			<label index="LABEL_FILES">Files</label>
@@ -181,6 +201,8 @@
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
 			<label index="LABEL_FILTER_NOT_SET">filter not set</label>
 			<label index="LABEL_FILTER_RESET">reset filter</label>
+			<label index="LABEL_FILTER_CHARGED_ACTIVE">click to deactivate charged filter</label>
+			<label index="LABEL_FILTER_CHARGED_INACTIVE">click to show only tickets not fully charged</label>
 			<label index="LABEL_VIEWTYPE">View</label>
 
 			<label index="LABEL_GO_TO_TICKET">Open this ticket</label>
@@ -252,6 +274,7 @@
 			<label index="listFieldHeader_crdate">Erstelldatum</label>
 			<label index="listFieldHeader_comments">Kommentare</label>
 			<label index="listFieldHeader_billing">Abrechnung</label>
+			<label index="listFieldHeader_charged">Abgerechnet</label>
 			<label index="listFieldHeader_effort">Aufwand</label>
 
 			<label index="list_mode_all">Alle</label>
@@ -354,6 +377,10 @@
 			<label index="SELECTLABEL_DETAILED">ausführlich</label>
 			<label index="SELECTLABEL_SHORT">übersichtlich</label>
 
+			<label index="SELECTLABEL_NOT_CHARGED">nicht abgerechnet</label>
+			<label index="SELECTLABEL_FULLY_CHARGED">vollständig abgerechnet</label>
+			<label index="SELECTLABEL_NOT_FULLY_CHARGED">nicht vollständig abgerechnet</label>
+
 			<label index="LABEL_HISTORY_DATE">Datum</label>
 			<label index="LABEL_HISTORY_USER">Benutzer</label>
 			<label index="LABEL_HISTORY_FIELD">Feld</label>
@@ -367,6 +394,8 @@
 			<label index="LABEL_TITLE">Titel</label>
 			<label index="LABEL_STATUS">Status</label>
 			<label index="LABEL_BILLING">Abrechnung</label>
+			<label index="LABEL_CHARGED">Abgerechnet</label>
+			<label index="LABEL_FILTER_CHARGED">Abgerechnet</label>
 			<label index="LABEL_PRIORITY">Priorität</label>
 			<label index="LABEL_DESCRIPTION">Beschreibung</label>
 			<label index="LABEL_UNTIL_DATE">Zu erledigen bis</label>
@@ -406,6 +435,8 @@
 			<label index="LABEL_FILTER_SUBMIT">OK</label>
 			<label index="LABEL_FILTER_NOT_SET">kein Filter gesetzt</label>
 			<label index="LABEL_FILTER_RESET">Filter zurücksetzen</label>
+			<label index="LABEL_FILTER_CHARGED_ACTIVE">klicken, um den Abgerechnet-Filter zu deaktivieren</label>
+			<label index="LABEL_FILTER_CHARGED_INACTIVE">klicken, um nur noch nicht vollständig abgerechnete Aufgaben zu zeigen</label>
 			<label index="LABEL_VIEWTYPE">Ansicht</label>
 
 			<label index="LABEL_GO_TO_TICKET">Aufgabe aufrufen</label>

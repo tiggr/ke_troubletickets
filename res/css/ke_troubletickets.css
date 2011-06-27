@@ -188,10 +188,14 @@
 }
 
 
-.kett_sv_boxes { overflow:hidden; }
+.kett_sv_boxes { 
+	overflow:hidden;
+	background:#E6EFEF none repeat scroll 0 0;
+}
 .kett_sv_single_box {
   float: left;
-  width: 33.31%;
+  /*width: 33.31%;*/
+  width: 25%;
   }
 .kett_sv_sbox_head {
   background:#FFFFFF url(../images/list_item_userhead_bg_norma.gif) repeat scroll 0 0;
@@ -423,13 +427,13 @@
 .kett_toolbar_filter select:hover,
 .kett_toolbar_filter select:active { background: #fff5d1; }
 
-.kett_toolbar_filter select {width: 110px;}
+.kett_toolbar_filter select {width: 100px;}
 .kett_toolbar_filter select.select_short {width: 75px;}
 .kett_toolbar_filter select option {width: auto; overflow: visible;}
 
 .kett_toolbar_filter .single_filter {
 	float:left;
-	padding: 0 10px 0 10px;
+	padding: 0 6px 0 6px;
 	border-right: 1px dashed #666;
 	font-size: 12px;
 }

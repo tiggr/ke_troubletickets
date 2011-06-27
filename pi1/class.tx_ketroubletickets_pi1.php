@@ -51,6 +51,7 @@ define('RENDER_EMPTY_DRODOWN_ELEMENT', true);
 define('DONT_RENDER_EMPTY_DRODOWN_ELEMENT', false);
 define('CONST_KEEP_TAGS_YES', 'keeptags');
 define('CONST_RENDER_ALL_INTERNAL_FIELDS', 'render_all_internal_fields');
+define('NOT_FULLY_CHARGED_FILTER', 'not_fully_charged');
 
 	// RTE
 require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
@@ -2885,6 +2886,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// TODO: Should be configurable in Typoscript in future versions
 					// $renderEmptyDropdownFields is only set when rendering the filter dropdown,
 					// so we use this as a condition.
+				if ($fieldConf['name'] == 'charged' && $renderEmptyDropdownFields) {
+					$valueList = NOT_FULLY_CHARGED_FILTER . ',' . $valueList;
+				}
+
+					// this is a HACK for the filter option "status". We want to
+					// have a filter for "open" and "working" in one option.
+					// TODO: Should be configurable in Typoscript in future versions
+					// $renderEmptyDropdownFields is only set when rendering the filter dropdown,
+					// so we use this as a condition.
 				if ($fieldConf['name'] == 'status' && $renderEmptyDropdownFields) {
 					$valueList = 'open_and_working,all_not_closed,all,' . $valueList;
 				}
@@ -3662,6 +3672,17 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							$addWhere .= ' AND ' . $filterName . '="' . mysql_real_escape_string($filterValue) . '"';
 						break;
 					}
+					// HACK for the "not fully charged" filter
+					// TODO: Should be configurable in Typoscript in future versions
+				} else if ($filterName == 'charged') {
+					switch ($filterValue) {
+						case NOT_FULLY_CHARGED_FILTER:
+							$addWhere .= ' AND (charged!="fully_charged")';
+						break;
+						default:
+							$addWhere .= ' AND ' . $filterName . '="' . mysql_real_escape_string($filterValue) . '"';
+						break;
+					}
 				} else if ($filterName == 'closed_in_month') {
 					$from = intval($filterValue);
 					$month_to = date('m', $from) + 1;
@@ -3729,14 +3750,22 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				if ($fieldConf['prefillWithCurrentUserIfEmpty']) {
 					$fieldConf['prefillWithCurrentUserIfEmpty'] = 0;
 				}
-				$this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, RENDER_EMPTY_DRODOWN_ELEMENT);
+				$this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] = 
+					$this->renderFormField(
+						$fieldConf,
+						RENDER_EMPTY_DRODOWN_ELEMENT,
+						'onchange="this.form.submit();"'
+					);
 			}
 		}
 
 			// render the viewtype selector
-		$this->markerArray['VIEWTYPE_SELECTOR'] = $this->renderFormField($this->conf['viewtype_selector.'],
-			DONT_RENDER_EMPTY_DRODOWN_ELEMENT,
-			'onchange="this.form.submit();"');
+		$this->markerArray['VIEWTYPE_SELECTOR'] = 
+			$this->renderFormField(
+				$this->conf['viewtype_selector.'],
+				DONT_RENDER_EMPTY_DRODOWN_ELEMENT,
+				'onchange="this.form.submit();"'
+			);
 
 			// add the filter form markers
 		$this->markerArray['FILTERFORM_NAME'] = $this->ticketFormName . '_filter';
@@ -3979,12 +4008,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			case 'status':
 			case 'billing':
+			case 'charged':
 			case 'priority':
 				return $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($this->internal['currentRow'][$fieldName])));
 				break;
 
 			case 'status_raw_value':
 			case 'billing_raw_value':
+			case 'charged_raw_value':
 			case 'priority_raw_value':
 				return strtoupper(trim($this->internal['currentRow'][str_replace('_raw_value', '', $fieldName)]));
 				break;
@@ -4100,6 +4131,27 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$imageConf['altText'] = $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($this->internal['currentRow']['status'])), $this->internal['currentRow']['status']);
 				$imageConf['file'] = $this->getFilePath($imageConf['file']);
 				return $lcObj->IMAGE($imageConf);
+				break;
+
+			case 'charged_icon':
+				if ($this->internal['currentRow']['charged'] == 'not_charged' || !$this->internal['currentRow']['charged']) {
+						// no image if "charged" is 0
+					$returnValue = '';
+				} else {
+						// two different icons for "charge":
+						// fully charged or partly charged
+					if ($this->internal['currentRow']['charged'] == 'fully_charged') {
+						$imageConfigName = 'fully_charged';
+					} else {
+						$imageConfigName = 'partly_charged';
+					}
+					$imageConf = $this->conf['chargedImage.'][$imageConfigName . '.'];
+					$imageConf['altText'] = $this->pi_getLL('SELECTLABEL_' . strtoupper(trim($this->internal['currentRow']['charged'])), $this->internal['currentRow']['charged']);
+					$imageConf['titleText'] = $imageConf['altText'];
+					$imageConf['file'] = $this->getFilePath($imageConf['file']);
+					$returnValue = $lcObj->IMAGE($imageConf);
+				}
+				return $returnValue;
 				break;
 
 			case 'edit_icon':
@@ -4293,6 +4345,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					unset($imageConf);
 					$imageConf['file'] = t3lib_extMgm::siteRelPath($this->extKey).'res/images/reset_gray.gif';
 					$imageConf['altText'] = $this->pi_getLL('LABEL_FILTER_NOT_SET');
+					$imageConf['titleText'] = $imageConf['altText'];
 					return $this->cObj->IMAGE($imageConf);
 				}
 				// filter is set
@@ -4300,6 +4353,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					unset($imageConf);
 					$imageConf['file'] = t3lib_extMgm::siteRelPath($this->extKey).'res/images/reset.gif';
 					$imageConf['altText'] = $this->pi_getLL('LABEL_FILTER_RESET');
+					$imageConf['titleText'] = $imageConf['altText'];
 					$resetImage = $this->cObj->IMAGE($imageConf);
 					//build link with reset filters
 					unset($linkconf);

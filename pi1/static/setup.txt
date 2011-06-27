@@ -21,13 +21,20 @@ plugin.tx_ketroubletickets_pi1 {
 	datePickerImage = IMAGE
 	datePickerImage.file = EXT:ke_troubletickets/res/images/calendar.png
 
+	# Possible values for status, billing, priority, charged
 	# Status and Priority Names are stored in locallang
 	# remember to adjust the TCA (tca.php), too, if you change these values
 	# statusList = open,acknowledged,working,closed,onhold,wait,offer
 	statusList = open,working,closed,onhold,wait,closed_locked
 	priorityList = 2,1,3
 	billingList = open,service,invoice,offer,service_invoice
+	chargedList = not_charged,10,20,30,40,50,60,70,80,90,fully_charged
+
+	# Possible values for "send notitification", can be set in the frontend if
+	# enabled in the backend flexform options of the plugin
 	notificationBehaviorList = oneverychange,onstatuschange,never,typoscript
+
+	# special wraps for "priority" (to enable different colors)
 	priorityWrap.1 = <span class="priority_1">|</span>
 	priorityWrap.2 = <span class="priority_2">|</span>
 	priorityWrap.3 = <span class="priority_3">|</span>
@@ -67,6 +74,11 @@ plugin.tx_ketroubletickets_pi1 {
 	statusImageTeaser.closed_locked = IMAGE
 	statusImageTeaser.closed_locked.file = EXT:ke_troubletickets/res/images/gray.png
 
+	chargedImage.partly_charged = IMAGE
+	chargedImage.partly_charged.file = EXT:ke_troubletickets/res/images/charged_partly.png
+	chargedImage.fully_charged = IMAGE
+	chargedImage.fully_charged.file = EXT:ke_troubletickets/res/images/charged_fully.png
+
 	# edit and delete icons
 	icons.edit = IMAGE
 	icons.edit.file = EXT:ke_troubletickets/res/images/icon_edit_ticket.png
@@ -90,7 +102,7 @@ plugin.tx_ketroubletickets_pi1 {
 	iconPlus.file = EXT:ke_troubletickets/res/images/button_plus.gif
 
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
-	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_NEW, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT, VIEWTYPE, MYACTIVETICKETS
+	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_NEW, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT, VIEWTYPE, MYACTIVETICKETS, CHARGED, FILTER_CHARGED
 
 	# Format for outputting the date when not in an input field
 	# german format
@@ -298,6 +310,16 @@ plugin.tx_ketroubletickets_pi1 {
 			# validation applies.
 			#validate = notAllowedWhenClosing:open
 		}
+		27 {
+			name = charged
+			type = select
+			size = 1
+			multiple = 0
+			# list of values defined in this typoscript configuration
+			# labels are defined in locallang ('SELECTLABEL_...')
+			valueList = chargedList
+			writeAccessOnlyForUserGroup =
+		}
 		30 {
 			name = priority
 			type = select
@@ -484,9 +506,9 @@ plugin.tx_ketroubletickets_pi1 {
 
 # Listview defaults
 plugin.tx_ketroubletickets_pi1.listView {
-	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value, number_of_attachments, latest_comment, files
+	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value, number_of_attachments, latest_comment, files, charged_icon
 	headerList = category, title, crdate, from_date, until_date, status, owner_feuser, responsible_feuser, number_of_comments, priority
-	filterList = status, responsible_feuser, category, closed_in_month, billing
+	filterList = status, responsible_feuser, category, closed_in_month, billing, charged
 	closed_in_month_dateformat = m/Y
 	csvExportFieldList =  uid, crdate, from_date, until_date, title, status, billing, effort, category, owner_feuser, responsible_feuser, priority, observers_feuser, description, comments, close_time
 	results_at_a_time =
@@ -573,7 +595,7 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	subject_prefix = [TROUBLE TICKET]
 	from_email = me@domain.com
 	from_name = TYPO3 Trouble Ticket System
-	fieldList = crdate, title, status, billing, priority, priority_wrapped, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets
+	fieldList = crdate, title, status, billing, priority, priority_wrapped, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets, charged
 	# Don't send notification when only the following internal fields are changed (comma seperated list)
 	internalFieldsWithoutNotification = time_used
 	# Add ticket UID to notification subject?

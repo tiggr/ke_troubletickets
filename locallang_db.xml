@@ -24,6 +24,7 @@
 			<label index="tx_ketroubletickets_tickets.status.I.4">On hold</label>
 			<label index="tx_ketroubletickets_tickets.status">Status</label>
 			<label index="tx_ketroubletickets_tickets.billing">Billing</label>
+			<label index="tx_ketroubletickets_tickets.charged">Charged</label>
 			<label index="tx_ketroubletickets_tickets.priority.I.0">Low</label>
 			<label index="tx_ketroubletickets_tickets.priority.I.1">Normal</label>
 			<label index="tx_ketroubletickets_tickets.priority.I.2">High</label>
@@ -78,6 +79,7 @@
 			<label index="tx_ketroubletickets_tickets.category">Kategorie</label>
 			<label index="tx_ketroubletickets_tickets.status">Status</label>
 			<label index="tx_ketroubletickets_tickets.billing">Abrechnung</label>
+			<label index="tx_ketroubletickets_tickets.charged">Abgerechnet</label>
 			<label index="tx_ketroubletickets_tickets.priority">Priorität</label>
 			<label index="tx_ketroubletickets_tickets.notifications_owner.I.0">Niemals</label>
 			<label index="tx_ketroubletickets_tickets.notifications_owner.I.1">Bei jeder Änderung</label>

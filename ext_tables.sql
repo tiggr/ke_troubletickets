@@ -36,6 +36,7 @@ CREATE TABLE tx_ketroubletickets_tickets (
 	category blob NOT NULL,
 	status varchar(20) DEFAULT '' NOT NULL,
 	billing varchar(20) DEFAULT '' NOT NULL,
+	charged varchar(20) DEFAULT '' NOT NULL,
 	priority int(11) DEFAULT '0' NOT NULL,
 	notifications_owner varchar(20) DEFAULT '' NOT NULL,
 	notifications_responsible varchar(20) DEFAULT '' NOT NULL,

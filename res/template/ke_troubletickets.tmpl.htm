@@ -80,6 +80,13 @@ New Ticket / Edit Ticket Form / Singleview
         <div class="kett_sv_sboxb_in">###FIELD_EFFORT###</div>
       </div>
     </div>
+
+    <div class="kett_sv_single_box">
+      <div class="kett_sv_sbox_head">###LABEL_CHARGED###</div>
+      <div class="kett_sv_sbox_body">
+        <div class="kett_sv_sboxb_in">###FIELD_CHARGED###</div>
+      </div>
+    </div>
     ###INTERNAL_FROM_DATE###
     ###INTERNAL_TIME_PLANNED###
     ###INTERNAL_TIME_USED###
@@ -219,9 +226,9 @@ Optional Labels and Fields
 
 <!-- ###INTERNAL_FROM_DATE_SUBPART### START-->
   <div class="kett_sv_single_box kett_sv_single_box_intern">
-    <div class="kett_sv_sbox_head">###LABEL_INTERNAL### ###LABEL_FROM_DATE###</div>
+    <div class="kett_sv_sbox_head">###LABEL_INTERNAL###</div>
     <div class="kett_sv_sbox_body">
-      <div class="kett_sv_sboxb_in">###FIELD_FROM_DATE###</div>
+      <div class="kett_sv_sboxb_in">###FIELD_FROM_DATE### ###LABEL_FROM_DATE###</div>
     </div>
   </div>
 <!-- ###INTERNAL_FROM_DATE_SUBPART### END-->
@@ -314,6 +321,7 @@ Listview
 </div>
 
 <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
+<input type="hidden" name="tx_ketroubletickets_pi1[filter_submit]" value="1" />
 
 <!-- +++ Listview-Toolbar +++ show options, filter -->
 <div class="kett_listview_toolbar">
@@ -332,11 +340,14 @@ Listview
 		<div class="single_filter"><label>###LABEL_BILLING###:</label>###FILTER_BILLING###</div>
 		<!-- ###FILTER_BLOCK_BILLING### end -->
 		<!-- ###FILTER_BLOCK_CATEGORY### start -->
-		<div class="single_filter last_filter"><label>###LABEL_FILTER_CATEGORY###:</label>###FILTER_CATEGORY###</div>
+		<div class="single_filter"><label>###LABEL_FILTER_CATEGORY###:</label>###FILTER_CATEGORY###</div>
 		<!-- ###FILTER_BLOCK_CATEGORY### end -->
+		<!-- ###FILTER_BLOCK_CHARGED### start -->
+		<div class="single_filter last_filter"><label>###LABEL_FILTER_CHARGED###:</label>###FILTER_CHARGED###</div>
+		<!-- ###FILTER_BLOCK_CHARGED### end -->
 		<div class="single_filter buttons">
-			###FILTER_SUBMIT###
-			<span class="filter_statusicon">###FILTER_STATUSICON###</span>
+		<!-- ###FILTER_SUBMIT### -->
+		<span class="filter_statusicon">###FILTER_STATUSICON###</span>
 		</div>
     </div>
   </div>
@@ -442,6 +453,8 @@ Listview
 	  <img src="typo3conf/ext/ke_troubletickets/res/images/icon_comments.png" title="###LATEST_COMMENT###" /></a> (###NUMBER_OF_COMMENTS###)
 	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
 	  <img src="typo3conf/ext/ke_troubletickets/res/images/icon_attach.png" title="###FILES###" /> (###NUMBER_OF_ATTACHMENTS###)
+	  <span class="kett_lvrf_border">&nbsp;&#124;&nbsp;</span>
+	  ###CHARGED_ICON###
     </div>
     <div class="kett_float_right">###EDIT_ICON### ###DELETE_ICON###</div>
   </div>
@@ -473,6 +486,7 @@ Listview Short
 
 
 <form name="###FILTERFORM_NAME###" id="###FILTERFORM_NAME###" action="###FILTERFORM_ACTION###" method="post" enctype="multipart/form-data">
+<input type="hidden" name="tx_ketroubletickets_pi1[filter_submit]" value="1" />
 
 <!-- +++ Listview-Toolbar +++ show options, filter -->
 <div class="kett_listview_toolbar">
@@ -491,11 +505,14 @@ Listview Short
 		<div class="single_filter"><label>###LABEL_BILLING###:</label>###FILTER_BILLING###</div>
 		<!-- ###FILTER_BLOCK_BILLING### end -->
 		<!-- ###FILTER_BLOCK_CATEGORY### start -->
-		<div class="single_filter last_filter"><label>###LABEL_FILTER_CATEGORY###:</label>###FILTER_CATEGORY###</div>
+		<div class="single_filter"><label>###LABEL_FILTER_CATEGORY###:</label>###FILTER_CATEGORY###</div>
 		<!-- ###FILTER_BLOCK_CATEGORY### end -->
+		<!-- ###FILTER_BLOCK_CHARGED### start -->
+		<div class="single_filter last_filter"><label>###LABEL_FILTER_CHARGED###:</label>###FILTER_CHARGED###</div>
+		<!-- ###FILTER_BLOCK_CHARGED### end -->
 		<div class="single_filter buttons">
-			###FILTER_SUBMIT###
-			<span class="filter_statusicon">###FILTER_STATUSICON###</span>
+		<!-- ###FILTER_SUBMIT### -->
+		<span class="filter_statusicon">###FILTER_STATUSICON###</span>
 		</div>
     </div>
   </div>
@@ -875,6 +892,10 @@ E-Mail Notification
 				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_EFFORT###">###EMAIL_FIELD_EFFORT###&nbsp;</td>
 			</tr>
 			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_CHARGED###:</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_CHARGED###">###EMAIL_FIELD_CHARGED###&nbsp;</td>
+			</tr>
+			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_CATEGORY###:</td>
 				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_CATEGORY###">###EMAIL_FIELD_CATEGORY###&nbsp;</td>
 			</tr>
@@ -976,6 +997,11 @@ Printview
 	<div class="printview_floatblock">
 		<label>###LABEL_EFFORT###:</label>
 		###FIELD_EFFORT###
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
+		<label>###LABEL_CHARGED###:</label>
+		###FIELD_CHARGED###
 		<div class="kett_float_clean">&nbsp;</div>
 	</div>
 	<!-- ###INTERNAL_FROM_DATE### start -->
