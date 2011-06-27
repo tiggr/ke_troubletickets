@@ -130,8 +130,9 @@
 			<label index="SELECTLABEL_DETAILED">detailed</label>
 			<label index="SELECTLABEL_SHORT">overview</label>
 
+			<label index="SELECTLABEL_0">-</label>
+
 			<label index="SELECTLABEL_NOT_CHARGED">not charged</label>
-			<label index="SELECTLABEL_0">0 %</label>
 			<label index="SELECTLABEL_10">10 %</label>
 			<label index="SELECTLABEL_20">20 %</label>
 			<label index="SELECTLABEL_30">30 %</label>
