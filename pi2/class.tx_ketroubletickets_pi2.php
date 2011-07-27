@@ -134,17 +134,18 @@ class tx_ketroubletickets_pi2 extends tslib_pibase {
 				// use that. Otherwise use the current page.
 			if (is_array($categoryData) && !empty($categoryData['singleviewpage'])) {
 				$singleViewPage = $categoryData['singleviewpage'];
+					// render the link
+				$linkToTicketURL = $this->pi_getPageLink($singleViewPage, '_blank', array(
+						'tx_ketroubletickets_pi1[showUid]' => $ticket['uid']
+					)
+				);
+
+					// do the redirect
+				header('Location:'.t3lib_div::locationHeaderUrl($linkToTicketURL));
 			} else {
-				$singleViewPage = $GLOBALS['TSFE']->id;
+				$content .= '<p class="error">' . $this->pi_getLL('error_no_singleviewpage') . '</p>';
 			}
 
-				// render the link
-			$linkToTicketURL = $this->pi_getPageLink($singleViewPage, '_blank', array(
-					'tx_ketroubletickets_pi1[showUid]' => $ticket['uid']
-				)
-			);
-
-			header('Location:'.t3lib_div::locationHeaderUrl($linkToTicketURL));
 		}
 
 		if ($this->piVars['sword']) {
