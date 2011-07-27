@@ -9,8 +9,6 @@ t3lib_extMgm::addTypoScript($_EXTKEY,'editorcfg','
 
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_ketroubletickets_pi1.php','_pi1','list_type',0);
 
-$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['tx_ketroubletickets_ical'] = 'EXT:ke_troubletickets/ical/class.tx_ketroubletickets_icalendar.php';
-
 t3lib_extMgm::addTypoScript($_EXTKEY,'setup','
 	tt_content.shortcut.20.0.conf.tx_ketroubletickets_tickets = < plugin.'.t3lib_extMgm::getCN($_EXTKEY).'_pi1
 	tt_content.shortcut.20.0.conf.tx_ketroubletickets_tickets.CMD = singleView
