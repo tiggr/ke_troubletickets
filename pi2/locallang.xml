@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_ketroubletickets_pi1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="error_no_permission">Permission denied. You do not have access rights to this ticket or the ticket is in a different folder.</label>
+			<label index="error_not_logged_in">Please log in.</label>
+			<label index="error_no_template">Error: No static template has been found. Did you include the static template?</label>
+			<label index="error_not_found">No ticket found.</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="error_no_template">Fehler: Es wurde kein Template gefunden. Wurde das statische Template eingebunden?</label>
+			<label index="error_not_logged_in">Bitte loggen Sie sich ein.</label>
+			<label index="error_no_permission">Kein Zugriff. Sie haben entweder kein Zugriffsrecht auf diese Aufgabe, oder die Aufgabe liegt in einem anderen Ordner.</label>
+			<label index="error_not_found">Keine Aufgabe mit dieser ID vorhanden.</label>
+		</languageKey>
+	</data>
+</T3locallang>

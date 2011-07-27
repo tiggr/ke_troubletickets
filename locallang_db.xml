@@ -7,6 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tt_content.list_type_pi1">Troubletickets</label>
+			<label index="tt_content.list_type_pi2">Troubletickets UID searchform</label>
 			<label index="tx_ketroubletickets_tickets">Troubletickets: Tickets</label>
 			<label index="tx_ketroubletickets_tickets.title">Title</label>
 			<label index="tx_ketroubletickets_tickets.description">Description</label>
@@ -67,6 +68,7 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tt_content.list_type_pi1">Troubletickets</label>
+			<label index="tt_content.list_type_pi2">Troubletickets UID Suchformular</label>
 			<label index="tx_ketroubletickets_tickets">Troubletickets: Aufgaben</label>
 			<label index="tx_ketroubletickets_tickets.title">Titel</label>
 			<label index="tx_ketroubletickets_tickets.description">Beschreibung</label>
