@@ -4193,7 +4193,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						'additionalParams' => $additionalParams
 					);
 					$deleteLink_URL = $this->cObj->typoLink_URL( $deleteLinkConf );
-					$imageConf['wrap'] = '<a href="#" onclick="areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
+					$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
 					//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
 				}
 
