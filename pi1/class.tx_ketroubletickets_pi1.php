@@ -3559,8 +3559,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 											'additionalParams' => $additionalParams
 											);
 									$deleteLink_URL = $this->cObj->typoLink_URL( $deleteLinkConf );
-									//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
-									$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
+									$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
+									//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
 
 									// generate the alt text
 									$imageConf['altText'] = $this->pi_getLL('altText_delete_related_ticket', 'Delete related ticket.');
@@ -3750,7 +3750,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				if ($fieldConf['prefillWithCurrentUserIfEmpty']) {
 					$fieldConf['prefillWithCurrentUserIfEmpty'] = 0;
 				}
-				$this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] = 
+				$this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] =
 					$this->renderFormField(
 						$fieldConf,
 						RENDER_EMPTY_DRODOWN_ELEMENT,
@@ -3760,7 +3760,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// render the viewtype selector
-		$this->markerArray['VIEWTYPE_SELECTOR'] = 
+		$this->markerArray['VIEWTYPE_SELECTOR'] =
 			$this->renderFormField(
 				$this->conf['viewtype_selector.'],
 				DONT_RENDER_EMPTY_DRODOWN_ELEMENT,
@@ -4193,8 +4193,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						'additionalParams' => $additionalParams
 					);
 					$deleteLink_URL = $this->cObj->typoLink_URL( $deleteLinkConf );
-					//$imageConf['wrap'] = '<a href="#" onclick="areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
-					$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
+					$imageConf['wrap'] = '<a href="#" onclick="areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
+					//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
 				}
 
 				// basic configuration for the single view link
@@ -4265,7 +4265,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 										'additionalParams' => $additionalParams
 										);
 								$deleteLink_URL = $this->cObj->typoLink_URL($deleteLinkConf);
-								$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
+								$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . $deleteLink_URL . '\')">|</a></span>';
+								//$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
 
 									// generate the alt text
 								$imageConf['altText'] = $this->pi_getLL('altText_deletefile', 'Delete file.');
