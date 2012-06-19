@@ -2718,7 +2718,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$markerArray['LABEL_RELATED_TICKETS'] = $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_RELATED_TICKETS_UKB'));
 		}
 
-		return $markerArray;
+			// max. Filesize
+		$markerArray['LABEL_MAXFILESIZE'] = str_replace(
+			'###FILESIZE###', 
+			$this->lib->filesize_format($this->conf['maxFileSize']), 
+			$markerArray['LABEL_MAXFILESIZE']
+		);
+
+	return $markerArray;
 
 	}/*}}}*/
 

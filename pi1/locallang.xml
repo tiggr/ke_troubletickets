@@ -175,6 +175,7 @@
 			<label index="LABEL_ADDITIONAL_INFO">Additional information</label>
 			<label index="LABEL_EFFORT">Effort</label>
 			<label index="LABEL_FILES">Files</label>
+			<label index="LABEL_MAXFILESIZE">(max. ###FILESIZE### each)</label>
 			<label index="LABEL_CATEGORY">Category</label>
 			<label index="LABEL_OWNER_FEUSER">Owner</label>
 			<label index="LABEL_NUMBER">No.</label>
@@ -409,6 +410,7 @@
 			<label index="LABEL_ADDITIONAL_INFO">Zusatzinformationen</label>
 			<label index="LABEL_EFFORT">Aufwand</label>
 			<label index="LABEL_FILES">Dateien</label>
+			<label index="LABEL_MAXFILESIZE">(max. ###FILESIZE### pro Datei)</label>
 			<label index="LABEL_CATEGORY">Kategorie</label>
 			<label index="LABEL_OWNER_FEUSER">Besitzer</label>
 			<label index="LABEL_NUMBER">Nr.</label>
@@ -607,6 +609,7 @@
 			<label index="LABEL_ADDITIONAL_INFO">Informacje dodatkowe</label>
 			<label index="LABEL_EFFORT">Wysiłek</label>
 			<label index="LABEL_FILES">Pliki</label>
+			<label index="LABEL_MAXFILESIZE">(max. ###FILESIZE###)</label>
 			<label index="LABEL_CATEGORY">Kategoria</label>
 			<label index="LABEL_OWNER_FEUSER">Właściciel</label>
 			<label index="LABEL_NUMBER">Nr.</label>
