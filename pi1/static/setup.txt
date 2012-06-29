@@ -270,8 +270,10 @@ plugin.tx_ketroubletickets_pi1 {
 			doNotSaveInDB = 1
 
 			# if you want to make the owner selectable in the frontend,
-			# activate these lines:
-
+			# activate the lines below.
+			# You'll have to replace ###FIELD_OWNER_FEUSER### 
+			# with ###VALUE_OWNER_FEUSER### in your HTML template.
+	
 			#flexformFieldForUsergroupToChoseFrom = owner_group_to_choose_from
 			#size = 1
 			#multiple = 0
