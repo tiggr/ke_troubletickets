@@ -60,7 +60,10 @@ require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.
 require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php');
 
 	// Mail functions
-require_once (PATH_t3lib.'class.t3lib_htmlmail.php');
+if (t3lib_div::int_from_ver(TYPO3_version) >= 4005000)
+	require_once(PATH_t3lib.'mail/class.t3lib_mail_message.php');
+else
+	require_once(PATH_t3lib.'class.t3lib_htmlmail.php');
 
 /**
  * Plugin 'Trouble Ticket System' for the 'ke_troubletickets' extension.
@@ -1808,7 +1811,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					}
 				}
 			}
-			$changedInternalFields = t3lib_div::rm_endcomma($changedInternalFields);
+			$changedInternalFields = rtrim($changedInternalFields,',');
 
 			foreach (explode(',', $changedInternalFields) as $fieldName) {
 				$localMarkerArray['INTERNAL_CHANGES'] .= $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_' . strtoupper(trim($fieldName)), $fieldName));
@@ -1857,43 +1860,67 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$message = html_entity_decode(strip_tags($html_body), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
 		// inspired by code from tt_products, thanks
-		$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_htmlmail');
-		$Typo3_htmlmail->start();
-
-		$Typo3_htmlmail->subject = $subject;
-		$Typo3_htmlmail->from_email = $this->conf['email_notifications.']['from_email'];
-		$Typo3_htmlmail->from_name = $this->conf['email_notifications.']['from_name'];
-		$Typo3_htmlmail->replyto_email = $Typo3_htmlmail->from_email;
-		$Typo3_htmlmail->replyto_name = $Typo3_htmlmail->from_name;
-		$Typo3_htmlmail->organisation = '';
-
-		// add Attachments
-		if (is_array($files) && count($files)>0) {
-			foreach ($files as $attachment) {
-				$Typo3_htmlmail->addAttachment($uploadPath.$attachment);
+		if (t3lib_div::int_from_ver(TYPO3_version) >= 4005000){
+			$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_mail_Message');
+			$Typo3_htmlmail->setSubject($subject);
+			$Typo3_htmlmail->setFrom(array($this->conf['email_notifications.']['from_email'] => $this->conf['email_notifications.']['from_name']));
+	
+			// add Attachments
+			if (is_array($files) && count($files)>0) {
+				foreach ($files as $attachment) {
+					$Typo3_htmlmail->attach(Swift_Attachment::fromPath($uploadPath.$attachment));
+				}
 			}
-		}
+	
+			if ($sendAsHTML)  {
+				$Typo3_htmlmail->setBody($html_body, 'text/html');
+				if ($message && $this->conf['email_notifications.']['addPlainTextPart'])	{
+					$Typo3_htmlmail->addPart($message, 'text/plain');
+				}
+			} else {
+				$Typo3_htmlmail->addPart($message, 'text/plain');
+			}
+			$Typo3_htmlmail->setTo(explode(',', $toEMail));
+			$Typo3_htmlmail->send();
+		}else{
+			$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_htmlmail');
+			$Typo3_htmlmail->start();
 
-		if ($sendAsHTML)  {
-			$Typo3_htmlmail->theParts['html']['content'] = $html_body;
-			$Typo3_htmlmail->theParts['html']['path'] = t3lib_div::getIndpEnv('TYPO3_REQUEST_HOST') . '/';
+			$Typo3_htmlmail->subject = $subject;
+			$Typo3_htmlmail->from_email = $this->conf['email_notifications.']['from_email'];
+			$Typo3_htmlmail->from_name = $this->conf['email_notifications.']['from_name'];
+			$Typo3_htmlmail->replyto_email = $Typo3_htmlmail->from_email;
+			$Typo3_htmlmail->replyto_name = $Typo3_htmlmail->from_name;
+			$Typo3_htmlmail->organisation = '';
 
-			$Typo3_htmlmail->extractMediaLinks();
-			$Typo3_htmlmail->extractHyperLinks();
-			$Typo3_htmlmail->fetchHTMLMedia();
-			$Typo3_htmlmail->substMediaNamesInHTML(0);	// 0 = relative
-			$Typo3_htmlmail->substHREFsInHTML();
-			$Typo3_htmlmail->setHTML($Typo3_htmlmail->encodeMsg($Typo3_htmlmail->theParts['html']['content']));
-			if ($message && $this->conf['email_notifications.']['addPlainTextPart'])	{
+			// add Attachments
+			if (is_array($files) && count($files)>0) {
+				foreach ($files as $attachment) {
+					$Typo3_htmlmail->addAttachment($uploadPath.$attachment);
+				}
+			}
+
+			if ($sendAsHTML)  {
+				$Typo3_htmlmail->theParts['html']['content'] = $html_body;
+				$Typo3_htmlmail->theParts['html']['path'] = t3lib_div::getIndpEnv('TYPO3_REQUEST_HOST') . '/';
+
+				$Typo3_htmlmail->extractMediaLinks();
+				$Typo3_htmlmail->extractHyperLinks();
+				$Typo3_htmlmail->fetchHTMLMedia();
+				$Typo3_htmlmail->substMediaNamesInHTML(0);	// 0 = relative
+				$Typo3_htmlmail->substHREFsInHTML();
+				$Typo3_htmlmail->setHTML($Typo3_htmlmail->encodeMsg($Typo3_htmlmail->theParts['html']['content']));
+				if ($message && $this->conf['email_notifications.']['addPlainTextPart'])	{
+					$Typo3_htmlmail->addPlain($message);
+				}
+			} else {
 				$Typo3_htmlmail->addPlain($message);
 			}
-		} else {
-			$Typo3_htmlmail->addPlain($message);
+			$Typo3_htmlmail->setHeaders();
+			$Typo3_htmlmail->setContent();
+			$Typo3_htmlmail->setRecipient(explode(',', $toEMail));
+			$Typo3_htmlmail->sendTheMail();
 		}
-		$Typo3_htmlmail->setHeaders();
-		$Typo3_htmlmail->setContent();
-		$Typo3_htmlmail->setRecipient(explode(',', $toEMail));
-		$Typo3_htmlmail->sendTheMail();
 	}/*}}}*/
 
 	/**
