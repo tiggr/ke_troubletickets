@@ -550,10 +550,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// - the submit-field
 				// - internal fields if the current user is not an internal user
 				// - fields that are configured as "doNotSaveInDB = 1"
+				// - fields the user does not have access to
 			if (
 				$fieldConf['type'] != 'submit'
 				&& (!$fieldConf['internal'] || $this->isCurrentUserInternalUser())
 				&& !$fieldConf['doNotSaveInDB']
+				&& $this->fieldIsWritableForCurrentUser($fieldConf)
 			) {
 
 					// required-check
