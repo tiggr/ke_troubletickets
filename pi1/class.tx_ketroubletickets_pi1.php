@@ -2474,6 +2474,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			}
 		}
 
+			// If a new ticket has been created, some values may be
+			// defined in hidden fields (set in the backend via flexform).
+			// We have to allow that here.
+		$allowedFieldsInNewTickets = 'responsible_feuser,observers_feuser,notifications_owner,notifications_responsible,notifications_observer';
+		if ($this->piVars['newticket'] && t3lib_div::inList($allowedFieldsInNewTickets, $fieldConf['name'])) {
+			$returnValue = true;
+		}
+
 		return $returnValue;
 	}
 
