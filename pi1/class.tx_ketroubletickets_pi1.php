@@ -3858,6 +3858,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$content = $this->cObj->substituteSubpart ($content, '###FILTER_BLOCK_' . strtoupper(trim($fieldConf['name'])), '');
 				}
 			}
+			// remove Filters for Internal Fields if User is no internal User
+			if($fieldConf['internal'] && !$this->isCurrentUserInternalUser())
+				$content = $this->cObj->substituteSubpart ($content, '###FILTER_BLOCK_' . strtoupper(trim($fieldConf['name'])), '');
 		}
 
 			// overwrite status message subpart if no status message is set
