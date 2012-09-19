@@ -2072,6 +2072,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$returnValue .= $this->piVars[$fieldConf['name']];
 			break;
 
+            case 'checkbox':
+                $returnValue .= intval($this->piVars[$fieldConf['name']]);
+            break;
+
 			case 'input':
 			case 'textarea':
 				$returnValue .= $this->sanitizeData($this->piVars[$fieldConf['name']]);
@@ -2907,6 +2911,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$prefillValue = $this->parsePrefillValue($fieldConf, $prefillValue);
 				$content .= '<input ' . $addJS . 'type="text" name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" value="' . $prefillValue . '" size="' . $fieldConf['size'] . '" maxlength="' . $fieldConf['maxlength'] . '">';
 			break;
+
+            case 'checkbox':
+                $class = $fieldConf['css_class'] ? ' class="' . $fieldConf['css_class'] . '"' : '';
+                $checked = $prefillValue ? ' checked="checked"' : '';
+                $content ='<input type="checkbox" value="1" ' . $checked . $addJS . $class . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']"' . '>';
+            break;
 
 			case 'select':
 				$class = $fieldConf['css_class'] ? ' class="' . $fieldConf['css_class'] . '"' : '';
