@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Christian Bülter <buelter@kennziffer.com>
+*  (c) 2007-2012 Christian Bülter <buelter@kennziffer.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -59,8 +59,15 @@ require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.
 	// Basic file func, needed for checking filenames when uploading files
 require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php');
 
+if (class_exists(VersionNumberUtility)) {
+    $numeric_typo3_version = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version);
+} else if (class_exists('t3lib_utility_VersionNumber')) {
+    $numeric_typo3_version = t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version);
+} else {
+    $numeric_typo3_version = t3lib_div::int_from_ver(TYPO3_version);
+}
 	// Mail functions
-if (t3lib_div::int_from_ver(TYPO3_version) >= 4005000)
+if ($numeric_typo3_version >= 4005000)
 	require_once(PATH_t3lib.'mail/class.t3lib_mail_message.php');
 else
 	require_once(PATH_t3lib.'class.t3lib_htmlmail.php');
@@ -112,9 +119,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		'itemFormElName' =>  '',
 		'itemFormElValue' => '',
 	);
-    var $specConf = array();
+    var $specConf = array(
+        'rte_transform' => array(
+        'parameters' => array('mode' => 'ts_css')
+        )
+    );
     var $thisConfig = array();
     var $RTEtypeVal = 'text';
+    var $thePidValue;
 
 	/**
 	 * Plugin Main Method
@@ -134,9 +146,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->extPath = t3lib_extMgm::siteRelPath($this->extKey);
 
 			// Include default CSS?
-		if ($this->conf['includeDefaultCSS']) {
-			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_css'] = '<link rel="stylesheet" type="text/css" href="' . $this->extPath . $this->defaultCSS . '" />';
-		}
+ 		if ($this->conf['includeDefaultCSS']) {
+            if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+                $GLOBALS['TSFE']->getPageRenderer()->addCssFile($this->extPath . $this->defaultCSS);
+            } else {
+                $GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_css'] = '<link rel="stylesheet" type="text/css" href="' . $this->extPath . $this->defaultCSS . '" />';
+            }
+        }
 
 			// create instance of the extension library
 		$this->lib = t3lib_div::makeInstance('tx_ketroubletickets_lib');
@@ -1862,7 +1878,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$message = html_entity_decode(strip_tags($html_body), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
 		// inspired by code from tt_products, thanks
-		if (t3lib_div::int_from_ver(TYPO3_version) >= 4005000){
+		if ($this->getNumericTYPO3versionNumber() >= 4005000){
 			$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_mail_Message');
 			$Typo3_htmlmail->setSubject($subject);
 			$Typo3_htmlmail->setFrom(array($this->conf['email_notifications.']['from_email'] => $this->conf['email_notifications.']['from_name']));
@@ -3057,34 +3073,45 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				break;
 
 			case 'textareaRTE':
-				// make RTE instance
-				$this->RTEObj = t3lib_div::makeInstance('tx_rtehtmlarea_pi2');
+                if (!$this->RTEObj) $this->RTEObj = t3lib_div::makeInstance('tx_rtehtmlarea_pi2');
+                if ($this->RTEObj->isAvailable()) {
+                    $this->RTEcounter++;
+                    $this->formName = $this->ticketFormName;
+                    $this->PA['itemFormElName'] = $this->prefixId . '[' . $fieldConf['name'] . ']';
+                    $this->PA['itemFormElValue'] = $prefillValue;
+                    $this->thePidValue = $GLOBALS['TSFE']->id;
+                    $this->strEntryField = $fieldConf['name'];
+                    // add 150px to the RTE width if configured in typoscript
+                    if ($fieldConf['largeRTE']) {
+                        $this->docLarge = true;
+                    }
+                    $RTEItem = $this->RTEObj->drawRTE(
+                        $this,
+                        '',
+                        $this->strEntryField,
+                        $row=array(),
+                        $this->PA,
+                        $this->specConf,
+                        $this->thisConfig,
+                        $this->RTEtypeVal,
+                        '',
+                        $this->thePidValue
+                    );
+                    $this->markerArray['ADDITIONALJS_PRE'] =
+                        $this->additionalJS_initial
+                        . '<script type="text/javascript">'
+                        . implode(chr(10), $this->additionalJS_pre)
+                        . '</script>';
+                    $this->markerArray['ADDITIONALJS_POST'] =
+                        '<script type="text/javascript">'
+                        . implode(chr(10), $this->additionalJS_post)
+                        . '</script>';
+                    $this->markerArray['ADDITIONALJS_SUBMIT'] =
+                        implode(';', $this->additionalJS_submit);
+                    $content = $RTEItem;
+                }
+ 			break;
 
-				// initialize the RTE
-				$this->RTEcounter++;
-				$this->formName = $this->ticketFormName;
-				$this->strEntryField = $fieldConf['name'];
-				$this->PA['itemFormElName'] = $this->prefixId . '[' . $fieldConf['name'] . ']';
-				$this->PA['itemFormElValue'] = $prefillValue;
-				$this->thePidValue = $GLOBALS['TSFE']->id;
-
-					// add 150px to the RTE width if configured in typoscript
-				if ($fieldConf['largeRTE']) {
-					$this->docLarge = true;
-				}
-
-				$content = $this->RTEObj->drawRTE($this,'',$this->strEntryField,$row=array(), $this->PA, $this->specConf, $this->thisConfig, $this->RTEtypeVal, '', $this->thePidValue);
-
-				// RTE Markers
-				$this->markerArray['ADDITIONALJS_PRE'] = $this->additionalJS_initial.'
-					<script type="text/javascript">'. implode(chr(10), $this->additionalJS_pre).'
-					</script>';
-				$this->markerArray['ADDITIONALJS_POST'] = '
-					<script type="text/javascript">'. implode(chr(10), $this->additionalJS_post).'
-					</script>';
-				$this->markerArray['ADDITIONALJS_SUBMIT'] = implode(';', $this->additionalJS_submit);
-
-			break;
 
 			case 'textarea':
 				$content .= '<textarea name="' . $this->prefixId . '[' . $fieldConf['name'] . ']" cols="' . $fieldConf['cols'] . '" rows="' . $fieldConf['rows'] . '"  maxlength="' . $fieldConf['maxlength'] . '">';
@@ -3681,11 +3708,20 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		list($this->internal['orderBy'], $this->internal['descFlag']) = explode('-', $this->piVars['sort']);
 
 			// Number of results to show in a listing.
-		$this->internal['results_at_a_time']=t3lib_div::intInRange($this->listViewConf['results_at_a_time'],0,1000,10);
+        if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+            $this->internal['results_at_a_time'] = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->listViewConf['results_at_a_time'],0,1000,10);
+        } else {
+            $this->internal['results_at_a_time'] = t3lib_div::intInRange($this->listViewConf['results_at_a_time'],0,1000,10);
+        }
 		if ($this->piVars['entries_per_page']) $this->internal['results_at_a_time'] = $this->piVars['entries_per_page'];
 
 			// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
-		$this->internal['maxPages'] = t3lib_div::intInRange($this->listViewConf['maxPages'],0,1000,5);;
+        if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+            $this->internal['maxPages'] = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->listViewConf['maxPages'],0,1000,5);
+        } else {
+            $this->internal['maxPages'] = t3lib_div::intInRange($this->listViewConf['maxPages'],0,1000,5);
+        }
+
 
 			// fields to search in
 		$this->internal['searchFieldList'] = 'title,description';
@@ -4590,9 +4626,18 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// Initializing variables:
 		$pointer = intval($this->piVars[$pointerName]);
 		$count = intval($this->internal['res_count']);
-		$results_at_a_time = t3lib_div::intInRange($this->internal['results_at_a_time'],1,1000);
+        if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+            $results_at_a_time = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->internal['results_at_a_time'],1,1000);
+        } else {
+            $results_at_a_time = t3lib_div::intInRange($this->internal['results_at_a_time'],1,1000);
+        }
 		$totalPages = ceil($count/$results_at_a_time);
-		$maxPages = t3lib_div::intInRange($this->internal['maxPages'],1,100);
+        if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+            $maxPages = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->internal['maxPages'],1,100);
+        } else {
+            $maxPages = t3lib_div::intInRange($this->internal['maxPages'],1,100);
+        }
+
 		$pi_isOnlyFields = $this->pi_isOnlyFields($this->pi_isOnlyFields);
 
 			// $showResultCount determines how the results of the pagerowser will be shown.
@@ -4612,7 +4657,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$pagefloat = ceil(($maxPages - 1)/2);
 			} else {
 				// pagefloat set as integer. 0 = left, value >= $this->internal['maxPages'] = right
-				$pagefloat = t3lib_div::intInRange($this->internal['pagefloat'],-1,$maxPages-1);
+                if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+                    $pagefloat = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->internal['pagefloat'],-1,$maxPages-1);
+                } else {
+                    $pagefloat = t3lib_div::intInRange($this->internal['pagefloat'],-1,$maxPages-1);
+                }
 			}
 		} else {
 			$pagefloat = -1; // pagefloat disabled
@@ -4641,7 +4690,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$firstPage = max(0,$lastPage-$maxPages);
 			} else {
 				$firstPage = 0;
-				$lastPage = t3lib_div::intInRange($totalPages,1,$maxPages);
+                if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+                    $lastPage = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($totalPages,1,$maxPages);
+                } else {
+                    $lastPage = t3lib_div::intInRange($totalPages,1,$maxPages);
+                }
+
 			}
 			$links=array();
 
@@ -5031,6 +5085,23 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$this->timetracking[$title] = round((microtime(true) * 1000 - $this->timetracking['start']));
 		}
 	}
+
+    /**
+     * Returns the current TYPO3 version number as an integer, eg. 4005000 for version 4.5
+     *
+     * @return int
+     */
+    public function getNumericTYPO3versionNumber() {
+        if (class_exists(VersionNumberUtility)) {
+            $numeric_typo3_version = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version);
+        } else if (class_exists('t3lib_utility_VersionNumber')) {
+            $numeric_typo3_version = t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version);
+        } else {
+            $numeric_typo3_version = t3lib_div::int_from_ver(TYPO3_version);
+        }
+        return $numeric_typo3_version;
+    }
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ke_troubletickets/pi1/class.tx_ketroubletickets_pi1.php'])	{

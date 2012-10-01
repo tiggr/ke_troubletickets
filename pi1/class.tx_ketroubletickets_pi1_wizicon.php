@@ -34,39 +34,59 @@
  */
 class tx_ketroubletickets_pi1_wizicon {
 
-					/**
-					 * Processing the wizard items array
-					 *
-					 * @param	array		$wizardItems: The wizard items
-					 * @return	Modified array with wizard items
-					 */
-					function proc($wizardItems)	{
-						global $LANG;
+    /**
+     * Processing the wizard items array
+     *
+     * @param	array		$wizardItems: The wizard items
+     * @return	Modified array with wizard items
+     */
+    function proc($wizardItems)	{
+        global $LANG;
 
-						$LL = $this->includeLocalLang();
+        $LL = $this->includeLocalLang();
 
-						$wizardItems['plugins_tx_ketroubletickets_pi1'] = array(
-							'icon'=>t3lib_extMgm::extRelPath('ke_troubletickets').'pi1/ce_wiz.gif',
-							'title'=>$LANG->getLLL('pi1_title',$LL),
-							'description'=>$LANG->getLLL('pi1_plus_wiz_description',$LL),
-							'params'=>'&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=ke_troubletickets_pi1'
-						);
+        $wizardItems['plugins_tx_ketroubletickets_pi1'] = array(
+            'icon'=>t3lib_extMgm::extRelPath('ke_troubletickets').'pi1/ce_wiz.gif',
+            'title'=>$LANG->getLLL('pi1_title',$LL),
+            'description'=>$LANG->getLLL('pi1_plus_wiz_description',$LL),
+            'params'=>'&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=ke_troubletickets_pi1'
+        );
 
-						return $wizardItems;
-					}
+        return $wizardItems;
+    }
 
-					/**
-					 * Reads the [extDir]/locallang.xml and returns the $LOCAL_LANG array found in that file.
-					 *
-					 * @return	The array with language labels
-					 */
-					function includeLocalLang()	{
-						$llFile = t3lib_extMgm::extPath('ke_troubletickets').'locallang.xml';
-						$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
-						
-						return $LOCAL_LANG;
-					}
-				}
+    /**
+     * Reads the [extDir]/locallang.xml and returns the $LOCAL_LANG array found in that file.
+     *
+     * @return	The array with language labels
+     */
+    function includeLocalLang() {
+        $llFile = t3lib_extMgm::extPath('ke_troubletickets') . 'locallang.xml';
+        if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+            $xmlParser = t3lib_div::makeInstance('t3lib_l10n_parser_Llxml');
+            $LOCAL_LANG = $xmlParser->getParsedData($llFile, $GLOBALS['LANG']->lang);
+        } else {
+            $LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
+        }
+        return $LOCAL_LANG;
+    }
+
+    /**
+     * Returns the current TYPO3 version number as an integer, eg. 4005000 for version 4.5
+     *
+     * @return int
+     */
+    public function getNumericTYPO3versionNumber() {
+        if (class_exists(VersionNumberUtility)) {
+            $numeric_typo3_version = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version);
+        } else if (class_exists('t3lib_utility_VersionNumber')) {
+            $numeric_typo3_version = t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version);
+        } else {
+            $numeric_typo3_version = t3lib_div::int_from_ver(TYPO3_version);
+        }
+        return $numeric_typo3_version;
+    }
+}
 
 
 
