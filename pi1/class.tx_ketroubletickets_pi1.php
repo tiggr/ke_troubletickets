@@ -221,14 +221,18 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// add the "are you sure"-function to the header.
-		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_areyousure'] = '<script type="text/javascript">
+        $jsCode = '<script type="text/javascript">
 	function areYouSure(ziel) {
 		if ( confirm("' . $this->pi_getLL('are_you_sure_delete', 'Are you sure?') . '") ) {
 			window.location.href = ziel;
 		}
 	}
 </script>';
-
+        if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+            $GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
+        } else {
+            $GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_areyousure'] = $jsCode;
+        }
 			// General permission check: This plugin only makes sense if a user is logged in
 		if (!$GLOBALS['TSFE']->loginUser) {
 			return $this->pi_wrapInBaseClass($this->pi_getLL('error_not_logged_in', 'Please log in.'));
@@ -2311,15 +2315,21 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$this->markerArray['LABEL_OPEN_NEW_TICKET'] = '';
 		}
 
-			// add date picker javascript to the header
-			// and configure it
+            // add date picker javascript to the header and configure it
 		if (!$this->useDate2Cal) {
-			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker'] = '<script type="text/javascript" src="'.$this->extPath.'js/datetimepicker.js"></script>';
-			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker_config'] .= '
-<script type="text/javascript">
+            $jsCode =
+'<script type="text/javascript">
 	var DateSeparator="' . $this->conf['datepicker.']['separator'] . '";
 </script>';
+            if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+                $GLOBALS['TSFE']->getPageRenderer()->addHeaderData('<script type="text/javascript" src="'.$this->extPath.'js/datetimepicker.js"></script>');
+                $GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
+            } else {
+                $GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker'] = '<script type="text/javascript" src="'.$this->extPath.'js/datetimepicker.js"></script>';
+                $GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_datetimepicker_config'] .= $jsCode;
+            }
 		}
+
 			// get the template subpart
 		$content = $this->cObj->getSubpart($this->templateCode,'###TICKET_FORM###');
 
