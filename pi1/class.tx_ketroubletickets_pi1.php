@@ -2526,15 +2526,18 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function printview() {
 
-		// include special css for printview
-		$cssfile = t3lib_extMgm::siteRelPath($this->extKey).'res/css/ke_troubletickets_printview.css';
-		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId] .= '<link rel="stylesheet" type="text/css" href="'.$cssfile.'" />';
+        // include Javascript for printview
+        // include special css for printview
+        $jsCode = '<script type="text/javascript">window.print();</script>';
 
-		// include Javascript for printview
-		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId] .= '
-			<script type="text/javascript">
-				window.print();
-			</script>';
+		$cssfile = t3lib_extMgm::siteRelPath($this->extKey).'res/css/ke_troubletickets_printview.css';
+        if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+            $GLOBALS['TSFE']->getPageRenderer()->addHeaderData('<link rel="stylesheet" type="text/css" href="'.$cssfile.'" />');
+            $GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
+        } else {
+            $GLOBALS['TSFE']->additionalHeaderData[$this->prefixId] .= '<link rel="stylesheet" type="text/css" href="'.$cssfile.'" />';
+            $GLOBALS['TSFE']->additionalHeaderData[$this->prefixId] .=  $jsCode;
+        }
 
 		// get the template subpart
 		$content = $this->cObj->getSubpart($this->templateCode,'###PRINTVIEW###');
@@ -5074,7 +5077,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 		// get initialisation code of the calendar
 		if (($jsCode = $this->JSCalendar->getMainJS()) != '') {
-			$GLOBALS['TSFE']->additionalHeaderData['date2cal'] = $jsCode;
+            if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+                $GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
+            } else {
+                $GLOBALS['TSFE']->additionalHeaderData['date2cal'] = $jsCode;
+            }
 		}
 
 		$this->useDate2Cal = true;
