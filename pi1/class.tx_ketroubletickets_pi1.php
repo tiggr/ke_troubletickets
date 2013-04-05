@@ -221,13 +221,16 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// add the "are you sure"-function to the header.
-        $jsCode = '<script type="text/javascript">
+        $jsCode = '
+<script type="text/javascript">
 	function areYouSure(ziel) {
 		if ( confirm("' . $this->pi_getLL('are_you_sure_delete', 'Are you sure?') . '") ) {
 			window.location.href = ziel;
 		}
 	}
-</script>';
+</script>
+';
+		
         if ($this->getNumericTYPO3versionNumber() >= 6000000) {
             $GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
         } else {
@@ -298,6 +301,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if ($this->piVars['deleteRelatedTicket']) {
 			$this->removeRelatedTicketFromCurrentTicket($this->piVars['deleteRelatedTicket']);
 		}
+		
 			// Render the main content
 		if (
 			($this->piVars['do'] == 'new')
@@ -644,6 +648,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 					// parse and clean up the submitted value
 				$this->insertFields[$fieldConf['name']] = $this->generateDBInsertValue($fieldConf, $defaultValue);
+							
 			}
 		}
 			// if there are errors, delete the uploaded files
@@ -768,17 +773,17 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 							// change the status
 						$this->insertFields['status'] = CONST_STATUS_OPEN;
-
+							
 							// add the information to changedFields list
 						$changedFields = $this->addToCommaList($changedFields, CONST_REOPENANDCOMMENT);
 
 							// add a history entry
 						$this->addHistoryEntry( array(
-									'ticket_uid' => $this->internal['currentRow']['uid'],
-									'databasefield' => 'status',
-									'value_old' => $this->internal['currentRow']['status'],
-									'value_new' => CONST_STATUS_OPEN
-									));
+							'ticket_uid' => $this->internal['currentRow']['uid'],
+							'databasefield' => 'status',
+							'value_old' => $this->internal['currentRow']['status'],
+							'value_new' => CONST_STATUS_OPEN
+						));
 					} else {
 
 							// if the status is currentyl "wait", set the status to the value
@@ -807,6 +812,18 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$changedFields = $this->addToCommaList($changedFields, CONST_NEWCOMMENT);
 					}
 
+				}
+				
+				
+					// get ticket progress
+				$newStatus = $this->insertFields['status'];
+				if ($newStatus == CONST_STATUS_CLOSED || $newStatus == CONST_STATUS_CLOSED_LOCKED) {
+					$this->insertFields['progress'] = 100;
+				} else {
+					$this->insertFields['progress'] = $this->lib->getTicketProgressFromToDo($this->internal['currentRow']['uid']);
+				}
+				if ($this->insertFields['progress'] != $this->internal['currentRow']['progress']) {
+					$changedFields = $this->addToCommaList($changedFields, 'progress');
 				}
 
 					// exec update database query
@@ -1646,7 +1663,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$fieldsArray = t3lib_div::trimExplode(',', $lConf['fieldList']);
 		$changedFieldsArray = t3lib_div::trimExplode(',', $changedFields);
 
-			// get the markers
+		// get the markers
 		foreach ($fieldsArray as $fieldName) {
 			if (strtolower(trim($fieldName)) == 'comments') {
 				$markerContent = '<strong>' . $this->pi_getLL('LABEL_COMMENT_HEADER') . '</strong><br />';
@@ -1664,7 +1681,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$localMarkerArray['EMAIL_FIELD_' . strtoupper(trim($fieldName))] = $markerContent;
 		}
 
-			// find out what type of change
+		// find out what type of change
 		if (stristr($changedFields, CONST_NEWTICKET)) {
 			$type = 'new';
 		} else if (stristr($this->internal['currentRow']['status'], CONST_STATUS_CLOSED)) {
@@ -2267,7 +2284,42 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->markerArray['ADDITIONALJS_PRE'] = '';
 		$this->markerArray['ADDITIONALJS_POST'] = '';
 		$this->markerArray['UKB_FORM'] = '';
+		
+		
+			// set css and js files that have to be included
+		$cssFiles = array();
+		$jsFiles = array();
+		
+			// Include default CSS?
+ 		if ($this->conf['includeDefaultCSS']) $cssFiles['css'] = $this->defaultCSS;
+			// Include jQuery?
+		if ($this->conf['includeJQuery']) $jsFiles['jquery'] = 'js/jquery-1.9.1.min.js';
+			// Include jQueryUI?
+		if ($this->conf['includeJQueryUI']) {
+			$jsFiles['jqueryui'] = 'js/jquery-ui/jquery-ui-1.10.2.custom.min.js';
+			$cssFiles['jqueryuicss'] = 'js/jquery-ui/ui-lightness/jquery-ui-1.10.2.custom.min.css';
+		}
+			// Include Todo functions?
+		if ($this->conf['includeToDoFunctions']) $jsFiles['todo'] = 'js/todo.js';
 
+			// Include configured CSS and JS files regarding to 
+			// current TYPO3 version
+		if ($this->getNumericTYPO3versionNumber() >= 6000000) {
+			foreach($cssFiles as $cssFile) {
+				$GLOBALS['TSFE']->getPageRenderer()->addCssFile($this->extPath . $cssFile);
+			}
+			foreach ($jsFiles as $jsFile) {
+				$GLOBALS['TSFE']->getPageRenderer()->addJsFile($this->extPath . $jsFile);
+			}
+		} else {
+			foreach($cssFiles as $key => $cssFile) {
+				$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_' . $key] = '<link rel="stylesheet" type="text/css" href="' . $this->extPath . $cssFile . '" />';
+			}
+			foreach ($jsFiles as $key => $jsFile) {
+				$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_' . $key] = '<script type="text/javascript" src="' . $this->extPath . $jsFile . '"></script>';
+			}
+		}
+				
 			// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
@@ -2344,8 +2396,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// get the field markers (render the form fields)
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-
-				// decide wether the field is editable and output either the
+				
+			// decide wether the field is editable and output either the
 				// form field or just the content of that field.
 			if ($this->fieldIsWritableForCurrentUser($fieldConf)) {
 					// current user has write access
@@ -2703,7 +2755,10 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		} else {
 			$markerArray['CLEANUID'] = '';
 		}
-
+		
+			// STORAGE PID
+		$markerArray['STORAGEPID'] = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
+		
 			// get the label markers from locallang
 		foreach (explode(',', $this->conf['locallangLabelList']) as $labelName) {
 			$markerArray['LABEL_' . trim($labelName)] = $this->pi_getLL('LABEL_' . trim($labelName));
@@ -3428,8 +3483,25 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						}
 					}
 				}
+			break;	
+			
+			case 'todo_list':
+				if ($this->piVars['showUid'] || $this->piVars['updateUid']) {
+						$content = '
+							<ul id="kett_todo_list"></ul><br /><br />
+							<input type="text" id="kett_todo_new" />
+							<div id="addToDo" /></div>';
+					} else {
+						$content = $this->pi_getLL('SAVETICKETFIRST');
+					}
 			break;
-
+		
+			case 'progress':
+				$content = '
+					<div id="kett_sv_progress_outer"><div id="kett_sv_progress"></div></div>
+					<div id="kett_sv_progress_percent"></div>';
+			break;
+		
 			default:
 
 			break;
@@ -4481,6 +4553,25 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			case 'additional_info':
 				$retval = nl2br($this->cleanUpHtmlOutput($this->internal['currentRow'][$fieldName]));
 				return $retval;
+				break;
+			
+			case 'progress':
+				return $this->internal['currentRow']['progress'];
+				break;
+			
+			case 'todo_list':
+				$toDoEntries = $this->lib->getToDoEntriesForTicket($this->internal['currentRow']['uid']);
+				$toDoContent = '';
+				foreach ($toDoEntries as $key => $toDo) {
+					if ($renderType == CONST_RENDER_TYPE_EMAIL) {
+						$toDoContent .= '<span style="font-family:\'Lucida Console\', Monaco, monospace ">';
+					} else {
+						$toDoContent .= '<span class="todo_status">';
+					}
+					$toDoContent .= $toDo['done'] == 1 ? '[X] ' : '[ ] ';
+					$toDoContent .= '</span>'.$toDo['title'].'<br />';
+				}
+				return $toDoContent;
 				break;
 
 			default:

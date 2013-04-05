@@ -324,7 +324,55 @@ class tx_ketroubletickets_lib {
    public function getTicketData($ticketUid) {
 		return $this->fe_getRecord('*', 'tx_ketroubletickets_tickets', 'uid=' . $ticketUid);
    }
-
+   
+   
+	/**
+	 * returns the todo entries for a ticket
+	 *
+	 * @param   integer $ticketUid
+	 * @return  array
+	 * @author  Andreas Kiefer <kiefer@kennziffer.com>
+	 * @since   Wed Apr 3 2013 16:37:32 GMT+0200
+	 */
+	public function getToDoEntriesForTicket($ticketUid) {
+		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$table = 'tx_ketroubletickets_todo';
+		$fields = '*';
+		$where = 'ticket_uid=' . intval($ticketUid);
+		$where .= $lcObj->enableFields($table);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where, '', 'sorting, uid');
+		$results = array();
+		while ($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			$results[] = $row;
+		}
+		return $results;
+	}
+   
+	/**
+	 * calculates the ticket progress regarding to todo entries 
+	 * 
+	 *
+	 * @param   integer $ticketUid
+	 * @return  integer
+	 * @author  Andreas Kiefer <kiefer@kennziffer.com>
+	 * @since   Thu Apr 4 2013 11:45:22 GMT+0200
+	 */
+	function getTicketProgressFromToDo($ticketUid) {
+		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$table = 'tx_ketroubletickets_todo';
+		$fields = 'count(uid) as total, (SELECT count(uid) FROM tx_ketroubletickets_todo WHERE ticket_uid='.$ticketUid.' AND done=1) as completed';
+		$where = 'ticket_uid=' . intval($ticketUid);
+		$where .= $lcObj->enableFields($table);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
+		$row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		if ($row['total'] > 0) {
+			// calculation based on existing todos
+			return round((100 * $row['completed']) / $row['total']);
+		} else {
+			// calculation based on ticket status
+			return 0;
+		}
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ke_troubletickets/pi1/class.tx_ketroubletickets_pi1.php'])	{

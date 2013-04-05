@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA["tx_ketroubletickets_tickets"] = array (
 	"ctrl" => $TCA["tx_ketroubletickets_tickets"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "sys_language_uid,l18n_parent,l18n_diffsource,hidden,starttime,endtime,fe_group,title,description,until_date,owner_feuser,responsible_feuser,observers_feuser,category,status,priority,notifications_owner,notifications_responsible,notifications_observer,files,time_used,from_date,time_planned,billing,related_tickets"
+		"showRecordFieldList" => "sys_language_uid,l18n_parent,l18n_diffsource,hidden,starttime,endtime,fe_group,title,description,until_date,owner_feuser,responsible_feuser,observers_feuser,category,status,priority,notifications_owner,notifications_responsible,notifications_observer,files,time_used,from_date,time_planned,billing,related_tickets,progress"
 	),
 	"feInterface" => $TCA["tx_ketroubletickets_tickets"]["feInterface"],
 	"columns" => array (
@@ -366,9 +366,16 @@ $TCA["tx_ketroubletickets_tickets"] = array (
 				"rows" => "5",
 			)
 		),
+		"progress" => Array(
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_tickets.progress",
+			"config" => Array (
+				"type" => "none",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "sys_language_uid;;;;1-1-1, l18n_parent, l18n_diffsource, hidden;;1, title;;;;2-2-2, description;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_ketroubletickets/rte/];3-3-3, from_date, until_date, owner_feuser, responsible_feuser, observers_feuser, category, status, billing, priority, notifications_owner, notifications_responsible, notifications_observer, files, related_tickets, time_planned, time_used, close_time, effort, additional_info")
+		"0" => array("showitem" => "sys_language_uid;;;;1-1-1, l18n_parent, l18n_diffsource, hidden;;1, title;;;;2-2-2, description;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_ketroubletickets/rte/];3-3-3, from_date, until_date, owner_feuser, responsible_feuser, observers_feuser, category, status, billing, priority, notifications_owner, notifications_responsible, notifications_observer, files, related_tickets, time_planned, time_used, close_time, effort, additional_info, progress")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
@@ -722,4 +729,50 @@ $TCA["tx_ketroubletickets_history"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+$TCA["tx_ketroubletickets_todo"] = array (
+	"ctrl" => $TCA["tx_ketroubletickets_todo"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "ticket_uid,title,done"
+	),
+	"feInterface" => $TCA["tx_ketroubletickets_todo"]["feInterface"],
+	"columns" => array (
+		"ticket_uid" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_todo.ticket_uid",
+			"config" => Array (
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "tx_ketroubletickets_tickets",
+				"size" => 1,
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
+		"title" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_todo.title",
+			"config" => Array (
+				"type" => "input",
+				"size" => "30",
+			)
+		),
+		"done" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_todo.done",
+			"config" => Array (
+				"type" => "check",
+			)
+		
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "ticket_uid;;;;1-1-1, title, done")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
+
+
 ?>

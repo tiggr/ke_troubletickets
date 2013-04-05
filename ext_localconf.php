@@ -47,4 +47,8 @@ RTE.config.tx_ketroubletickets_comments.content {
   }
 }
 ');
+
+// register eID script
+$TYPO3_CONF_VARS['FE']['eID_include']['kett'] = 'EXT:ke_troubletickets/eID/class.tx_ketroubletickets_eid.php';
+
 ?>

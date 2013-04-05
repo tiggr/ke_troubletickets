@@ -6,6 +6,11 @@ New Ticket / Edit Ticket Form / Singleview
 
 <!-- ###TICKET_FORM### START-->
 
+<script type="text/javascript">
+	var ticketUid = parseInt(###CLEANUID###);
+	var storagePid = ###STORAGEPID###;
+</script>
+
 <form name="###TICKETFORM_NAME###" id="###TICKETFORM_NAME###" action="###TICKETFORM_ACTION###" method="post" enctype="multipart/form-data" onSubmit="###ADDITIONALJS_SUBMIT###">
 ###ADDITIONALJS_PRE###
 
@@ -87,15 +92,31 @@ New Ticket / Edit Ticket Form / Singleview
         <div class="kett_sv_sboxb_in">###FIELD_CHARGED###</div>
       </div>
     </div>
+	
+	<div class="kett_sv_single_box">
+		<div class="kett_sv_sbox_head">###LABEL_PROGRESS###</div>
+		<div class="kett_sv_sbox_body">
+			<div class="kett_sv_sboxb_in">###FIELD_PROGRESS###</div>
+		</div>
+	</div>
+	
     ###INTERNAL_FROM_DATE###
     ###INTERNAL_TIME_PLANNED###
     ###INTERNAL_TIME_USED###
   </div>
 
-  <div class="kett_sv_description">
-    <div class="kett_sv_desc_head">###LABEL_DESCRIPTION###</div>
-    <div class="kett_sv_desc_body"><table><tr><td>###FIELD_DESCRIPTION###</td></tr></table></div>
-  </div>
+	<div class="kett_sv_description">
+		<div class="kett_sv_desc_head">###LABEL_DESCRIPTION###</div>
+		<div class="kett_sv_desc_body"><table><tr><td>###FIELD_DESCRIPTION###</td></tr></table></div>
+	</div>
+	
+	<div class="kett_sv_description">
+		<div class="kett_sv_desc_head">###LABEL_TODO_LIST###</div>
+		<div class="kett_sv_desc_body">
+			###FIELD_TODO_LIST###
+		</div>
+		
+	</div>
 
   <div class="kett_sv_save">
     <div class="kett_sv_save_in">
@@ -103,7 +124,7 @@ New Ticket / Edit Ticket Form / Singleview
     </div>
     <div class="kett_float_clean"></div>
   </div>
-
+	
   ###INTERNAL_ADDITIONAL_INFO###
 
   <div class="kett_sv_description">
@@ -408,6 +429,13 @@ Listview
       <div class="kett_lvrow_headline_top">###UID###[###CATEGORY###]</div>
       <div class="kett_lvrow_headline_title">###TITLE###</div>
     </div>
+	<div class="kett_listview_row_progress">
+		<div class="kett_lvrow_progress_percent">###PROGRESS### %</div>
+		<br />
+		<div class="kett_lvrow_progress_outer">
+			<div class="kett_lvrow_progress_inner" style="width: ###PROGRESS###%; height: 5px;">&nbsp;</div>
+		</div>
+	</div>
   </div>
 
   <div class="kett_listview_row_body">
@@ -876,6 +904,10 @@ E-Mail Notification
 				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_STATUS###">###EMAIL_FIELD_STATUS###&nbsp;</td>
 			</tr>
 			<tr>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_PROGRESS###:</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_PROGRESS###">###EMAIL_FIELD_PROGRESS###&nbsp;%</td>
+			</tr>
+			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_BILLING###:</td>
 				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_BILLING###">###EMAIL_FIELD_BILLING###&nbsp;</td>
 			</tr>
@@ -904,9 +936,14 @@ E-Mail Notification
 				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_FILES###">###EMAIL_FIELD_FILES###&nbsp;</td>
 			</tr>
 			<tr>
-				<td style="vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_RELATED_TICKETS###:</td>
-				<td style="###CELLSTYLE_RELATED_TICKETS###">###EMAIL_FIELD_RELATED_TICKETS###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_RELATED_TICKETS###:</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_RELATED_TICKETS###">###EMAIL_FIELD_RELATED_TICKETS###&nbsp;</td>
 			</tr>
+			<tr>
+				<td style="vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_TODO_LIST###:</td>
+				<td style="###CELLSTYLE_TODO_LIST###">###EMAIL_FIELD_TODO_LIST###&nbsp;</td>
+			</tr>
+			
 			</table>
 		</td>
 
@@ -975,6 +1012,11 @@ Printview
 		<div class="kett_float_clean">&nbsp;</div>
 	</div>
 	<div class="printview_floatblock">
+		<label>###LABEL_PROGRESS###:</label>
+		###FIELD_PROGRESS###%
+		<div class="kett_float_clean">&nbsp;</div>
+	</div>
+	<div class="printview_floatblock">
 		<label>###LABEL_BILLING###:</label>
 		###FIELD_BILLING###
 		<div class="kett_float_clean">&nbsp;</div>
@@ -1031,6 +1073,11 @@ Printview
 	<div class="printview_block">
 		<span class="label">###LABEL_DESCRIPTION###:</span><br />
 		###FIELD_DESCRIPTION###
+	</div>
+	
+	<div class="printview_block">
+		<span class="label">###LABEL_TODO_LIST###:</span><br />
+		###FIELD_TODO_LIST###
 	</div>
 
 	<!-- ###INTERNAL_ADDITIONAL_INFO### start -->

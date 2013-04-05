@@ -17,6 +17,15 @@ plugin.tx_ketroubletickets_pi1 {
 	# Main HTML-Template
 	templateFile = EXT:ke_troubletickets/res/template/ke_troubletickets.tmpl.htm
 
+	# Include jQuery? (needed for Todo-Lists)
+	includeJQuery = 1
+
+	# Include jQuery UI? (CSS and JS, needed for Todo-Lists)
+	includeJQueryUI = 1
+
+	# Include ToDo-Lists Javascript functions?
+	includeToDoFunctions = 1
+
 	# Image used for the date picker
 	datePickerImage = IMAGE
 	datePickerImage.file = EXT:ke_troubletickets/res/images/calendar.png
@@ -105,7 +114,7 @@ plugin.tx_ketroubletickets_pi1 {
 	iconPlus.file = EXT:ke_troubletickets/res/images/button_plus.gif
 
 	# Locallang-Labels, will be substituted with the corresponding LABEL_...-entry in the the locallang-file
-	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_NEW, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT, VIEWTYPE, MYACTIVETICKETS, CHARGED, FILTER_CHARGED, MAXFILESIZE
+	locallangLabelList = OPEN_NEW_TICKET, TITLE, STATUS, PRIORITY, DESCRIPTION, UNTIL_DATE, EFFORT, TIME_USED, FILES, CATEGORY, RESPONSIBLE_FEUSER, OBSERVERS_FEUSER, NOTIFICATIONS_OWNER, NOTIFICATIONS_RESPONSIBLE, NOTIFICATIONS_OBSERVER, SUBMITBUTTON, CRDATE, OWNER_FEUSER, NUMBER_OF_COMMENTS, EDIT_TICKET, TICKET_HISTORY_HEADER, HISTORY_DATE, HISTORY_USER, HISTORY_FIELD, HISTORY_OLD_VALUE, HISTORY_NEW_VALUE, TICKET_HISTORY_HEADER, COMMENT_HEADER, COMMENT_NEW, COMMENT_SUBMIT, LINKTEXT_CSV_EXPORT, BILLING, FROM_DATE, TIME_PLANNED, EFFORT, RELATED_TICKETS, ADDITIONAL_INFO, SORTING, MODE_SELECTOR, RESPONSIBLE_FEUSER, FILTER_CATEGORY, FROM, TO, INTERNAL, CLOSE_TIME, GO_TO_COMMENTS_FROM_EMAIL, NUMBER, COMMENTS, ATTACHMENTS, HISTORY, CLOSED_IN_MONTH, PERMALINK, LATEST_COMMENT, VIEWTYPE, MYACTIVETICKETS, CHARGED, FILTER_CHARGED, MAXFILESIZE, TODO_LIST, PROGRESS, SAVETICKETFIRST
 
 	# Format for outputting the date when not in an input field
 	# german format
@@ -506,12 +515,31 @@ plugin.tx_ketroubletickets_pi1 {
 			#css_class = select_short
 			doNotSaveInDB = 1
 		}
+
+		# TODO LIST
+		190 {
+			name = todo_list
+			type = todo_list
+			doNotSaveInDB = 1
+		}
+
+		200 {
+			name = progress
+			type = progress
+			doNotSaveInDB = 1
+		}
+		210 {
+			name = progressbar
+			type = progressbar
+			doNotSaveInDB = 1
+		}
+		
 	}
 }
 
 # Listview defaults
 plugin.tx_ketroubletickets_pi1.listView {
-	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value, number_of_attachments, latest_comment, files, charged_icon
+	fieldList = edit_icon, close_icon, delete_icon, crdate, until_date, title, number_of_comments, status_icon, status_icon_teaser, status, category, owner_feuser, responsible_feuser, priority, priority_wrapped, observers_feuser, from_date, billing, time_planned, effort, singleview_pagetitle, close_time_with_text, priority_number, description_clean, status_raw_value, number_of_attachments, latest_comment, files, charged_icon, progress
 	headerList = category, title, crdate, from_date, until_date, status, owner_feuser, responsible_feuser, number_of_comments, priority
 	filterList = status, responsible_feuser, category, closed_in_month, billing, charged
 	closed_in_month_dateformat = m/Y
@@ -600,7 +628,7 @@ plugin.tx_ketroubletickets_pi1.email_notifications {
 	subject_prefix = [TROUBLE TICKET]
 	from_email = me@domain.com
 	from_name = TYPO3 Trouble Ticket System
-	fieldList = crdate, title, status, billing, priority, priority_wrapped, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets, charged
+	fieldList = crdate, title, status, billing, priority, priority_wrapped, until_date, effort, owner_feuser, responsible_feuser, observers_feuser, category, files, description, comments, related_tickets, charged, progress, todo_list
 	# Don't send notification when only the following internal fields are changed (comma seperated list)
 	internalFieldsWithoutNotification = time_used
 	# Add ticket UID to notification subject?

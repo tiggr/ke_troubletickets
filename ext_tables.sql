@@ -46,7 +46,8 @@ CREATE TABLE tx_ketroubletickets_tickets (
 	time_planned int(11) DEFAULT '0' NOT NULL,
 	effort tinytext NOT NULL,
 	close_time int(11) DEFAULT '0' NOT NULL,
-	related_tickets blob NOT NULL
+	related_tickets blob NOT NULL,
+	progress int(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid),
@@ -145,6 +146,25 @@ CREATE TABLE tx_ketroubletickets_history (
 	feuser_username tinytext NOT NULL,
 	value_old text NOT NULL,
 	value_new text NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+#
+# Table structure for table 'tx_ketroubletickets_todo'
+#
+CREATE TABLE tx_ketroubletickets_todo (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	sorting int(10) DEFAULT '0' NOT NULL,
+	ticket_uid blob NOT NULL,
+	title tinytext NOT NULL,
+	done tinyint(4) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

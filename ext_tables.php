@@ -181,9 +181,27 @@ $TCA["tx_ketroubletickets_history"] = array (
 	)
 );
 
+$TCA["tx_ketroubletickets_todo"] = array (
+	"ctrl" => array (
+		'title'     => 'LLL:EXT:ke_troubletickets/locallang_db.xml:tx_ketroubletickets_todo',
+		'label'     => 'uid',
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'sortby' => 'sorting',
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_ketroubletickets_todo.gif',
+	),
+	"feInterface" => array (
+		"fe_admin_fieldList" => "ticket_uid, title, done",
+	)
+);
+
+
 	// allow the data to be stored on normal pages
 t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_tickets');
 t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_categories');
 t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_comments');
 t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_history');
+t3lib_extMgm::allowTableOnStandardPages('tx_ketroubletickets_todo');
 ?>

@@ -222,6 +222,10 @@
 			<label index="LABEL_NOT_AVAILABLE">n/a</label>
 			<label index="LABEL_ENTRIES_PER_PAGE">Entries per page</label>
 			<label index="LABEL_MYACTIVETICKETS">My active tickets</label>
+			
+			<label index="LABEL_TODO_LIST">ToDo</label>
+			<label index="LABEL_PROGRESS">Progress</label>
+			<label index="SAVETICKETFIRST">Save ticket first</label>
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">General settings</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">User settings</label>
@@ -307,7 +311,7 @@
 			<label index="error_date2cal_not_loaded">Fehler: Die Erweiterung date2cal muss installiert sein.</label>
 			<label index="error_no_tickets_found">Es wurden keine Aufgaben gefunden.</label>
 			<label index="error_no_template">Fehler: Es wurde kein Template gefunden. Wurde das statische Template eingebunden?</label>
-			<label index="error_no_category">Fehler: Es muss mindestens einen Kategorie angelegt sein.</label>
+			<label index="error_no_category">Fehler: Es muss mindestens eine Kategorie angelegt sein.</label>
 			<label index="error_no_responsible_user">Fehler: Es wurde kein verantwortlicher Benutzer gefunden.</label>
 			<label index="error_no_values">Fehler: Keine Werte gefunden für </label>
 			<label index="error_no_upload_directory">Fehler: Das Verzeichnis existiert nicht. Bitte kontaktieren Sie den Administrator.</label>
@@ -457,6 +461,10 @@
 			<label index="LABEL_NOT_AVAILABLE">n/a</label>
 			<label index="LABEL_ENTRIES_PER_PAGE">Einträge pro Seite</label>
 			<label index="LABEL_MYACTIVETICKETS">Meine aktiven Aufgaben</label>
+			
+			<label index="LABEL_TODO_LIST">ToDo-Liste</label>
+			<label index="LABEL_PROGRESS">Fortschritt</label>
+			<label index="SAVETICKETFIRST">Bitte speichern Sie die Aufgabe zunächst</label>
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">Allgemeine Einstellungen</label>
 			<label index="tt_content.pi_ketroubletickets.sheet_title_users">Benutzereinstellungen</label>
