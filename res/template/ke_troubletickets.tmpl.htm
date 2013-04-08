@@ -589,6 +589,7 @@ Listview Short
     <td class="kett_tw_head">###LABEL_TITLE###</td>
     <td class="kett_tw_head">###LABEL_RESPONSIBLE_FEUSER###</td>
     <td class="kett_tw_head">###LABEL_UNTIL_DATE###</td>
+    <td class="kett_tw_head">###LABEL_PROGRESS###</td>
   </tr>
 ###LISTCONTENT###
 </table>
@@ -605,6 +606,13 @@ Listview Short
   </td>
   <td class="kett_tw_body">###RESPONSIBLE_FEUSER###</td>
   <td class="kett_tw_body"><span class="due_###IS_OVERDUE###">###UNTIL_DATE###</span></td>
+  <td class="kett_tw_body">
+	  <div class="kett_listview_row_progress">
+		<div class="kett_lvrow_progress_outer">
+			<div class="kett_lvrow_progress_inner" style="width: ###PROGRESS###%; height: 5px;">&nbsp;</div>
+		</div> ###PROGRESS### %
+	</div>
+  </td>
 </tr>
 <!-- ###LISTVIEWSHORT_SINGLE_ROW### END-->
 

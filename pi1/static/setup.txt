@@ -550,7 +550,7 @@ plugin.tx_ketroubletickets_pi1.listView {
 	cropDescription = 400
 	templateSubpart = ###LISTVIEW###
 	templateSubpartRow = ###LISTVIEW_SINGLE_ROW###
-	entries_per_page_options = 10,20,50
+	entries_per_page_options = 10,20,50,100
 	hideIfNoResults = 0
 	sort = crdate-1
 	sort2 = , priority DESC, crdate ASC
@@ -579,7 +579,7 @@ plugin.tx_ketroubletickets_pi1.filter {
 # Short listview
 plugin.tx_ketroubletickets_pi1.listViewShort < plugin.tx_ketroubletickets_pi1.listView
 plugin.tx_ketroubletickets_pi1.listViewShort {
-	fieldList = crdate, until_date, title, status_icon_teaser, responsible_feuser, singleview_pagetitle
+	fieldList = crdate, until_date, title, status_icon_teaser, responsible_feuser, singleview_pagetitle, progress
 	results_at_a_time = 50
 	templateSubpart = ###LISTVIEWSHORT###
 	templateSubpartRow = ###LISTVIEWSHORT_SINGLE_ROW###

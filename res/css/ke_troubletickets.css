@@ -752,6 +752,17 @@
   background: none;
 }
 
+.kett_listviewshort .kett_listview_row_progress {
+	float: none;
+	width: 150px;
+	min-width: 150px;
+	text-align: left !important;
+}
+.kett_listviewshort .kett_lvrow_progress_outer {
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
 /* Save */
 .kett_sv_save {
   background: #EFEFEF url(../images/css_gradient5.gif) repeat scroll 0 0;
