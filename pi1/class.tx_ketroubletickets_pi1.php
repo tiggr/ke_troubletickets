@@ -3488,7 +3488,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			case 'todo_list':
 				if ($this->piVars['showUid'] || $this->piVars['updateUid']) {
 						$content = '
-							<ul id="kett_todo_list"></ul><br /><br />
+							<ul id="kett_todo_list"></ul>
+							<div class="kett_float_clean">&nbsp;</div>
 							<input type="text" id="kett_todo_new" />
 							<div id="addToDo" /></div>';
 					} else {
