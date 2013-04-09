@@ -2403,7 +2403,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// current user has write access
 				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->renderFormField($fieldConf, $fieldConf['renderEmptyDropdownField']);
 			} else {
-					// current user has no write access
+				// current user has no write access
 					// render the field
 				$this->markerArray['FIELD_' . strtoupper(trim($fieldConf['name']))] = $this->getFieldContent($fieldConf['name'], 'default', $fieldConf);
 

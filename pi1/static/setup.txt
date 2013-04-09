@@ -521,6 +521,7 @@ plugin.tx_ketroubletickets_pi1 {
 			name = todo_list
 			type = todo_list
 			doNotSaveInDB = 1
+			writeAccessOnlyForUserGroup = 
 		}
 
 		200 {
