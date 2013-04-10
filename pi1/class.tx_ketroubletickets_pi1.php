@@ -2759,6 +2759,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// STORAGE PID
 		$markerArray['STORAGEPID'] = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
 		
+			// COBJ UID
+		$markerArray['COBJID'] = $this->cObj->data['uid'];
+		
 			// get the label markers from locallang
 		foreach (explode(',', $this->conf['locallangLabelList']) as $labelName) {
 			$markerArray['LABEL_' . trim($labelName)] = $this->pi_getLL('LABEL_' . trim($labelName));

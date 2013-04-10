@@ -21,6 +21,7 @@ jQuery(document).ready(function() {
 			data: {
 				action: 'getToDos',
 				ticketUid: ticketUid,
+				cobjid: cObjId,
 				storagePid: storagePid
 			},
 			success: function (data) {
@@ -68,6 +69,7 @@ jQuery(document).ready(function() {
 			data: {
 				action: 'addToDo',
 				ticketUid: ticketUid,
+				cobjid: cObjId,
 				title: title,
 				storagePid: storagePid
 			},
@@ -96,6 +98,7 @@ jQuery(document).ready(function() {
 				action: 'removeToDo',
 				toDoUid: parseInt(cleanID),
 				ticketUid: ticketUid,
+				cobjid: cObjId,
 				storagePid: storagePid
 			},
 			success: function (data) {
@@ -118,6 +121,7 @@ jQuery(document).ready(function() {
 				action: 'updateToDoStatus',
 				toDoUid: parseInt(cleanID),
 				ticketUid: ticketUid,
+				cobjid: cObjId,
 				doneStatus: toDoStatus,
 				storagePid: storagePid
 			},
@@ -136,6 +140,7 @@ jQuery(document).ready(function() {
 			data: {
 				action: 'calculateTicketProgress',
 				ticketUid: ticketUid,
+				cobjid: cObjId,
 				storagePid: storagePid
 			},
 			success: function (data) {
@@ -161,6 +166,7 @@ jQuery(document).ready(function() {
 			url: "index.php?eID=kett",
 			data: {
 				ticketUid: ticketUid,
+				cobjid: cObjId,
 				action: 'updateSorting',
 				sorting: sorting.toString(),
 				storagePid: storagePid

@@ -30,8 +30,15 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		tslib_eidtools::connectDB(); 
 
 		// sanitize params
+		// ticket uid
 		$this->ticketUid = intval(t3lib_div::_GP('ticketUid'));
 		if (!$this->ticketUid) die();
+		
+		// cobj id
+		$this->cObjId = intval(t3lib_div::_GP('cobjid'));
+		if (!$this->cObjId) die();
+		
+		// other params
 		$this->storagePid = intval(t3lib_div::_GP('storagePid'));
 		$toDoUid = intval(t3lib_div::_GP('toDoUid'));
 		$progressValue = intval(t3lib_div::_GP('progressValue'));
@@ -260,33 +267,57 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 	 * @return boolean
 	 */
 	function checkPermission() {
+		
 		$permission = false;
+		
+		if ($this->checkTicketAdmin()) {
+			// user is ticket administrator?
+			$permission = true;
+		} else {
+			// check permissions for non-admin users
+			if(is_array($this->feUserObj->user)) {
+				// get user id
+				$userId = $this->feUserObj->user['ses_userid'];
 
-		if(is_array($this->feUserObj->user)) {
-			// get user id
-			$userId = $this->feUserObj->user['ses_userid'];
-			
-			// Fetch the ticket from the database. This is the first
-			// permission check (enableFields).
-			$where = 'uid=' . $this->ticketUid;
-			$where .= t3lib_BEfunc::BEenableFields('tx_ketroubletickets_tickets');
-			$where .= t3lib_befunc::deleteClause('tx_ketroubletickets_tickets');
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_ketroubletickets_tickets', $where);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-				$ticketRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-				if ($ticketRow['owner_feuser'] == $userId) {
-					$permission = true;
-				}
-				if ($ticketRow['responsible_feuser'] == $userId) {
-					$permission = true;
-				}
-				if (t3lib_div::inList($ticketRow['observers_feuser'], $userId)) {
-					$permission = true;
+				// Fetch the ticket from the database. This is the first
+				// permission check (enableFields).
+				$where = 'uid=' . $this->ticketUid;
+				$where .= t3lib_BEfunc::BEenableFields('tx_ketroubletickets_tickets');
+				$where .= t3lib_befunc::deleteClause('tx_ketroubletickets_tickets');
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_ketroubletickets_tickets', $where);
+				if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+					$ticketRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+					if ($ticketRow['owner_feuser'] == $userId) {
+						$permission = true;
+					}
+					if ($ticketRow['responsible_feuser'] == $userId) {
+						$permission = true;
+					}
+					if (t3lib_div::inList($ticketRow['observers_feuser'], $userId)) {
+						$permission = true;
+					}
 				}
 			}
 		}
-		
 		return $permission;
+	}
+	
+	
+	/*
+	 * check if current user is ticket admin
+	 */
+	function checkTicketAdmin() {
+		// get cobj from db
+		$where = 'uid=' . $this->cObjId;
+		$where .= t3lib_BEfunc::BEenableFields('tt_content');
+		$where .= t3lib_befunc::deleteClause('tt_content');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform', 'tt_content', $where, '', '', $limit=1);
+		$row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		if (!empty($row['pi_flexform'])) $ffData = t3lib_div::xml2array($row['pi_flexform']);
+		$ticketAdmins = $ffData['data']['sheetUsers']['lDEF']['ticket_administrators']['vDEF'];
+		if ($ticketAdmins) {
+			if (t3lib_div::inList($ticketAdmins, $this->feUserObj->user['ses_userid'])) return true;
+		} else return false;	
 	}
 	
 	
