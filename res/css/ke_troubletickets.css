@@ -985,3 +985,7 @@
 	display: inline-block;
 	margin-right: -20px;
 }
+
+.tx-ketroubletickets-pi1 .kett_sv_sboxb_in input[type="text"] {
+    width: 41%;
+}
