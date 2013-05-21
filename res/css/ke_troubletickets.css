@@ -564,9 +564,10 @@
   overflow:hidden;
   }
 .kett_listview_row_head {
-  height:43px;
+  min-height:43px;
+  overflow:hidden;
   margin: 0 0 1px 0;
-  background:#FFFFFF url(../images/list_item_head_bg_normal.gif) repeat scroll 0 0;
+  background: #ebcc6e url(../images/list_item_head_bg_normal.gif) repeat-x 0 0;
   line-height: 16px;
   font-size: 12px;
 
@@ -579,8 +580,9 @@
 
   
 .kett_listview_row_headline {
-	/* width: 75%; */
+	width: 75%; 
 	float: left;
+	padding-bottom: 5px;
 }
  
 .kett_listview_row_progress {
@@ -605,7 +607,7 @@
 		padding: 1px;
 		text-align: left;
 		line-height: 1px;
-		fonst-size: 1px;
+		font-size: 1px;
 	}
 	
 	.kett_lvrow_progress_inner {
@@ -724,7 +726,7 @@
 /* ALIEN fremde Tickets */
 
 .current_row_is_not_own_task .kett_listview_row_head {
-  background: #FFFFFF url(../images/list_item_head_bg_alien.gif) repeat scroll 0 0;
+  background: #cacaca url(../images/list_item_head_bg_alien.gif) repeat-x scroll 0 0;
   }
 .current_row_is_not_own_task .kett_listview_row_body {
   background: #FFFFFF url(../images/list_item_subt_bg_alien.gif) repeat scroll 0 0;
