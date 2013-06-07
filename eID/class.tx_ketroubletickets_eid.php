@@ -159,6 +159,7 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		$where = 'uid='.$toDoUid;
 		$fields_values = array(
 			'done' => $doneStatus,
+			'tstamp' => time()
 		);
 		if ($GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, $where, $fields_values)) {
 			$toDoTitle = $this->getToDoTitle($toDoUid);
