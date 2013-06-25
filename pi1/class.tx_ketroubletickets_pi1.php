@@ -3149,7 +3149,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
                     $this->RTEcounter++;
                     $this->formName = $this->ticketFormName;
                     $this->PA['itemFormElName'] = $this->prefixId . '[' . $fieldConf['name'] . ']';
-                    $this->PA['itemFormElValue'] = $prefillValue;
+                    $this->PA['itemFormElValue'] = htmlspecialchars_decode($prefillValue);
                     $this->thePidValue = $GLOBALS['TSFE']->id;
                     $this->strEntryField = $fieldConf['name'];
                     // add 150px to the RTE width if configured in typoscript
