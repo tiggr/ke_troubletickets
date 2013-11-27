@@ -1,1 +1,192 @@
-Please see manual.sxw in the doc/ folder for a changelog.
+Current SVN trunk
+* feature: ToDo-Lists. Each ticket can have a list single items in a ToDo-List. AJAX-based. Can be marked as "done".
+* feature: progress bar. Calculates the progress of a ticket depending of the ToDo-List items which are mared as "done".
+* task: move ChangeLog from documentation to ChangeLog text file
+* task: display closed tickets with a gray icon instead of orange in overview list mode
+* feature: external observers. Each ticket can have external observers (email addresses), email notifications will be sent to those email addresses, although those observers will not have access to edit the tickets.
+
+Version 1.5 (2012 / 10)
+* Needs PHP 5.3 now (because of the namespacing feature).
+* made Extension compatible with TYPO3 6.0 by removing calls to t3lib_div::view_array, t3lib_div::intInRange, t3lib_div::int_from_ver --> pi1, t3lib_div::readLLXMLfile
+* feature: added „checkbox“ type for editing form. Just set type to „checkbox“ in formFieldList setting. Example:
+  plugin.tx_ketroubletickets_pi1.formFieldList {
+  10 {
+	name = mynewfield
+	type = checkbox
+    }
+  }
+* bugfix: follow up to http://forge.typo3.org/issues/31654. If a new ticket has been created, some values may be defined in hidden fields (set in the backend via flexform), eg. responsible user. That has to be allowed.
+* Bugfix: Filters for internal fields should not be visible for non-internal users, thanks to Jonas Götze, http://forge.typo3.org/issues/38937
+
+Version 1.4 (2012 / 06)
+
+* make frontend plugin compatible with TYPO3 4.7 (new Mail API and t3lib_div::rm_endcomma), thanks to Jonas Götze, http://forge.typo3.org/issues/37897
+* Show max. possible filesize in file upload field (frontend)
+* Bugfix: Ticket owner may change any ticket information even, if the ticked is locked. Thanks to Victor Livakovsky. http://forge.typo3.org/issues/31654
+* added some documentation about how to make the owner selectable in the frontend.
+
+Version 1.3 (2012 / 02)
+
+* Bugfix: Removed HOST-Prefix in delete-Links.
+* Fixed backend module for TYPO3 4.6.
+* Bugfix: Removed HOST-Prefix in Links from email-notifications. Links were broken when config.absRefPrefix was set.
+* New feature: Plugin "uid searchform" which gives you a small searchform to search for a ticket uid and jump to the correct single view page defined in the category belonging to the ticket. Appears in the „insert plugin“ list.
+* changed default sorting: newest on top, only in „short compact view of own tickets“ the default sorting is: sort after „todo until date“ then all the tickets without „todo until date“, newest on top
+* removed experimental ical support
+* CSS-Webkit BugFix (Listview)
+* CSS improvement in List/Pagebrowser. Deleted fixed width (result box) to let the elements better float.
+* CSS improvement in Listview. Description-Text-Container got overflow:hidden.
+* new field: „charged“. Indicates how much (nothing / in percent / fully) you charged already for. It's a public field by default, it's available in single view. In the list view, a small euro icon is shown if the „charged“ value is greater zero.
+
+Version 1.2.1 (2010 / 08)
+
+* new viewtype: short teaserview of own tickets
+* performance: teaserview is a lot faster
+* fixed constant definitions
+* bugfix: in function parsePrefillValue (http://forge.typo3.org/issues/9383)
+* bugfix: in last version filelist was missing in singleview
+
+Version 1.2.0 (2010 / 08)
+
+* fixed bug: missing div in browsebox, see http://forge.typo3.org/issues/show/5073
+* new viewtype: compact list of delegated tickets
+* bugfix: link to singleview in email-notifications: use the current page if no target page for the category is set
+* new config option: hide listview / teaserview if there are no tickets available
+* fixed bug: don't use filter from session data if in teaser own or teaser delegated view since then there may be no output and it's not possible to change the filter in teaser view (at least when using the default template)
+* new feature: owner may be selected in frontend, new flexform field to select usergroup for that function, hast to be activated in typoscript
+* new feature: viewtype selector in listview: detailed and short view (update your template: if you use your own template, you'll have to include the new markers and subparts to use it)
+* new feature: changed fields are now marked in the email-notifications (update your template)
+* fixed bug: description field is rendered differently in email-notifications so that e.g. <script>-parts are visible
+* fixed bug: non working option "notification on status change"
+* new feature: conditions for when to send a notification mail can now be set very exact via typoscript. Please see setup.txt for an explanation.
+* fixed bug: check for the right sysfolder. Before that tickets from other sysfolders other than the defined starting point could be opened (although the permission check worked correctly, that means you could only open tickets you had access to).
+* re-implemented feature: Added Datetimepicker-Javascript which works with TYPO3 4.3. Although it's not localized and styled fully yet.
+* new feature: It's now possible to preselect an responsible user for new tickets in the backend.
+* cleanup: Cleaned up user sheet in flexform a bit.
+* fixed bug: file deletion was not possible because of colon in URL. Now a pipe is used instead of the colon.
+* new feature: in dropdowns you can no force an empty dropdown element. This may be used to force frontend users to select a category (instead of just leave the default category which is the first in the list). See setup.txt formFieldList.80 for an example.
+* new feature: fields can now be validated as „float“ value. This is activated by default for the fields „time_planned“ and „time_used“, but can also be activated for the field „effort“ (which is still a text field in the database).
+* little css change in the list view.
+* bugfix: typoscript notification did not work on keyword comment
+* rte in frontend is larger now by default (configurable in typoscript)
+* new feature: write access to form fields can now be restricted to a usergroup (writeAccessOnlyForUserGroup). see setup.txt.
+* changed behaviour: close_time is now set only the first time you close a ticket. That means once you close a ticket, the closing time stays on that timestamp, even if you re-open a ticket and then close it again.
+* new feature: validation method „notAllowedWhenClosing“. If you want to force users to select a value from the dropdown which differs from the default value, you may use the validation method "notAllowedWhenClosing". Write down the value which is not allowed after the colon. When the ticket gets closed, the validation applies.
+* Example: plugin.tx_ketroubletickets_pi1.formFieldList.25.validate = notAllowedWhenClosing:open
+* new feature: changeWaitStatusOnNewComment. If you want tickets that have the "wait" status to change their status whenever a new comment is submitted, enter the desired status here.
+* Example: plugin.tx_ketroubletickets_pi1.changeWaitStatusOnNewComment = open
+* bugfix: link to file did not open in new window. Thanks to Esben Fest.
+* changed ts path to preview thumbnail image
+* new subpart in the template for file attachments
+* new feature, behavior change: If the owner, the responsible user or the observers have changed treat the former owner, former responsible user and former observers temporarily as observers (for this change only). For example, This notifies former responsible users that they are not responsible anymore.
+* added default font size in css.
+* new feature: locked tickets. This is a new status a ticket can have. Locked tickets cannot be edited anymore, at least by normal users. Internal users may edit the status field and re-open a ticket. The fields which may be edited in locked tickets are configurable via typoscript.
+* new feature: follow-up ticket. Create a new ticket which is automatically related to the current ticket and prefill the new ticket with some values from the old one: category, billing, priority, owner, responsible user, observers. Useful in combination with „locked tickets“.
+* New flexform option to support ke_ukb wiki links.
+* New hook, called after inserting a new ticket.
+* Changed behaviour: responsible user is now a by default a required field.
+* Added check: Is a responsible user available?
+* removed dependency to date2cal in backend module
+* ke_ukb interface changed: transmit complete ke_troubletickets object to ke_ukb
+* allow the data to be stored on normal pages
+* new feature: basic API (get ticket data, check permission, get link to ticket)
+* new hook: afterRenderFormField
+* two new hooks
+* removed plain text part form notification email. May be enabled in typoscript setup.
+* new hook for additional printview markers
+* new hook for additional notification markers
+* improved printview rendering for field „description“
+* new config option added: „allow comments in new ticket form“: Shows and processes the comment form with creating a new ticket.
+* Order listview by priority now shows tickets with highest priority at first click
+* new feature: redirect to refering page after ticket update when coming from another page than the main page, e.g. from „,my tickets“ view (has to be activated in TS, deactivated by default)
+* bugfix: If a validation error occurs on updating a ticket, remember the values the user entered.
+* Added support for date2cal for TYPO3 versions 4.3 and greater. Needs date2cal 7.3.0 or greater.
+* bugfix: Submit correct values even if a user doesn't have access to a form field (correct the values in the hidden form field)
+* bugfix: Fix charset problem in notification emails
+* bugfix: set the "close_time" field, if the ticket is directy set to "closed" the moment it's created.
+* On follow-up-tickets add the owner of the parent ticket as observer to the new ticket.
+* the "project leader function": If a user is the responsible user of a ticket and delegates that ticket to another user, automatically add the former responsible user to the list of observers. That only happens if the responsible user himself changes the responsibility. Typoscript option: addResponsibleUserAsObserverAfterDelegation
+* Don't send notification emails twice to a user (e.g. if he is observer and responsible user).
+* Don't send notification emails to the user who changed the ticket. Can be activated with typoscript option sendNotificationsToSelf.
+
+Version 1.1.6 (2009/12)
+
+* removed dependency to date2cal because date2cal does not work with TYPO3 4.3. ke_troubletickets works now in TYPO3 4.3
+* improved css for status field in listview
+
+Version 1.1.5 (2009/11)
+
+* removed debug output
+* new marker: Marker CRDATE ist now available in single view.
+
+Version 1.1.4 (2009/11)
+
+* bugfix: fixed bug with filter “closed_in” introduced in 1.1.3.
+
+Version 1.1.3 (2009/11)
+
+* new feature: CSV export is now configurable via typoscript (splitchar, wrapchar and line-ending). See http://forge.typo3.org/issues/show/4585. Thanks to Lina Ourima.
+* bugfix: SQL error when trying to geht the singleviewpage from a ticket without a category. See http://forge.typo3.org/issues/show/4586. Thanks to Lina Ourima.
+* bugfix: wrong email subject encoding. See http://forge.typo3.org/issues/show/4652. Thanks to Lina Ourima.
+* bugfix: if there is no ticket uid given (so the input field ist empty), make sure, that at least the already given tickets will not be deleted!
+* New feature: if “name” ist not set: display “first_name” and “last_name” if set. Configurable: Render “last_name” first in dropdowns.
+* Changed: changed rendering of usernames. only show cleartext name. username may be shown additionally by setting addUsername = 1 in typoscript.
+* New feature: Order of comments may be changed by setting commentListOrderBy in typoscript.
+* Changed: Order of “Closed in” filter values in dropdown box: descending instead of ascending.
+* New feature: Additional information-field is now rendered with line breaks in e-mail notifications.
+* Bugfix: Allow only one category to be set in the backend since only one category can be set in the frontend.
+
+Version 1.1.2 (2009/08)
+
+* bugfix: link to singleview from notification email did not work with realurl
+
+Version 1.1.1 (2009/08)
+
+* bugfix: When a new ticket has been opened, content of internal fields has been sent to internal AND non-internal users. Now only internal users get information about internal fields in the first notification email.
+* bugfix: The link to to the ticket singleview from notification mails works now also when TYPO3 is installed in a subdirectory of the webserver.
+
+Version 1.1 (2009/07)
+
+* new: When opening a new ticket, current user name is printed as owner and “n/a” as Ticket UID (was empty before). Thanks to Björn Jacob.
+* new: Specify fields for which no notification mail will be sent when changed
+* bugfix: http://forge.typo3.org/issues/show/3230 Thanks to Björn Jacob.
+* new: Ticket UID added to subject of notification mail (may be disabled by TYPOScript)
+* new: Permalink added to single view
+* new: Jump to singleview if entered search param is a ticket UID
+* new: Show coloured priority in notification email
+* new: Go back to result page 1 if a new filter has been set in listview
+* new: Show latest comment when holding mouse pointer over the comments icon in listview
+* new: Show list of attached files when holding mouse pointer over the attachments icon in listview
+* new: Icons for most important filetypes added (usage of standard TYPO3 fileicons)
+* new: Formatting of ticket uid configurable by sprintf formatstring in TYPOScript
+* new: Chosen filter and sorting options are stored in user session
+* bugfix: filter options don't get lost any more when using the search form
+* new: listview-filter “billing” added by default
+* new: labels for filters without options are not displayed any more
+* new: css and html template changes regarding listview-filters
+* bugfix: flushing of field values, e.g. by deselecting observers, is now possible
+* new: TSConfig option “doNotSaveInDB” for form field configuration added; set by default for field “closed_in_month”
+* bugfix: toolbar options like “go to comments” are not longer displayed if the form is rendered for a new ticket entry because the anchors don't exist in this view
+* new: status message in listview after saving changes
+* new: number of entries per page in listview is changeable now; the selectable values can be configured in TYPOScript, default values are 5, 10 and 20 entries per page
+* changed default values in status list and billing list
+* new: status message in listview after creating a new ticket
+* new: printview added
+* new: filter status icon included that indicates if filter is set; icon reacts as filter reset button if filter is set
+* new: sorting of category filter options is configurable by TYPOScript now; default value is “sorting”
+
+Version 1.0.3 (2009/03)
+* bugfix: http://forge.typo3.org/issues/show/2673
+
+Version 1.0.2 (2009/02)
+* little bugfix: findig singleview page had no check if a category was set
+* deactivated debug output of database errors, was activated in 1.0.1
+
+Version 1.0.1 (2009/02)
+* new: listview-filter: closed in month
+* bugfix: initial rendering of sort links was wrong
+* bugfix: keep entered comment after error while updating a ticket
+* new: added polish translation, thanks to Daniel Ciunkiewicz
+
+Version 1.0.0 (2009/01)
+* First release

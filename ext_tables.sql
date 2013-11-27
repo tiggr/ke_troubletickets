@@ -33,6 +33,7 @@ CREATE TABLE tx_ketroubletickets_tickets (
 	owner_feuser blob NOT NULL,
 	responsible_feuser blob NOT NULL,
 	observers_feuser blob NOT NULL,
+	externalobservers text NOT NULL,
 	category blob NOT NULL,
 	status varchar(20) DEFAULT '' NOT NULL,
 	billing varchar(20) DEFAULT '' NOT NULL,

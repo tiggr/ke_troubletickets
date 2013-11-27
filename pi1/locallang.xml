@@ -13,6 +13,7 @@
 			<label index="listFieldHeader_owner_feuser">Owner</label>
 			<label index="listFieldHeader_responsible_feuser">Responsible user</label>
 			<label index="listFieldHeader_observers_feuser">Observer</label>
+			<label index="listFieldHeader_externalobservers">External observers</label>
 			<label index="listFieldHeader_category">Category</label>
 			<label index="listFieldHeader_status">Status</label>
 			<label index="listFieldHeader_priority">Priority</label>
@@ -180,6 +181,7 @@
 			<label index="LABEL_OWNER_FEUSER">Owner</label>
 			<label index="LABEL_NUMBER">No.</label>
 			<label index="LABEL_OBSERVERS_FEUSER">Observer</label>
+			<label index="LABEL_EXTERNALOBSERVERS">External observers</label>
 			<label index="LABEL_COMMENTS">Comments</label>
 			<label index="LABEL_NUMBER_OF_COMMENTS">Comments</label>
 			<label index="LABEL_NEWCOMMENT">A comment has been added.</label>
@@ -225,6 +227,7 @@
 			
 			<label index="LABEL_TODO_LIST">ToDo</label>
 			<label index="LABEL_PROGRESS">Progress</label>
+			<label index="LABEL_ONE_MAIL_PER_LINE">(one mail address per line)</label>
 			<label index="SAVETICKETFIRST">Save ticket first</label>
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">General settings</label>
@@ -267,6 +270,7 @@
 			<label index="listFieldHeader_owner_feuser">Besitzer</label>
 			<label index="listFieldHeader_responsible_feuser">Verantwortlicher Benutzer</label>
 			<label index="listFieldHeader_observers_feuser">Beobachter</label>
+			<label index="listFieldHeader_externalobservers">Externe Beobachter</label>
 			<label index="listFieldHeader_category">Kategorie</label>
 			<label index="listFieldHeader_status">Status</label>
 			<label index="listFieldHeader_priority">Priorität</label>
@@ -419,6 +423,7 @@
 			<label index="LABEL_OWNER_FEUSER">Besitzer</label>
 			<label index="LABEL_NUMBER">Nr.</label>
 			<label index="LABEL_OBSERVERS_FEUSER">Beobachter</label>
+			<label index="LABEL_EXTERNALOBSERVERS">Externe Beobachter</label>
 			<label index="LABEL_COMMENTS">Kommentare</label>
 			<label index="LABEL_NUMBER_OF_COMMENTS">Kommentare</label>
 			<label index="LABEL_NEWCOMMENT">Ein Kommentar wurde hinzugefügt.</label>
@@ -464,6 +469,7 @@
 			
 			<label index="LABEL_TODO_LIST">ToDo-Liste</label>
 			<label index="LABEL_PROGRESS">Fortschritt</label>
+			<label index="LABEL_ONE_MAIL_PER_LINE">(eine E-Mail-Adresse pro Zeile)</label>
 			<label index="SAVETICKETFIRST">Bitte speichern Sie die Aufgabe zunächst</label>
 
 			<label index="tt_content.pi_ketroubletickets.sheet_title_default">Allgemeine Einstellungen</label>

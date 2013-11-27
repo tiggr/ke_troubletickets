@@ -203,7 +203,7 @@ Optional Labels and Fields
 <!-- ###OPTIONAL_OBSERVERS_FEUSER_SUBPART### START-->
   <div class="kett_sv_description">
     <div class="kett_sv_desc_head">###LABEL_OBSERVERS_FEUSER###</div>
-    <div class="kett_sv_desc_body">###FIELD_OBSERVERS_FEUSER###</div>
+    <div class="kett_sv_desc_body"><div class="kett_float_left kett_margin_right">###FIELD_OBSERVERS_FEUSER###</div> ###LABEL_EXTERNALOBSERVERS### ###LABEL_ONE_MAIL_PER_LINE###<br /> ###FIELD_EXTERNALOBSERVERS### <div class="kett_float_clean"></div></div>
   </div>
 <!-- ###OPTIONAL_OBSERVERS_FEUSER_SUBPART### END-->
 
@@ -465,7 +465,7 @@ Listview
       <tr>
         <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###RESPONSIBLE_FEUSER###</div></td>
         <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OWNER_FEUSER###</div></td>
-        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OBSERVERS_FEUSER###</div></td>
+        <td class="kett_lvrow_user_con"><div class="kett_lvrow_user_inner">###OBSERVERS_FEUSER### ###EXTERNALOBSERVERS###</div></td>
       </tr>
     </table>
   </div>
@@ -906,7 +906,7 @@ E-Mail Notification
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_OBSERVERS_FEUSER###: </td>
-				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_OBSERVERS_FEUSER###">###EMAIL_FIELD_OBSERVERS_FEUSER###&nbsp;</td>
+				<td style="border-bottom: 1px solid #cccccc; ###CELLSTYLE_OBSERVERS_FEUSER###">###EMAIL_FIELD_OBSERVERS_FEUSER###&nbsp;<br />###EMAIL_FIELD_EXTERNALOBSERVERS###</td>
 			</tr>
 			<tr>
 				<td style="border-bottom: 1px solid #cccccc; vertical-align:top; padding: 0 10px 5px 0; font-size:10pt; font-family: Verdana;"><b>###LABEL_STATUS###:</td>
@@ -1109,6 +1109,7 @@ Printview
 	<div class="printview_block">
 		<label>###LABEL_OBSERVERS_FEUSER###:</label>
 		###FIELD_OBSERVERS_FEUSER###
+		###FIELD_EXTERNALOBSERVERS###
 		<div class="kett_float_clean">&nbsp;</div>
 	</div>
 	<div class="printview_block">

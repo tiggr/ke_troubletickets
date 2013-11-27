@@ -1481,12 +1481,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['owner_feuser']);
 
 					// send standard mail
-				if (is_array($fe_user_data) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
+				if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 				}
 
 					// send internal mail
-				if (is_array($fe_user_data) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
+				if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 				}
 			}
@@ -1509,12 +1509,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['responsible_feuser']);
 
 					// send standard mail
-				if (is_array($fe_user_data) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
+				if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 				}
 
 					// send internal mail
-				if (is_array($fe_user_data) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
+				if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 				}
 			}
@@ -1548,35 +1548,55 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// send notifications to observers
 			if (count($observers)) {
 				foreach ($observers as $observer_uid) {
-					if (($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
-						|| (
-							$this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE
-							&& t3lib_div::inList($changedFields, 'status')
-						)
-						|| (
-							$this->internal['currentRow']['notifications_observer'] == CONST_TYPOSCRIPT
-							&& $this->checkCustomNotificationCondition($changedFields, $this->conf['email_notifications.']['observersNotificationOnChangedFields'])
-						)
-					)
-					&& $sendNotification) {
+					if ($this->checkIfNotificationShouldBeSentToObservers() && $sendNotification) {
 
 							// get the user data of the observer
 						$fe_user_data = $this->getFeUserData($observer_uid);
 
 							// send standard mail
-						if (is_array($fe_user_data) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
+						if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 							$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 						}
 
 							// send internal mail
-						if (is_array($fe_user_data) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
+						if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 							$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 						}
 					}
 				}
 			}
+
+			// send notification to external observers
+			if (!empty($this->internal['currentRow']['externalobservers'])) {
+				$emails = t3lib_div::trimExplode("\n", $this->internal['currentRow']['externalobservers'], TRUE);
+				foreach ($emails as $email) {
+					if (t3lib_div::validEmail($email) && $this->checkIfNotificationShouldBeSentToObservers() && $sendNotification && !empty($changedFields)) {
+							// send standard email (not internal)
+						$this->sendNotificationEmail($email, $subject, $emailbody);
+					}
+				}
+			}
 		}
 	}/*}}}*/
+
+	/**
+	 * Checks wether a notification to the observers of a ticket should be sent
+	 *
+	 * @return boolean
+	 * @author Christian Bülter <buelter@kennziffer.com>
+	 * @since 27.11.13
+	 */
+	public function checkIfNotificationShouldBeSentToObservers() {
+		if ($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
+			|| ($this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE && t3lib_div::inList($changedFields, 'status'))
+			|| ($this->internal['currentRow']['notifications_observer'] == CONST_TYPOSCRIPT 
+				&& $this->checkCustomNotificationCondition($changedFields, $this->conf['email_notifications.']['observersNotificationOnChangedFields']))
+			) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
 
 	/**
  	* checks the changed fields of a ticket against the options set in

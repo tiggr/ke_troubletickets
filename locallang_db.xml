@@ -17,6 +17,7 @@
 			<label index="tx_ketroubletickets_tickets.owner_feuser">Owner</label>
 			<label index="tx_ketroubletickets_tickets.responsible_feuser">Responsible user</label>
 			<label index="tx_ketroubletickets_tickets.observers_feuser">Observers</label>
+			<label index="tx_ketroubletickets_tickets.externalobservers">External Observers (one email address per line)</label>
 			<label index="tx_ketroubletickets_tickets.category">Category</label>
 			<label index="tx_ketroubletickets_tickets.status.I.0">Open</label>
 			<label index="tx_ketroubletickets_tickets.status.I.1">Acknowledged</label>
@@ -83,6 +84,7 @@
 			<label index="tx_ketroubletickets_tickets.owner_feuser">Besitzer</label>
 			<label index="tx_ketroubletickets_tickets.responsible_feuser">Verantwortlicher Benutzer</label>
 			<label index="tx_ketroubletickets_tickets.observers_feuser">Beobachter</label>
+			<label index="tx_ketroubletickets_tickets.externalobservers">Externe Beobachter (eine E-Mail-Adresse pro Zeile)</label>
 			<label index="tx_ketroubletickets_tickets.category">Kategorie</label>
 			<label index="tx_ketroubletickets_tickets.status">Status</label>
 			<label index="tx_ketroubletickets_tickets.billing">Abrechnung</label>
