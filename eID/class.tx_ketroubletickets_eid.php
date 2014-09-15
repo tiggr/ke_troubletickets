@@ -12,7 +12,7 @@
  * 
  */
 
-require_once(PATH_tslib.'class.tslib_pibase.php');
+
 
 class tx_ketroubletickets_eid extends tslib_pibase {
   

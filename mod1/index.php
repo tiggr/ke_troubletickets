@@ -27,13 +27,11 @@
 unset($MCONF);
 require_once('conf.php');
 require_once($BACK_PATH.'init.php');
-require_once($BACK_PATH.'template.php');
 
 require_once('../lib/class.tx_ketroubletickets_lib.php');
 require_once('backendmenu.class.php');
 
 $LANG->includeLLFile('EXT:ke_troubletickets/mod1/locallang.xml');
-require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);    // This checks permissions and exits if the users has no permission for entry.
     // DEFAULT initialization of a module [END]
 
@@ -678,8 +676,8 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                                 The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('ke_troubletickets'),strlen(PATH_site)).$pathSuffix.'index.php and edit it!
                                 <hr />
                                 <br />This is the GET/POST vars sent to the script:<br />'.
-                                'GET:'.t3lib_div::view_array($_GET).'<br />'.
-                                'POST:'.t3lib_div::view_array($_POST).'<br />'.
+                                'GET:'.t3lib_utility_Debug::viewArray($_GET).'<br />'.
+                                'POST:'.t3lib_utility_Debug::viewArray($_POST).'<br />'.
                                 '';
                             $this->content.=$this->doc->section($GLOBALS['LANG']->getLL('title'),$content,0,1);
                         break;

@@ -27,7 +27,6 @@
  * @author	Christian Bülter <buelter@kennziffer.com>
  */
 
-require_once(PATH_tslib.'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('ke_troubletickets').'lib/class.tx_ketroubletickets_lib.php');
 
 	// Constants
@@ -56,21 +55,7 @@ define('NOT_FULLY_CHARGED_FILTER', 'not_fully_charged');
 	// RTE
 require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
 
-	// Basic file func, needed for checking filenames when uploading files
-require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php');
 
-if (class_exists(VersionNumberUtility)) {
-    $numeric_typo3_version = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version);
-} else if (class_exists('t3lib_utility_VersionNumber')) {
-    $numeric_typo3_version = t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version);
-} else {
-    $numeric_typo3_version = t3lib_div::int_from_ver(TYPO3_version);
-}
-	// Mail functions
-if ($numeric_typo3_version >= 4005000)
-	require_once(PATH_t3lib.'mail/class.t3lib_mail_message.php');
-else
-	require_once(PATH_t3lib.'class.t3lib_htmlmail.php');
 
 /**
  * Plugin 'Trouble Ticket System' for the 'ke_troubletickets' extension.
