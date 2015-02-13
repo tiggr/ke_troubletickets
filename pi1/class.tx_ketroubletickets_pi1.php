@@ -52,9 +52,6 @@ define('CONST_KEEP_TAGS_YES', 'keeptags');
 define('CONST_RENDER_ALL_INTERNAL_FIELDS', 'render_all_internal_fields');
 define('NOT_FULLY_CHARGED_FILTER', 'not_fully_charged');
 
-	// RTE
-require_once(t3lib_extMgm::extPath('rtehtmlarea').'pi2/class.tx_rtehtmlarea_pi2.php');
-
 
 
 /**
@@ -215,7 +212,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	}
 </script>
 ';
-		
+
         if ($this->getNumericTYPO3versionNumber() >= 6000000) {
             $GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
         } else {
@@ -286,7 +283,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		if ($this->piVars['deleteRelatedTicket']) {
 			$this->removeRelatedTicketFromCurrentTicket($this->piVars['deleteRelatedTicket']);
 		}
-		
+
 			// Render the main content
 		if (
 			($this->piVars['do'] == 'new')
@@ -633,7 +630,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 					// parse and clean up the submitted value
 				$this->insertFields[$fieldConf['name']] = $this->generateDBInsertValue($fieldConf, $defaultValue);
-							
+
 			}
 		}
 			// if there are errors, delete the uploaded files
@@ -758,7 +755,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 							// change the status
 						$this->insertFields['status'] = CONST_STATUS_OPEN;
-							
+
 							// add the information to changedFields list
 						$changedFields = $this->addToCommaList($changedFields, CONST_REOPENANDCOMMENT);
 
@@ -798,8 +795,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					}
 
 				}
-				
-				
+
+
 					// get ticket progress
 				$newStatus = $this->insertFields['status'];
 				if ($newStatus == CONST_STATUS_CLOSED || $newStatus == CONST_STATUS_CLOSED_LOCKED) {
@@ -1574,7 +1571,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function checkIfNotificationShouldBeSentToObservers() {
 		if ($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
 			|| ($this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE && t3lib_div::inList($changedFields, 'status'))
-			|| ($this->internal['currentRow']['notifications_observer'] == CONST_TYPOSCRIPT 
+			|| ($this->internal['currentRow']['notifications_observer'] == CONST_TYPOSCRIPT
 				&& $this->checkCustomNotificationCondition($changedFields, $this->conf['email_notifications.']['observersNotificationOnChangedFields']))
 			) {
 			return TRUE;
@@ -1908,14 +1905,14 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_mail_Message');
 			$Typo3_htmlmail->setSubject($subject);
 			$Typo3_htmlmail->setFrom(array($this->conf['email_notifications.']['from_email'] => $this->conf['email_notifications.']['from_name']));
-	
+
 			// add Attachments
 			if (is_array($files) && count($files)>0) {
 				foreach ($files as $attachment) {
 					$Typo3_htmlmail->attach(Swift_Attachment::fromPath($uploadPath.$attachment));
 				}
 			}
-	
+
 			if ($sendAsHTML)  {
 				$Typo3_htmlmail->setBody($html_body, 'text/html');
 				if ($message && $this->conf['email_notifications.']['addPlainTextPart'])	{
@@ -2289,12 +2286,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->markerArray['ADDITIONALJS_PRE'] = '';
 		$this->markerArray['ADDITIONALJS_POST'] = '';
 		$this->markerArray['UKB_FORM'] = '';
-		
-		
+
+
 			// set css and js files that have to be included
 		$cssFiles = array();
 		$jsFiles = array();
-		
+
 			// Include default CSS?
  		if ($this->conf['includeDefaultCSS']) $cssFiles['css'] = $this->defaultCSS;
 			// Include jQuery?
@@ -2307,7 +2304,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// Include Todo functions?
 		if ($this->conf['includeToDoFunctions']) $jsFiles['todo'] = 'js/todo.js';
 
-			// Include configured CSS and JS files regarding to 
+			// Include configured CSS and JS files regarding to
 			// current TYPO3 version
 		if ($this->getNumericTYPO3versionNumber() >= 6000000) {
 			foreach($cssFiles as $cssFile) {
@@ -2324,7 +2321,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_' . $key] = '<script type="text/javascript" src="' . $this->extPath . $jsFile . '"></script>';
 			}
 		}
-				
+
 			// get additional markers (locallang, ...)
 		$this->markerArray = $this->getAdditionalMarkers($this->markerArray);
 
@@ -2401,7 +2398,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// get the field markers (render the form fields)
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-				
+
 			// decide wether the field is editable and output either the
 				// form field or just the content of that field.
 			if ($this->fieldIsWritableForCurrentUser($fieldConf)) {
@@ -2760,13 +2757,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		} else {
 			$markerArray['CLEANUID'] = '';
 		}
-		
+
 			// STORAGE PID
 		$markerArray['STORAGEPID'] = $this->pi_getPidList($this->conf['pidList'], $this->conf['recursive']);
-		
+
 			// COBJ UID
 		$markerArray['COBJID'] = $this->cObj->data['uid'];
-		
+
 			// get the label markers from locallang
 		foreach (explode(',', $this->conf['locallangLabelList']) as $labelName) {
 			$markerArray['LABEL_' . trim($labelName)] = $this->pi_getLL('LABEL_' . trim($labelName));
@@ -2853,8 +2850,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// max. Filesize
 		$markerArray['LABEL_MAXFILESIZE'] = str_replace(
-			'###FILESIZE###', 
-			$this->lib->filesize_format($this->conf['maxFileSize']), 
+			'###FILESIZE###',
+			$this->lib->filesize_format($this->conf['maxFileSize']),
 			$markerArray['LABEL_MAXFILESIZE']
 		);
 
@@ -3491,8 +3488,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						}
 					}
 				}
-			break;	
-			
+			break;
+
 			case 'todo_list':
 				if ($this->piVars['showUid'] || $this->piVars['updateUid']) {
 						$content = '
@@ -3504,13 +3501,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$content = $this->pi_getLL('SAVETICKETFIRST');
 					}
 			break;
-		
+
 			case 'progress':
 				$content = '
 					<div id="kett_sv_progress_outer"><div id="kett_sv_progress"></div></div>
 					<div id="kett_sv_progress_percent"></div>';
 			break;
-		
+
 			default:
 
 			break;
@@ -4563,11 +4560,11 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$retval = nl2br($this->cleanUpHtmlOutput($this->internal['currentRow'][$fieldName]));
 				return $retval;
 				break;
-			
+
 			case 'progress':
 				return $this->internal['currentRow']['progress'];
 				break;
-			
+
 			case 'todo_list':
 				$toDoEntries = $this->lib->getToDoEntriesForTicket($this->internal['currentRow']['uid']);
 				$toDoContent = '';
