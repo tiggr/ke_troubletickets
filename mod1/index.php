@@ -147,7 +147,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                     if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))    {
 
                             // Draw the header.
-                        $this->doc = t3lib_div::makeInstance('mediumDoc');
+                        $this->doc = t3lib_div::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
                         $this->doc->backPath = $BACK_PATH;
                         //$this->doc->form='<form action="" method="POST">';
 
@@ -205,7 +205,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                     } else {
                             // If no access or if ID == zero
 
-                        $this->doc = t3lib_div::makeInstance('mediumDoc');
+                        $this->doc = t3lib_div::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
                         $this->doc->backPath = $BACK_PATH;
 
                         $this->content.=$this->doc->startPage($LANG->getLL('title'));
