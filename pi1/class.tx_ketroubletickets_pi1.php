@@ -27,7 +27,7 @@
  * @author	Christian Bülter <buelter@kennziffer.com>
  */
 
-require_once(t3lib_extMgm::extPath('ke_troubletickets').'lib/class.tx_ketroubletickets_lib.php');
+require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_troubletickets').'lib/class.tx_ketroubletickets_lib.php');
 
 	// Constants
 define('CONST_NEWTICKET', 'NEWTICKET');
@@ -61,7 +61,7 @@ define('NOT_FULLY_CHARGED_FILTER', 'not_fully_charged');
  * @package	TYPO3
  * @subpackage	tx_ketroubletickets
  */
-class tx_ketroubletickets_pi1 extends tslib_pibase {
+class tx_ketroubletickets_pi1 extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	var $prefixId 			= 'tx_ketroubletickets_pi1';		// Same as class name
 	var $scriptRelPath 		= 'pi1/class.tx_ketroubletickets_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey 			= 'ke_troubletickets';	// The extension key.
@@ -125,7 +125,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->pi_loadLL();
 
 			// path to this extension
-		$this->extPath = t3lib_extMgm::siteRelPath($this->extKey);
+		$this->extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey);
 
 			// Include default CSS?
  		if ($this->conf['includeDefaultCSS']) {
@@ -137,12 +137,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
         }
 
 			// create instance of the extension library
-		$this->lib = t3lib_div::makeInstance('tx_ketroubletickets_lib');
+		$this->lib = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_ketroubletickets_lib');
 
 			// include ke_ukb if installed
-		if (t3lib_extMgm::isLoaded('ke_ukb')) {
-			require_once(t3lib_extMgm::extPath('ke_ukb').'class.ke_ukb.php');
-			$this->ukb = t3lib_div::makeInstance('ke_ukb');
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_ukb')) {
+			require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_ukb').'class.ke_ukb.php');
+			$this->ukb = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('ke_ukb');
 		}
 
 			// Configuring so caching is not expected. This value means that no
@@ -162,12 +162,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$this->conf = $conf;
 
 			// use date2cal if the extension is installed
-		if (t3lib_extMgm::isLoaded('date2cal')) {
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('date2cal')) {
 			$this->initDate2Cal();
 		}
 
 			// a local content object (with clear configuration)
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 			// start with empty content
 		$content = '';
@@ -192,7 +192,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// get the list of internal users
 		if ($this->ffdata['internal_users']) {
-			$this->internalUserList = t3lib_div::trimExplode(',',$this->ffdata['internal_users']);
+			$this->internalUserList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',',$this->ffdata['internal_users']);
 		}
 
 			// get the template
@@ -321,7 +321,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// accept only allowed values
-		if (!in_array($this->piVars['viewtype'], t3lib_div::trimExplode(',', $this->conf['viewtypeList']))) {
+		if (!in_array($this->piVars['viewtype'], \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->conf['viewtypeList']))) {
 			unset($this->piVars['viewtype']);
 		}
 
@@ -573,7 +573,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 					// validate
 				if ($fieldConf['validate'] && !empty($this->piVars[$fieldConf['name']])) {
-					$validationParams = t3lib_div::trimExplode(':', $fieldConf['validate']);
+					$validationParams = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(':', $fieldConf['validate']);
 					switch ($validationParams[0]) {
 						case 'float':
 								// replace dot with comma in order to check
@@ -651,7 +651,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			&& $this->conf['addResponsibleUserAsObserverAfterDelegation']
 			&& $this->internal['currentRow']['responsible_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']
 			&& $this->insertFields['responsible_feuser'] != $GLOBALS['TSFE']->fe_user->user['uid']
-			&& !t3lib_div::inList($GLOBALS['TSFE']->fe_user->user['uid'], $this->insertFields['observers_feuser'])
+			&& !\TYPO3\CMS\Core\Utility\GeneralUtility::inList($GLOBALS['TSFE']->fe_user->user['uid'], $this->insertFields['observers_feuser'])
 			) {
 			$this->insertFields['observers_feuser'] = $this->addToCommaList($this->insertFields['observers_feuser'], $GLOBALS['TSFE']->fe_user->user['uid']);
 		}
@@ -671,7 +671,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// hook: after inserting a new ticket
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterNewTicketInsert'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterNewTicketInsert'] as $_classRef) {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
+						$_procObj = & \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 						$_procObj->afterNewTicketInsert($new_uid, $this);
 					}
 				}
@@ -774,7 +774,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						if ($this->conf['changeWaitStatusOnNewComment']
 							&& $this->internal['currentRow']['status'] == CONST_STATUS_WAIT
 							&& $this->insertFields['status'] == $this->internal['currentRow']['status']
-							&& t3lib_div::inList($this->conf['statusList'], $this->conf['changeWaitStatusOnNewComment'])) {
+							&& \TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->conf['statusList'], $this->conf['changeWaitStatusOnNewComment'])) {
 
 								// change the status
 							$this->insertFields['status'] = $this->conf['changeWaitStatusOnNewComment'];
@@ -815,7 +815,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// hook: after updating a ticket
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterTicketUpdate'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterTicketUpdate'] as $_classRef) {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
+						$_procObj = & \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 						$_procObj->afterTicketUpdate($this->internal['currentRow']['uid'], $this);
 					}
 				}
@@ -865,7 +865,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$redirectLink = $this->cObj->typoLink_URL($linkconf);
 
 				// generate location header url
-				$redirectUrl = t3lib_div::locationHeaderUrl($redirectLink);
+				$redirectUrl = \TYPO3\CMS\Core\Utility\GeneralUtility::locationHeaderUrl($redirectLink);
 
 				// process redirect
 				header("Refresh: ".$this->conf['listView.']['backPidRedirect.']['wait']."; ".$redirectUrl);
@@ -911,7 +911,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function removeFileFromTicket($filename) { /*{{{*/
 		$deleteAllowed = false;
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 		if (file_exists($this->fileUploadDir . $filename)) {
 			$listQuery = $GLOBALS['TYPO3_DB']->listQuery('files', $filename, $this->tablename);
@@ -930,7 +930,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$this->deleteFiles($filename);
 
 			// remove it from the database
-			$new_filelist = t3lib_div::rmFromList($filename, $row['files']);
+			$new_filelist = \TYPO3\CMS\Core\Utility\GeneralUtility::rmFromList($filename, $row['files']);
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $row['uid'], array('files' => $new_filelist));
 
 			// and add a history entry
@@ -954,12 +954,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function removeRelatedTicketFromCurrentTicket($ticketUid) {/*{{{*/
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 		// case 1: It's a relation from the current to an other ticket
-		if (t3lib_div::inList($this->internal['currentRow']['related_tickets'], $ticketUid)) {
+		if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->internal['currentRow']['related_tickets'], $ticketUid)) {
 			// remove it from the list
-			$new_related_ticket_list = t3lib_div::rmFromList($ticketUid, $this->internal['currentRow']['related_tickets']);
+			$new_related_ticket_list = \TYPO3\CMS\Core\Utility\GeneralUtility::rmFromList($ticketUid, $this->internal['currentRow']['related_tickets']);
 
 			// update the ticket entry in the database
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $this->internal['currentRow']['uid'], array('related_tickets' => $new_related_ticket_list));
@@ -992,7 +992,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$row = $rows[0];
 
 			// remove it from the list
-			$new_related_ticket_list = t3lib_div::rmFromList($this->internal['currentRow']['uid'], $row['related_tickets']);
+			$new_related_ticket_list = \TYPO3\CMS\Core\Utility\GeneralUtility::rmFromList($this->internal['currentRow']['uid'], $row['related_tickets']);
 
 			// update the ticket entry in the database
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $ticketUid, array('related_tickets' => $new_related_ticket_list));
@@ -1113,7 +1113,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function cleanUpHtmlOutput($content='', $param='') {/*{{{*/
-		$content = html_entity_decode(t3lib_div::deHSCentities($content), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+		$content = html_entity_decode(\TYPO3\CMS\Core\Utility\GeneralUtility::deHSCentities($content), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 		$content = htmlentities($content, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
 		// Keep Tags
@@ -1138,7 +1138,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return array
 	 */
 	public function getTicketData($ticket_uid) {/*{{{*/
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		if ($this->checkPermissionForTicket($ticket_uid)) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->tablename, 'uid=' . $ticket_uid . $lcObj->enableFields($this->tablename));
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
@@ -1164,7 +1164,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function deleteTicket($ticket_uid) {/*{{{*/
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$deleteAllowed = false;
 
 		if ($ticket_uid) {
@@ -1367,7 +1367,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function checkChangesAndSendNotificationEmails($ticket_uid, $changedFields, $changedInternalFields='') {/*{{{*/
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 			// a notification will be sent if a ticket has been updated and
 			// 1. notification setting is "always"
@@ -1436,7 +1436,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// check if only fields have been changed where
 					// no notification is wanted. this applies only to
 					// internal fields
-				$internalFieldsWithoutNotification = t3lib_div::trimExplode(',', $this->conf['email_notifications.']['internalFieldsWithoutNotification']);
+				$internalFieldsWithoutNotification = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->conf['email_notifications.']['internalFieldsWithoutNotification']);
 				$changedInternalFieldsArray = explode(',',$changedInternalFields);
 				foreach ($changedInternalFieldsArray as $internalField) {
 					if (!in_array($internalField, $internalFieldsWithoutNotification)) {
@@ -1450,7 +1450,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					&& ($this->internal['currentRow']['notifications_owner'] == CONST_ONEVERYCHANGE
 						|| (
 							$this->internal['currentRow']['notifications_owner'] == CONST_ONSTATUSCHANGE
-							&& t3lib_div::inList($changedFields, 'status')
+							&& \TYPO3\CMS\Core\Utility\GeneralUtility::inList($changedFields, 'status')
 						)
 						|| (
 							$this->internal['currentRow']['notifications_owner'] == CONST_TYPOSCRIPT
@@ -1463,12 +1463,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['owner_feuser']);
 
 					// send standard mail
-				if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
+				if (is_array($fe_user_data) && \TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 				}
 
 					// send internal mail
-				if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
+				if (is_array($fe_user_data) && \TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 				}
 			}
@@ -1478,7 +1478,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					&& ($this->internal['currentRow']['notifications_responsible'] == CONST_ONEVERYCHANGE
 						|| (
 							$this->internal['currentRow']['notifications_responsible'] == CONST_ONSTATUSCHANGE
-							&& t3lib_div::inList($changedFields, 'status')
+							&& \TYPO3\CMS\Core\Utility\GeneralUtility::inList($changedFields, 'status')
 						)
 						|| (
 							$this->internal['currentRow']['notifications_responsible'] == CONST_TYPOSCRIPT
@@ -1491,19 +1491,19 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$fe_user_data = $this->getFeUserData($this->internal['currentRow']['responsible_feuser']);
 
 					// send standard mail
-				if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
+				if (is_array($fe_user_data) && \TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 				}
 
 					// send internal mail
-				if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
+				if (is_array($fe_user_data) && \TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 					$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 				}
 			}
 
 				// list of observers
 			if ($this->internal['currentRow']['observers_feuser']) {
-				$observers = t3lib_div::trimExplode(',', $this->internal['currentRow']['observers_feuser']);
+				$observers = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->internal['currentRow']['observers_feuser']);
 			} else {
 				$observers = array();
 			}
@@ -1519,7 +1519,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				$observers[] = $this->oldTicket['responsible_feuser'];
 			}
 			if ($this->oldTicket['observers_feuser']) {
-				$observers_old = t3lib_div::trimExplode(',', $this->oldTicket['observers_feuser']);
+				$observers_old = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->oldTicket['observers_feuser']);
 				foreach ($observers_old as $observer_old) {
 					if (!in_array($observer_old, $observers)) {
 						$observers[] = $observer_old;
@@ -1536,12 +1536,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						$fe_user_data = $this->getFeUserData($observer_uid);
 
 							// send standard mail
-						if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
+						if (is_array($fe_user_data) && \TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($fe_user_data['email']) && !empty($changedFields) && !$this->isUserInternalUser($fe_user_data['uid'])) {
 							$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody);
 						}
 
 							// send internal mail
-						if (is_array($fe_user_data) && t3lib_div::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
+						if (is_array($fe_user_data) && \TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($fe_user_data['email']) && (!empty($changedFields) || !empty($changedInternalFields)) && $this->isUserInternalUser($fe_user_data['uid'])) {
 							$this->sendNotificationEmail($fe_user_data['email'], $subject, $emailbody_internal);
 						}
 					}
@@ -1550,9 +1550,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// send notification to external observers
 			if (!empty($this->internal['currentRow']['externalobservers'])) {
-				$emails = t3lib_div::trimExplode("\n", $this->internal['currentRow']['externalobservers'], TRUE);
+				$emails = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode("\n", $this->internal['currentRow']['externalobservers'], TRUE);
 				foreach ($emails as $email) {
-					if (t3lib_div::validEmail($email) && $this->checkIfNotificationShouldBeSentToObservers() && $sendNotification && !empty($changedFields)) {
+					if (\TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($email) && $this->checkIfNotificationShouldBeSentToObservers() && $sendNotification && !empty($changedFields)) {
 							// send standard email (not internal)
 						$this->sendNotificationEmail($email, $subject, $emailbody);
 					}
@@ -1570,7 +1570,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function checkIfNotificationShouldBeSentToObservers() {
 		if ($this->internal['currentRow']['notifications_observer'] == CONST_ONEVERYCHANGE
-			|| ($this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE && t3lib_div::inList($changedFields, 'status'))
+			|| ($this->internal['currentRow']['notifications_observer'] == CONST_ONSTATUSCHANGE && \TYPO3\CMS\Core\Utility\GeneralUtility::inList($changedFields, 'status'))
 			|| ($this->internal['currentRow']['notifications_observer'] == CONST_TYPOSCRIPT
 				&& $this->checkCustomNotificationCondition($changedFields, $this->conf['email_notifications.']['observersNotificationOnChangedFields']))
 			) {
@@ -1594,26 +1594,26 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$sendNotification = false;
 
 			// comment?
-		if (stristr($changedFields, CONST_NEWCOMMENT) && t3lib_div::inList($options, 'comment')) {
+		if (stristr($changedFields, CONST_NEWCOMMENT) && \TYPO3\CMS\Core\Utility\GeneralUtility::inList($options, 'comment')) {
 			$sendNotification = true;
 		}
 
 			// new ticket?
-		if (stristr($changedFields, CONST_NEWTICKET) && t3lib_div::inList($options, 'newticket')) {
+		if (stristr($changedFields, CONST_NEWTICKET) && \TYPO3\CMS\Core\Utility\GeneralUtility::inList($options, 'newticket')) {
 			$sendNotification = true;
 		}
 
 			// closed ticket?
-		if (t3lib_div::inList($changedFields, 'status')
+		if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($changedFields, 'status')
 			&& stristr($this->internal['currentRow']['status'], CONST_STATUS_CLOSED)
-			&& t3lib_div::inList($options, 'closed')) {
+			&& \TYPO3\CMS\Core\Utility\GeneralUtility::inList($options, 'closed')) {
 			$sendNotification = true;
 		}
 
 			// is one of the changedFields in the options-List?
-		$changedFieldsArray = t3lib_div::trimExplode(',', $changedFields);
+		$changedFieldsArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $changedFields);
 		foreach ($changedFieldsArray as $changedField) {
-			if (t3lib_div::inList($options, $changedField)) {
+			if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($options, $changedField)) {
 				$sendNotification = true;
 			}
 		}
@@ -1631,7 +1631,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function getFeUserData($fe_user_uid=0) {/*{{{*/
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		if ($fe_user_uid) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', 'uid=' . $fe_user_uid . $lcObj->enableFields('fe_users'));
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
@@ -1658,12 +1658,12 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	function renderNotificationMail($changedFields='', $changedInternalFields='') {/*{{{*/
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$content = $this->cObj->getSubpart($this->templateCode,'###EMAIL_NOTIFICATION###');
 		$localMarkerArray = array();
 		$lConf = $this->conf['email_notifications.'];
-		$fieldsArray = t3lib_div::trimExplode(',', $lConf['fieldList']);
-		$changedFieldsArray = t3lib_div::trimExplode(',', $changedFields);
+		$fieldsArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $lConf['fieldList']);
+		$changedFieldsArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $changedFields);
 
 		// get the markers
 		foreach ($fieldsArray as $fieldName) {
@@ -1803,7 +1803,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		);
 		if (!empty($linkToTicketURL)) {
 			$localSubpartMarkerArray = array(
-				//'URL_GO_TO_TICKET' => t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $linkToTicketURL,
+				//'URL_GO_TO_TICKET' => \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $linkToTicketURL,
 				'URL_GO_TO_TICKET' => $linkToTicketURL,
 				'LINKTEXT_GO_TO_TICKET' => $this->pi_getLL('LABEL_GO_TO_TICKET')
 			);
@@ -1816,7 +1816,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		// hook for additional notification marker
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalNotificationMarker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalNotificationMarker'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->additionalNotificationMarker($localMarkerArray, $this);
 			}
 		}
@@ -1894,15 +1894,15 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 		// Only ASCII is allowed in the header
-		$subject = html_entity_decode(t3lib_div::deHSCentities($subject), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
-		$subject = t3lib_div::encodeHeader($subject, 'base64', $GLOBALS['TSFE']->renderCharset);
+		$subject = html_entity_decode(\TYPO3\CMS\Core\Utility\GeneralUtility::deHSCentities($subject), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
+		$subject = \TYPO3\CMS\Core\Utility\GeneralUtility::encodeHeader($subject, 'base64', $GLOBALS['TSFE']->renderCharset);
 
 		// create the plain message body
 		$message = html_entity_decode(strip_tags($html_body), ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 
 		// inspired by code from tt_products, thanks
 		if ($this->getNumericTYPO3versionNumber() >= 4005000){
-			$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_mail_Message');
+			$Typo3_htmlmail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_mail_Message');
 			$Typo3_htmlmail->setSubject($subject);
 			$Typo3_htmlmail->setFrom(array($this->conf['email_notifications.']['from_email'] => $this->conf['email_notifications.']['from_name']));
 
@@ -1924,7 +1924,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			$Typo3_htmlmail->setTo(explode(',', $toEMail));
 			$Typo3_htmlmail->send();
 		}else{
-			$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_htmlmail');
+			$Typo3_htmlmail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_htmlmail');
 			$Typo3_htmlmail->start();
 
 			$Typo3_htmlmail->subject = $subject;
@@ -1943,7 +1943,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			if ($sendAsHTML)  {
 				$Typo3_htmlmail->theParts['html']['content'] = $html_body;
-				$Typo3_htmlmail->theParts['html']['path'] = t3lib_div::getIndpEnv('TYPO3_REQUEST_HOST') . '/';
+				$Typo3_htmlmail->theParts['html']['path'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/';
 
 				$Typo3_htmlmail->extractMediaLinks();
 				$Typo3_htmlmail->extractHyperLinks();
@@ -2025,7 +2025,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return string
 	 */
 	public function renderCommentList($ticket_uid, $renderType='', $latest=0, $markNewestComment=0) {/*{{{*/
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$content = '';
 
 			// if the newest comment should be marked, find out which one it is
@@ -2103,7 +2103,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return mixed
 	 */
 	public function generateDBInsertValue($fieldConf, $returnValue = '') {/*{{{*/
-		$lcObj = t3lib_div::makeInstance('tslib_cObj');
+		$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 		switch ($fieldConf['type']) {
 
@@ -2160,7 +2160,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						// and update the ticket
 						// or put the value into the insertFields (if it is a new ticket)
 						if ($this->piVars['updateUid']) {
-							if (!t3lib_div::inList($this->piVars['related_tickets_old'], $ticketUid)) {
+							if (!\TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->piVars['related_tickets_old'], $ticketUid)) {
 								$returnValue = $this->piVars['related_tickets_old'];
 								if ($returnValue) {
 									$returnValue .= ',';
@@ -2279,7 +2279,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function renderTicketForm() {/*{{{*/
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 			// clear markers which won't be filled if the corresponding files
 			// are marked as "not writable", e.g. RTE Javascript
@@ -2505,7 +2505,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		// hook for additional ticketForm Markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalTicketFormMarker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalTicketFormMarker'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->additionalTicketFormMarker($this->markerArray, $this);
 			}
 		}
@@ -2538,7 +2538,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
  	* @since   Tue May 18 2010 10:00:47 GMT+0200
  	*/
 	public function fieldIsWritableForCurrentUser($fieldConf) {
-		if (empty($fieldConf['writeAccessOnlyForUserGroup']) || t3lib_div::inList($GLOBALS['TSFE']->fe_user->user['usergroup'], $fieldConf['writeAccessOnlyForUserGroup'])) {
+		if (empty($fieldConf['writeAccessOnlyForUserGroup']) || \TYPO3\CMS\Core\Utility\GeneralUtility::inList($GLOBALS['TSFE']->fe_user->user['usergroup'], $fieldConf['writeAccessOnlyForUserGroup'])) {
 			$returnValue = true;
 		} else {
 			$returnValue = false;
@@ -2553,7 +2553,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			} else {
 				$allowedFields = $this->conf['allowFieldsInLockedTickets'];
 			}
-			if (!t3lib_div::inList($allowedFields, $fieldConf['name'])) {
+			if (!\TYPO3\CMS\Core\Utility\GeneralUtility::inList($allowedFields, $fieldConf['name'])) {
 				$returnValue = false;
 			}
 		}
@@ -2562,7 +2562,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// defined in hidden fields (set in the backend via flexform).
 			// We have to allow that here.
 		$allowedFieldsInNewTickets = 'responsible_feuser,observers_feuser,notifications_owner,notifications_responsible,notifications_observer';
-		if ($this->piVars['newticket'] && t3lib_div::inList($allowedFieldsInNewTickets, $fieldConf['name'])) {
+		if ($this->piVars['newticket'] && \TYPO3\CMS\Core\Utility\GeneralUtility::inList($allowedFieldsInNewTickets, $fieldConf['name'])) {
 			$returnValue = true;
 		}
 
@@ -2584,7 +2584,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
         // include special css for printview
         $jsCode = '<script type="text/javascript">window.print();</script>';
 
-		$cssfile = t3lib_extMgm::siteRelPath($this->extKey).'res/css/ke_troubletickets_printview.css';
+		$cssfile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey).'res/css/ke_troubletickets_printview.css';
         if ($this->getNumericTYPO3versionNumber() >= 6000000) {
             $GLOBALS['TSFE']->getPageRenderer()->addHeaderData('<link rel="stylesheet" type="text/css" href="'.$cssfile.'" />');
             $GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
@@ -2636,7 +2636,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		// hook for additional printview markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalPrintviewMarker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['additionalPrintviewMarker'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->additionalPrintviewMarker($this->markerArray, $this);
 			}
 		}
@@ -2742,7 +2742,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	public function getAdditionalMarkers($markerArray=array(), $renderType='') {/*{{{*/
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 			// UID
 		if (is_array($this->internal['currentRow']) && !empty($this->internal['currentRow']['uid'])) {
@@ -2790,7 +2790,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				);
 
 			// current url
-		$markerArray['CURRENT_URL'] = htmlspecialchars(t3lib_div::getIndpEnv('REQUEST_URI'));
+		$markerArray['CURRENT_URL'] = htmlspecialchars(\TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('REQUEST_URI'));
 
 			// TODO: link to the current ticket singleview
 			// The single-view of this ticket is defined in the category this ticket belongs to.
@@ -2815,7 +2815,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// Addtional Icons
 		if ($this->conf['additionalIconList']) {
-			foreach (t3lib_div::trimExplode(',', $this->conf['additionalIconList']) as $iconName) {
+			foreach (\TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->conf['additionalIconList']) as $iconName) {
 				$imageConf = $this->conf[$iconName . '.'];
 				$imageConf['file'] = $this->getFilePath($imageConf['file']);
 				$markerArray[strtoupper($iconName)] = $lcObj->IMAGE($imageConf);
@@ -2844,7 +2844,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		$markerArray['PRINTLINK'] = $this->cObj->typoLink($this->pi_getLL('LABEL_PRINTLINK'),$linkconf);
 
 			// ke_ukb label markers
-		if (t3lib_extMgm::isLoaded('ke_ukb')) {
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_ukb')) {
 			$markerArray['LABEL_RELATED_TICKETS'] = $this->cleanUpHtmlOutput($this->pi_getLL('LABEL_RELATED_TICKETS_UKB'));
 		}
 
@@ -2964,7 +2964,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function renderFormField($fieldConf, $renderEmptyDropdownFields=0, $addJS='') {/*{{{*/
 
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$content = '';
 
 			// Get the prefillValue:
@@ -3113,7 +3113,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 				// AK 08.04.2010
 				// universal keworks browser
-				if (t3lib_extMgm::isLoaded('ke_ukb')) {
+				if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_ukb')) {
 					// show ukb only in edit view, not when creating a ticket
 					if ($this->piVars['showUid'] || $this->piVars['updateUid']) {
 						// use showUid or updateUid ?
@@ -3146,7 +3146,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				break;
 
 			case 'textareaRTE':
-                if (!$this->RTEObj) $this->RTEObj = t3lib_div::makeInstance('tx_rtehtmlarea_pi2');
+                if (!$this->RTEObj) $this->RTEObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_rtehtmlarea_pi2');
                 if ($this->RTEObj->isAvailable()) {
                     $this->RTEcounter++;
                     $this->formName = $this->ticketFormName;
@@ -3277,7 +3277,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 						// render the options
 					while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-						if (t3lib_div::inList($prefillValue, $row['uid'])) {
+						if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($prefillValue, $row['uid'])) {
 							$selected = ' selected';
 						} else {
 							$selected = '';
@@ -3387,7 +3387,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 									$content .= '</option>';
 								}
 								while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-									if (t3lib_div::inList($prefillValue, $row['uid'])) {
+									if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($prefillValue, $row['uid'])) {
 										$selected = ' selected';
 									} else {
 										$selected = '';
@@ -3428,7 +3428,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// render a drodown and give the user the opportunity to select the notification behavior
 					$content .= '<select ' . $addJS . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 					foreach (explode(',',$this->conf[$fieldConf['valueList']]) as $value) {
-						if (t3lib_div::inList($prefillValue, $value)) {
+						if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($prefillValue, $value)) {
 							$selected = ' selected';
 						} else {
 							$selected = '';
@@ -3463,7 +3463,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 						if ($num_rows > 0) {
 							$content .= '<select ' . $addJS . 'name="' . $this->prefixId . '[' . $fieldConf['name'] . ']' . ($fieldConf['multiple'] ? '[]' : '') . '" size="' . $fieldConf['size'] . '"' . ($fieldConf['multiple'] ? ' multiple="multiple"' : '') .'>';
 							while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-								if (t3lib_div::inList($prefillValue, $row['uid'])) {
+								if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($prefillValue, $row['uid'])) {
 									$selected = ' selected';
 								} else {
 									$selected = '';
@@ -3516,7 +3516,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// hook for changing the rendered form field, overwrites the rendered content
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterRenderFormField'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_troubletickets']['afterRenderFormField'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$content = $_procObj->afterRenderFormField($content, $fieldConf, $this);
 			}
 		}
@@ -3554,7 +3554,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					// because by default the owner can't be changed in the
 					// frontend), so add the former owner as observer of the
 					// follow-up ticket (only if he isn't already an observer).
-				if (!t3lib_div::inList($value, $this->parentTicket['owner_feuser'])) {
+				if (!\TYPO3\CMS\Core\Utility\GeneralUtility::inList($value, $this->parentTicket['owner_feuser'])) {
 					$value = $this->addToCommaList($value, $this->parentTicket['owner_feuser']);
 				}
 			break;
@@ -3626,7 +3626,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function renderNamesFromFeUserUids($uidList) {
 		$retval = '';
 
-		foreach (t3lib_div::trimExplode(',', $uidList) as $feuserUid) {
+		foreach (\TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $uidList) as $feuserUid) {
 			if ($retval) {
 				$retval .= ', ';
 			}
@@ -3647,9 +3647,9 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function getFilePath($filePath) {/*{{{*/
 		// Parse EXT: in $filePath into real path
-		$filePath = t3lib_div::getFileAbsFileName($filePath);
+		$filePath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($filePath);
 		// Returns relative filename
-		if (t3lib_div::isAbsPath($filePath)) {
+		if (\TYPO3\CMS\Core\Utility\GeneralUtility::isAbsPath($filePath)) {
 			$filePath = substr($filePath,strlen(PATH_site));
 		}
 		return $filePath;
@@ -3666,7 +3666,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return string
 	 */
 	public function renderRelatedTicketListForCurrentTicket($renderLinks = true, $renderDeleteButton = true, $renderWrapDiv = true, $separator = '<br />') {/*{{{*/
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$content = '';
 
 		if (is_array($this->internal['currentRow']) && count($this->internal['currentRow'])) {
@@ -3674,7 +3674,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 				// render ke_ukb relations instead of related tickets
 				// if the extension ke_ukb is installed
-			if (t3lib_extMgm::isLoaded('ke_ukb')) {
+			if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_ukb')) {
 
 					// make instance, set pids and render the content
 					// render only the names of the related elements
@@ -3733,7 +3733,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 											);
 									$deleteLink_URL = $this->cObj->typoLink_URL( $deleteLinkConf );
 									$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
-									//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
+									//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
 
 									// generate the alt text
 									$imageConf['altText'] = $this->pi_getLL('altText_delete_related_ticket', 'Delete related ticket.');
@@ -3802,7 +3802,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
         if ($this->getNumericTYPO3versionNumber() >= 6000000) {
             $this->internal['results_at_a_time'] = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->listViewConf['results_at_a_time'],0,1000,10);
         } else {
-            $this->internal['results_at_a_time'] = t3lib_div::intInRange($this->listViewConf['results_at_a_time'],0,1000,10);
+            $this->internal['results_at_a_time'] = \TYPO3\CMS\Core\Utility\GeneralUtility::intInRange($this->listViewConf['results_at_a_time'],0,1000,10);
         }
 		if ($this->piVars['entries_per_page']) $this->internal['results_at_a_time'] = $this->piVars['entries_per_page'];
 
@@ -3810,7 +3810,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
         if ($this->getNumericTYPO3versionNumber() >= 6000000) {
             $this->internal['maxPages'] = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->listViewConf['maxPages'],0,1000,5);
         } else {
-            $this->internal['maxPages'] = t3lib_div::intInRange($this->listViewConf['maxPages'],0,1000,5);
+            $this->internal['maxPages'] = \TYPO3\CMS\Core\Utility\GeneralUtility::intInRange($this->listViewConf['maxPages'],0,1000,5);
         }
 
 
@@ -3897,7 +3897,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 		}
 
 			// Check if submitted sort is allowed, if not, set it to default
-		if ($this->piVars['sort'] && $this->piVars['sort'] != DEFAULT_SORT && !t3lib_div::inList(t3lib_div::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
+		if ($this->piVars['sort'] && $this->piVars['sort'] != DEFAULT_SORT && !\TYPO3\CMS\Core\Utility\GeneralUtility::inList(\TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($this->internal['orderByList']),$this->internal['orderBy'])) {
 			list($this->internal['orderBy'], $this->internal['descFlag']) = explode(',', DEFAULT_SORT);
 		}
 
@@ -3927,7 +3927,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 
 			// render the filters
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-			if (t3lib_div::inList(t3lib_div::uniqueList($this->listViewConf['filterList']),$fieldConf['name'])) {
+			if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList(\TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($this->listViewConf['filterList']),$fieldConf['name'])) {
 				// dont't pre-select user values in the filter if the filter ist empty
 				if ($fieldConf['prefillWithCurrentUserIfEmpty']) {
 					$fieldConf['prefillWithCurrentUserIfEmpty'] = 0;
@@ -3990,7 +3990,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 			// check every filter if there is content for every filter, otherwise substitute
 			// whole filter block subpart with empty content
 		foreach ($this->conf['formFieldList.'] as $fieldConf) {
-			if (t3lib_div::inList(t3lib_div::uniqueList($this->listViewConf['filterList']),$fieldConf['name'])) {
+			if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList(\TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($this->listViewConf['filterList']),$fieldConf['name'])) {
 				if ($this->markerArray['FILTER_' . strtoupper(trim($fieldConf['name']))] == '' ) {
 					$content = $this->cObj->substituteSubpart ($content, '###FILTER_BLOCK_' . strtoupper(trim($fieldConf['name'])), '');
 				}
@@ -4029,7 +4029,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				||
 				($this->ffdata['show_tickets'] == CONST_SHOW_ALL_FOR_ADMINS
 				&& $this->ffdata['ticket_administrators']
-				&& t3lib_div::inList($this->ffdata['ticket_administrators'], $fe_user_uid))) {
+				&& \TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->ffdata['ticket_administrators'], $fe_user_uid))) {
 
 			$addWhere = '';
 
@@ -4115,7 +4115,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return	Value of the field
 	 */
 	public function getFieldContent($fieldName, $renderType='default', $fieldConf=array())	{/*{{{*/
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		switch($fieldName) {
 			/*
 			case 'uid':
@@ -4379,7 +4379,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					);
 					$deleteLink_URL = $this->cObj->typoLink_URL( $deleteLinkConf );
 					$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . $deleteLink_URL . '\')">|</a>';
-					//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
+					//$imageConf['wrap'] = '<a href="javascript:areYouSure(\' ' . \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a>';
 				}
 
 				// basic configuration for the single view link
@@ -4451,7 +4451,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 										);
 								$deleteLink_URL = $this->cObj->typoLink_URL($deleteLinkConf);
 								$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . $deleteLink_URL . '\')">|</a></span>';
-								//$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
+								//$imageConf['wrap'] = '<span class="deleteFile"><a href="javascript:areYouSure(\'' . \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $deleteLink_URL . '\')">|</a></span>';
 
 									// generate the alt text
 								$imageConf['altText'] = $this->pi_getLL('altText_deletefile', 'Delete file.');
@@ -4467,7 +4467,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 							$filetype = substr(strrchr($filename, '.'), 1);
 							$filetype = strtolower($filetype);
 							unset($imageConf);
-							if (t3lib_div::inList($fieldConf['thumbnails'], $filetype)) {
+							if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($fieldConf['thumbnails'], $filetype)) {
 								if (file_exists($this->fileUploadDir . $filename)) {
 									$imageConf = $this->conf['thumbnailImage.']['preview.'];
 									$imageConf['file'] = $this->fileUploadDir . $filename;
@@ -4529,7 +4529,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// no filter is set and status filter is set to default "all_not_closed"
 				if (count($this->filter)==1 && $this->filter['status'] == 'all_not_closed') {
 					unset($imageConf);
-					$imageConf['file'] = t3lib_extMgm::siteRelPath($this->extKey).'res/images/reset_gray.gif';
+					$imageConf['file'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey).'res/images/reset_gray.gif';
 					$imageConf['altText'] = $this->pi_getLL('LABEL_FILTER_NOT_SET');
 					$imageConf['titleText'] = $imageConf['altText'];
 					return $this->cObj->IMAGE($imageConf);
@@ -4537,7 +4537,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 				// filter is set
 				else {
 					unset($imageConf);
-					$imageConf['file'] = t3lib_extMgm::siteRelPath($this->extKey).'res/images/reset.gif';
+					$imageConf['file'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey).'res/images/reset.gif';
 					$imageConf['altText'] = $this->pi_getLL('LABEL_FILTER_RESET');
 					$imageConf['titleText'] = $imageConf['altText'];
 					$resetImage = $this->cObj->IMAGE($imageConf);
@@ -4546,7 +4546,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 					$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 					$linkconf['additionalParams'] = '&'.$this->prefixId.'[pointer]=0';
 					// reset every single filter
-					$filterList = t3lib_div::trimExplode(',',$this->conf['listView.']['filterList'],1);
+					$filterList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',',$this->conf['listView.']['filterList'],1);
 					foreach($filterList as $filter) {
 						$linkconf['additionalParams'] .= '&'.$this->prefixId.'['.$filter.']=';
 					}
@@ -4596,7 +4596,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 * @return integer
 	 */
 	public function getSingleViewPageIdForCurrentTicket() {/*{{{*/
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 		// where is the singleview?
 		// may be set in the flexform of the plugin (first priority)
@@ -4739,13 +4739,13 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
         if ($this->getNumericTYPO3versionNumber() >= 6000000) {
             $results_at_a_time = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->internal['results_at_a_time'],1,1000);
         } else {
-            $results_at_a_time = t3lib_div::intInRange($this->internal['results_at_a_time'],1,1000);
+            $results_at_a_time = \TYPO3\CMS\Core\Utility\GeneralUtility::intInRange($this->internal['results_at_a_time'],1,1000);
         }
 		$totalPages = ceil($count/$results_at_a_time);
         if ($this->getNumericTYPO3versionNumber() >= 6000000) {
             $maxPages = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->internal['maxPages'],1,100);
         } else {
-            $maxPages = t3lib_div::intInRange($this->internal['maxPages'],1,100);
+            $maxPages = \TYPO3\CMS\Core\Utility\GeneralUtility::intInRange($this->internal['maxPages'],1,100);
         }
 
 		$pi_isOnlyFields = $this->pi_isOnlyFields($this->pi_isOnlyFields);
@@ -4770,7 +4770,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
                 if ($this->getNumericTYPO3versionNumber() >= 6000000) {
                     $pagefloat = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($this->internal['pagefloat'],-1,$maxPages-1);
                 } else {
-                    $pagefloat = t3lib_div::intInRange($this->internal['pagefloat'],-1,$maxPages-1);
+                    $pagefloat = \TYPO3\CMS\Core\Utility\GeneralUtility::intInRange($this->internal['pagefloat'],-1,$maxPages-1);
                 }
 			}
 		} else {
@@ -4803,7 +4803,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
                 if ($this->getNumericTYPO3versionNumber() >= 6000000) {
                     $lastPage = \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange($totalPages,1,$maxPages);
                 } else {
-                    $lastPage = t3lib_div::intInRange($totalPages,1,$maxPages);
+                    $lastPage = \TYPO3\CMS\Core\Utility\GeneralUtility::intInRange($totalPages,1,$maxPages);
                 }
 
 			}
@@ -4976,7 +4976,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	 */
 	public function renderTable2CSV($res,$table,$fieldList='',$renderHeader=1,$splitChar=',',$wrapChar='"',$endLineChar="\r\n") {/*{{{*/
 		$data='';
-		$fields=t3lib_div::trimExplode(',',$fieldList);
+		$fields=\TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',',$fieldList);
 		if ($renderHeader) {
 			$line='';
 			foreach ($fields as $field) {
@@ -5027,7 +5027,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
 	public function renderListSortingLinks() {/*{{{*/
 		$mainPage = $this->ffdata['page_of_main_plugin'] ? $this->ffdata['page_of_main_plugin'] : $GLOBALS['TSFE']->id;
 
-		foreach (t3lib_div::trimExplode(',', $this->conf['listView.']['headerList']) as $headerName) {
+		foreach (\TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->conf['listView.']['headerList']) as $headerName) {
 
 			// add the sort parameter to the link
 			// AK 13.08.2010
@@ -5160,7 +5160,7 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
  	*/
 	public function initDate2Cal() {
 			// include jscalendar api
-		include_once(t3lib_extMgm::siteRelPath('date2cal') . '/src/class.jscalendar.php');
+		include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('date2cal') . '/src/class.jscalendar.php');
 
 			// init jscalendar class
 		$this->JSCalendar = JSCalendar::getInstance();
@@ -5211,7 +5211,8 @@ class tx_ketroubletickets_pi1 extends tslib_pibase {
         } else if (class_exists('t3lib_utility_VersionNumber')) {
             $numeric_typo3_version = t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version);
         } else {
-            $numeric_typo3_version = t3lib_div::int_from_ver(TYPO3_version);
+			$numeric_typo3_version = 7600000;
+            // TODO$numeric_typo3_version = \TYPO3\CMS\Core\Utility\GeneralUtility::int_from_ver(TYPO3_version);
         }
         return $numeric_typo3_version;
     }

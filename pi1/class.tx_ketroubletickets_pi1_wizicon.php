@@ -46,7 +46,7 @@ class tx_ketroubletickets_pi1_wizicon {
         $LL = $this->includeLocalLang();
 
         $wizardItems['plugins_tx_ketroubletickets_pi1'] = array(
-            'icon'=>t3lib_extMgm::extRelPath('ke_troubletickets').'pi1/ce_wiz.gif',
+            'icon'=>\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ke_troubletickets').'pi1/ce_wiz.gif',
             'title'=>$LANG->getLLL('pi1_title',$LL),
             'description'=>$LANG->getLLL('pi1_plus_wiz_description',$LL),
             'params'=>'&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=ke_troubletickets_pi1'
@@ -61,12 +61,12 @@ class tx_ketroubletickets_pi1_wizicon {
      * @return	The array with language labels
      */
     function includeLocalLang() {
-        $llFile = t3lib_extMgm::extPath('ke_troubletickets') . 'locallang.xml';
+        $llFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_troubletickets') . 'locallang.xml';
         if ($this->getNumericTYPO3versionNumber() >= 6000000) {
-            $xmlParser = t3lib_div::makeInstance('t3lib_l10n_parser_Llxml');
+            $xmlParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Localization\Parser\LocallangXmlParser::class);
             $LOCAL_LANG = $xmlParser->getParsedData($llFile, $GLOBALS['LANG']->lang);
         } else {
-            $LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
+            $LOCAL_LANG = \TYPO3\CMS\Core\Utility\GeneralUtility::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
         }
         return $LOCAL_LANG;
     }
@@ -77,12 +77,12 @@ class tx_ketroubletickets_pi1_wizicon {
      * @return int
      */
     public function getNumericTYPO3versionNumber() {
-        if (class_exists(VersionNumberUtility)) {
+        if (class_exists(\TYPO3\CMS\Core\Utility\VersionNumberUtility::class)) {
             $numeric_typo3_version = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version);
         } else if (class_exists('t3lib_utility_VersionNumber')) {
             $numeric_typo3_version = t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version);
         } else {
-            $numeric_typo3_version = t3lib_div::int_from_ver(TYPO3_version);
+            $numeric_typo3_version = \TYPO3\CMS\Core\Utility\GeneralUtility::int_from_ver(TYPO3_version);
         }
         return $numeric_typo3_version;
     }

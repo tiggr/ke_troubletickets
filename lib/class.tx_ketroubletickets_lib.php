@@ -164,7 +164,7 @@ class tx_ketroubletickets_lib {
  	* @since   Thu Jun 17 2010 13:19:40 GMT+0200
  	*/
 	public function getLinkToTicket_URL($ticketData, $overWriteSingleViewPid=0, $troubleticketsObj=false) {
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$url = '';
 		if (is_array($ticketData) && count($ticketData)) {
 				// find out the singleview pid
@@ -247,7 +247,7 @@ class tx_ketroubletickets_lib {
 
 				// Fetch the ticket from the database. This is the first
 				// permission check (enableFields).
-			$lcObj = t3lib_div::makeInstance('tslib_cObj');
+			$lcObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 			$where = 'uid=' . $ticketUid . $lcObj->enableFields('tx_ketroubletickets_tickets');
 
 				// if the call is coming from ke_troubletickets, the configuration
@@ -269,7 +269,7 @@ class tx_ketroubletickets_lib {
 				if ($ticketRow['responsible_feuser'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
 					$permission = true;
 				}
-				if (t3lib_div::inList($ticketRow['observers_feuser'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
+				if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($ticketRow['observers_feuser'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
 					$permission = true;
 				}
 
@@ -277,7 +277,7 @@ class tx_ketroubletickets_lib {
 					// is available, therefore we can check if the user is a ticket
 					// administrator. If not, we don't check and don't set the permission.
 				if (is_object($troubleticketsObj)) {
-					if ($troubleticketsObj->ffdata['show_tickets'] == CONST_SHOW_ALL_FOR_ADMINS && $troubleticketsObj->ffdata['ticket_administrators'] && t3lib_div::inList($troubleticketsObj->ffdata['ticket_administrators'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
+					if ($troubleticketsObj->ffdata['show_tickets'] == CONST_SHOW_ALL_FOR_ADMINS && $troubleticketsObj->ffdata['ticket_administrators'] && \TYPO3\CMS\Core\Utility\GeneralUtility::inList($troubleticketsObj->ffdata['ticket_administrators'], $GLOBALS['TSFE']->fe_user->user['uid'])) {
 						$permission = true;
 					}
 					if ($troubleticketsObj->ffdata['show_tickets'] == CONST_SHOW_ALL_ALWAYS) {
@@ -304,7 +304,7 @@ class tx_ketroubletickets_lib {
 	* @return array / false
 	*/
    function fe_getRecord($fields, $from_table, $where_clause, $groupBy='',$orderBy='',$limit='1') {
-	   $lcObj=t3lib_div::makeInstance('tslib_cObj');
+	   $lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 	   $where_clause .= $lcObj->enableFields($from_table);
 	   $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$from_table,$where_clause,$groupBy,$orderBy,$limit);
 	   if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
@@ -324,8 +324,8 @@ class tx_ketroubletickets_lib {
    public function getTicketData($ticketUid) {
 		return $this->fe_getRecord('*', 'tx_ketroubletickets_tickets', 'uid=' . $ticketUid);
    }
-   
-   
+
+
 	/**
 	 * returns the todo entries for a ticket
 	 *
@@ -335,7 +335,7 @@ class tx_ketroubletickets_lib {
 	 * @since   Wed Apr 3 2013 16:37:32 GMT+0200
 	 */
 	public function getToDoEntriesForTicket($ticketUid) {
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$table = 'tx_ketroubletickets_todo';
 		$fields = '*';
 		$where = 'ticket_uid=' . intval($ticketUid);
@@ -347,10 +347,10 @@ class tx_ketroubletickets_lib {
 		}
 		return $results;
 	}
-   
+
 	/**
-	 * calculates the ticket progress regarding to todo entries 
-	 * 
+	 * calculates the ticket progress regarding to todo entries
+	 *
 	 *
 	 * @param   integer $ticketUid
 	 * @return  integer
@@ -358,7 +358,7 @@ class tx_ketroubletickets_lib {
 	 * @since   Thu Apr 4 2013 11:45:22 GMT+0200
 	 */
 	function getTicketProgressFromToDo($ticketUid) {
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$table = 'tx_ketroubletickets_todo';
 		$fields = 'count(uid) as total, (SELECT count(uid) FROM tx_ketroubletickets_todo WHERE ticket_uid='.$ticketUid.' AND done=1) as completed';
 		$where = 'ticket_uid=' . intval($ticketUid);

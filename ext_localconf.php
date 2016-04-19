@@ -2,20 +2,20 @@
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
   ## Extending TypoScript from static template uid=43 to set up userdefined tag:
-t3lib_extMgm::addTypoScript($_EXTKEY,'editorcfg','
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript($_EXTKEY,'editorcfg','
 	tt_content.CSS_editor.ch.tx_ketroubletickets_pi1 = < plugin.tx_ketroubletickets_pi1.CSS_editor
 ',43);
 
 
-t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_ketroubletickets_pi1.php','_pi1','list_type',0);
-t3lib_extMgm::addPItoST43($_EXTKEY,'pi2/class.tx_ketroubletickets_pi2.php','_pi2','list_type',0);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43($_EXTKEY,'pi1/class.tx_ketroubletickets_pi1.php','_pi1','list_type',0);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43($_EXTKEY,'pi2/class.tx_ketroubletickets_pi2.php','_pi2','list_type',0);
 
-t3lib_extMgm::addTypoScript($_EXTKEY,'setup','
-	tt_content.shortcut.20.0.conf.tx_ketroubletickets_tickets = < plugin.'.t3lib_extMgm::getCN($_EXTKEY).'_pi1
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript($_EXTKEY,'setup','
+	tt_content.shortcut.20.0.conf.tx_ketroubletickets_tickets = < plugin.'.\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getCN($_EXTKEY).'_pi1
 	tt_content.shortcut.20.0.conf.tx_ketroubletickets_tickets.CMD = singleView
 ',43);
 
-t3lib_extMgm::addPageTSConfig('
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('
 
 	# ***************************************************************************************
 	# CONFIGURATION of RTE in table "tx_ketroubletickets_tickets", field "description"
@@ -31,7 +31,7 @@ RTE.config.tx_ketroubletickets_tickets.description {
   }
 }
 ');
-t3lib_extMgm::addPageTSConfig('
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('
 
 	# ***************************************************************************************
 	# CONFIGURATION of RTE in table "tx_ketroubletickets_comments", field "content"

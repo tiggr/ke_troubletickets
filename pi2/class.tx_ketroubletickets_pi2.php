@@ -27,7 +27,7 @@
  * @author	Christian Bülter <buelter@kennziffer.com>
  */
 
-require_once(t3lib_extMgm::extPath('ke_troubletickets').'lib/class.tx_ketroubletickets_lib.php');
+require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_troubletickets').'lib/class.tx_ketroubletickets_lib.php');
 
 /**
  * Plugin 'Trouble Ticket System' for the 'ke_troubletickets' extension.
@@ -36,7 +36,7 @@ require_once(t3lib_extMgm::extPath('ke_troubletickets').'lib/class.tx_ketroublet
  * @package	TYPO3
  * @subpackage	tx_ketroubletickets
  */
-class tx_ketroubletickets_pi2 extends tslib_pibase {
+class tx_ketroubletickets_pi2 extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	var $prefixId 			= 'tx_ketroubletickets_pi2';		// Same as class name
 	var $scriptRelPath 		= 'pi2/class.tx_ketroubletickets_pi2.php';	// Path to this script relative to the extension dir.
 	var $extKey 			= 'ke_troubletickets';	// The extension key.
@@ -57,10 +57,10 @@ class tx_ketroubletickets_pi2 extends tslib_pibase {
 		$this->pi_loadLL();
 
 			// path to this extension
-		$this->extPath = t3lib_extMgm::siteRelPath($this->extKey);
+		$this->extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey);
 
 			// create instance of the extension library
-		$this->lib = t3lib_div::makeInstance('tx_ketroubletickets_lib');
+		$this->lib = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_ketroubletickets_lib');
 
 			// Configuring so caching is not expected. This value means that no
 			// cHash params are ever set. We do this, because it's a USER_INT
@@ -79,15 +79,15 @@ class tx_ketroubletickets_pi2 extends tslib_pibase {
 		$this->conf = $conf;
 
 			// a local content object (with clear configuration)
-		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$lcObj=\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 			// start with empty content
 		$content = '';
 
 
 			// get the template
-		$templateFile = $this->conf['templateFile'] ? 
-				$this->conf['templateFile'] : 
+		$templateFile = $this->conf['templateFile'] ?
+				$this->conf['templateFile'] :
 				$this->extPath . 'res/template/ke_troubletickets_pi2.tmpl.htm';
 
 		$this->templateCode = $lcObj->fileResource($templateFile);
@@ -140,7 +140,7 @@ class tx_ketroubletickets_pi2 extends tslib_pibase {
 				);
 
 					// do the redirect
-				header('Location:'.t3lib_div::locationHeaderUrl($linkToTicketURL));
+				header('Location:'.\TYPO3\CMS\Core\Utility\GeneralUtility::locationHeaderUrl($linkToTicketURL));
 			} else {
 				$content .= '<p class="error">' . $this->pi_getLL('error_no_singleviewpage') . '</p>';
 			}

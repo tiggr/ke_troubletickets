@@ -60,7 +60,7 @@ class backendMenu {
 			$menuHTML .= '<li ';
 			if ($selectedValue == $menuValue) $menuHTML .= 'class="selected" ';
 			$menuHTML .= '><a ';
-			$menuHTML .= 'href="index.php?id='.t3lib_div::_GET('id').'&'.$menuName.'='.$menuValue;
+			$menuHTML .= 'href="index.php?id='.\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id').'&'.$menuName.'='.$menuValue;
 			$menuHTML .= $additionalParams;
 			$menuHTML .= '">';
 			$menuHTML .= $menuDescription;
@@ -104,7 +104,7 @@ class backendMenu {
 		$selectedValue = explode(',',$selectedValue);
 
 		// render the form
-		$formURL = 'index.php?id='.t3lib_div::_GET('id').$additionalParams;
+		$formURL = 'index.php?id='.\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id').$additionalParams;
 		$formName = 'form_'.$menuName;
 
 		$menuHTML = '<form name="'.$formName;
@@ -160,7 +160,7 @@ class backendMenu {
 		$selectedValue = $this->getSelectedValue($menuName,$allowedValues);
 
 		// render the form
-		$formURL = 'index.php?id='.t3lib_div::_GET('id').$additionalParams;
+		$formURL = 'index.php?id='.\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id').$additionalParams;
 		$formName = 'form_'.$menuName;
 		$menuHTML = '';
 
@@ -201,7 +201,7 @@ class backendMenu {
 	 * @return void
 	 */
 	function getSelectedValue($menuName='default',$allowedValues=array(), $transformNullValue=1) {/*{{{*/
-		$value = t3lib_div::_GP($menuName);
+		$value = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP($menuName);
 		// check if this is a multiple select field
 		if (!is_array($value)) {
 			if (empty($value) && $this->tabmenuPresetValues[$menuName]) $value = $this->tabmenuPresetValues[$menuName];

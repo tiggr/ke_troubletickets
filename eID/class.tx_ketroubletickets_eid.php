@@ -2,56 +2,56 @@
 
 /*
  * eID script for ke_troubletickets extension
- * 
+ *
  * EXAMPLES:
- * 
+ *
  * index.php?eID=kett&ticketUid=1&progressValue=10&action=updateProgress
  * index.php?eID=kett&ticketUid=1&title=test&action=addToDo
  * index.php?eID=kett&ticketUid=1&toDoUid=1&doneStatus=1&action=updateToDoStatus
  * index.php?eID=kett&ticketUid=1&toDoUid=1&action=removeToDo
- * 
+ *
  */
 
 
 
-class tx_ketroubletickets_eid extends tslib_pibase {
-  
+class tx_ketroubletickets_eid extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
+
 	var $ticketUid;
 	var $storagePid;
-	
+
 	/*
 	 * main method for eID script
 	 */
 	function main(){
 		// Initialize FE user object
-		$this->feUserObj = tslib_eidtools::initFeUser(); 
-		
+		$this->feUserObj = tslib_eidtools::initFeUser();
+
 		//Connect to database
-		tslib_eidtools::connectDB(); 
+		tslib_eidtools::connectDB();
 
 		// sanitize params
 		// ticket uid
-		$this->ticketUid = intval(t3lib_div::_GP('ticketUid'));
+		$this->ticketUid = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('ticketUid'));
 		if (!$this->ticketUid) die();
-		
+
 		// cobj id
-		$this->cObjId = intval(t3lib_div::_GP('cobjid'));
+		$this->cObjId = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('cobjid'));
 		if (!$this->cObjId) die();
-		
+
 		// other params
-		$this->storagePid = intval(t3lib_div::_GP('storagePid'));
-		$toDoUid = intval(t3lib_div::_GP('toDoUid'));
-		$progressValue = intval(t3lib_div::_GP('progressValue'));
-		$title = t3lib_div::removeXSS(t3lib_div::_GP('title'));
-		$doneStatus = intval(t3lib_div::_GP('doneStatus'));
-		$sorting = t3lib_div::_GP('sorting');
-		
+		$this->storagePid = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('storagePid'));
+		$toDoUid = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('toDoUid'));
+		$progressValue = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('progressValue'));
+		$title = \TYPO3\CMS\Core\Utility\GeneralUtility::removeXSS(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('title'));
+		$doneStatus = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('doneStatus'));
+		$sorting = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('sorting');
+
 		// check user's permissions
 		// exit if user has no permission for this ticket
 		if (!$this->checkPermission()) exit;
 
 		// switch actions
-		switch (t3lib_div::_GP('action')) {
+		switch (\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('action')) {
 			case 'getToDos':
 				echo json_encode($this->getToDos());
 				break;
@@ -76,7 +76,7 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 				break;
 		}
 	}
-	
+
 	/*
 	 * get all todos for a ticket
 	 */
@@ -93,21 +93,21 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		}
 		return $results;
 	}
-	
-	
+
+
 	/*
 	 * add new todo to ticket
-	 * 
+	 *
 	 * @param string $title				title of the todo
 	 * @param int $storagePid			storage pid
 	 */
 	function addToDo($title, $storagePid) {
 		// check values
 		if (!$this->ticketUid || empty($title)) return false;
-		
+
 		// sanitize values
-		$title = t3lib_div::removeXSS($title);
-		
+		$title = \TYPO3\CMS\Core\Utility\GeneralUtility::removeXSS($title);
+
 		// add ToDo
 		$table = 'tx_ketroubletickets_todo';
 		$fields_values = array(
@@ -126,7 +126,7 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		}
 		else return false;
 	}
-	
+
 	/*
 	 * get max sorting value for todos to current ticket
 	 */
@@ -138,11 +138,11 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		$row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		return $row['maxsort'];
 	}
-	
-	 
+
+
 	/*
 	 * update status of existing todo
-	 * 
+	 *
 	 * @param int $toDoUid				todo uid
 	 * @param boolean $doneStatus		status of todo
 	 */
@@ -150,10 +150,10 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		// sanitize values
 		$toDoUid = intval($toDoUid);
 		$doneStatus = intval($doneStatus);
-		
+
 		// check values
 		if (!$toDoUid || ($doneStatus != 1 && $doneStatus != 0)) return false;
-		
+
 		// update ToDo
 		$table = 'tx_ketroubletickets_todo';
 		$where = 'uid='.$toDoUid;
@@ -168,11 +168,11 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		}
 		else return false;
 	}
-	
-	
+
+
 	/*
 	 * remove todo
-	 * 
+	 *
 	 * @param int $toDoUid		uid of todo
 	 * @return boolean
 	 */
@@ -180,10 +180,10 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		// sanitize values
 		$toDoUid = intval($toDoUid);
 		$toDoTitle = $this->getToDoTitle($toDoUid);
-		
+
 		// check value
 		if (!$toDoUid) return false;
-		
+
 		// delete ToDo
 		$table = 'tx_ketroubletickets_todo';
 		$where = 'uid='.$toDoUid;
@@ -193,21 +193,21 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		}
 		else return false;
 	}
-	
-	
+
+
 	/*
 	 * set the percentage progress value of a ticket
-	 * 
+	 *
 	 * @param int progressValue		the progress value in percent (0-100)
-	 * @return boolean				
+	 * @return boolean
 	 */
 	function setProgress($progressValue) {
 		// sanitize value
 		$progressValue = intval($progressValue);
-		
+
 		// check for valid progress value
 		if ($progressValue > 100 || $progressValue < 0) return false;
-		
+
 		// update ticket
 		$table = 'tx_ketroubletickets_tickets';
 		$fields_values['progress'] = $progressValue;
@@ -215,11 +215,11 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		if ($GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, $where, $fields_values)) return true;
 		else return false;
 	}
-	
-	
+
+
 	/*
 	 * calcluate the progress of a ticket
-	 * 
+	 *
 	 * @return int
 	 */
 	function calculateTicketProgress() {
@@ -230,9 +230,9 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		$where .= t3lib_befunc::deleteClause($table);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
 		$row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		
+
 		$ticketStatus = $this->getTicketStatus();
-		
+
 		// ticket already closed
 		if ($ticketStatus == 'closed' || $ticketStatus == 'closed_locked') {
 			return 100;
@@ -257,20 +257,20 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	/**
-	 * check user's permission 
+	 * check user's permission
 	 *
 	 * returns false if he has no rights
-	 * 
+	 *
 	 * @return boolean
 	 */
 	function checkPermission() {
-		
+
 		$permission = false;
-		
+
 		if ($this->checkTicketAdmin()) {
 			// user is ticket administrator?
 			$permission = true;
@@ -294,7 +294,7 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 					if ($ticketRow['responsible_feuser'] == $userId) {
 						$permission = true;
 					}
-					if (t3lib_div::inList($ticketRow['observers_feuser'], $userId)) {
+					if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($ticketRow['observers_feuser'], $userId)) {
 						$permission = true;
 					}
 				}
@@ -302,8 +302,8 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		}
 		return $permission;
 	}
-	
-	
+
+
 	/*
 	 * check if current user is ticket admin
 	 */
@@ -314,23 +314,23 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		$where .= t3lib_befunc::deleteClause('tt_content');
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform', 'tt_content', $where, '', '', $limit=1);
 		$row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		if (!empty($row['pi_flexform'])) $ffData = t3lib_div::xml2array($row['pi_flexform']);
+		if (!empty($row['pi_flexform'])) $ffData = \TYPO3\CMS\Core\Utility\GeneralUtility::xml2array($row['pi_flexform']);
 		$ticketAdmins = $ffData['data']['sheetUsers']['lDEF']['ticket_administrators']['vDEF'];
 		if ($ticketAdmins) {
-			if (t3lib_div::inList($ticketAdmins, $this->feUserObj->user['ses_userid'])) return true;
-		} else return false;	
+			if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($ticketAdmins, $this->feUserObj->user['ses_userid'])) return true;
+		} else return false;
 	}
-	
-	
-	
+
+
+
 	/*
 	 * update sorting of todo list elements
-	 * 
+	 *
 	 * @param string $sorting	the sort values
 	 * @return string
 	 */
 	function updateSorting($sorting) {
-		$elements = t3lib_div::trimExplode(',', $sorting);
+		$elements = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $sorting);
 		$newSorting = 0;
 		foreach ($elements as $key => $element) {
 			$toDoUid = intval(str_replace('todo_', '', $element));
@@ -343,13 +343,13 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		}
 		return 'OK';
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	function addHistoryEntry($toDoTitle, $action, $value, $storagePid) {
-		
+
 		// set old value
 		if ($action == 'new') {
 			$oldValue = '';
@@ -361,7 +361,7 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 			$oldValue = '';
 			$newValue = 'ToDo removed: "'.$toDoTitle.'"';
 		}
-		
+
 		$table = 'tx_ketroubletickets_history';
 		$fields_values = array(
 			'crdate' => time(),
@@ -375,9 +375,9 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		);
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values);
 	}
-	
-	
-	
+
+
+
 	function getToDoTitle($toDoUid) {
 		$table = 'tx_ketroubletickets_todo';
 		$fields = 'title';
@@ -386,8 +386,8 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		$row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		return $row['title'];
 	}
-	
-	
+
+
 	function getTicketStatus() {
 		$table = 'tx_ketroubletickets_tickets';
 		$fields = 'status';
@@ -397,11 +397,11 @@ class tx_ketroubletickets_eid extends tslib_pibase {
 		return $row['status'];
 	}
 
-	
-	
+
+
 }
- 
-$output = t3lib_div::makeInstance('tx_ketroubletickets_eid');
+
+$output = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_ketroubletickets_eid');
 $output->main();
 
 ?>

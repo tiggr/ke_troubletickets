@@ -78,13 +78,13 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 					$this->enableFields_address     = t3lib_BEfunc::deleteClause($this->address_table).t3lib_BEfunc::BEenableFields($this->address_table);
 					$this->enableFields_pages       = t3lib_BEfunc::deleteClause($this->pages_table).t3lib_BEfunc::BEenableFields($this->pages_table);
 
-					$this->lib = t3lib_div::makeInstance('tx_ketroubletickets_lib');
+					$this->lib = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_ketroubletickets_lib');
 
 					// get the page ts config
 					$this->pageTSConfig = t3lib_BEfunc::getPagesTSconfig($this->id);
 
                     /*
-                    if (t3lib_div::_GP('clear_all_cache'))    {
+                    if (\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('clear_all_cache'))    {
                         $this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
                     }
                     */
@@ -147,7 +147,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                     if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))    {
 
                             // Draw the header.
-                        $this->doc = t3lib_div::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
+                        $this->doc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
                         $this->doc->backPath = $BACK_PATH;
                         //$this->doc->form='<form action="" method="POST">';
 
@@ -170,13 +170,13 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 						*/
 
 						// initialize tab menu
-						$this->tabmenu = t3lib_div::makeInstance('backendMenu');
+						$this->tabmenu = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('backendMenu');
 						$this->doc->inDocStylesArray['tab_menu'] = $this->tabmenu->getStyleSheet();
 
 						// Add CSS for the ticket table
 						$this->doc->inDocStylesArray['tables'] = $this->getTableCSS();
 
-                        $headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_cs($this->pageinfo['_thePath'],-50);
+                        $headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.\TYPO3\CMS\Core\Utility\GeneralUtility::fixed_lgd_cs($this->pageinfo['_thePath'],-50);
 
 						// Add css
 						$this->doc->inDocStyles = 'div.typo3-mediumDoc { width:100%; }';
@@ -188,9 +188,9 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                         $this->content.=$this->doc->divider(5);
 
 						// date2cal is needed for the time selector fields
-						if (t3lib_extMgm::isLoaded('date2cal')) {
+						if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('date2cal')) {
 							$this->tabmenu->useDate2Cal = true;
-							include_once(t3lib_div::resolveBackPath($BACK_PATH . '../' . t3lib_extMgm::siteRelPath('date2cal') . 'src/class.jscalendar.php'));
+							include_once(\TYPO3\CMS\Core\Utility\GeneralUtility::resolveBackPath($BACK_PATH . '../' . \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('date2cal') . 'src/class.jscalendar.php'));
 						}
 
 						// Render content:
@@ -205,7 +205,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                     } else {
                             // If no access or if ID == zero
 
-                        $this->doc = t3lib_div::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
+                        $this->doc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
                         $this->doc->backPath = $BACK_PATH;
 
                         $this->content.=$this->doc->startPage($LANG->getLL('title'));
@@ -673,7 +673,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
                     switch((string)$this->MOD_SETTINGS['function'])    {
                         case 1:
                             $content='<div align="center"><strong>Hello World!</strong></div><br />
-                                The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('ke_troubletickets'),strlen(PATH_site)).$pathSuffix.'index.php and edit it!
+                                The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_troubletickets'),strlen(PATH_site)).$pathSuffix.'index.php and edit it!
                                 <hr />
                                 <br />This is the GET/POST vars sent to the script:<br />'.
                                 'GET:'.t3lib_utility_Debug::viewArray($_GET).'<br />'.
@@ -885,7 +885,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 									$formatted_data = '<span style="color:#cccccc;">' . $GLOBALS['LANG']->getLL('empty_value') . '</span>';
 								} else {
 									// calculate the sum
-									if (in_array($key, t3lib_div::trimExplode(',', $columnsWithSum))) {
+									if (in_array($key, \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $columnsWithSum))) {
 										if (stristr($dataRow[$key], ',')) {
 											$sumRow[$key] += floatval(str_replace(',', '.', $dataRow[$key]));
 										} else {
@@ -929,7 +929,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 								$content .= '<th>'.$GLOBALS['LANG']->getLL('sum').'</th>';
 								$firstCol = false;
 							} else {
-								if (in_array($key, t3lib_div::trimExplode(',',$columnsWithSum))) {
+								if (in_array($key, \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',',$columnsWithSum))) {
 									$sum = $sumRow[$key];
 									switch ($fieldType) {
 										case 'hours_from_minutes':
@@ -962,7 +962,7 @@ class  tx_ketroubletickets_module1 extends t3lib_SCbase {
 									$content .= '<th>'.$GLOBALS['LANG']->getLL('average').'</th>';
 									$firstCol = false;
 								} else {
-									if (in_array($key, t3lib_div::trimExplode(',',$columnsWithSum))) {
+									if (in_array($key, \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',',$columnsWithSum))) {
 										$average = $sumRow[$key] / count($dataRows);
 										switch ($fieldType) {
 											case 'hours_from_minutes':
@@ -1160,7 +1160,7 @@ if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ke_trou
 
 
 // Make instance:
-$SOBE = t3lib_div::makeInstance('tx_ketroubletickets_module1');
+$SOBE = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_ketroubletickets_module1');
 $SOBE->init();
 
 // Include files?
